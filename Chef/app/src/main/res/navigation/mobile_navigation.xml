@@ -22,4 +22,52 @@
         android:name="com.paul.chef.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/chefEditFragment"
+        android:name="com.paul.chef.ui.chefEdit.ChefEditFragment"
+        android:label="ChefEditFragment" />
+    <fragment
+        android:id="@+id/chefFragment"
+        android:name="com.paul.chef.ui.chef.ChefFragment"
+        android:label="ChefFragment" />
+    <fragment
+        android:id="@+id/menuDetailFragment"
+        android:name="com.paul.chef.ui.menuDetail.MenuDetailFragment"
+        android:label="MenuDetailFragment" />
+    <fragment
+        android:id="@+id/menuEditFragment"
+        android:name="com.paul.chef.ui.menuEdit.MenuEditFragment"
+        android:label="MenuEditFragment" />
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.paul.chef.ui.menu.MenuFragment"
+        android:label="MenuFragment" />
+
+    <action
+        android:id="@+id/action_global_chefEditFragment"
+        app:destination="@id/chefEditFragment" />
+
+    <action
+        android:id="@+id/action_global_chefFragment"
+        app:destination="@id/chefFragment" />
+
+    <action
+        android:id="@+id/action_global_menuDetailFragment"
+        app:destination="@id/menuDetailFragment" />
+
+    <action
+        android:id="@+id/action_global_menuEditFragment"
+        app:destination="@id/menuEditFragment" />
+
+    <action
+        android:id="@+id/action_global_menuFragment"
+        app:destination="@id/menuFragment" />
+
+    <action
+        android:id="@+id/action_global_bookFragment"
+        app:destination="@id/bookFragment" />
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.paul.chef.ui.book.BookFragment"
+        android:label="BookFragment" />
 </navigation>

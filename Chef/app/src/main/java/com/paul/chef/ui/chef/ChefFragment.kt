@@ -1,4 +1,4 @@
-package com.paul.chef.ui.notifications
+package com.paul.chef.ui.chef
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.paul.chef.databinding.FragmentNotificationsBinding
+import com.paul.chef.databinding.FragmentChefPageBinding
 
-class NotificationsFragment : Fragment() {
+class ChefFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentChefPageBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,10 +18,10 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        val chefViewModel =
+            ViewModelProvider(this).get(ChefViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
