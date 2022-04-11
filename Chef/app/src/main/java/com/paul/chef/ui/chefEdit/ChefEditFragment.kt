@@ -30,20 +30,8 @@ class ChefEditFragment : Fragment() {
 
 
 
-        //接收廚師資訊
+
         val chefId = "9qKTEyvYbiXXEJSjDJGF"
-        db.collection("Chef")
-            .whereEqualTo("chefId", chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    Log.d("chefeditfragment", "item=$item")
-                }
-            }
 
         binding.chefSave.setOnClickListener {
             chefEditViewModel.saveChef(chefId)

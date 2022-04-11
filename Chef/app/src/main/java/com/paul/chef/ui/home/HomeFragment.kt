@@ -36,15 +36,15 @@ class HomeFragment : Fragment() {
             menu.setOnClickListener {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
             }
-            menuDetail.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment())
-            }
+
             menuEdit.setOnClickListener {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment())
             }
-            book.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalBookFragment())
+
+            calender.setOnClickListener {
+                findNavController().navigate(MobileNavigationDirections.actionGlobalCalendar())
             }
+
 
         }
 

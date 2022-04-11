@@ -1,22 +1,15 @@
 package com.paul.chef.data
 
-
-data class TestData(
-    val chefId:String,
-    val chefInfo:Info,
-    val menuId: List<String>?,
-    val address: List<String>
-)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+import java.time.LocalDate
 
 
-data class ChefData(
-    val chefId:	String,
-    val info:Info,
-    val menuId: List<String>?=null,
-//    val roomList:List<Room>, //check
+data class Chef(
+    val id:	String,
+    val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
-//    val orderId:List<String>,  //check
-    val orderSetting:OrderSetting,
     val address:List<String>
 )
 
@@ -28,50 +21,51 @@ data class OrderSetting(
     val duration:String,
 )
 
-
-data class Menu(
-    val menuId:String,
+@Parcelize
+data class ChefMenu( ///menu
+    val id:String,
     val images:List<String>,
-    val dishes:List<Dish>,
+    val dishes:@RawValue List<Dish>,
     val chefId:String,
-    val review:List<Review>,
+    val reviewRating: Float? = null,
     val perPrice:Int,
-    val discount:Discount,
-)
+    val discount:@RawValue List<Discount>,
+    val orderSetting: @RawValue OrderSetting
+): Parcelable
 
+@Parcelize
 data class Discount(
     val people:Int,
     val percentOff:Int
-)
+): Parcelable
 
+@Parcelize
 data class Dish(
-    val type:String,
+    val type:String, //甜點、開胃菜
     val option:Int, //固定菜色, 可替換, 加價替換
-    val dishName:List<DishName>
-)
+    val dishName:@RawValue List<DishName>
+): Parcelable
 
 data class DishName(
     val extraPrice:Int,
     val name:String
 )
-
+@Parcelize
 data class Review(
     val star:Double,
     val userId:String,
     val content:String
-)
+): Parcelable
 
 
-data class UserTable(
+data class User(
     val userId:	String,
-    val info:Info,
+    val profileInfo:ProfileInfo,
     val address:List<String>,
-    val orderId:List<String>,
-    val roomList:List<Room>,
 )
 
 
-data class Info(
+data class ProfileInfo(
     val name: String,
     val email:String,
     val avatar:String,
@@ -86,28 +80,24 @@ data class BankInfo(
 )
 
 data class Room(
+    val id: String,
     val lastMsg: String,
-    val dataType: Int,  //0Strng, 1image,
-    val senderId: String, //userId,chefId
+    val dataType: Int,  //0String, 1image,
+    val attendance: List<String>, //userId,chefId
+    val chat:List<Chat>,
     val time: Long, //用來排序
-    val roomID: String
+
 )
 
 
 data class Chat(
     val message: String,
-    val dataType: Int,  //0Strng, 1image,
+    val dataType: Int,  //0String, 1image,
     val senderId: String, //userId,chefId
     val time: Long, //用來排序
-    val roomID: String
 )
 
 
-data class ReView(
-    val star:Double,
-    val name:String,
-    val content:String
-)
 
 data class DefaultTime(
     val default:Boolean, //all open, all close
@@ -141,13 +131,16 @@ data class OrderTable(
     val userId:String,
     val userEmail:String,
     val chefId:String, //chefId or kitchenId
-    val chefEmail:String,
+//    val chefEmail:String,
+    val date:Long,
+//    val time:String,
+    val note:String,
     val people:Int,
-    val time:Long,
+    val orderTime:Long,
     val menuId:String,
     val status:Int, //即將到來,已取消,已完成
     val originalPrice:Int,
-    val discount:String,
+    val discount:Int,
     val total:Int
 )
 

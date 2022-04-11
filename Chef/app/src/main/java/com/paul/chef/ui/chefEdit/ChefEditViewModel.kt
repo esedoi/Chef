@@ -2,11 +2,9 @@ package com.paul.chef.ui.chefEdit
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.icu.text.IDNA
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.data.*
 
@@ -24,16 +22,14 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
 
 
     fun createChef(){
-        val chefId = db.collection("Chef").document().id
-        val chefInfo = Info("paul", "email@email.com", "imagesString","i am master chef")
+        val id = db.collection("Chef").document().id
+        val profileInfo = ProfileInfo("paul", "email@email.com", "imagesString","i am master chef")
         val address = listOf<String>("address____iwefiwefweqwdqwd")
-        val defaultTime = DefaultTime(true, "18:30", "22:30")
-        val orderSetting = OrderSetting(1, defaultTime, override = null, 20, "5")
-        val temp = ChefData(chefId, chefInfo, menuId = null, bankInfo = null, orderSetting, address)
+        val temp = Chef(id, profileInfo, bankInfo = null, address)
 
 
         //set firebase資料
-        db.collection("Chef").document(chefId)
+        db.collection("Chef").document(id)
             .set(temp)
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
@@ -47,7 +43,7 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
 
     fun saveChef(chefId:String){
 
-        val info = Info("jack", "jack@email.com", "jackimage","i am master chef!!")
+        val info = ProfileInfo("jack", "jack@email.com", "jackimage","i am master chef!!")
 
         db.collection("Chef").document(chefId)
             .update(mapOf(
