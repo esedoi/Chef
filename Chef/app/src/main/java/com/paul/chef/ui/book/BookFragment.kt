@@ -42,7 +42,7 @@ class BookFragment: Fragment() {
         //navigation safe args
         val menu = arg.chefMenu
 
-       menu.orderSetting.defaultTime
+
 
         var datePicker =
             MaterialDatePicker.Builder.datePicker()
@@ -58,11 +58,6 @@ class BookFragment: Fragment() {
         datePicker.addOnPositiveButtonClickListener {
             Log.d("bookfragment", "datePicker.selection=${datePicker.selection}")
             selectDate = datePicker.selection
-//            val sdf = SimpleDateFormat("YYYY-MM-dd")
-//            val day = sdf.format(datePicker.selection?.let { it1 -> Date(it1) })
-//            val localday:LocalDate = LocalDate.parse(day)
-//            Log.d("bookfragment", "localday=${localday}")
-//            picker = localday
         }
 
 

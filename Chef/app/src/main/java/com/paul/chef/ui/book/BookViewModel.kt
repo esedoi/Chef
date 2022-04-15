@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.data.*
-import java.time.LocalDate
 import java.util.*
 
 class BookViewModel(application: Application) : AndroidViewModel(application) {
@@ -68,7 +67,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         Log.d("bookviewmodel", "total = $total")
         Log.d("bookviewmodel", "discount = $discount")
 
-        val order = OrderTable(
+        val order = Order(
             orderId,
             userName,
             userId,
@@ -82,7 +81,9 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             status,
             originalPrice,
             discount,
-            total
+            total,
+            1,
+            "taipei"
           )
 
         //set firebase資料

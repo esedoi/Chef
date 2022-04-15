@@ -9,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -22,14 +20,10 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.R
-import com.paul.chef.data.ChefMenu
-import com.paul.chef.data.OrderTable
+import com.paul.chef.data.Order
 import com.paul.chef.databinding.CalendarDayLayoutBinding
 import com.paul.chef.databinding.CalendarMonthHeaderLayoutBinding
 import com.paul.chef.databinding.FragmentCalendarBinding
-import com.paul.chef.databinding.FragmentChefPageBinding
-import com.paul.chef.ui.chef.ChefViewModel
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -49,7 +43,7 @@ class Calendar : Fragment() {
     private val today = LocalDate.now()
 
 
-    val orderList = mutableListOf<OrderTable>()
+    val orderList = mutableListOf<Order>()
 
     val dateList = mutableListOf<LocalDate>()
 
@@ -75,7 +69,7 @@ class Calendar : Fragment() {
                 for (doc in value!!.documents) {
                     val item = doc.data
                     val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, OrderTable::class.java)
+                    val data = Gson().fromJson(json, Order::class.java)
                     orderList.add(data)
                 }
                 for (i in orderList){
@@ -190,6 +184,10 @@ class Calendar : Fragment() {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
         binding.calendarView.scrollToMonth(currentMonth)
+
+        binding.edit.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalCalendarSetting())
+        }
 
 
         return root

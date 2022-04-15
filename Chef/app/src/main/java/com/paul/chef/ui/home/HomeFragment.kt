@@ -38,11 +38,15 @@ class HomeFragment : Fragment() {
             }
 
             menuEdit.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment())
+                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment(null))
             }
 
             calender.setOnClickListener {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalCalendar())
+            }
+
+            orderSetting.setOnClickListener {
+                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderSetting())
             }
 
 

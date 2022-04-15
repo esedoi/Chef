@@ -45,7 +45,7 @@ class ChefFragment : Fragment() {
             }
 
         binding.createMenu.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment(null))
         }
 
         return root

@@ -25,7 +25,8 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
         val id = db.collection("Chef").document().id
         val profileInfo = ProfileInfo("paul", "email@email.com", "imagesString","i am master chef")
         val address = listOf<String>("address____iwefiwefweqwdqwd")
-        val temp = Chef(id, profileInfo, bankInfo = null, address)
+
+        val temp = Chef(id, profileInfo, bankInfo = null, address, orderSetting = null )
 
 
         //set firebase資料

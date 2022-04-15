@@ -3,34 +3,97 @@ package com.paul.chef.data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
-import java.time.LocalDate
 
 
 data class Chef(
     val id:	String,
     val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
-    val address:List<String>
+    val address:List<String>,
+    val orderSetting: OrderSetting? = null
 )
 
+//come with menu
 data class OrderSetting(
-    val type:Int = -1, //接受user前來廚房,接受前往user廚房,都接受, 都不接受
-    val defaultTime:DefaultTime,
-    val override:Override?=null,
+    val type:Int = -1, //chef place,userplace,都接受, 都不接受
+    val defaultDateStatus:Int, //all open, all close
+    val menuList:List<MenuStatus>? = null,
+    val chefSpace:ChefSpace? = null,
+    val userSpace:UserSpace? = null,
+    val dateSetting:DateSetting? = null,
+    val todayPeople:Int? =  null
+)
+
+data class MenuStatus(
+    val menuId:String,
+    val status:Int
+)
+
+
+data class ChefSpace(
+    val sessionCapacity:Int,
+    val session:List<String>,
+)
+
+data class UserSpace(
     val capacity:Int,
-    val duration:String,
+    val starTime:String,
+    val endTime:String,
+)
+
+data class DateSetting(
+    val week:List<WeekStatus>, //一二三四五六日
+    val date:List<DateStatus>, // 5/16, 6/13
+)
+
+data class WeekStatus(
+    val status:Int,
+    val week:String, //一二三四五六日
+    val session:List<String>? = null,
+    val startTime:String? = null,
+    val endTime:String? = null,
+)
+
+data class DateStatus(
+    val status:Int,
+    val date:Long,
+    val session:List<String>? = null,
+    val startTime:String? = null,
+    val endTime:String? = null,
+)
+
+data class Order(
+    val id:String, //D2204130685964
+    val userName:String,
+    val userId:String,
+    val userEmail:String,
+    val chefId:String, //chefId or kitchenId
+//    val chefEmail:String,
+    val date:Long,
+//    val time:String,
+    val note:String,
+    val people:Int,
+    val orderTime:Long,
+    val menuId:String,
+    val status:Int, //即將到來,已取消,已完成
+    val originalPrice:Int,
+    val discount:Int,
+    val total:Int,
+    val type:Int,
+    val address: String
 )
 
 @Parcelize
 data class ChefMenu( ///menu
     val id:String,
-    val images:List<String>,
-    val dishes:@RawValue List<Dish>,
     val chefId:String,
-    val reviewRating: Float? = null,
+    val menuName:String,
+    val intro:String,
     val perPrice:Int,
+    val images:List<String>,
     val discount:@RawValue List<Discount>,
-    val orderSetting: @RawValue OrderSetting
+    val dishes:@RawValue List<Dish>,
+    val reviewRating: Float? = null,
 ): Parcelable
 
 @Parcelize
@@ -43,13 +106,18 @@ data class Discount(
 data class Dish(
     val type:String, //甜點、開胃菜
     val option:Int, //固定菜色, 可替換, 加價替換
-    val dishName:@RawValue List<DishName>
+    val name:String? = "",
+    val extraPrice:Int? = -1,
 ): Parcelable
 
-data class DishName(
+@Parcelize
+data class ExtraDish(
+    val type:String, //甜點、開胃菜
+    val number:Int,
     val extraPrice:Int,
     val name:String
-)
+): Parcelable
+
 @Parcelize
 data class Review(
     val star:Double,
@@ -97,52 +165,6 @@ data class Chat(
     val time: Long, //用來排序
 )
 
-
-
-data class DefaultTime(
-    val default:Boolean, //all open, all close
-    val startTime:String, //11:30
-    val endTime:String, //22:30
-)
-
-data class Override(
-    val week:List<WeekStatus>, //一二三四五六日
-    val date:List<DateStatus>, // 5/16, 6/13
-)
-
-data class DateStatus(
-    val status:Boolean,
-    val date:String,
-    val startTime:String,
-    val endTime:String,
-)
-
-data class WeekStatus(
-    val status:Boolean,
-    val week:String, //一二三四五六日
-    val startTime:String,
-    val endTime:String,
-)
-
-
-data class OrderTable(
-    val orderId:String, //D2204130685964
-    val userName:String,
-    val userId:String,
-    val userEmail:String,
-    val chefId:String, //chefId or kitchenId
-//    val chefEmail:String,
-    val date:Long,
-//    val time:String,
-    val note:String,
-    val people:Int,
-    val orderTime:Long,
-    val menuId:String,
-    val status:Int, //即將到來,已取消,已完成
-    val originalPrice:Int,
-    val discount:Int,
-    val total:Int
-)
 
 
 data class VendorPayment(

@@ -42,7 +42,13 @@
     <fragment
         android:id="@+id/menuEditFragment"
         android:name="com.paul.chef.ui.menuEdit.MenuEditFragment"
-        android:label="MenuEditFragment" />
+        android:label="MenuEditFragment" >
+        <argument
+            android:name="dish"
+            app:nullable="true"
+            app:argType="com.paul.chef.data.Dish" />
+    </fragment>
+
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.paul.chef.ui.menu.MenuFragment"
@@ -87,4 +93,27 @@
     <action
         android:id="@+id/action_global_calendar"
         app:destination="@id/calendar" />
+    <fragment
+        android:id="@+id/calendarSetting"
+        android:name="com.paul.chef.ui.calendarSetting.CalendarSetting"
+        android:label="CalendarSetting" />
+
+    <action
+        android:id="@+id/action_global_calendarSetting"
+        app:destination="@id/calendarSetting" />
+    <fragment
+        android:id="@+id/orderSetting"
+        android:name="com.paul.chef.ui.orderSetting.OrderSetting"
+        android:label="OrderSetting" />
+
+    <action
+        android:id="@+id/action_global_orderSetting"
+        app:destination="@id/orderSetting" />
+    <dialog
+        android:id="@+id/addDishBottomSheet"
+        android:name="com.paul.chef.ui.dishAdd.AddDishBottomSheet"
+        android:label="AddDishBottomSheet" />
+    <action
+        android:id="@+id/action_global_addDishBottomSheet"
+        app:destination="@id/addDishBottomSheet" />
 </navigation>
