@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.paul.chef.ui.menu.MenuFragment"
+        android:name="com.paul.chef.ui.menu.MenuListFragment"
         android:label="MenuFragment" />
 
     <action
