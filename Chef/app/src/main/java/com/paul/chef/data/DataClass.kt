@@ -64,24 +64,24 @@ data class DateStatus(
 
 data class Order(
     val id:String, //D2204130685964
-    val userName:String,
     val userId:String,
-    val userEmail:String,
     val chefId:String, //chefId or kitchenId
-//    val chefEmail:String,
+    val type:Int, //userspace, chef space
+    val address: String,
+    val orderTime:Long,
     val date:Long,
-//    val time:String,
+    val time:String,
     val note:String,
     val people:Int,
-    val orderTime:Long,
     val menuId:String,
+    val selectedDish: List<Dish>,
     val status:Int, //即將到來,已取消,已完成
     val originalPrice:Int,
     val discount:Int,
     val total:Int,
-    val type:Int,
-    val address: String
 )
+
+
 
 @Parcelize
 data class ChefMenu( ///menu

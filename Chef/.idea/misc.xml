@@ -12,7 +12,7 @@
         <entry key="app/src/main/res/layout/calendar_day_legend.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/dialog_add.xml" value="0.19656677246093746" />
-        <entry key="app/src/main/res/layout/fragment_book.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_book.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.34546152750651044" />
         <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_chef_edit.xml" value="0.25" />
@@ -51,6 +51,8 @@
         <entry key="app/src/main/res/layout/item_dish_fixed_add.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_dish_optional.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_dishes.xml" value="0.34894561767578125" />
+        <entry key="app/src/main/res/layout/item_display_dish.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_display_fixed_dish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_display_optional_dish.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_fixed_dish.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_fixed_dish_add.xml" value="0.40625" />

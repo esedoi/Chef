@@ -10,37 +10,29 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.data.Dish
 import com.paul.chef.data.DisplayDish
 import com.paul.chef.databinding.*
 import com.paul.chef.ui.menuEdit.DiscountAdapter
+import kotlinx.coroutines.selects.select
 
 class MenuDetailFragment : Fragment() {
 
     private var _binding: FragmentMenuDetailBinding? = null
     private val binding get() = _binding!!
 
-//    private var _fixedBinding: ItemDisplayFixedDishBinding? = null
-//    private val fixedBinding get() = _fixedBinding!!
-//
-//    private var _optionalBinding: ItemDisplayOptionalDishBinding? = null
-//    private val optionalBinding get() = _optionalBinding!!
-
     private var _itemDisplayBinding: ItemDisplayDishBinding? = null
     private val itemDisplayBinding get() = _itemDisplayBinding!!
 
-
-    var bindingList = mutableListOf<ItemDisplayFixedDishBinding>()
-    var allDishBindingList = mutableListOf<ItemDisplayOptionalDishBinding>()
-
     //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +44,6 @@ class MenuDetailFragment : Fragment() {
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         //navigation safe args
         val menu = arg.chefMenu
         val dishList = menu.dishes
@@ -60,6 +51,8 @@ class MenuDetailFragment : Fragment() {
         val or = "or"
         val and = "and"
         val displayList = mutableListOf<ItemDisplayDishBinding>()
+        val selectedDish = mutableListOf<Dish>()
+
 
 
         for (i in dishList) {
@@ -68,6 +61,7 @@ class MenuDetailFragment : Fragment() {
 
             if (i.option == 0) {
                 if (i.typeNumber != defaultType) {
+                    //setType
                     itemDisplayBinding.displayTitle.text = i.type
                     defaultType = i.typeNumber
                     binding.displayDishLinear.addView(itemDisplayBinding.root)
@@ -77,21 +71,12 @@ class MenuDetailFragment : Fragment() {
                     val andText = TextView(this.context)
                     andText.text = and
                     andText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
-
                     displayList[defaultType].displayRG.addView(andText)
-
-
                 }
-
                 // +textview
                 val nameText = TextView(this.context)
                 nameText.text = i.name
-
                 displayList[defaultType].displayRG.addView(nameText)
-                Log.d("menudetail", "defaultype= ${defaultType}")
-                Log.d("menudetail", "displatlist= ${displayList}")
-
-
 
             } else {
                 if (i.typeNumber != defaultType) {
@@ -105,27 +90,59 @@ class MenuDetailFragment : Fragment() {
                     val orText = TextView(this.context)
                     orText.text = or
                     orText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
-//                    itemDisplayBinding.displayRG.addView(orText)
                     displayList[defaultType].displayRG.addView(orText)
                 }
                 //+radiobutton  +price
                 val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
                 val nameRadioBtn = RadioButton(this.context)
                 nameRadioBtn.text = Html.fromHtml(radioText)
-//                itemDisplayBinding.displayRG.addView(nameRadioBtn)
+                nameRadioBtn.id = View.generateViewId()
+                nameRadioBtn.tag = i
                 displayList[defaultType].displayRG.addView(nameRadioBtn)
-
             }
         }
 
 
 
         binding.detailName.text = menu.menuName
-
+        binding.detailMenuIntro.text = menu.intro
 
         binding.choice.setOnClickListener {
-            Log.d("menudetailfragment", "menu=$menu")
-            findNavController().navigate(MobileNavigationDirections.actionGlobalBookFragment(menu))
+
+            var isRadioSelected = true
+            var typeInt = -1
+
+
+            for (i in dishList){
+                if (i.option==0){
+                    selectedDish.add(i)
+                    typeInt = i.typeNumber
+                }else{
+                    if(typeInt!=i.typeNumber){
+                        val selectedId = displayList[i.typeNumber].displayRG.checkedRadioButtonId
+                        if(selectedId !=-1){
+                            val radioButton  = root.findViewById<RadioButton>(selectedId)
+                            val radioDish:Dish = radioButton.tag as Dish
+                            selectedDish.add(radioDish)
+                            typeInt = i.typeNumber
+                        }else{
+                            isRadioSelected = false
+
+                        }
+                    }
+                }
+            }
+
+            if (isRadioSelected){
+
+                Log.d("menudetailfragment", "selectedDish=${selectedDish}")
+                val list = selectedDish.toTypedArray()
+                findNavController().navigate(MobileNavigationDirections.actionGlobalBookFragment(menu, list))
+            }else{
+                Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
+                selectedDish.clear()
+            }
+
         }
 
         return root

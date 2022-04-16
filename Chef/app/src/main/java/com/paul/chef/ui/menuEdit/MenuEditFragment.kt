@@ -79,6 +79,8 @@ class MenuEditFragment : Fragment(), AddDiscount {
         binding.discountRecycler.adapter = discountAdapter
 
 
+
+
         //discount spinner
         val discountSpinner =
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
@@ -230,7 +232,7 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
             //typeSpinner
             val typeList =
-                arrayOf("開胃菜", "湯", "麵包", "飲料", "酒", "沙拉", "前菜", "主菜", "甜點", "其他")
+                arrayOf("開胃菜", "湯", "飲料", "酒", "沙拉", "前菜", "主菜", "甜點", "其他")
             val typeAdapter =
                 this.context?.let { ArrayAdapter(it, R.layout.simple_spinner_item, typeList) }
             typeAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -250,7 +252,7 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
             t.removeType.setOnClickListener {
                 binding.dishTypeLinear.removeView(bindingList[typeIndex].root)
-                bindingList.removeAt(typeIndex) //---------------------------
+                bindingList.removeAt(typeIndex)
             }
 
             t.addDish.setOnClickListener {

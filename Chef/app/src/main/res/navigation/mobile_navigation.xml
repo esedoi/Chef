@@ -84,6 +84,9 @@
         <argument
             android:name="chefMenu"
             app:argType="com.paul.chef.data.ChefMenu" />
+        <argument
+            android:name="selectedDish"
+            app:argType="com.paul.chef.data.Dish[]" />
     </fragment >
     <fragment
         android:id="@+id/calendar"
@@ -109,11 +112,6 @@
     <action
         android:id="@+id/action_global_orderSetting"
         app:destination="@id/orderSetting" />
-    <dialog
-        android:id="@+id/addDishBottomSheet"
-        android:name="com.paul.chef.ui.dishAdd.AddDishBottomSheet"
-        android:label="AddDishBottomSheet" />
-    <action
-        android:id="@+id/action_global_addDishBottomSheet"
-        app:destination="@id/addDishBottomSheet" />
+
+
 </navigation>
