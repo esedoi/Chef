@@ -141,6 +141,10 @@
         android:name="com.paul.chef.ui.orderManage.OrderManageFragment"
         android:label="fragment_order_manage"
         tools:layout="@layout/fragment_order_manage" />
+
+    <action
+        android:id="@+id/action_global_orderManageFragment"
+        app:destination="@id/orderManageFragment" />
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.paul.chef.ui.transaction.TransactionFragment"

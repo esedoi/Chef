@@ -19,6 +19,7 @@
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.34546152750651044" />
         <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_chef_edit.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_chef_page 2.xml" value="0.15838724772135415" />
         <entry key="app/src/main/res/layout/fragment_chef_page.xml" value="0.40394897460937496" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3441025641025641" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3441025641025641" />
@@ -29,6 +30,7 @@
         <entry key="app/src/main/res/layout/fragment_menu_edit.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_menu_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.24075936341897036" />
+        <entry key="app/src/main/res/layout/fragment_order_manage 2.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/layout/fragment_order_manage.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/layout/fragment_order_setting.xml" value="0.4456258138020833" />
         <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.18177083333333333" />

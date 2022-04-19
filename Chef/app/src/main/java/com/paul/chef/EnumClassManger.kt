@@ -15,3 +15,7 @@ enum class CalendarType(val index:Int){
 enum class DateStatus(val index:Int){
     CLOSE(0),OPEN(1)
 }
+
+enum class Mode(val index:Int){
+    LOGOUT(0),USER(1),CHEF(2)
+}

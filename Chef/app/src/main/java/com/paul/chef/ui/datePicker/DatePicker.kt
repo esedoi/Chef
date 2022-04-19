@@ -39,7 +39,7 @@ import java.time.temporal.ChronoField
 import java.time.temporal.WeekFields
 import java.util.*
 
-class DatePicker: BottomSheetDialogFragment() {
+class DatePicker : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetDatepickerBinding? = null
     private val binding get() = _binding!!
@@ -68,6 +68,9 @@ class DatePicker: BottomSheetDialogFragment() {
 
         val datePickerViewModel =
             ViewModelProvider(this).get(DatePickerViewModel::class.java)
+
+        val validDate = mutableListOf<LocalDate>()
+        val inValidDate = mutableListOf<LocalDate>()
 //        val bookSetting = arg.bookSetting
         val chefId = arg.chefId
 //        datePickerViewModel.chefId = chefId
@@ -79,7 +82,7 @@ class DatePicker: BottomSheetDialogFragment() {
             binding.datePickerCalendarView.notifyCalendarChanged()
         }
 
-        datePickerViewModel.dateSetting.observe(viewLifecycleOwner){
+        datePickerViewModel.dateSetting.observe(viewLifecycleOwner) {
             dateList.addAll(it)
             binding.datePickerCalendarView.notifyCalendarChanged()
         }
@@ -94,37 +97,73 @@ class DatePicker: BottomSheetDialogFragment() {
 
 
             init {
-//                view.isClickable =
-//                    !(calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index)
-
-//                for (i in dateList) {
-//                    val localDate: LocalDate = LocalDate.ofEpochDay(i.date)
-//                    if (localDate == day.date) {
-//                        view.isClickable = i.status != com.paul.chef.DateStatus.CLOSE.index
-//                    }
-//                }
-
-                view.setOnClickListener {
 
 
+                for (i in dateList) {
+                    val localDate: LocalDate = LocalDate.ofEpochDay(i.date)
+                    if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
+                        //不能按
+                        inValidDate.add(localDate)
+                    } else {
+                        //可以按
+                        validDate.add(localDate)
+                    }
+                }
 
-                    if (day.owner == DayOwner.THIS_MONTH
-                        && (day.date == today || day.date.isAfter(today))
+                if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
+                    //不能按
+                    view.setOnClickListener {
+                        if (validDate.contains(day.date)) {
+                            if (day.owner == DayOwner.THIS_MONTH
+                                && (day.date == today || day.date.isAfter(today))
 
-                    ) {
-                        val currentSelection = selectedDate
-                        if (currentSelection == day.date) {
-                            selectedDate = null
-                            binding.datePickerCalendarView.notifyDateChanged(currentSelection)
-                        } else {
-                            selectedDate = day.date
-                            binding.datePickerCalendarView.notifyDateChanged(day.date)
-                            if (currentSelection != null){
-                                binding.datePickerCalendarView.notifyDateChanged(currentSelection)
+                            ) {
+                                val currentSelection = selectedDate
+                                if (currentSelection == day.date) {
+                                    selectedDate = null
+                                    binding.datePickerCalendarView.notifyDateChanged(
+                                        currentSelection
+                                    )
+                                } else {
+                                    selectedDate = day.date
+                                    binding.datePickerCalendarView.notifyDateChanged(day.date)
+                                    if (currentSelection != null) {
+                                        binding.datePickerCalendarView.notifyDateChanged(
+                                            currentSelection
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    //可以按
+                    view.setOnClickListener {
+                        if (!inValidDate.contains(day.date)) {
+                            if (day.owner == DayOwner.THIS_MONTH
+                                && (day.date == today || day.date.isAfter(today))
+                            ) {
+                                val currentSelection = selectedDate
+                                if (currentSelection == day.date) {
+                                    selectedDate = null
+                                    binding.datePickerCalendarView.notifyDateChanged(
+                                        currentSelection
+                                    )
+                                } else {
+                                    selectedDate = day.date
+                                    binding.datePickerCalendarView.notifyDateChanged(day.date)
+                                    if (currentSelection != null) {
+                                        binding.datePickerCalendarView.notifyDateChanged(
+                                            currentSelection
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
             }
 
         }
@@ -176,7 +215,7 @@ class DatePicker: BottomSheetDialogFragment() {
                     container.textView.visibility = View.VISIBLE
 
                     when {
-                        day.date.isBefore(today)->{
+                        day.date.isBefore(today) -> {
                             container.textView.setTextColor(resources.getColor(R.color.example_4_grey_past))
                         }
 
