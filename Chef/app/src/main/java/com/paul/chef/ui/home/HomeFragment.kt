@@ -27,9 +27,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.apply {
-            editChef.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment())
-            }
+
             chef.setOnClickListener {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
             }
@@ -37,17 +35,11 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
             }
 
-            menuEdit.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment(null))
-            }
-
             calender.setOnClickListener {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalCalendar())
             }
 
-            orderSetting.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderSetting())
-            }
+
 
 
         }

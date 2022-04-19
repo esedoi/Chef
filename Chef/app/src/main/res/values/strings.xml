@@ -2,5 +2,15 @@
     <string name="app_name">Chef</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_menu">Menu</string>
+    <string name="title_like">Like</string>
+    <string name="title_user_order">Order</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_user_profile">Profile</string>
+    <string name="title_chef_order">Order</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_transaction">Transaction</string>
+    <string name="title_chef_profile">Profile</string>
+
+
 </resources>

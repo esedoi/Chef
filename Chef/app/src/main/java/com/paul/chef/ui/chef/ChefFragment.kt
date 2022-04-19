@@ -30,22 +30,23 @@ class ChefFragment : Fragment() {
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val chefId = "9qKTEyvYbiXXEJSjDJGF"
-        db.collection("Chef")
-            .whereEqualTo("chefId", chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    Log.d("chefeditfragment", "item=$item")
-                }
-            }
+
+        chefViewModel.chefInfo.observe(viewLifecycleOwner){
+            Log.d("CHEFFRAGMENT","接收到資料")
+            binding.chefName.text = it.profileInfo.name
+            binding.chefIntro.text = it.profileInfo.introduce
+        }
 
         binding.createMenu.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment(null))
+        }
+
+        binding.editProfileBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment())
+        }
+
+        binding.bookSettingBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalBookSetting())
         }
 
         return root

@@ -1,14 +1,14 @@
 package com.paul.chef.ui.menuDetail
 
-import android.annotation.SuppressLint
+
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Dish
-import com.paul.chef.data.DisplayDish
 import com.paul.chef.databinding.*
-import com.paul.chef.ui.menuEdit.DiscountAdapter
-import kotlinx.coroutines.selects.select
+import com.paul.chef.ui.menu.MenuListAdapter
 
 class MenuDetailFragment : Fragment() {
 
@@ -30,6 +28,9 @@ class MenuDetailFragment : Fragment() {
 
     private var _itemDisplayBinding: ItemDisplayDishBinding? = null
     private val itemDisplayBinding get() = _itemDisplayBinding!!
+
+    private lateinit var imageAdapter: DetailImagesAdapter
+    private var layoutManager: RecyclerView.LayoutManager? = null
 
     //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
@@ -44,6 +45,9 @@ class MenuDetailFragment : Fragment() {
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+
+
         //navigation safe args
         val menu = arg.chefMenu
         val dishList = menu.dishes
@@ -52,6 +56,14 @@ class MenuDetailFragment : Fragment() {
         val and = "and"
         val displayList = mutableListOf<ItemDisplayDishBinding>()
         val selectedDish = mutableListOf<Dish>()
+
+
+        //imagesRecyclerView
+        imageAdapter = DetailImagesAdapter()
+        layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.imagesRecycler.layoutManager = layoutManager
+        binding.imagesRecycler.adapter = imageAdapter
+        imageAdapter.submitList(menu.images)
 
 
 
@@ -70,13 +82,16 @@ class MenuDetailFragment : Fragment() {
                     //+and
                     val andText = TextView(this.context)
                     andText.text = and
+                    andText.gravity = Gravity.CENTER
                     andText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
                     displayList[defaultType].displayRG.addView(andText)
                 }
                 // +textview
                 val nameText = TextView(this.context)
                 nameText.text = i.name
+                nameText.gravity = Gravity.CENTER
                 displayList[defaultType].displayRG.addView(nameText)
+                displayList[defaultType].displayRG.gravity = Gravity.CENTER
 
             } else {
                 if (i.typeNumber != defaultType) {
@@ -89,16 +104,25 @@ class MenuDetailFragment : Fragment() {
                     //+or
                     val orText = TextView(this.context)
                     orText.text = or
+
                     orText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
                     displayList[defaultType].displayRG.addView(orText)
                 }
                 //+radiobutton  +price
-                val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
+
+//                val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
+                val radioText = if(i.extraPrice!=0){
+                    "${i.name}    <font color = \"#03A9F4\">(+NT$ ${i.extraPrice})</font>"
+                }else{
+                    "${i.name}"
+                }
+
                 val nameRadioBtn = RadioButton(this.context)
                 nameRadioBtn.text = Html.fromHtml(radioText)
                 nameRadioBtn.id = View.generateViewId()
                 nameRadioBtn.tag = i
                 displayList[defaultType].displayRG.addView(nameRadioBtn)
+                displayList[defaultType].displayRG.gravity = Gravity.CENTER
             }
         }
 

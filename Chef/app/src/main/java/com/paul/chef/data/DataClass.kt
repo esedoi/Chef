@@ -3,31 +3,32 @@ package com.paul.chef.data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import java.time.LocalDate
 
 
 data class Chef(
     val id:	String,
     val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
-    val address:List<String>,
-    val orderSetting: OrderSetting? = null
+    val address:List<String>?=null,
+    val bookSetting: BookSetting? = null
 )
 
 //come with menu
-data class OrderSetting(
+@Parcelize
+data class BookSetting(
     val type:Int = -1, //chef place,userplace,都接受, 都不接受
-    val defaultDateStatus:Int, //all open, all close
-    val menuList:List<MenuStatus>? = null,
-    val chefSpace:ChefSpace? = null,
-    val userSpace:UserSpace? = null,
-    val dateSetting:DateSetting? = null,
-    val todayPeople:Int? =  null
-)
+    val calendarDefault:Int, //all open, all close
+    val chefSpace: @RawValue ChefSpace? = null,
+    val userSpace: @RawValue UserSpace? = null,
+    val dateSetting:@RawValue DateSetting? = null,
+): Parcelable
 
 data class MenuStatus(
     val menuId:String,
     val status:Int
 )
+
 
 
 data class ChefSpace(
@@ -42,8 +43,8 @@ data class UserSpace(
 )
 
 data class DateSetting(
-    val week:List<WeekStatus>, //一二三四五六日
-    val date:List<DateStatus>, // 5/16, 6/13
+    val week:List<WeekStatus>?=null, //一二三四五六日
+    val date:List<DateStatus>?=null, // 5/16, 6/13
 )
 
 data class WeekStatus(
@@ -60,6 +61,8 @@ data class DateStatus(
     val session:List<String>? = null,
     val startTime:String? = null,
     val endTime:String? = null,
+    val menuList:List<MenuStatus>? = null,
+    val todayPeople:Int? =  null
 )
 
 data class Order(
@@ -186,6 +189,16 @@ data class VendorPayment(
     val bankInfo:BankInfo,
     val status:Int, //處理中, 已付款, 已取消
 )
+
+@Parcelize
+data class SelectedDates(
+    val selectedDates: List<LocalDate>
+):Parcelable
+
+@Parcelize
+data class SelectedDate(
+    val selectedDate: LocalDate
+):Parcelable
 
 
 

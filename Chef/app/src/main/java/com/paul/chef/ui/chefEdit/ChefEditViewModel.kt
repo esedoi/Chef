@@ -21,12 +21,11 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
 
 
 
-    fun createChef(){
+    fun createChef(name:String, email:String, intro:String){
         val id = db.collection("Chef").document().id
-        val profileInfo = ProfileInfo("paul", "email@email.com", "imagesString","i am master chef")
-        val address = listOf<String>("address____iwefiwefweqwdqwd")
+        val profileInfo = ProfileInfo(name, email, "imagesString",intro)
 
-        val temp = Chef(id, profileInfo, bankInfo = null, address, orderSetting = null )
+        val temp = Chef(id, profileInfo)
 
 
         //set firebase資料
@@ -42,15 +41,17 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
 
     }
 
-    fun saveChef(chefId:String){
+    fun saveChef(chefId:String, name:String, email:String, intro:String){
 
-        val info = ProfileInfo("jack", "jack@email.com", "jackimage","i am master chef!!")
+        val info = ProfileInfo(name, email, "jackimage",intro)
 
         db.collection("Chef").document(chefId)
             .update(mapOf(
-                "chefInfo" to info,
+                "profileInfo" to info,
             ))
-            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!") }
+            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
+                Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
+            }
             .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
 
     }

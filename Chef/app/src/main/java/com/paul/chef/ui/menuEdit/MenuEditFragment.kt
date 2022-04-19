@@ -170,7 +170,9 @@ class MenuEditFragment : Fragment(), AddDiscount {
                 }
 
                 if (isNameFilled) {
-                    val images = listOf<String>("photo1", "photo2", "photo3")
+                    val images = listOf<String>("https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
+                        "https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
+                        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/738206-1-1591601705.jpg?crop=0.503xw:1.00xh;0,0&resize=640:*")
                     Log.d("menuEditfragment", "dishList = ${dishList}")
                     menuEditViewModel.createMenu(
                         menuName,

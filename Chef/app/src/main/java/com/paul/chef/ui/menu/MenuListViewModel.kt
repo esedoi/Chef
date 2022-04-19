@@ -12,8 +12,8 @@ import com.paul.chef.data.ChefMenu
 class MenuListViewModel(application: Application) : AndroidViewModel(application){
 
 
-    val dataList = mutableListOf<ChefMenu>()
-    var _menuList = MutableLiveData<List<ChefMenu>>()
+    private val dataList = mutableListOf<ChefMenu>()
+    private var _menuList = MutableLiveData<List<ChefMenu>>()
     val menuList: LiveData<List<ChefMenu>>
         get() = _menuList
     private val db = FirebaseFirestore.getInstance()

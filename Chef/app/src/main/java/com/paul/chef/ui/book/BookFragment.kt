@@ -12,12 +12,20 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.R
+import com.paul.chef.data.BookSetting
 import com.paul.chef.data.Dish
+import com.paul.chef.data.SelectedDate
 import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.ui.chef.ChefViewModel
@@ -30,8 +38,8 @@ class BookFragment : Fragment() {
     private var _binding: FragmentBookBinding? = null
     private val binding get() = _binding!!
     var selectDate: Long? = null
-
     var picker: LocalDate? = null
+    var bookSetting: BookSetting? = null
 
     //safe args
     private val arg: BookFragmentArgs by navArgs()
@@ -48,15 +56,14 @@ class BookFragment : Fragment() {
         val root: View = binding.root
 
 
-
-
         //navigation safe args
         val menu = arg.chefMenu
         val selectedDish = arg.selectedDish.toList()
 
-        bookViewModel.priceResult.observe(viewLifecycleOwner){
-            Log.d("bookfragment","isdiscount=${it["isDiscount"]}")
-            if(it["isDiscount"] ==1){
+
+        bookViewModel.priceResult.observe(viewLifecycleOwner) {
+            Log.d("bookfragment", "isdiscount=${it["isDiscount"]}")
+            if (it["isDiscount"] == 1) {
                 binding.apply {
                     orginalPerPrice.visibility = View.VISIBLE
                     orginalTotal.visibility = View.VISIBLE
@@ -69,7 +76,7 @@ class BookFragment : Fragment() {
                     userFee.text = it["userFee"].toString()
                     userPay.text = it["userPay"].toString()
                 }
-                }else{
+            } else {
                 binding.apply {
                     orginalPerPrice.visibility = View.GONE
                     orginalTotal.visibility = View.GONE
@@ -78,25 +85,27 @@ class BookFragment : Fragment() {
                     userFee.text = it["userFee"].toString()
                     userPay.text = it["userPay"].toString()
                 }
-                }
             }
-
-
-
-        var datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .setTitleText("Select date")
-                .build()
-
-
-        binding.datepicker.setOnClickListener {
-            datePicker.show(this.parentFragmentManager, "tag")
         }
 
-        datePicker.addOnPositiveButtonClickListener {
-            Log.d("bookfragment", "datePicker.selection=${datePicker.selection}")
-            selectDate = datePicker.selection
+
+        setFragmentResultListener("requestKey") { requestKey, bundle ->
+            val result = bundle.getLong("bundleKey")
+            selectDate = result
+            Log.d("bookfragment", "result=$result")
+        }
+
+        binding.datepicker.setOnClickListener {
+//            if (bookSetting != null) {
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalDatePicker3(menu.chefId)
+                )
+//            }
+        }
+
+
+        bookViewModel.bookSetting.observe(viewLifecycleOwner) {
+            bookSetting = it
         }
 
         var people = -1
@@ -128,9 +137,9 @@ class BookFragment : Fragment() {
                 Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
             } else if (selectDate == null) {
                 Toast.makeText(this.context, "請選擇時間", Toast.LENGTH_SHORT).show()
-            } else if(typeId ==-1){
+            } else if (typeId == -1) {
                 Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
 
                 val typeInt = if (typeId == R.id.userSpace) {
                     0
