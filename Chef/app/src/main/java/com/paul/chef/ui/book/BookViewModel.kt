@@ -45,7 +45,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 //            }
     }
 
-    var _priceResult = MutableLiveData<Map<String,Int>>()
+    private var _priceResult = MutableLiveData<Map<String,Int>>()
     val priceResult: LiveData<Map<String,Int>>
         get() = _priceResult
 
@@ -80,11 +80,36 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+//    data class Order(
+//        val id:String, //D2204130685964
+//        val userId:String,
+//        val chefId:String, //chefId or kitchenId
+//        val userName:String,
+//        val chefName:String,
+//        val menuName:String,
+//        val type:Int, //userspace, chef space
+//        val address: String,
+//        val orderTime:Long,
+//        val date:Long,
+//        val time:String,
+//        val note:String,
+//        val people:Int,
+//        val menuId:String,
+//        val selectedDish: List<Dish>,
+//        val status:Int, //即將到來,已取消,已完成
+//        val originalPrice:Int,
+//        val discount:Int,
+//        val total:Int,
+//    )
+
 
     fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
         val userId = "77777777"
+        val userName = "Amy"
+        val chefName = chefMenu.chefName
+        val menuName = chefMenu.menuName
         val chefId = chefMenu.chefId
         val orderTime = Calendar.getInstance().timeInMillis
         val date = datePicker
@@ -108,6 +133,9 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             orderId,
             userId,
             chefId,
+            userName,
+            chefName,
+            menuName,
             type,
             address,
             orderTime,

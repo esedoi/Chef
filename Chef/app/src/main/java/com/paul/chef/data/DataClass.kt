@@ -25,8 +25,8 @@ data class BookSetting(
 ): Parcelable
 
 data class MenuStatus(
-    val menuId:String,
-    val status:Int
+    val menuId:String? = null,
+    val status:Int?=null
 )
 
 
@@ -65,10 +65,14 @@ data class DateStatus(
     val todayPeople:Int? =  null
 )
 
+@Parcelize
 data class Order(
     val id:String, //D2204130685964
     val userId:String,
     val chefId:String, //chefId or kitchenId
+    val userName:String,
+    val chefName:String,
+    val menuName:String,
     val type:Int, //userspace, chef space
     val address: String,
     val orderTime:Long,
@@ -82,7 +86,7 @@ data class Order(
     val originalPrice:Int,
     val discount:Int,
     val total:Int,
-)
+): Parcelable
 
 
 
@@ -91,6 +95,7 @@ data class ChefMenu( ///menu
     val id:String,
     val chefId:String,
     val menuName:String,
+    val chefName:String,
     val intro:String,
     val perPrice:Int,
     val images:List<String>,

@@ -1,40 +1,26 @@
-package com.paul.chef.ui.menuEdit
+package com.paul.chef.ui.orderDetail
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.paul.chef.ChefManger
-import com.paul.chef.data.*
 
-class MenuEditViewModel (application: Application) : AndroidViewModel(application){
+class OrderDetailViewModel(application: Application) : AndroidViewModel(application){
 
     @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
 
     private val db = FirebaseFirestore.getInstance()
-    val chefId = ChefManger().chefId
-    val chefName = ChefManger().chefName
 
-
-
-    fun createMenu(menuName:String,
-                   menuIntro:String,
-                   perPrice:Int,
-                   images:List<String>,
-                   discountList:List<Discount>,
-                   dishList:List<Dish>){
-        val id = db.collection("Menu").document().id
-
-
-        val menu = ChefMenu(id, chefId, menuName,chefName, menuIntro, perPrice, images, discountList, dishList)
-
-
+    fun changeStatus(orderId:String, status:Int){
         //set firebase資料
-        db.collection("Menu").document(id)
-            .set(menu)
+        db.collection("Order").document(orderId)
+            .update(mapOf(
+                "status" to status,
+            ))
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
                 Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
@@ -44,6 +30,5 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
             }
 
     }
-
 
 }

@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+//    val navView: BottomNavigationView? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +39,10 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        if (mode == Mode.USER.index) {
-            navView.menu.clear()
-            navView.inflateMenu(R.menu.bottom_nav_menu)
-        } else {
-            navView.menu.clear()
-            navView.inflateMenu(R.menu.chef_bottom_nav_menu)
-        }
+
 
 
 //        app:menu="@menu/bottom_nav_menu"
-
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
@@ -69,6 +64,16 @@ class MainActivity : AppCompatActivity() {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.chef_bottom_nav_menu)
             }
+        }
+    }
+
+    fun  turnMode(mode:Int){
+        if (mode == Mode.USER.index) {
+            binding.navView.menu.clear()
+            binding.navView.inflateMenu(R.menu.bottom_nav_menu)
+        } else {
+            binding.navView.menu.clear()
+            binding.navView.inflateMenu(R.menu.chef_bottom_nav_menu)
         }
     }
 }

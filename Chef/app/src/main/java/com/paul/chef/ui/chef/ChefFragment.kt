@@ -11,10 +11,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
-import com.paul.chef.MainActivity
-import com.paul.chef.MainViewModel
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.Mode
+import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
 
 class ChefFragment : Fragment() {
@@ -31,8 +28,7 @@ class ChefFragment : Fragment() {
     ): View {
         val chefViewModel =
             ViewModelProvider(this).get(ChefViewModel::class.java)
-        val mainViewModel =
-            ViewModelProvider(this).get(MainViewModel::class.java)
+
 
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -57,9 +53,9 @@ class ChefFragment : Fragment() {
         }
 
         binding.turnToUser.setOnClickListener {
-            mainViewModel.turnMode(Mode.USER.index)
-            setFragmentResult("requestKey", bundleOf("bundleKey" to Mode.USER.index))
-//            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+            (activity as MainActivity).turnMode(Mode.USER.index)
+            UserManger().mode = Mode.USER.index
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
 
         return root

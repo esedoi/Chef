@@ -28,13 +28,12 @@ class UserProfileFragment : Fragment() {
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val mainViewModel =
-            ViewModelProvider(this).get(MainViewModel::class.java)
+
 
         binding.turnToChef.setOnClickListener {
-           mainViewModel.turnMode(Mode.CHEF.index)
-            Log.d("userprofilefragment", "here__________________")
-//            findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+            (activity as MainActivity).turnMode(Mode.CHEF.index)
+            UserManger().mode = Mode.CHEF.index
+            findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
         }
         return  root
     }

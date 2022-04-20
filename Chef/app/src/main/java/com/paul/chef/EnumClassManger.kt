@@ -19,3 +19,10 @@ enum class DateStatus(val index:Int){
 enum class Mode(val index:Int){
     LOGOUT(0),USER(1),CHEF(2)
 }
+
+enum class OrderStatus(val index: Int, val value: String) {
+    PENDING(0, "待處理"),
+    UPCOMING(1,"即將到來"),
+    COMPLETED(2,"已完成"),
+    CANCELLED(3,"已取消")
+}

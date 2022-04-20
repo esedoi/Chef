@@ -155,6 +155,19 @@
         android:name="com.paul.chef.ui.userProfile.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.paul.chef.ui.orderDetail.OrderDetailFragment"
+        android:label="fragment_order_detail_"
+        tools:layout="@layout/fragment_order_detail_" >
+        <argument
+            android:name="order"
+            app:argType="com.paul.chef.data.Order" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_orderDetailFragment"
+        app:destination="@id/orderDetailFragment" />
+
 
 
 </navigation>

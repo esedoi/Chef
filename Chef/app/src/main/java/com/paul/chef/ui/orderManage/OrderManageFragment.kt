@@ -6,27 +6,61 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.tabs.TabLayoutMediator
+import com.paul.chef.OrderStatus
 import com.paul.chef.R
+import com.paul.chef.databinding.FragmentChefPageBinding
+import com.paul.chef.databinding.FragmentOrderManageBinding
 
 class OrderManageFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = OrderManageFragment()
-    }
 
     private lateinit var viewModel: OrderManageViewModel
+
+    private var _binding: FragmentOrderManageBinding? = null
+    private val binding get() = _binding!!
+
+    lateinit var orderAdapter: OrderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_order_manage, container, false)
+        _binding = FragmentOrderManageBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        viewModel = ViewModelProvider(this).get(OrderManageViewModel::class.java)
+
+
+        //viewPager2
+        orderAdapter = OrderAdapter(this)
+        binding.viewpager2.adapter = orderAdapter
+
+        TabLayoutMediator(binding.tabs, binding.viewpager2) { tab, position ->
+
+            when (position) {
+                0 -> {
+                    tab.text = OrderStatus.PENDING.value
+                }
+                1 -> {
+                    tab.text = OrderStatus.UPCOMING.value
+                }
+                2 -> {
+                    tab.text = OrderStatus.COMPLETED.value
+                }
+                3 -> {
+                    tab.text = OrderStatus.CANCELLED.value
+                }
+            }
+
+        }.attach()
+
+        return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(OrderManageViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
