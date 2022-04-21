@@ -3,6 +3,7 @@ package com.paul.chef.ui.orderDetail
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,14 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
-import com.paul.chef.ChefManger
-import com.paul.chef.OrderStatus
-import com.paul.chef.R
+import com.paul.chef.*
 import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.databinding.FragmentOrderDetailBinding
 import com.paul.chef.databinding.FragmentUserProfileBinding
 import com.paul.chef.databinding.ItemDisplayDishBinding
 import com.paul.chef.ui.book.BookFragmentArgs
+import java.time.LocalDate
 
 class OrderDetailFragment : Fragment() {
 
@@ -42,30 +42,88 @@ class OrderDetailFragment : Fragment() {
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
         val order = arg.order
+
+        val mode = UserManger.readData("mode", (activity as MainActivity))
 
 
         binding.apply {
-            orderDetailType.text = order.type.toString()
-            orderDetailStatus.text = order.status.toString()
-            orderDetailDate.text = order.date.toString()
-            orderDetailName.text = order.userName
+
+            when(mode){
+                Mode.CHEF.index->{
+                    orderDetailType.text = when(order.type){
+                        BookType.ChefSpace.index-> BookType.ChefSpace.chefTxt
+                        BookType.UserSpace.index-> BookType.UserSpace.chefTxt
+                        else->"something went wrong"
+                    }
+                    orderDetailName.text = order.userName
+                    orderDetailPaymentText.text = "你的收款"
+                    orderDetailTotal.text = order.chefReceive.toString()
+                    if(order.status==OrderStatus.PENDING.index){
+                        orderDetailAcceptBtn.visibility = View.VISIBLE
+                    }else{
+                        orderDetailAcceptBtn.visibility = View.GONE
+                    }
+                   
+                    orderDetailAcceptBtn.setOnClickListener {
+                        viewModel.changeStatus(order.id,OrderStatus.UPCOMING.index)
+
+                    }
+                    orderDetailCancelBtn.text = when(order.status){
+                        OrderStatus.PENDING.index ->"拒絕此訂單"
+                        else->"取消訂單"
+                    }
+
+                    orderDetailCancelBtn.setOnClickListener {
+                        viewModel.changeStatus(order.id,OrderStatus.CANCELLED.index)
+                    }
+
+
+                }
+                Mode.USER.index->{
+                    orderDetailType.text = when(order.type){
+                        BookType.ChefSpace.index-> BookType.ChefSpace.userTxt
+                        BookType.UserSpace.index-> BookType.UserSpace.userTxt
+                        else->"something went wrong"
+                    }
+                    orderDetailName.text = order.chefName
+                    orderDetailPaymentText.text = "你的付款"
+                    orderDetailTotal.text = order.userPay.toString()
+                    orderDetailAcceptBtn.visibility = View.GONE
+                    orderDetailCancelBtn.text = "取消訂單"
+                }
+            }
+
+            orderDetailStatus.text = when(order.status){
+                OrderStatus.PENDING.index->OrderStatus.PENDING.value
+                OrderStatus.UPCOMING.index->OrderStatus.UPCOMING.value
+                OrderStatus.COMPLETED.index->OrderStatus.COMPLETED.value
+                OrderStatus.CANCELLED.index->OrderStatus.CANCELLED.value
+                else->"something went wrong"
+            }
+            orderDetailDate.text = LocalDate.ofEpochDay(order.date).toString()
+
             orderDetailMenuName.text = order.menuName
             orderDetailNote.text = order.note
-            orderDetailPeople.text = order.people.toString()
+            orderDetailPeople.text = order.people.toString()+" 人"
             orderDetailOrginalPrice.text = order.originalPrice.toString()
             orderDetailDiscount.text = order.discount.toString()
-            orderDetailFee.text = ChefManger().fee.toString()
-            orderDetailTotal.text = order.total.toString()
+            orderDetailFee.text = ChefManger().chefFee.toString()
 
-            orderDetailAccept.setOnClickListener {
-                viewModel.changeStatus(order.id,OrderStatus.UPCOMING.index)
-
+            when(order.status){
+                 OrderStatus.PENDING.index or OrderStatus.UPCOMING.index ->{
+                    orderDetailCancelBtn.isClickable =true
+                     orderDetailCancelBtn.setOnClickListener {
+                         viewModel.changeStatus(order.id,OrderStatus.CANCELLED.index)
+                     }
+                }
+                else->{
+                    orderDetailCancelBtn.isClickable = false
+                }
             }
-            orderDetailRefuse.setOnClickListener {
-                viewModel.changeStatus(order.id,OrderStatus.CANCELLED.index)
+
+            orderDetailSendBtn.setOnClickListener {
+                Log.d("orderdetailfragment","send message")
             }
         }
 

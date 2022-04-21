@@ -2,6 +2,7 @@ package com.paul.chef.ui.orderManage
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,14 @@ import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.paul.chef.OrderStatus
 import com.paul.chef.R
+import com.paul.chef.UserManger
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentOrderManageBinding
 
 class OrderManageFragment : Fragment() {
 
 
-    private lateinit var viewModel: OrderManageViewModel
+
 
     private var _binding: FragmentOrderManageBinding? = null
     private val binding get() = _binding!!
@@ -28,9 +30,6 @@ class OrderManageFragment : Fragment() {
     ): View? {
         _binding = FragmentOrderManageBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        viewModel = ViewModelProvider(this).get(OrderManageViewModel::class.java)
-
 
         //viewPager2
         orderAdapter = OrderAdapter(this)

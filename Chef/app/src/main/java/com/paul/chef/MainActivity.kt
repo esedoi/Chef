@@ -21,7 +21,7 @@ import com.paul.chef.ui.datePicker.DatePickerViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    var mode = Mode.CHEF.index
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -68,6 +68,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun  turnMode(mode:Int){
+
+        UserManger.saveData(mode,this)
+
         if (mode == Mode.USER.index) {
             binding.navView.menu.clear()
             binding.navView.inflateMenu(R.menu.bottom_nav_menu)

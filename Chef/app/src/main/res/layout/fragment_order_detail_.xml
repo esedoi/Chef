@@ -74,11 +74,11 @@
                 android:id="@+id/order_detail_menuName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:text="menuName"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="@+id/order_detail_people"
-                app:layout_constraintTop_toBottomOf="@+id/order_detail_people" />
+                app:layout_constraintTop_toBottomOf="@+id/order_detail_cancel_btn" />
 
             <LinearLayout
                 android:id="@+id/order_detail_linear"
@@ -91,28 +91,30 @@
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_menuName"></LinearLayout>
 
             <Button
-                android:id="@+id/order_detail_accept"
-                android:layout_width="wrap_content"
+                android:id="@+id/order_detail_accept_btn"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginBottom="92dp"
+                android:layout_marginEnd="32dp"
                 android:text="accept"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/order_detail_cancel_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/order_detail_cancel_btn" />
 
             <Button
-                android:id="@+id/order_detail_refuse"
-                android:layout_width="wrap_content"
+                android:id="@+id/order_detail_cancel_btn"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
                 android:text="refuse"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.456"
-                app:layout_constraintStart_toEndOf="@+id/order_detail_accept"
-                app:layout_constraintTop_toTopOf="@+id/order_detail_accept" />
+                app:layout_constraintEnd_toStartOf="@+id/order_detail_send_btn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/order_detail_people" />
 
             <TextView
-                android:id="@+id/textView42"
+                android:id="@+id/order_detail_payment_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
@@ -148,8 +150,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="幾人 x 每人價格 "
-                app:layout_constraintStart_toStartOf="@+id/textView42"
-                app:layout_constraintTop_toBottomOf="@+id/textView42" />
+                app:layout_constraintStart_toStartOf="@+id/order_detail_payment_text"
+                app:layout_constraintTop_toBottomOf="@+id/order_detail_payment_text" />
 
             <TextView
                 android:id="@+id/order_detail_orginal_price"
@@ -177,10 +179,9 @@
                 android:id="@+id/order_detail_discount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="68dp"
                 android:text="折扣價格"
                 app:layout_constraintBottom_toBottomOf="@+id/textView47"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/order_detail_orginal_price"
                 app:layout_constraintTop_toTopOf="@+id/textView47"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -197,10 +198,9 @@
                 android:id="@+id/order_detail_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="56dp"
                 android:text="平台服務費"
                 app:layout_constraintBottom_toBottomOf="@+id/textView49"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/order_detail_discount"
                 app:layout_constraintTop_toTopOf="@+id/textView49"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -208,19 +208,21 @@
                 android:id="@+id/textView53"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="80dp"
                 android:text="總共"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView49"
-                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+                app:layout_constraintTop_toBottomOf="@+id/textView49"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/order_detail_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="68dp"
                 android:text="總共"
                 app:layout_constraintBottom_toBottomOf="@+id/textView53"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/order_detail_fee"
                 app:layout_constraintTop_toTopOf="@+id/textView53"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -233,6 +235,21 @@
                 android:text="note"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_linear" />
+
+            <Button
+                android:id="@+id/order_detail_send_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="32dp"
+                android:text="傳送訊息"
+                app:layout_constraintBottom_toBottomOf="@+id/order_detail_cancel_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/order_detail_accept_btn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/order_detail_cancel_btn"
+                app:layout_constraintTop_toTopOf="@+id/order_detail_cancel_btn"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

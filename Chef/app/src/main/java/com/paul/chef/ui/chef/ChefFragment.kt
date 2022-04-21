@@ -54,7 +54,6 @@ class ChefFragment : Fragment() {
 
         binding.turnToUser.setOnClickListener {
             (activity as MainActivity).turnMode(Mode.USER.index)
-            UserManger().mode = Mode.USER.index
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
 

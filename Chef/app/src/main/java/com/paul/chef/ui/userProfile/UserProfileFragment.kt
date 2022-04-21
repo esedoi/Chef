@@ -32,7 +32,6 @@ class UserProfileFragment : Fragment() {
 
         binding.turnToChef.setOnClickListener {
             (activity as MainActivity).turnMode(Mode.CHEF.index)
-            UserManger().mode = Mode.CHEF.index
             findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
         }
         return  root

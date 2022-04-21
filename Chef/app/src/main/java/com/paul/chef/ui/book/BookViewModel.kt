@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import java.time.LocalDate
 import java.util.*
@@ -24,6 +25,9 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     private var _bookSetting = MutableLiveData<BookSetting>()
     val bookSetting: LiveData<BookSetting>
         get() = _bookSetting
+
+    var userPay = -1
+    var chefReceive = -1
 
 
 
@@ -54,7 +58,8 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         val originalPrice = chefMenu.perPrice * people
         var total = originalPrice
         var isDiscount = 0
-        var userFee = 300
+        var userFee = UserManger().userFee
+        var chefFee = ChefManger().chefFee
 
         for(i in chefMenu.discount){
             if(people>=i.people){
@@ -67,7 +72,8 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         }
         val discountPerPrice = total/people
         val discount = originalPrice-total
-        val userPay = total+userFee
+         userPay = total+userFee
+        chefReceive = total-chefFee
         _priceResult.value = mapOf(
             "discountPerPrice" to discountPerPrice,
             "originalPrice" to originalPrice,
@@ -148,7 +154,8 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             status,
             originalPrice,
             discount,
-            total,
+            userPay,
+            chefReceive
           )
 
         //set firebase資料

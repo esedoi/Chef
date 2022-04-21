@@ -85,7 +85,8 @@ data class Order(
     val status:Int, //即將到來,已取消,已完成
     val originalPrice:Int,
     val discount:Int,
-    val total:Int,
+    val userPay:Int,
+    val chefReceive:Int
 ): Parcelable
 
 

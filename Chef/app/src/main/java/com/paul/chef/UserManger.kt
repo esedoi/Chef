@@ -8,14 +8,15 @@ import android.provider.CalendarContract
 
 class UserManger  {
 
-    var mode = Mode.USER.index
+
+    val userFee = 300
 
 
     companion object  {
         //            private lateinit var settings: SharedPreferences
 //            var loginStatus: Boolean = false
 //            var userToken: String = "userToken"
-        @SuppressLint("StaticFieldLeak")
+//        @SuppressLint("StaticFieldLeak")
 //            private var context: Context = Context
 
 
@@ -23,33 +24,24 @@ class UserManger  {
         private lateinit var settings: SharedPreferences
 
 
-        fun readData(userToken: String, context: Context): String? {
+        fun readData(mode: String, context: Context): Int? {
 
-//            settings = context.getSharedPreferences(
-//                "DATA",
-//                Context.MODE_PRIVATE
-//            )
-
-
-
-            return settings.getString(userToken, "")
-
-        }
-
-        fun saveData(token:String, context: Context) {
-            //使用 getSharedPreferences() 方法
-            //參數前面放入資料夾名稱，後面放入MODE
-            // MODE_PRIVATE 表示只有建立該檔案的應用才能訪問他
             settings = context.getSharedPreferences(
                 "DATA",
                 Context.MODE_PRIVATE
             )
-            //使用edit()添加數據
+
+            return settings.getInt(mode, 1)
+
+        }
+
+        fun saveData(mode:Int, context: Context) {
+            settings = context.getSharedPreferences(
+                "DATA",
+                Context.MODE_PRIVATE
+            )
             settings.edit()
-                .putString("userToken",token )
-                .putInt("age",18 )
-                .putBoolean("status",false )
-                //調用apply()提交數據
+                .putInt("mode",mode )
                 .apply()
         }
 

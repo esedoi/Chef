@@ -1,22 +1,26 @@
 package com.paul.chef.ui.orderManage
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.ChefManger
-import com.paul.chef.Mode
-import com.paul.chef.OrderStatus
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.data.BookSetting
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
 import java.time.LocalDate
 
-class OrderManageViewModel : ViewModel() {
+class OrderManageViewModel(application: Application) : AndroidViewModel(application){
+    @SuppressLint("StaticFieldLeak")
+    private val context = getApplication<Application>().applicationContext
+
+
     private val db = FirebaseFirestore.getInstance()
 
 
@@ -41,11 +45,9 @@ class OrderManageViewModel : ViewModel() {
     var value = ""
 
 
-
-
     init{
 
-        when(UserManger().mode){
+        when(UserManger.readData("mode", context)){
             Mode.USER.index->{
                 field = "userId"
                 value = userId
@@ -56,9 +58,10 @@ class OrderManageViewModel : ViewModel() {
             }
         }
 
+        Log.d("field", "field=$field")
 
         db.collection("Order")
-            .whereEqualTo(field, value)
+            .whereEqualTo( field , value)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Log.w("notification", "Listen failed.", e)
