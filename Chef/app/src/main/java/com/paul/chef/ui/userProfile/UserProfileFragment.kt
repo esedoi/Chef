@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentUserProfileBinding
+import com.paul.chef.ui.chef.ChefViewModel
+import com.paul.chef.ui.orderDetail.OrderDetailViewModel
 
 class UserProfileFragment : Fragment() {
 
@@ -28,7 +30,16 @@ class UserProfileFragment : Fragment() {
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val userProfileViewModel =
+            ViewModelProvider(this).get(UserProfileViewModel::class.java)
 
+
+        binding.createUser.setOnClickListener {
+            val userName = "Amy"
+            val userEmail = "amy@gmail.com"
+            val userIntro = "i am a nice guest"
+            userProfileViewModel.createUser(userEmail,userIntro, userName)
+        }
 
         binding.turnToChef.setOnClickListener {
             (activity as MainActivity).turnMode(Mode.CHEF.index)

@@ -2,14 +2,15 @@ package com.paul.chef.ui.menu
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.MenuDetail
+import com.paul.chef.ItemMenu
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.databinding.ItemMenuListBinding
 
-class MenuListAdapter(val menuDetail:MenuDetail) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(FriendListCallback()) {
+class MenuListAdapter(private val itemMenu:ItemMenu, menuViewModel:ViewModel) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(FriendListCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -21,7 +22,7 @@ class MenuListAdapter(val menuDetail:MenuDetail) : ListAdapter<ChefMenu, Recycle
 
 
         if (holder is ArticlesHolder) {
-            holder.bind(item, menuDetail)
+            holder.bind(item, itemMenu)
         }
 
     }
@@ -31,9 +32,12 @@ class MenuListAdapter(val menuDetail:MenuDetail) : ListAdapter<ChefMenu, Recycle
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: ChefMenu, menuDetail: MenuDetail) {
+        fun bind(item: ChefMenu, itemMenu: ItemMenu) {
             itemView.setOnClickListener {
-                menuDetail.goDetail(item)
+                itemMenu.goDetail(item)
+            }
+            binding.itemMenuLikeBtn.setOnClickListener {
+                itemMenu.like(item.id)
             }
             binding.menuTitle.text = item.menuName
         }

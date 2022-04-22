@@ -17,10 +17,6 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
 
     private val db = FirebaseFirestore.getInstance()
 
-
-
-
-
     fun createChef(name:String, email:String, intro:String){
         val id = db.collection("Chef").document().id
         val profileInfo = ProfileInfo(name, email, "imagesString",intro)

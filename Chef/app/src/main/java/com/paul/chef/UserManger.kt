@@ -10,6 +10,8 @@ class UserManger  {
 
 
     val userFee = 300
+    val userId = "G89XOKfdRAElWj5AnaoY"
+
 
 
     companion object  {

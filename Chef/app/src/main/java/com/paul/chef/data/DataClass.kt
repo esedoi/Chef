@@ -148,7 +148,8 @@ data class Review(
 data class User(
     val userId:	String,
     val profileInfo:ProfileInfo,
-    val address:List<String>,
+    val likeList:List<String>?=null,
+    val address:List<String>?=null
 )
 
 

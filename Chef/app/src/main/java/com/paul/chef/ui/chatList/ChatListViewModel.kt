@@ -1,7 +1,7 @@
-package com.paul.chef.ui.chat
+package com.paul.chef.ui.chatList
 
 import androidx.lifecycle.ViewModel
 
-class ChatViewModel : ViewModel() {
+class ChatListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

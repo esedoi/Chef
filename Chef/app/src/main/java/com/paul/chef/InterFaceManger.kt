@@ -9,8 +9,9 @@ interface AddDiscount{
            fun remove(position: Int, percentOff:Int)
        }
 
-    interface MenuDetail{
+    interface ItemMenu{
         fun goDetail(menu:ChefMenu)
+        fun like(menuId:String)
     }
 
     interface GoOrderDetail{

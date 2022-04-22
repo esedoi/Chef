@@ -128,9 +128,9 @@
         app:destination="@id/datePicker3" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.paul.chef.ui.chat.ChatFragment"
+        android:name="com.paul.chef.ui.chatList.ChatListFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat_list" />
     <fragment
         android:id="@+id/likeFragment"
         android:name="com.paul.chef.ui.like.LikeFragment"

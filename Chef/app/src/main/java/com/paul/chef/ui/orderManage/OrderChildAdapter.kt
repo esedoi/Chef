@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.GoOrderDetail
-import com.paul.chef.MenuDetail
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
-import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.databinding.ItemOrderChildBinding
 
 class OrderChildAdapter(val goOrderDetail: GoOrderDetail) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {

@@ -34,9 +34,6 @@ class ChefEditFragment : Fragment() {
 
 
 
-
-
-
         binding.chefSave.setOnClickListener {
             val name = binding.chefNameEdit.text.toString()
             val email = binding.chefEmailEdit.text.toString()

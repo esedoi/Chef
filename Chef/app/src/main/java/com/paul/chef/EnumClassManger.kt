@@ -38,3 +38,8 @@ enum class PickerType(val index: Int, val value: String) {
     PICK_SESSION_TIME(7, "pickSessionTime"),
     PICK_TIME(8, "pickTime")
 }
+
+enum class Like(val index: Int) {
+    ADD(0), REMOVE(1)
+}
+
