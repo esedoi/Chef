@@ -26,3 +26,15 @@ enum class OrderStatus(val index: Int, val value: String) {
     COMPLETED(2, "已完成"),
     CANCELLED(3, "已取消")
 }
+
+enum class PickerType(val index: Int, val value: String) {
+    SET_CAPACITY(0, "setCapacity"),
+    SET_SESSION_CAPACITY(1, "setSessionCapacity"),
+    SET_SESSION_TIME(2, "setSessionTime"),
+    SET_START_TIME(3, "setStartTime"),
+    SET_END_TIME(4, "setEndTime"),
+    PICK_CAPACITY(5, "pickCapacity"),
+    PICK_SESSION_CAPACITY(6, "pickSessionCapacity"),
+    PICK_SESSION_TIME(7, "pickSessionTime"),
+    PICK_TIME(8, "pickTime")
+}

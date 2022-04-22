@@ -29,6 +29,7 @@ class DatePickerViewModel(application: Application) : AndroidViewModel(applicati
 
 
     init {
+        //user端不應該從manger  get chefid
         val chefId = ChefManger().chefId
 
 

@@ -32,7 +32,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    init{
+//    init{
 //        val chefId = ChefManger().chefId
 //        db.collection("Chef")
 //            .document(chefId)
@@ -47,7 +47,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 //                val data = Gson().fromJson(json, Chef::class.java)
 //                _bookSetting.value = data.bookSetting!!
 //            }
-    }
+//    }
 
     private var _priceResult = MutableLiveData<Map<String,Int>>()
     val priceResult: LiveData<Map<String,Int>>

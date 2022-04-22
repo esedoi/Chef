@@ -21,7 +21,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.paul.chef.BookType
 import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.PickerType
 import com.paul.chef.R
 import com.paul.chef.data.BookSetting
 import com.paul.chef.data.Dish
@@ -39,7 +41,7 @@ class BookFragment : Fragment() {
     private val binding get() = _binding!!
     var selectDate: Long? = null
     var picker: LocalDate? = null
-    var bookSetting: BookSetting? = null
+//    var bookSetting: BookSetting? = null
 
     //safe args
     private val arg: BookFragmentArgs by navArgs()
@@ -89,62 +91,126 @@ class BookFragment : Fragment() {
         }
 
 
+
+
+        binding.datepicker.setOnClickListener {
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalDatePicker3(menu.chefId)
+            )
+        }
+
         setFragmentResultListener("requestKey") { requestKey, bundle ->
             val result = bundle.getLong("bundleKey")
             selectDate = result
             Log.d("bookfragment", "result=$result")
         }
 
-        binding.datepicker.setOnClickListener {
-//            if (bookSetting != null) {
-                findNavController().navigate(
-                    MobileNavigationDirections.actionGlobalDatePicker3(menu.chefId)
-                )
-//            }
-        }
+
+        var typeId: Int
 
 
-        bookViewModel.bookSetting.observe(viewLifecycleOwner) {
-            bookSetting = it
-        }
-
-        var people = -1
-        //peopleSpinner
-        val peopleList =
-            arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
-        val peopleAdapter =
-            this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, peopleList) }
-        peopleAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        binding.peopleSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    people = peopleList[p2].toInt()
-                    bookViewModel.orderPrice(menu, people)
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
-            }
-        binding.peopleSpinner.adapter = peopleAdapter
 
 
-        binding.pay.setOnClickListener {
-            val typeId = binding.orderTypeGroup.checkedRadioButtonId
 
-            if (people == -1) {
-                Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
-            } else if (selectDate == null) {
-                Toast.makeText(this.context, "請選擇時間", Toast.LENGTH_SHORT).show()
-            } else if (typeId == -1) {
+        binding.bookPeoplerPicker.setOnClickListener {
+            typeId = binding.orderTypeGroup.checkedRadioButtonId
+
+            if (typeId == -1) {
                 Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
             } else {
 
                 val typeInt = if (typeId == R.id.userSpace) {
-                    0
+                    BookType.UserSpace.index
                 } else {
-                    1
+                    BookType.ChefSpace.index
+                }
+
+                val safeArg = if(typeInt ==BookType.UserSpace.index){
+                    PickerType.PICK_CAPACITY.index
+                }else{
+                    PickerType.PICK_SESSION_CAPACITY.index
+                }
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalPickerBottomSheet(
+                        safeArg,menu.chefId
+                    )
+                )
+            }
+        }
+
+        binding.bookTimePicker.setOnClickListener {
+            typeId = binding.orderTypeGroup.checkedRadioButtonId
+
+            if (typeId == -1) {
+                Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
+            } else {
+                val typeInt = if (typeId == R.id.userSpace) {
+                    BookType.UserSpace.index
+                } else {
+                    BookType.ChefSpace.index
+                }
+
+                val safeArg = if(typeInt ==BookType.UserSpace.index){
+                    PickerType.PICK_TIME.index
+                }else{
+                    PickerType.PICK_SESSION_TIME.index
+                }
+
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalPickerBottomSheet(
+                        safeArg,menu.chefId
+                    )
+                )
+            }
+        }
+
+
+
+        var pickPeople = -1
+        var pickTime = ""
+
+        binding.orderTypeGroup.setOnCheckedChangeListener { radioGroup, i ->
+            typeId = binding.orderTypeGroup.checkedRadioButtonId
+            pickPeople = -1
+            pickTime = ""
+        }
+
+        setFragmentResultListener(PickerType.PICK_TIME.value) { requestKey, bundle ->
+            pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
+        }
+        setFragmentResultListener(PickerType.PICK_SESSION_TIME.value) { requestKey, bundle ->
+            pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
+        }
+        setFragmentResultListener(PickerType.PICK_CAPACITY.value) { requestKey, bundle ->
+            pickPeople = bundle.getInt(PickerType.PICK_CAPACITY.value)
+            bookViewModel.orderPrice(menu, pickPeople)
+        }
+        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
+            pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
+            bookViewModel.orderPrice(menu, pickPeople)
+        }
+
+
+
+
+
+        binding.pay.setOnClickListener {
+           typeId = binding.orderTypeGroup.checkedRadioButtonId
+
+            if (selectDate == null) {
+                Toast.makeText(this.context, "請選擇日期", Toast.LENGTH_SHORT).show()
+            } else if (typeId == -1) {
+                Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
+            } else if(pickPeople == -1){
+                Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
+            }else if(pickTime == ""){
+                Toast.makeText(this.context, "請選擇用餐時間", Toast.LENGTH_SHORT).show()
+            }else {
+
+                val typeInt = if (typeId == R.id.userSpace) {
+                    BookType.UserSpace.index
+                } else {
+                    BookType.ChefSpace.index
                 }
                 Log.d("bookfragment", "typeId = $typeId")
                 Log.d("bookfragment", "typeInt = $typeInt")
@@ -154,7 +220,7 @@ class BookFragment : Fragment() {
                 } else {
                     "userAddress"
                 }
-                val time = "19:00"
+
 
                 val note = binding.noteInput.text.toString()
 
@@ -163,9 +229,9 @@ class BookFragment : Fragment() {
                     typeInt,
                     address,
                     selectDate!!,
-                    time,
+                    pickTime,
                     note,
-                    people,
+                    pickPeople,
                     selectedDish
                 )
 

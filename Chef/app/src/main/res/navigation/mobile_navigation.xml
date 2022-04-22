@@ -167,7 +167,22 @@
     <action
         android:id="@+id/action_global_orderDetailFragment"
         app:destination="@id/orderDetailFragment" />
+    <dialog
+        android:id="@+id/pickerBottomSheet"
+        android:name="com.paul.chef.ui.bottomSheetPicker.PickerBottomSheet"
+        android:label="PickerBottomSheet" >
+        <argument
+            android:name="pickerType"
+            app:argType="integer" />
+        <argument
+            android:name="chefId"
+            app:argType="string"
+            app:nullable="true"/>
 
+    </dialog>
+    <action
+        android:id="@+id/action_global_pickerBottomSheet"
+        app:destination="@id/pickerBottomSheet" />
 
 
 </navigation>

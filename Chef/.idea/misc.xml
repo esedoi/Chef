@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26752878824869786" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_dish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bottom_sheet_datepicker.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/bottom_sheet_time_picker.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/calendar_day_legend.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.18489583333333334" />

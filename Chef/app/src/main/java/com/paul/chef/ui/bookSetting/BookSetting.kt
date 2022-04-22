@@ -3,15 +3,21 @@ package com.paul.chef.ui.bookSetting
 import android.R
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.paul.chef.BookSettingType
 import com.paul.chef.CalendarType
+import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.PickerType
 import com.paul.chef.data.ChefSpace
 import com.paul.chef.data.DateSetting
 import com.paul.chef.data.MenuStatus
@@ -78,40 +84,43 @@ class BookSetting : Fragment() {
         binding.calendarSpinner.adapter = myAdapter
 
 
+        binding.bookSettingPickSession.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalPickerBottomSheet(PickerType.SET_SESSION_TIME.index, null) )
+        }
+        binding.bookSettingSessionCapacity.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalPickerBottomSheet(PickerType.SET_SESSION_CAPACITY.index, null))
+        }
+        binding.bookSettingStartPick.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalPickerBottomSheet(PickerType.SET_START_TIME.index,null))
+        }
+        binding.bookSettingEndPick.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalPickerBottomSheet(PickerType.SET_END_TIME.index,null))
+        }
+        binding.bookSettingCapacity.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalPickerBottomSheet(PickerType.SET_CAPACITY.index,null))
+        }
 
-        //capacity spinner
-        val capacityList =
-            arrayOf("1 人", "2 人", "3 人", "4 人", "5 人", "6 人", "7 人", "8 人", "9 人", "10 人", "11 人", "12 人", "13 人", "14 人", "15 人", "16 人")
-        var capacityResult = -1
-        val capacityAdapter =
-            this.context?.let {
-                ArrayAdapter(it, R.layout.simple_spinner_item, capacityList)
-            }
-        myAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.userSpaceCapcity.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    capacityResult = p2+1
-                }
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
-            }
-        binding.userSpaceCapcity.adapter = capacityAdapter
+        var capacity = 0
+        var sessionCapacity = 0
+        var sessionTime = mutableListOf<String>()
+        var startTime="null"
+        var endTime="null"
 
-
-        //capacity spinner
-        var sessionCapacityResult = -1
-        binding.sessionCapacity.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    sessionCapacityResult = p2+1
-                }
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
-            }
-        binding.sessionCapacity.adapter = capacityAdapter
+        setFragmentResultListener(PickerType.SET_CAPACITY.value) { requestKey, bundle ->
+            capacity = bundle.getInt(PickerType.SET_CAPACITY.value)
+        }
+        setFragmentResultListener(PickerType.SET_SESSION_CAPACITY.value) { requestKey, bundle ->
+            sessionCapacity = bundle.getInt(PickerType.SET_SESSION_CAPACITY.value)
+        }
+        setFragmentResultListener(PickerType.SET_SESSION_TIME.value) { requestKey, bundle ->
+            bundle.getString(PickerType.SET_SESSION_TIME.value)?.let { sessionTime.add(it) }
+        }
+        setFragmentResultListener(PickerType.SET_START_TIME.value) { requestKey, bundle ->
+            startTime = bundle.getString(PickerType.SET_START_TIME.value).toString()
+        }
+        setFragmentResultListener(PickerType.SET_END_TIME.value) { requestKey, bundle ->
+            endTime = bundle.getString(PickerType.SET_END_TIME.value).toString()
+        }
 
 
 
@@ -123,25 +132,28 @@ class BookSetting : Fragment() {
             val chefSwitch = binding.chefSpaceSwitch.isChecked
             val userSwitch = binding.userSpaceSwitch.isChecked
 
-            val type: Int = when {
-                chefSwitch && userSwitch -> BookSettingType.AcceptAll.index
-                !chefSwitch && userSwitch -> BookSettingType.OnlyUserSpace.index
-                chefSwitch && !userSwitch -> BookSettingType.OnlyChefSpace.index
-                !chefSwitch && !userSwitch -> BookSettingType.RefuseAll.index
-                else -> {
-                    -1
+            if(chefSwitch&&(sessionCapacity==0||sessionTime.size==0)){
+                Toast.makeText(this.context, "請設定人數與場次", Toast.LENGTH_SHORT).show()
+            }else if(userSwitch&&(capacity==0||startTime=="null"||endTime=="null")){
+                Toast.makeText(this.context, "請設定人數與時間", Toast.LENGTH_SHORT).show()
+            }else {
+
+                val type: Int = when {
+                    chefSwitch && userSwitch -> BookSettingType.AcceptAll.index
+                    !chefSwitch && userSwitch -> BookSettingType.OnlyUserSpace.index
+                    chefSwitch && !userSwitch -> BookSettingType.OnlyChefSpace.index
+                    !chefSwitch && !userSwitch -> BookSettingType.RefuseAll.index
+                    else -> {
+                        -1
+                    }
                 }
+                //bookSetting
+                val chefSpace = ChefSpace(sessionCapacity  , sessionTime)
+                val userSpace = UserSpace(capacity, startTime, endTime)
+
+                orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace)
             }
 
-            //orderSetting
-            val chefSpace = ChefSpace(sessionCapacityResult, listOf("12:00", "18:00"))
-            val userSpace = UserSpace(capacityResult, "10:00", "21:00")
-
-
-
-
-
-            orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace)
         }
 
 

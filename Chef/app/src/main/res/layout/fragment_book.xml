@@ -187,6 +187,16 @@
                         app:layout_constraintBottom_toBottomOf="@+id/textView12"
                         app:layout_constraintEnd_toEndOf="@+id/finalPerPrice"
                         app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+                    <Button
+                        android:id="@+id/book_peopler_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="選擇人數"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView35"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textView35" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
@@ -301,6 +311,14 @@
                         app:layout_constraintBottom_toBottomOf="@+id/textView34"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/textView34" />
+
+                    <Button
+                        android:id="@+id/book_timePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="選擇時間"
+                        app:layout_constraintEnd_toEndOf="@+id/datepicker"
+                        app:layout_constraintTop_toBottomOf="@+id/datepicker" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

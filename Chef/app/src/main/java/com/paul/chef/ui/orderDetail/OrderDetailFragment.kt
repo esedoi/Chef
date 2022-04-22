@@ -64,7 +64,7 @@ class OrderDetailFragment : Fragment() {
                     }else{
                         orderDetailAcceptBtn.visibility = View.GONE
                     }
-                   
+
                     orderDetailAcceptBtn.setOnClickListener {
                         viewModel.changeStatus(order.id,OrderStatus.UPCOMING.index)
 

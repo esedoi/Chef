@@ -116,44 +116,45 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView20"></LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/sessionSpinner"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:layout_constraintStart_toStartOf="@+id/textView20"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
                     <Button
-                        android:id="@+id/sessionBtn"
+                        android:id="@+id/book_setting_add_session"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="Button"
-                        app:layout_constraintBottom_toBottomOf="@+id/sessionSpinner"
-                        app:layout_constraintStart_toEndOf="@+id/sessionSpinner"
-                        app:layout_constraintTop_toTopOf="@+id/sessionSpinner" />
+                        android:layout_marginEnd="24dp"
+                        android:text="增添場次"
+                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_pick_session"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/book_setting_pick_session" />
 
                     <TextView
                         android:id="@+id/textView19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:text="一場可以容納幾位客人"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintStart_toStartOf="@+id/sessionSpinner"
-                        app:layout_constraintTop_toBottomOf="@+id/sessionSpinner" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_pick_session"
+                        tools:layout_editor_absoluteX="16dp" />
 
-                    <Spinner
-                        android:id="@+id/sessionCapacity"
-                        android:layout_width="100dp"
+                    <Button
+                        android:id="@+id/book_setting_pick_session"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="8dp"
+                        android:text="選擇場次"
+                        app:layout_constraintStart_toStartOf="@+id/textView20"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+                    <Button
+                        android:id="@+id/book_setting_session_capacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="選擇人數"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView19"
-                        app:layout_constraintTop_toBottomOf="@+id/textView19"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView19" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -200,39 +201,41 @@
                         app:layout_constraintStart_toStartOf="@+id/textView17"
                         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
-                    <Spinner
-                        android:id="@+id/openTimeSpinner"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:layout_constraintStart_toStartOf="@+id/textView27"
-                        app:layout_constraintTop_toBottomOf="@+id/textView27" />
-
-                    <Spinner
-                        android:id="@+id/endTimeSpinner"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@+id/openTimeSpinner"
-                        app:layout_constraintStart_toEndOf="@+id/openTimeSpinner"
-                        app:layout_constraintTop_toTopOf="@+id/openTimeSpinner" />
-
                     <TextView
                         android:id="@+id/textView28"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:text="最多幾人份的料理"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintStart_toStartOf="@+id/openTimeSpinner"
-                        app:layout_constraintTop_toBottomOf="@+id/openTimeSpinner" />
+                        app:layout_constraintStart_toStartOf="@+id/book_setting_start_pick"
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_start_pick" />
 
-                    <Spinner
-                        android:id="@+id/userSpaceCapcity"
-                        android:layout_width="100dp"
+                    <Button
+                        android:id="@+id/book_setting_start_pick"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="24dp"
-                        android:visibility="visible"
+                        android:text="選擇時間"
+                        app:layout_constraintStart_toStartOf="@+id/textView17"
+                        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+                    <Button
+                        android:id="@+id/book_setting_end_pick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:text="選擇時間"
+                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_start_pick"
+                        app:layout_constraintStart_toEndOf="@+id/book_setting_start_pick"
+                        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+                    <Button
+                        android:id="@+id/book_setting_capacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="選擇人數"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView28"
                         app:layout_constraintTop_toBottomOf="@+id/textView28" />
