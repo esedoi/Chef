@@ -79,4 +79,11 @@ class MainActivity : AppCompatActivity() {
             binding.navView.inflateMenu(R.menu.chef_bottom_nav_menu)
         }
     }
+
+    fun hideNaveView(){
+        binding.navView.visibility = View.GONE
+    }
+    fun showNaveView(){
+        binding.navView.visibility = View.VISIBLE
+    }
 }

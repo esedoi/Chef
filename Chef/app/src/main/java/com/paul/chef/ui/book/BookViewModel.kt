@@ -112,9 +112,11 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
-        val userId = "77777777"
+        val userId = UserManger().userId
         val userName = "Amy"
         val chefName = chefMenu.chefName
+        val userPic = UserManger().userAvatar
+        val chefPic = chefMenu.chefAvatar
         val menuName = chefMenu.menuName
         val chefId = chefMenu.chefId
         val orderTime = Calendar.getInstance().timeInMillis
@@ -142,6 +144,8 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             userName,
             chefName,
             menuName,
+            userPic,
+            chefPic,
             type,
             address,
             orderTime,

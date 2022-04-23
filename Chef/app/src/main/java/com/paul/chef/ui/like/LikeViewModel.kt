@@ -38,7 +38,8 @@ class LikeViewModel : ViewModel() {
                 val item = value?.data
                 val json = Gson().toJson(item)
                 val data = Gson().fromJson(json, User::class.java)
-                if (data.likeList != null) {
+
+                if (data.likeList?.isNotEmpty() == true) {
                     _likeList.value = data.likeList!!
                 }
 

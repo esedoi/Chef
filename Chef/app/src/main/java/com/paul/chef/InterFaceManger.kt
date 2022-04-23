@@ -18,4 +18,8 @@ interface AddDiscount{
         fun goDetail(order: Order)
     }
 
+    interface GoChatRoom{
+        fun goChatRoom(roomId:String)
+    }
+
 

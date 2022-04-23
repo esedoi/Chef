@@ -10,7 +10,8 @@ class UserManger  {
 
 
     val userFee = 300
-    val userId = "G89XOKfdRAElWj5AnaoY"
+    val userId = "V6FaQPxE9EskaO2v27fl"
+    val userAvatar = "userPic"
 
 
 

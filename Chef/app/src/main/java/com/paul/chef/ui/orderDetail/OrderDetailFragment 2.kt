@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentBookBinding
@@ -43,8 +44,12 @@ class OrderDetailFragment : Fragment() {
         val root: View = binding.root
 
         val order = arg.order
+        var roomId = ""
+        val userId = UserManger().userId
+        val chefId = ChefManger().chefId
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
+
 
 
         binding.apply {
@@ -73,12 +78,9 @@ class OrderDetailFragment : Fragment() {
                         OrderStatus.PENDING.index ->"拒絕此訂單"
                         else->"取消訂單"
                     }
-
                     orderDetailCancelBtn.setOnClickListener {
                         viewModel.changeStatus(order.id,OrderStatus.CANCELLED.index)
                     }
-
-
                 }
                 Mode.USER.index->{
                     orderDetailType.text = when(order.type){
@@ -123,7 +125,9 @@ class OrderDetailFragment : Fragment() {
             }
 
             orderDetailSendBtn.setOnClickListener {
-                Log.d("orderdetailfragment","send message")
+                if (roomId!=""){
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalChatRoomFragment(roomId))
+                }
             }
         }
 
@@ -164,6 +168,19 @@ class OrderDetailFragment : Fragment() {
             displayList[defaultType].displayRG.gravity = Gravity.CENTER
 
         }
+
+        viewModel.getRoomId(order.userId, order.chefId)
+
+        viewModel.roomId.observe(viewLifecycleOwner){
+            Log.d("$$*********************","roomid = $it")
+            if(it!= ""){
+                roomId = it
+            }else{
+                viewModel.createRoom(order.userId, order.chefId,order.userName, order.chefName, order.userAvatar, order.chefAvatar)
+            }
+        }
+
+
 
 
         return root

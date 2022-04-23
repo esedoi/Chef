@@ -39,7 +39,7 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
 
 
     val chefId = ChefManger().chefId
-    val userId = "77777777"
+    val userId = UserManger().userId
 
     var field = ""
     var value = ""

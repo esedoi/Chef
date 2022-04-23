@@ -42,7 +42,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     val item = value?.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, User::class.java)
-                if(data.likeList!=null){
+                if(data.likeList?.isNotEmpty() == true){
                     _likeList.value = data.likeList!!
                 }
 
@@ -57,6 +57,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     Log.w("notification", "Listen failed.", e)
                     return@addSnapshotListener
                 }
+                dataList.clear()
                 for (doc in value!!.documents) {
                     val item = doc.data
                     val json = Gson().toJson(item)

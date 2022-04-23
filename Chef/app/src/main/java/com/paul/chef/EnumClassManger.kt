@@ -43,3 +43,8 @@ enum class Like(val index: Int) {
     ADD(0), REMOVE(1)
 }
 
+
+enum class MsgType(val index: Int) {
+    String(0), Photo(1)
+}
+

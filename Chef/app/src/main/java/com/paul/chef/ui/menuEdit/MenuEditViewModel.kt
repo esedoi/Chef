@@ -17,6 +17,7 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
     private val db = FirebaseFirestore.getInstance()
     val chefId = ChefManger().chefId
     val chefName = ChefManger().chefName
+    val avatar = ChefManger().chefPic
 
 
 
@@ -29,7 +30,7 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
         val id = db.collection("Menu").document().id
 
 
-        val menu = ChefMenu(id, chefId, menuName,chefName, menuIntro, perPrice, images, discountList, dishList)
+        val menu = ChefMenu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList)
 
 
         //set firebase資料

@@ -72,6 +72,8 @@ data class Order(
     val chefId:String, //chefId or kitchenId
     val userName:String,
     val chefName:String,
+    val userAvatar:String,
+    val chefAvatar:String,
     val menuName:String,
     val type:Int, //userspace, chef space
     val address: String,
@@ -97,6 +99,7 @@ data class ChefMenu( ///menu
     val chefId:String,
     val menuName:String,
     val chefName:String,
+    val chefAvatar: String,
     val intro:String,
     val perPrice:Int,
     val images:List<String>,
@@ -169,12 +172,14 @@ data class BankInfo(
 
 data class Room(
     val id: String,
-    val lastMsg: String,
-    val dataType: Int,  //0String, 1image,
     val attendance: List<String>, //userId,chefId
-    val chat:List<Chat>,
-    val time: Long, //用來排序
-
+    val userName: String,
+    val userAvatar: String,
+    val chefName: String,
+    val chefAvatar: String,
+    val lastMsg: String?=null,
+    val dataType: Int?=null,  //0String, 1image,
+    val time: Long?=null, //用來排序
 )
 
 

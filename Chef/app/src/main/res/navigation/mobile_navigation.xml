@@ -183,6 +183,18 @@
     <action
         android:id="@+id/action_global_pickerBottomSheet"
         app:destination="@id/pickerBottomSheet" />
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.paul.chef.ui.chatRoom.ChatRoomFragment"
+        android:label="fragment_chat_room"
+        tools:layout="@layout/fragment_chat_room" >
+        <argument
+            android:name="roomId"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_chatRoomFragment"
+        app:destination="@id/chatRoomFragment" />
 
 
 </navigation>
