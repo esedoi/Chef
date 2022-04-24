@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.paul.chef.MainActivity
 import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.Mode
+import com.paul.chef.UserManger
 import com.paul.chef.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -26,29 +29,22 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.apply {
 
-            chef.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
-            }
-            menu.setOnClickListener {
+
+            binding.login.setOnClickListener{
+                (activity as MainActivity).turnMode(Mode.USER.index)
                 findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
             }
 
-            calender.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalCalendar())
-            }
-
-
-
-
-        }
 
         return root
     }
 
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 }

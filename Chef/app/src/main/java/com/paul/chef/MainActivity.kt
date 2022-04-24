@@ -11,7 +11,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -40,8 +43,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
 
-
-
 //        app:menu="@menu/bottom_nav_menu"
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -55,16 +56,39 @@ class MainActivity : AppCompatActivity() {
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        mainViewModel.mode.observe(this) {
-            Log.d("mainactivity", "main______________________")
-            if (it == Mode.USER.index) {
-                navView.menu.clear()
-                navView.inflateMenu(R.menu.bottom_nav_menu)
-            } else {
-                navView.menu.clear()
-                navView.inflateMenu(R.menu.chef_bottom_nav_menu)
+
+
+
+        when(val mode = UserManger.readData("mode", this)){
+            Mode.CHEF.index->{
+                turnMode(mode)
+                navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+
+            }
+            Mode.USER.index->{
+                turnMode(mode)
+                navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
             }
         }
+
+        findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
+            when(navController.currentDestination?.id){
+                R.id.menuFragment,
+                R.id.likeFragment,
+                R.id.orderManageFragment,
+                R.id.chatFragment,
+                R.id.userProfileFragment,
+                R.id.calendar,
+                R.id.transactionFragment,
+                R.id.chefFragment ->{ navView.visibility = View.VISIBLE
+                }
+                else->{
+                    navView.visibility = View.GONE
+                }
+            }
+//
+        }
+        
     }
 
     fun  turnMode(mode:Int){
