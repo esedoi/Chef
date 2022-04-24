@@ -13,6 +13,7 @@ import com.paul.chef.OrderStatus
 import com.paul.chef.data.Chef
 import com.paul.chef.data.Order
 import com.paul.chef.data.Review
+import java.util.*
 
 class ReviewViewModel(application: Application) : AndroidViewModel(application){
     @SuppressLint("StaticFieldLeak")
@@ -119,7 +120,8 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application){
 
 
         val id = db.collection("Review").document().id
-        val review = Review(rating, order.userId, order.userName, order.userAvatar, txt)
+        val date = Calendar.getInstance().timeInMillis
+        val review = Review(rating, order.userId, order.userName, order.userAvatar, txt, date)
         db.collection("Menu").document(menuId)
             .collection("Review").document(id)
             .set(review)

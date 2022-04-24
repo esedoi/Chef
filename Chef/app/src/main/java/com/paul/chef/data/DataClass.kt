@@ -149,7 +149,8 @@ data class Review(
     val userId:String,
     val userName:String,
     val userAvatar:String,
-    val content:String
+    val content:String,
+    val date:Long
 ): Parcelable
 
 

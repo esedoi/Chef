@@ -12,6 +12,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Dish
 import com.paul.chef.databinding.*
-import com.paul.chef.ui.menu.MenuListAdapter
 
 class MenuDetailFragment : Fragment() {
 
@@ -31,6 +31,9 @@ class MenuDetailFragment : Fragment() {
 
     private lateinit var imageAdapter: DetailImagesAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
+
+    private lateinit var reviewAdapter: ReviewAdapter
+    private var reviewLayoutManager: RecyclerView.LayoutManager? = null
 
     //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
@@ -45,7 +48,8 @@ class MenuDetailFragment : Fragment() {
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        val menuDetailViewModel =
+            ViewModelProvider(this)[MenuDetailViewModel::class.java]
 
 
         //navigation safe args
@@ -57,6 +61,8 @@ class MenuDetailFragment : Fragment() {
         val displayList = mutableListOf<ItemDisplayDishBinding>()
         val selectedDish = mutableListOf<Dish>()
 
+        menuDetailViewModel.getReview(menu.id)
+
 
         //imagesRecyclerView
         imageAdapter = DetailImagesAdapter()
@@ -65,6 +71,14 @@ class MenuDetailFragment : Fragment() {
         binding.imagesRecycler.adapter = imageAdapter
         imageAdapter.submitList(menu.images)
 
+
+        reviewAdapter = ReviewAdapter()
+        reviewLayoutManager = LinearLayoutManager(this.context)
+        binding.menuDetailReviewRecycler.layoutManager = reviewLayoutManager
+        binding.menuDetailReviewRecycler.adapter = reviewAdapter
+        menuDetailViewModel.reviewList.observe(viewLifecycleOwner){
+            reviewAdapter.submitList(it)
+        }
 
 
         for (i in dishList) {
@@ -111,9 +125,9 @@ class MenuDetailFragment : Fragment() {
                 //+radiobutton  +price
 
 //                val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
-                val radioText = if(i.extraPrice!=0){
+                val radioText = if (i.extraPrice != 0) {
                     "${i.name}    <font color = \"#03A9F4\">(+NT$ ${i.extraPrice})</font>"
-                }else{
+                } else {
                     "${i.name}"
                 }
 
@@ -137,19 +151,19 @@ class MenuDetailFragment : Fragment() {
             var typeInt = -1
 
 
-            for (i in dishList){
-                if (i.option==0){
+            for (i in dishList) {
+                if (i.option == 0) {
                     selectedDish.add(i)
                     typeInt = i.typeNumber
-                }else{
-                    if(typeInt!=i.typeNumber){
+                } else {
+                    if (typeInt != i.typeNumber) {
                         val selectedId = displayList[i.typeNumber].displayRG.checkedRadioButtonId
-                        if(selectedId !=-1){
-                            val radioButton  = root.findViewById<RadioButton>(selectedId)
-                            val radioDish:Dish = radioButton.tag as Dish
+                        if (selectedId != -1) {
+                            val radioButton = root.findViewById<RadioButton>(selectedId)
+                            val radioDish: Dish = radioButton.tag as Dish
                             selectedDish.add(radioDish)
                             typeInt = i.typeNumber
-                        }else{
+                        } else {
                             isRadioSelected = false
 
                         }
@@ -157,12 +171,17 @@ class MenuDetailFragment : Fragment() {
                 }
             }
 
-            if (isRadioSelected){
+            if (isRadioSelected) {
 
                 Log.d("menudetailfragment", "selectedDish=${selectedDish}")
                 val list = selectedDish.toTypedArray()
-                findNavController().navigate(MobileNavigationDirections.actionGlobalBookFragment(menu, list))
-            }else{
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalBookFragment(
+                        menu,
+                        list
+                    )
+                )
+            } else {
                 Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
                 selectedDish.clear()
             }

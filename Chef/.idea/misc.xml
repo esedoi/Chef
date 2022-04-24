@@ -82,6 +82,7 @@
         <entry key="app/src/main/res/layout/item_option_dish.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_option_dish_add.xml" value="2.447100394112723" />
         <entry key="app/src/main/res/layout/item_order_child.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/item_review.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_right_chat.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/menu/chef_bottom_nav_menu.xml" value="0.18177083333333333" />
