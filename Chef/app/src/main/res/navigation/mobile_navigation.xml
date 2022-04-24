@@ -195,6 +195,23 @@
     <action
         android:id="@+id/action_global_chatRoomFragment"
         app:destination="@id/chatRoomFragment" />
+    <dialog
+        android:id="@+id/reviewFragment"
+        android:name="com.paul.chef.ui.review.ReviewFragment"
+        android:label="bottom_sheet_review"
+        tools:layout="@layout/bottom_sheet_review" >
+        <argument
+            android:name="rating"
+            app:argType="integer" />
+        <argument
+            android:name="order"
+            app:argType="com.paul.chef.data.Order"/>
+
+    </dialog>
+
+    <action
+        android:id="@+id/action_global_reviewFragment"
+        app:destination="@id/reviewFragment" />
 
 
 </navigation>

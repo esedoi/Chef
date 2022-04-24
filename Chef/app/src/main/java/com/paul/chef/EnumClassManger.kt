@@ -24,7 +24,8 @@ enum class OrderStatus(val index: Int, val value: String) {
     PENDING(0, "待處理"),
     UPCOMING(1, "即將到來"),
     COMPLETED(2, "已完成"),
-    CANCELLED(3, "已取消")
+    CANCELLED(3, "已取消"),
+    SCORED(4,"已評價")
 }
 
 enum class PickerType(val index: Int, val value: String) {

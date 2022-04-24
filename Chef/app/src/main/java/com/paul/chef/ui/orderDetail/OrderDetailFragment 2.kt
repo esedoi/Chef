@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
@@ -93,6 +94,18 @@ class OrderDetailFragment : Fragment() {
                     orderDetailTotal.text = order.userPay.toString()
                     orderDetailAcceptBtn.visibility = View.GONE
                     orderDetailCancelBtn.text = "取消訂單"
+
+                    if(order.status==OrderStatus.COMPLETED.index){
+                        orderDetailRatingBar.visibility = View.VISIBLE
+                        orderDetailReviewTxt.visibility = View.VISIBLE
+                        orderDetailRatingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
+                            findNavController().navigate(MobileNavigationDirections.actionGlobalReviewFragment(fl.toInt(),order))
+                        }
+                    }else{
+                        orderDetailRatingBar.visibility = View.GONE
+                        orderDetailReviewTxt.visibility = View.GONE
+                    }
+
                 }
             }
 

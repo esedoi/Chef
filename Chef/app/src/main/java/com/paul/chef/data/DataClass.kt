@@ -11,7 +11,9 @@ data class Chef(
     val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
     val address:List<String>?=null,
-    val bookSetting: BookSetting? = null
+    val bookSetting: BookSetting? = null,
+    val reviewRating: Float?=null,
+    val ratingNumber:Int? = null
 )
 
 //come with menu
@@ -106,6 +108,7 @@ data class ChefMenu( ///menu
     val discount:@RawValue List<Discount>,
     val dishes:@RawValue List<Dish>,
     val reviewRating: Float? = null,
+    val reviewNumber:Int?=null
 ): Parcelable
 
 @Parcelize
@@ -142,8 +145,10 @@ data class ExtraDish(
 
 @Parcelize
 data class Review(
-    val star:Double,
+    val rating:Float,
     val userId:String,
+    val userName:String,
+    val userAvatar:String,
     val content:String
 ): Parcelable
 

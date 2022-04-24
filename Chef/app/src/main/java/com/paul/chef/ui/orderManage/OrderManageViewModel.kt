@@ -67,7 +67,10 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                     Log.w("notification", "Listen failed.", e)
                     return@addSnapshotListener
                 }
-
+                pendingList.clear()
+                upComingList.clear()
+                completedList.clear()
+                cancelledList.clear()
                 for (doc in value!!.documents) {
                     val item = doc.data
                     val json = Gson().toJson(item)
@@ -81,7 +84,7 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                         OrderStatus.UPCOMING.index->{
                             upComingList.add(data)
                         }
-                        OrderStatus.COMPLETED.index->{
+                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index->{
                             completedList.add(data)
                         }
                         OrderStatus.CANCELLED.index->{
