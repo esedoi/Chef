@@ -86,28 +86,6 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-//    data class Order(
-//        val id:String, //D2204130685964
-//        val userId:String,
-//        val chefId:String, //chefId or kitchenId
-//        val userName:String,
-//        val chefName:String,
-//        val menuName:String,
-//        val type:Int, //userspace, chef space
-//        val address: String,
-//        val orderTime:Long,
-//        val date:Long,
-//        val time:String,
-//        val note:String,
-//        val people:Int,
-//        val menuId:String,
-//        val selectedDish: List<Dish>,
-//        val status:Int, //即將到來,已取消,已完成
-//        val originalPrice:Int,
-//        val discount:Int,
-//        val total:Int,
-//    )
-
 
     fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 

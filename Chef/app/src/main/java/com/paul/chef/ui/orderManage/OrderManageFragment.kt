@@ -16,9 +16,6 @@ import com.paul.chef.databinding.FragmentOrderManageBinding
 
 class OrderManageFragment : Fragment() {
 
-
-
-
     private var _binding: FragmentOrderManageBinding? = null
     private val binding get() = _binding!!
 

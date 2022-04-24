@@ -198,14 +198,11 @@ data class Chat(
 
 
 
-data class VendorPayment(
+data class Transaction(
     val id:	String,
-    val type:Int,//chefId, kitchenId
     val time:Long,
-    val price:Int,
-    val email:String,
-    val bankInfo:BankInfo,
-    val status:Int, //處理中, 已付款, 已取消
+    val chefReceive:Int,
+    val status:Int, //處理中, 已付款
 )
 
 @Parcelize

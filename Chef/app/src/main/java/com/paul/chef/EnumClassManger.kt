@@ -25,7 +25,10 @@ enum class OrderStatus(val index: Int, val value: String) {
     UPCOMING(1, "即將到來"),
     COMPLETED(2, "已完成"),
     CANCELLED(3, "已取消"),
-    SCORED(4,"已評價")
+    SCORED(4,"已評價"),
+//    UNPAID(5,"未處理的款項"),
+//    PROCESSING(6,"處理中的款項"),
+//    RECEIVED(7,"已完成的款項")
 }
 
 enum class PickerType(val index: Int, val value: String) {
@@ -47,5 +50,9 @@ enum class Like(val index: Int) {
 
 enum class MsgType(val index: Int) {
     String(0), Photo(1)
+}
+
+enum class TransactionStatus(val index:Int, val value: String){
+    PENDING(0, "未處理"), PROCESSING(1, "處理中"), COMPLETED(2, "已完成")
 }
 

@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
 //
         }
-        
+
     }
 
     fun  turnMode(mode:Int){
