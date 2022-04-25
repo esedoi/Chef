@@ -45,6 +45,7 @@
         <entry key="app/src/main/res/layout/fragment_order_setting.xml" value="0.4456258138020833" />
         <entry key="app/src/main/res/layout/fragment_review_.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_transaction_.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_transaction_child 2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_transaction_child.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.41044514973958335" />
         <entry key="app/src/main/res/layout/item_add_btn.xml" value="0.221875" />
@@ -86,7 +87,9 @@
         <entry key="app/src/main/res/layout/item_order_child.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_review.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_right_chat.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_transaction_child.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_transaction_child 2.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_transaction_child.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/item_transaction_unpaid 2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_transaction_unpaid.xml" value="0.375" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/menu/chef_bottom_nav_menu.xml" value="0.18177083333333333" />
