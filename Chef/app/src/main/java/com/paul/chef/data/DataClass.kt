@@ -200,8 +200,10 @@ data class Chat(
 
 data class Transaction(
     val id:	String,
+    val chefId:String,
     val time:Long,
     val chefReceive:Int,
+    val orderList:List<String>,
     val status:Int, //處理中, 已付款
 )
 

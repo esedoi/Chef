@@ -33,7 +33,11 @@ class TransactionUnpaidAdapter() : ListAdapter<Order, RecyclerView.ViewHolder>(O
 
 
         fun bind(item: Order) {
-            Log.d("transaction", "unpaid_______________")
+            binding.unpaidChefReceive.text = item.chefReceive.toString()
+            binding.unpaidDate.text = item.date.toString()
+            binding.unpaidName.text = item.userName.toString()
+            binding.unpaidPeople.text = item.people.toString()
+
         }
 
         companion object {

@@ -59,9 +59,7 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
         Log.d("orderchildfragment", "status=$status")
 
         orderViewModel.hasData.observe(viewLifecycleOwner){
-
                     orderViewModel.getList(status)
-            
         }
 
         orderViewModel.orderList.observe(viewLifecycleOwner){

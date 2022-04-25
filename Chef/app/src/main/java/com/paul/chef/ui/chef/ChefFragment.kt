@@ -10,14 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
+import com.paul.chef.ui.menuDetail.ReviewAdapter
 
 class ChefFragment : Fragment() {
 
     private var _binding: FragmentChefPageBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var reviewAdapter: ReviewAdapter
+    private var reviewLayoutManager: RecyclerView.LayoutManager? = null
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -55,6 +61,14 @@ class ChefFragment : Fragment() {
         binding.turnToUser.setOnClickListener {
             (activity as MainActivity).turnMode(Mode.USER.index)
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+        }
+
+        reviewAdapter = ReviewAdapter()
+        reviewLayoutManager = LinearLayoutManager(this.context)
+        binding.chefPageReviewRecycler.layoutManager = reviewLayoutManager
+        binding.chefPageReviewRecycler.adapter = reviewAdapter
+        chefViewModel.reviewList.observe(viewLifecycleOwner){
+            reviewAdapter.submitList(it)
         }
 
         return root

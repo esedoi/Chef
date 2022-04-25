@@ -14,17 +14,16 @@ import com.paul.chef.*
 import com.paul.chef.data.Order
 
 import com.paul.chef.data.Transaction
+import java.util.*
 
-class TransactionViewModel(application: Application) : AndroidViewModel(application){
+class TransactionViewModel:ViewModel(){
 
-    @SuppressLint("StaticFieldLeak")
-    private val context = getApplication<Application>().applicationContext
 
     private val db = FirebaseFirestore.getInstance()
 
     private val unpaidList = mutableListOf<Order>()
-    private val processingList = mutableListOf<Transaction>()
-    private val receivedList = mutableListOf<Transaction>()
+     val processingList = mutableListOf<Transaction>()
+     val receivedList = mutableListOf<Transaction>()
 
 
     private var _orderList = MutableLiveData<List<Order>>()
@@ -64,12 +63,17 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                         }
                     }
 
-                    if(position==1){
-                        _transactionList.value = processingList
+                    when(position){
+                        1->{
+                            Log.d("transaction_view_model", "posiotion1")
+                            _transactionList.value = processingList
+                        }
+                        2->{
+                            Log.d("transaction_view_model", "posiotion2")
+                            _transactionList.value = receivedList
+                        }
                     }
-                    if(position==2){
-                        _transactionList.value = receivedList
-                    }
+
                 } else {
                   //沒資料
                 }
@@ -92,7 +96,6 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                     val item = doc.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Order::class.java)
-                    Log.d("transactionviewmodel", "data =$data ")
                     when(data.status){
                         OrderStatus.COMPLETED.index, OrderStatus.SCORED.index->{
                             unpaidList.add(data)
@@ -106,28 +109,32 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
     }
 
-//    data class Transaction(
-//        val id:	String,
-//        val time:Long,
-//        val chefReceive:Int,
-    //    val orderList:list<String>
-//        val status:Int, //處理中, 已付款
-//    )
 
 
-    fun applyMoney(){
-//        val id = db.collection("Transaction").document().id
-//        val transaction = Transaction(id, )
-//
-//        db.collection("Transaction").document(id)
-//            .set(room)
-//            .addOnSuccessListener { documentReference ->
-//                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-//                _roomId.value = id
-//            }
-//            .addOnFailureListener { e ->
-//                Log.w("click", "Error adding document", e)
-//            }
+    fun applyMoney(chefReceive:Int){
+        val id = db.collection("Transaction").document().id
+        val time = Calendar.getInstance().timeInMillis
+        var idList = mutableListOf<String>()
+        val chefId = ChefManger().chefId
+
+        for(i in unpaidList){
+            idList.add(i.id)
+        }
+        Log.d("transactionviewmodel", "idlist=$idList")
+        if(idList.isNotEmpty()&&chefReceive!=0){
+
+            val transaction = Transaction(id,chefId,time,chefReceive,idList, TransactionStatus.PROCESSING.index)
+            Log.d("transactionviewmodel", "transaction=$transaction")
+
+            db.collection("Transaction").document(id)
+                .set(transaction)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("transactionviewmodel", "DocumentSnapshot added with ID: ${documentReference}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("transactionviewmodel", "Error adding document", e)
+                }
+        }
 
     }
 

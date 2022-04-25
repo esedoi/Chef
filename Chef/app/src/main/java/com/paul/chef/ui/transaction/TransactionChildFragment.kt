@@ -1,11 +1,13 @@
 package com.paul.chef.ui.transaction
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +20,8 @@ class TransactionChildFragment: Fragment() {
     private var _binding: FragmentTransactionChildBinding? = null
     private val binding get() = _binding!!
     //viewModel
-    private lateinit var transactionViewModel: TransactionViewModel
+//    private lateinit var transactionViewModel: TransactionViewModel
+    val transactionViewModel:TransactionViewModel  by viewModels({requireParentFragment()})
 
     private lateinit var transactionUnpaidAdapter: TransactionUnpaidAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -42,6 +45,7 @@ class TransactionChildFragment: Fragment() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +56,7 @@ class TransactionChildFragment: Fragment() {
         val root: View = binding.root
 
         //viewModel
-        transactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
+//        transactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
 
         status = requireArguments().getInt("position")
         Log.d("orderchildfragment", "status=$status")
@@ -64,27 +68,54 @@ class TransactionChildFragment: Fragment() {
                 binding.transactionRecycler.layoutManager = layoutManager
                 binding.transactionRecycler.adapter = transactionUnpaidAdapter
                 transactionViewModel.getList(status)
+                transactionViewModel.orderList.observe(viewLifecycleOwner){
+                    Log.d("transaction_child_fragment", "orderList_observe, it = $it")
+                    transactionUnpaidAdapter.submitList(it)
+                    transactionUnpaidAdapter.notifyDataSetChanged()
+                }
             }
-            else->{
+            1->{
                 transactionChildAdapter = TransactionChildAdapter()
                 layoutManager = LinearLayoutManager(this.context)
                 binding.transactionRecycler.layoutManager = layoutManager
                 binding.transactionRecycler.adapter = transactionChildAdapter
                 transactionViewModel.getList(status)
+                transactionViewModel.transactionList.observe(viewLifecycleOwner){
+                    Log.d("transaction_child_fragment", " transactionList_1_observe , it = $it")
+                    transactionChildAdapter.submitList( transactionViewModel.processingList)
+                    transactionChildAdapter.notifyDataSetChanged()
+                }
             }
+            2->{
+                transactionChildAdapter = TransactionChildAdapter()
+                layoutManager = LinearLayoutManager(this.context)
+                binding.transactionRecycler.layoutManager = layoutManager
+                binding.transactionRecycler.adapter = transactionChildAdapter
+                transactionViewModel.getList(status)
+                transactionViewModel.transactionList.observe(viewLifecycleOwner){
+                    Log.d("transaction_child_fragment", " transactionList_2_observe , it = $it")
+
+                    transactionChildAdapter.submitList(transactionViewModel.receivedList)
+                    transactionChildAdapter.notifyDataSetChanged()
+                }
+
+            }
+
         }
 
 
 
-        transactionViewModel.orderList.observe(viewLifecycleOwner){
-            Log.d("transactionchildfragment", "it = $it")
-            transactionUnpaidAdapter.submitList(it)
-        }
+//        transactionViewModel.orderList.observe(viewLifecycleOwner){
+//            Log.d("transactionchildfragment", "it = $it")
+//            transactionUnpaidAdapter.submitList(it)
+//        }
+//
+//        transactionViewModel.transactionList.observe(viewLifecycleOwner){
+//            Log.d("transactionchildfragment", "it = $it")
+//            transactionChildAdapter.submitList(it)
+//        }
 
-        transactionViewModel.transactionList.observe(viewLifecycleOwner){
-            Log.d("transactionchildfragment", "it = $it")
-            transactionChildAdapter.submitList(it)
-        }
+
 
 
 

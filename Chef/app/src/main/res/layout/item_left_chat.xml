@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/chat_left_bg"
         android:fontFamily="@font/noto_sans"
         android:maxWidth="190dp"
