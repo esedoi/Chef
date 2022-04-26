@@ -3,13 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.35" />
         <entry key="app/src/main/res/drawable/booked_day_layout.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bottom_sheet_dialog.xml" value="0.184" />
         <entry key="app/src/main/res/drawable/chat_left_bg.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/chat_right_bg.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/layer_heart_filled.xml" value="0.2345" />
         <entry key="app/src/main/res/drawable/paper_plane.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/round.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/selection_background.xml" value="0.1715" />
+        <entry key="app/src/main/res/drawable/sl_favourite.xml" value="0.2265" />
+        <entry key="app/src/main/res/drawable/smaller_heart_filled.xml" value="0.2345" />
+        <entry key="app/src/main/res/drawable/smaller_heart_outline.xml" value="0.2345" />
         <entry key="app/src/main/res/drawable/today_background.xml" value="0.138" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26752878824869786" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_dish.xml" value="0.25" />
@@ -25,7 +36,7 @@
         <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_chat_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_chat_room.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_chef_edit.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_chef_edit.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_chef_page 2.xml" value="0.15838724772135415" />
         <entry key="app/src/main/res/layout/fragment_chef_page.xml" value="0.40394897460937496" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3441025641025641" />
@@ -41,13 +52,13 @@
         <entry key="app/src/main/res/layout/fragment_order_child.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/layout/fragment_order_detail_.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_order_manage 2.xml" value="0.12760416666666666" />
-        <entry key="app/src/main/res/layout/fragment_order_manage.xml" value="0.18177083333333333" />
+        <entry key="app/src/main/res/layout/fragment_order_manage.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_order_setting.xml" value="0.4456258138020833" />
         <entry key="app/src/main/res/layout/fragment_review_.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_transaction_.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_transaction_child 2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_transaction_child.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.41044514973958335" />
+        <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_add_btn.xml" value="0.221875" />
         <entry key="app/src/main/res/layout/item_add_discount.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_add_dish.xml" value="0.2922374429223744" />

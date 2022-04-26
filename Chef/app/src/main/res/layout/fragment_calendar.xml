@@ -6,15 +6,23 @@
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_dialog">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exOneAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/example_1_bg_light"
+        android:background="@color/md_theme_light_primary"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar4">
 
         <include
             android:id="@+id/legendLayout"

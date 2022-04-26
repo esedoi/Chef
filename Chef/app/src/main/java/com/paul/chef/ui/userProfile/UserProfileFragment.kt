@@ -34,12 +34,12 @@ class UserProfileFragment : Fragment() {
             ViewModelProvider(this).get(UserProfileViewModel::class.java)
 
 
-        binding.createUser.setOnClickListener {
-            val userName = "Amy"
-            val userEmail = "amy@gmail.com"
-            val userIntro = "i am a nice guest"
-            userProfileViewModel.createUser(userEmail,userIntro, userName)
-        }
+//        binding.createUser.setOnClickListener {
+//            val userName = "Amy"
+//            val userEmail = "amy@gmail.com"
+//            val userIntro = "i am a nice guest"
+//            userProfileViewModel.createUser(userEmail,userIntro, userName)
+//        }
 
         binding.turnToChef.setOnClickListener {
             (activity as MainActivity).turnMode(Mode.CHEF.index)

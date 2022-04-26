@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.transaction.TransactionFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.appcompat.widget.Toolbar>
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/transaction_tabs"
         android:layout_width="0dp"
@@ -31,12 +45,12 @@
         android:id="@+id/textView43"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="未處理的款項"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar5" />
 
     <TextView
         android:id="@+id/textView44"
@@ -44,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="處理中的款項"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@+id/textView43"
         app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
@@ -54,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="已完成的款項"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@+id/textView44"
         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
@@ -63,10 +77,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView43"
         app:layout_constraintStart_toEndOf="@+id/textView43"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textView43" />
 
     <TextView
         android:id="@+id/transaction_processing_txt"
@@ -90,9 +103,10 @@
         android:id="@+id/transaction_apply_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="32dp"
+        android:enabled="false"
         android:text="收款"
+        app:layout_constraintBottom_toTopOf="@+id/transaction_tabs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

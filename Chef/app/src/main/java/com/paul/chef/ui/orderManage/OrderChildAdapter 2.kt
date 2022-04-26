@@ -43,7 +43,7 @@ class OrderChildAdapter(val goOrderDetail: GoOrderDetail) : ListAdapter<Order, R
 //                goDetail.goDetail(item)
 //                Log.d("orderchildadapter", "item=$item")
 //            }
-            binding.orderUserName.text = item.userName
+            binding.itemOrderName.text = item.userName
             binding.orderDate.text = item.time
             binding.orderTime.text = item.date.toString()
             binding.orderPeople.text = item.people.toString()
