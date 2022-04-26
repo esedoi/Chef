@@ -84,7 +84,7 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                         OrderStatus.UPCOMING.index->{
                             upComingList.add(data)
                         }
-                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index->{
+                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index, OrderStatus.APPLIED.index->{
                             completedList.add(data)
                         }
                         OrderStatus.CANCELLED.index->{

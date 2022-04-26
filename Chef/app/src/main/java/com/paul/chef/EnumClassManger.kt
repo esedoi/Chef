@@ -26,7 +26,7 @@ enum class OrderStatus(val index: Int, val value: String) {
     COMPLETED(2, "已完成"),
     CANCELLED(3, "已取消"),
     SCORED(4,"已評價"),
-//    UNPAID(5,"未處理的款項"),
+    APPLIED(5,"已申請的款項"),
 //    PROCESSING(6,"處理中的款項"),
 //    RECEIVED(7,"已完成的款項")
 }
