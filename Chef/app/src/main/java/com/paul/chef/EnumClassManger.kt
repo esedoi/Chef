@@ -56,3 +56,11 @@ enum class TransactionStatus(val index:Int, val value: String){
     PENDING(0, "未處理"), PROCESSING(1, "處理中"), COMPLETED(2, "已完成")
 }
 
+enum class MenuEditType(val index:Int){
+    FIRST_TIME(0), CREATE(1), EDIT(2)
+}
+
+enum class MenuType(val index: Int){
+    FULL(0), SIMPLE(1)
+}
+

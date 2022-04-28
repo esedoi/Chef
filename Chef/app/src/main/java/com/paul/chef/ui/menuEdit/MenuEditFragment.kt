@@ -1,7 +1,7 @@
 package com.paul.chef.ui.menuEdit
 
 
-import android.R
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.AddDiscount
+import com.paul.chef.R
 import com.paul.chef.data.Discount
 import com.paul.chef.data.Dish
 import com.paul.chef.databinding.FragmentMenuEditBinding
@@ -82,38 +84,31 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
 
         //discount spinner
-        val discountSpinner =
-            arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
-        val myAdapter =
-            this.context?.let {
-                ArrayAdapter(
-                    it,
-                    android.R.layout.simple_spinner_item,
-                    discountSpinner
-                )
-            }
-        myAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val items=
+            listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
 
-        binding.spinnerPeople.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                people = p2 + 1
-            }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
-        binding.spinnerPeople.adapter = myAdapter
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item ,items )
+        (binding.menuEditDiscountPeople.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
 
         binding.addDiscountBtn.setOnClickListener {
-            if (binding.percentOffInput.text.toString() != "") {
-                val percentOff = binding.percentOffInput.text.toString().toInt()
-                val discount = Discount(people, percentOff)
-                discountList.add(discount)
-                discountAdapter.submitList(discountList)
-                discountAdapter.notifyDataSetChanged()
-            } else {
-                Toast.makeText(this.context, "請填寫折扣", Toast.LENGTH_SHORT).show()
+            if(binding.menuEditDiscountPeople.editText?.text.toString()!=""){
+                people = binding.menuEditDiscountPeople.editText?.text.toString().toInt()
+                if (binding.menuEditDiscountPercentOff.editText?.text.toString() != "") {
+                    val percentOff = binding.menuEditDiscountPercentOff.editText?.text.toString().toInt()
+                    val discount = Discount(people, percentOff)
+                    discountList.add(discount)
+                    discountAdapter.submitList(discountList)
+                    discountAdapter.notifyDataSetChanged()
+                    binding.menuEditDiscountPercentOff.editText?.text?.clear()
+                    binding.menuEditDiscountPeople.editText?.text?.clear()
+
+                } else {
+                    Toast.makeText(this.context, "請填寫折扣", Toast.LENGTH_SHORT).show()
+                }
+            }else {
+                Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -135,10 +130,11 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
         //create Menu
         binding.build.setOnClickListener {
-            if (binding.menuName.text != null || binding.menuIntro.text != null || binding.menuPerPrice.text != null) {
-                menuName = binding.menuName.text.toString()
-                menuIntro = binding.menuIntro.text.toString()
-                perPrice = binding.menuPerPrice.text.toString().toInt()
+            Log.d("menueditfragment", "binding.menuEditPerprice.editText=${binding.menuEditPerprice.editText?.text}")
+            if (binding.menuEditName.editText?.text.toString() != "" || binding.menuEditIntro.editText?.text.toString() != "" || binding.menuEditPerprice.editText?.text.toString() != "") {
+                menuName = binding.menuEditName.editText?.text.toString()
+                menuIntro = binding.menuEditIntro.editText?.text.toString()
+                perPrice = binding.menuEditPerprice.editText?.text.toString().toInt()
 
                 var dishName = ""
                 var price = -1
@@ -149,16 +145,16 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
                 for (i in allDishBindingList) {
 
-                    if (i.dishNameInput.text == null) {
+                    if (i.menuDishNameInput.editText == null) {
                         isNameFilled = false
                     } else {
-                        price = if (i.dishPriceInput.text.toString() == "") {
+                        price = if (i.menuDishPriceInput.editText?.text.toString() == "") {
                             0
                         } else {
-                            i.dishPriceInput.text.toString().toInt()
+                            i.menuDishPriceInput.editText?.text.toString().toInt()
                         }
 
-                        dishName = i.dishNameInput.text.toString()
+                        dishName = i.menuDishNameInput.editText?.text.toString()
                         type = pendingList[count].type
                         option = pendingList[count].option
                         typeNumber = pendingList[count].typeNumber
@@ -234,23 +230,13 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
             //typeSpinner
             val typeList =
-                arrayOf("開胃菜", "湯", "飲料", "酒", "沙拉", "前菜", "主菜", "甜點", "其他")
-            val typeAdapter =
-                this.context?.let { ArrayAdapter(it, R.layout.simple_spinner_item, typeList) }
-            typeAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                listOf("開胃菜", "湯", "飲料", "酒", "沙拉", "前菜", "主菜", "甜點", "其他")
 
-            dishTypeView.dishTypeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    @SuppressLint("NotifyDataSetChanged")
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        dishType = typeList[p2]
-                        Log.d("menueditfragment", "typeList[p2]=${typeList[p2]}")
-                    }
+            val dishTypeAdapter = ArrayAdapter(requireContext(), R.layout.list_people_item ,typeList )
+            (dishTypeView.menuAddDishType.editText as? AutoCompleteTextView)?.setAdapter(dishTypeAdapter)
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                    }
-                }
-            dishTypeView.dishTypeSpinner.adapter = typeAdapter
+
+
 
             t.removeType.setOnClickListener {
                 binding.dishTypeLinear.removeView(bindingList[typeIndex].root)
@@ -262,12 +248,13 @@ class MenuEditFragment : Fragment(), AddDiscount {
                     ItemDishOptionalBinding.inflate(LayoutInflater.from(context), container, false)
 
                 if (option == 0) {
-                    dishView.dishPriceInput.visibility = View.GONE
+                    dishView.menuDishPriceInput.visibility = View.GONE
                 }
                 val dishBindingList = mutableListOf<ItemDishOptionalBinding>()
                 dishBindingList.add(dishView)
 
                 for (d in dishBindingList) {
+                    dishType = dishTypeView.menuAddDishType.editText?.text.toString()
                     val pendingDish = Dish(dishType, option, typeNumber = typeIndex)
                     pendingList.add(pendingDish)
                     allDishBindingList.add(d)

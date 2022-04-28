@@ -49,13 +49,10 @@ class ChatRoomAdapter(val nowId:String) : ListAdapter<Chat, RecyclerView.ViewHol
 
     override fun getItemViewType(position: Int): Int {
 
-
         return when(getItem(position).senderId){
             nowId -> RIGHT
             else -> LEFT
         }
-
-
 
     }
 
@@ -93,10 +90,6 @@ class ChatRoomAdapter(val nowId:String) : ListAdapter<Chat, RecyclerView.ViewHol
             }
         }
     }
-
-
-
-
 
 
 }

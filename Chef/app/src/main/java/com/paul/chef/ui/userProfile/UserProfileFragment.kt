@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.paul.chef.*
@@ -21,7 +22,7 @@ class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: UserProfileViewModel
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +34,14 @@ class UserProfileFragment : Fragment() {
         val userProfileViewModel =
             ViewModelProvider(this).get(UserProfileViewModel::class.java)
 
+        val user = mainViewModel.user
+        Log.d("userprofilefragment"," user= $user")
+        if (user != null) {
+            if(user.chefId!=null){
+                findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
+            }
+        }
+
 
 //        binding.createUser.setOnClickListener {
 //            val userName = "Amy"
@@ -41,10 +50,29 @@ class UserProfileFragment : Fragment() {
 //            userProfileViewModel.createUser(userEmail,userIntro, userName)
 //        }
 
-        binding.turnToChef.setOnClickListener {
+        userProfileViewModel.chefId.observe(viewLifecycleOwner){
+            Log.d("userprofilefragment","++++++++++++chefid = $it")
+            mainViewModel.getChef(it)
             (activity as MainActivity).turnMode(Mode.CHEF.index)
             findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
         }
+
+        binding.userProfileCreateChef.setOnClickListener {
+            if(mainViewModel.user!=null){
+                val name = mainViewModel.user!!.profileInfo.name
+                val intro = mainViewModel.user!!.profileInfo.introduce
+                val email = mainViewModel.user!!.profileInfo.email
+                val avatar = mainViewModel.user!!.profileInfo.avatar
+                userProfileViewModel.createChef(name, intro, email, avatar)
+//                (activity as MainActivity).turnMode(Mode.CHEF.index)
+//                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+            }
+        }
+
+//        binding.turnToChef.setOnClickListener {
+//            (activity as MainActivity).turnMode(Mode.CHEF.index)
+//            findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+//        }
         return  root
     }
 

@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.paul.chef.MainActivity
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.Mode
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +30,16 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
 
+        homeViewModel.userData.observe(viewLifecycleOwner){
+            mainViewModel.user = it
+            (activity as MainActivity).turnMode(Mode.USER.index)
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+        }
+
 
             binding.login.setOnClickListener{
+                homeViewModel.login()
                 (activity as MainActivity).turnMode(Mode.USER.index)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
             }
 
 

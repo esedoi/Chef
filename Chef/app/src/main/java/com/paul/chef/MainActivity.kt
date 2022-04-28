@@ -56,20 +56,25 @@ class MainActivity : AppCompatActivity() {
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+//        mainViewModel.chefId.observe(this){
+//            mainViewModel.getChef(it)
+//        }
 
 
-
-        when(val mode = UserManger.readData("mode", this)){
-            Mode.CHEF.index->{
-                turnMode(mode)
-                navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-
-            }
-            Mode.USER.index->{
-                turnMode(mode)
-                navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+        if(mainViewModel.user!=null){
+            when(val mode = UserManger.readData("mode", this)){
+                Mode.CHEF.index->{
+                    turnMode(mode)
+                    navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                }
+                Mode.USER.index->{
+                    turnMode(mode)
+                    navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+                }
             }
         }
+
+
 
         findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
             when(navController.currentDestination?.id){

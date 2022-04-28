@@ -62,10 +62,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView2"
+                android:id="@+id/chef_page_menu_recycler"
                 android:layout_width="0dp"
-                android:layout_height="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chef_page_menu_txt" />
@@ -116,7 +118,7 @@
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+                app:layout_constraintTop_toBottomOf="@+id/chef_page_menu_recycler" />
 
             <Button
                 android:id="@+id/editProfileBtn"
@@ -206,7 +208,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/chefName" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/chef_page_review_more"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -228,7 +230,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button" />
+                app:layout_constraintTop_toBottomOf="@+id/chef_page_review_more" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -11,10 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.ItemMenu
-import com.paul.chef.Like
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.databinding.FragmentMenuListBinding
 
@@ -52,12 +49,8 @@ class MenuListFragment : Fragment(), ItemMenu {
         val userId = UserManger().userId
 
 
-
-
-
-
         //menuList recycler
-        menuListAdapter = MenuListAdapter(this,menuListViewModel )
+        menuListAdapter = MenuListAdapter(this,menuListViewModel,MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
         binding.menuListRecycler.layoutManager = layoutManager
         binding.menuListRecycler.adapter = menuListAdapter

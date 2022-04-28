@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.ItemMenu
+import com.paul.chef.MenuType
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.R
 import com.paul.chef.data.ChefMenu
@@ -51,7 +52,7 @@ class LikeFragment : Fragment(), ItemMenu {
 
 
         //menuList recycler
-        menuListAdapter = MenuListAdapter(this,likeViewModel )
+        menuListAdapter = MenuListAdapter(this, likeViewModel, MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
         binding.likeRecycler.layoutManager = layoutManager
         binding.likeRecycler.adapter = menuListAdapter
