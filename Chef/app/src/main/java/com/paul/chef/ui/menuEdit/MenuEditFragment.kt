@@ -83,10 +83,9 @@ class MenuEditFragment : Fragment(), AddDiscount {
 
 
 
-        //discount spinner
+
         val items=
             listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
-
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item ,items )
         (binding.menuEditDiscountPeople.editText as? AutoCompleteTextView)?.setAdapter(adapter)

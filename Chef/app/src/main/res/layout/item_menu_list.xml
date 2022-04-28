@@ -36,7 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
-                android:id="@+id/icon"
+                android:id="@+id/item_menu_like_check"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="16dp"

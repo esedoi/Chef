@@ -115,7 +115,7 @@ class ChefFragment : Fragment() {
         }
 
 
-          
+
             binding.chefPageReviewMore.setOnClickListener {
                 if(reviewList.isNotEmpty()){
                     val arrayList = reviewList.toTypedArray()

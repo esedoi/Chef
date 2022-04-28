@@ -31,7 +31,7 @@
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/dialog_add.xml" value="0.19656677246093746" />
         <entry key="app/src/main/res/layout/fragment_book.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_book_setting.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_book_setting.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.34546152750651044" />
         <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_chat_list.xml" value="0.25" />
