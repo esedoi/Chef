@@ -38,8 +38,6 @@ class DiscountAdapter(val addDiscount:AddDiscount) : ListAdapter<Discount, Recyc
                 addDiscount.remove(position, item.percentOff)
             }
 
-
-
         }
 
         companion object {

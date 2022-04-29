@@ -93,7 +93,7 @@ class BookFragment : Fragment() {
 
 
 
-        binding.datepicker.setOnClickListener {
+        binding.bookDateSelect.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalDatePicker3(menu.chefId)
             )
@@ -103,6 +103,8 @@ class BookFragment : Fragment() {
             val result = bundle.getLong("bundleKey")
             selectDate = result
             Log.d("bookfragment", "result=$result")
+            val localDate: LocalDate = LocalDate.ofEpochDay(selectDate!!)
+            binding.bookDateSelect.setText(localDate.toString())
         }
 
 
@@ -112,14 +114,15 @@ class BookFragment : Fragment() {
 
 
 
-        binding.bookPeoplerPicker.setOnClickListener {
-            typeId = binding.orderTypeGroup.checkedRadioButtonId
+        binding.bookPeopleSelect.setOnClickListener {
+
+            typeId = binding.bookChipGroup.checkedChipId
 
             if (typeId == -1) {
                 Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
             } else {
 
-                val typeInt = if (typeId == R.id.userSpace) {
+                val typeInt = if (typeId == R.id.book_user_space_chip) {
                     BookType.UserSpace.index
                 } else {
                     BookType.ChefSpace.index
@@ -138,13 +141,13 @@ class BookFragment : Fragment() {
             }
         }
 
-        binding.bookTimePicker.setOnClickListener {
-            typeId = binding.orderTypeGroup.checkedRadioButtonId
+        binding.bookTimeSelect.setOnClickListener {
+            typeId = binding.bookChipGroup.checkedChipId
 
             if (typeId == -1) {
                 Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
             } else {
-                val typeInt = if (typeId == R.id.userSpace) {
+                val typeInt = if (typeId == R.id.book_user_space_chip) {
                     BookType.UserSpace.index
                 } else {
                     BookType.ChefSpace.index
@@ -169,25 +172,38 @@ class BookFragment : Fragment() {
         var pickPeople = -1
         var pickTime = ""
 
-        binding.orderTypeGroup.setOnCheckedChangeListener { radioGroup, i ->
-            typeId = binding.orderTypeGroup.checkedRadioButtonId
+
+        binding.bookChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            typeId = group.checkedChipId
             pickPeople = -1
             pickTime = ""
+            binding.bookTimeSelect.text?.clear()
+            binding.bookPeopleSelect.text?.clear()
+            binding.bookDateSelect.text?.clear()
         }
+
 
         setFragmentResultListener(PickerType.PICK_TIME.value) { requestKey, bundle ->
             pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
+            Log.d("bookfragment", "PICK_TIME.value_____picktime=$pickTime")
+            binding.bookTimeSelect.setText(pickTime)
         }
         setFragmentResultListener(PickerType.PICK_SESSION_TIME.value) { requestKey, bundle ->
-            pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
+            pickTime = bundle.getString(PickerType.PICK_SESSION_TIME.value).toString()
+            Log.d("bookfragment", "PICK_SESSION_TIME.value_____picktime=$pickTime")
+            binding.bookTimeSelect.setText(pickTime)
         }
         setFragmentResultListener(PickerType.PICK_CAPACITY.value) { requestKey, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_CAPACITY.value)
+            Log.d("bookfragment", "PICK_CAPACITY.value__ pickPeople=$ pickPeople")
             bookViewModel.orderPrice(menu, pickPeople)
+            binding.bookPeopleSelect.setText(pickPeople.toString())
         }
         setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
+            Log.d("bookfragment", "ICK_SESSION_CAPACITY.value=$pickPeople")
             bookViewModel.orderPrice(menu, pickPeople)
+            binding.bookPeopleSelect.setText(pickPeople.toString())
         }
 
 
@@ -195,7 +211,7 @@ class BookFragment : Fragment() {
 
 
         binding.pay.setOnClickListener {
-           typeId = binding.orderTypeGroup.checkedRadioButtonId
+            typeId = binding.bookChipGroup.checkedChipId
 
             if (selectDate == null) {
                 Toast.makeText(this.context, "請選擇日期", Toast.LENGTH_SHORT).show()
@@ -207,7 +223,7 @@ class BookFragment : Fragment() {
                 Toast.makeText(this.context, "請選擇用餐時間", Toast.LENGTH_SHORT).show()
             }else {
 
-                val typeInt = if (typeId == R.id.userSpace) {
+                val typeInt = if (typeId == R.id.book_user_space_chip) {
                     BookType.UserSpace.index
                 } else {
                     BookType.ChefSpace.index
@@ -222,7 +238,7 @@ class BookFragment : Fragment() {
                 }
 
 
-                val note = binding.noteInput.text.toString()
+                val note = binding.bookNoteLayout.editText?.text.toString()
 
                 bookViewModel.book(
                     menu,

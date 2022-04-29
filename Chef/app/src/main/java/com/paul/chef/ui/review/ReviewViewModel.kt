@@ -65,7 +65,7 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application){
                     db.collection("Chef").document(chefId)
                         .update(mapOf(
                             "reviewRating" to newChefRating,
-                            "ratingNumber" to newChefRatingNumber
+                            "reviewNumber" to newChefRatingNumber
                         ))
                         .addOnSuccessListener { documentReference ->
                             Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
@@ -100,7 +100,7 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application){
                     db.collection("Menu").document(menuId)
                         .update(mapOf(
                             "reviewRating" to newMenuRating,
-                            "ratingNumber" to newMenuRatingNumber
+                            "reviewNumber" to newMenuRatingNumber
                         ))
                         .addOnSuccessListener { documentReference ->
                             Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")

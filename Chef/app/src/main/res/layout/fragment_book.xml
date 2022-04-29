@@ -19,308 +19,484 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RadioGroup
-                android:id="@+id/orderTypeGroup"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/book_chip_group"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/textView21"
+                app:singleLine="true">
 
-                <RadioButton
-                    android:id="@+id/userSpace"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="邀請至我的場地擁餐" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                <RadioButton
-                    android:id="@+id/chefSpace"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="前往 Chef 的廚房用餐" />
-
-            </RadioGroup>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginBottom="90dp"
-                android:clickable="true"
-                app:cardCornerRadius="15dp"
-                app:cardMaxElevation="7dp"
-                app:contentPadding="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/pay"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.473"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView4">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="單價"
-                        app:layout_constraintStart_toStartOf="@+id/textView35"
-                        app:layout_constraintTop_toBottomOf="@+id/textView35" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="菜單"
-                        app:layout_constraintStart_toStartOf="@+id/textView11"
-                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-                    <TextView
-                        android:id="@+id/textView13"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="平台服務費"
-                        app:layout_constraintStart_toStartOf="@+id/textView12"
-                        app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="總價"
-                        app:layout_constraintStart_toStartOf="@+id/textView13"
-                        app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-                    <EditText
-                        android:id="@+id/noteInput"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:ems="10"
-                        android:gravity="start|top"
-                        android:hint="note"
-                        android:inputType="textMultiLine"
-                        app:layout_constraintStart_toStartOf="@+id/textView15"
-                        app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-                    <TextView
-                        android:id="@+id/orginalPerPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="TextView"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView11"
-                        app:layout_constraintEnd_toStartOf="@+id/finalPerPrice"
-                        app:layout_constraintTop_toTopOf="@+id/textView11"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <TextView
-                        android:id="@+id/orginalTotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView12"
-                        app:layout_constraintEnd_toEndOf="@+id/orginalPerPrice"
-                        app:layout_constraintTop_toTopOf="@+id/textView12" />
-
-                    <TextView
-                        android:id="@+id/userFee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView13"
-                        app:layout_constraintEnd_toEndOf="@+id/finalTotal"
-                        app:layout_constraintTop_toTopOf="@+id/textView13" />
-
-                    <TextView
-                        android:id="@+id/userPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-                        app:layout_constraintEnd_toEndOf="@+id/userFee"
-                        app:layout_constraintTop_toTopOf="@+id/textView15" />
-
-                    <TextView
-                        android:id="@+id/textView35"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/book_user_space_chip"
+                        style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="人數"
+                        android:text="預訂廚師來我的空間"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <Spinner
-                        android:id="@+id/peopleSpinner"
-                        android:layout_width="100dp"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/book_chef_space_chip"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView35"
+                        android:text="前往廚師的廚房"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView35" />
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/book_user_space_chip"
+                        app:layout_constraintTop_toTopOf="parent" />
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                    <TextView
-                        android:id="@+id/finalPerPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView11"
-                        app:layout_constraintEnd_toEndOf="@+id/peopleSpinner"
-                        app:layout_constraintTop_toTopOf="@+id/textView11" />
 
-                    <TextView
-                        android:id="@+id/finalTotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView12"
-                        app:layout_constraintEnd_toEndOf="@+id/finalPerPrice"
-                        app:layout_constraintTop_toTopOf="@+id/textView12" />
+            </com.google.android.material.chip.ChipGroup>
 
-                    <Button
-                        android:id="@+id/book_peopler_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="選擇人數"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView35"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView35" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <RadioGroup-->
+<!--                android:id="@+id/orderTypeGroup"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="80dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.0"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
 
-            </androidx.cardview.widget.CardView>
+<!--                <RadioButton-->
+<!--                    android:id="@+id/userSpace"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="邀請至我的場地擁餐" />-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/chefSpace"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="前往 Chef 的廚房用餐" />-->
+
+<!--            </RadioGroup>-->
 
             <Button
                 android:id="@+id/pay"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="24dp"
                 android:text="送出訂單"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="在哪裡用餐？"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <View-->
+<!--                android:id="@+id/view"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:background="@color/teal_700"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/book_chip_group" />-->
+
+
+            <TextView
+                android:id="@+id/addressTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="地址"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView4"
+            <View
+                android:id="@+id/divider34"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="15dp"
-                app:cardMaxElevation="7dp"
-                app:contentPadding="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                android:layout_height="8dp"
+                android:layout_marginTop="24dp"
+                android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/orderTypeGroup">
+                app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/book_date_select_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="選擇日期"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView22">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/book_date_select"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:background="@color/teal_700"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/addressTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="地址"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/book_time_select_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="選擇時間"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/book_date_select_layout">
 
-                    <TextView
-                        android:id="@+id/editAddress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="編輯"
-                        app:layout_constraintBottom_toBottomOf="@+id/dateTextview"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/dateTextview" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/book_time_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                    <TextView
-                        android:id="@+id/textView32"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="日期"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/dateTextview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="@+id/addressTextView"
-                        app:layout_constraintEnd_toStartOf="@+id/editAddress"
-                        app:layout_constraintStart_toEndOf="@+id/addressTextView"
-                        app:layout_constraintTop_toTopOf="@+id/addressTextView" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/book_people_select_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="用餐人數"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/book_time_select_layout">
 
-                    <Button
-                        android:id="@+id/datepicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="選擇日期"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView32"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView32" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/book_people_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                    <TextView
-                        android:id="@+id/textView34"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="24dp"
-                        android:text="時間"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView32" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <Spinner
-                        android:id="@+id/timeSpinner"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView34"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView34" />
+            <com.google.android.material.textfield.TextInputLayout
 
-                    <Button
-                        android:id="@+id/book_timePicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="選擇時間"
-                        app:layout_constraintEnd_toEndOf="@+id/datepicker"
-                        app:layout_constraintTop_toBottomOf="@+id/datepicker" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+                android:id="@+id/book_note_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:hint="備註"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/book_people_select_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:inputType="textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView32"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="日期"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/book_chef_space_capacity_layout" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView34"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="時間"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView32" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/datepicker"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="選擇日期"-->
+<!--                tools:layout_editor_absoluteX="235dp"-->
+<!--                tools:layout_editor_absoluteY="308dp" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/book_timePicker"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="選擇時間"-->
+<!--                tools:layout_editor_absoluteX="235dp"-->
+<!--                tools:layout_editor_absoluteY="363dp" />-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/timeSpinner"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                tools:layout_editor_absoluteX="311dp"-->
+<!--                tools:layout_editor_absoluteY="386dp" />-->
+
+            <TextView
+                android:id="@+id/dateTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/addressTextView"
+                app:layout_constraintEnd_toStartOf="@+id/editAddress"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/addressTextView"
+                app:layout_constraintTop_toTopOf="@+id/addressTextView" />
+
+            <TextView
+                android:id="@+id/editAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="編輯"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dateTextview" />
+
+            <View
+                android:id="@+id/divider14"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="24dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/book_note_layout" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView35"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="人數"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/divider14" />-->
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="單價"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="菜單"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/textView11"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="平台服務費"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/textView12"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/orginalTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/finalTotal"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView12"
+                app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/orginalPerPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                app:layout_constraintEnd_toStartOf="@+id/finalPerPrice"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+<!--            <Button-->
+<!--                android:id="@+id/book_peopler_picker"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="選擇人數"-->
+<!--                tools:layout_editor_absoluteX="258dp"-->
+<!--                tools:layout_editor_absoluteY="802dp" />-->
+
+            <TextView
+                android:id="@+id/finalTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/orginalTotal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/orginalTotal" />
+
+            <TextView
+                android:id="@+id/finalPerPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+<!--            <Spinner-->
+<!--                android:id="@+id/peopleSpinner"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/textView35"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/textView35" />-->
+
+            <TextView
+                android:id="@+id/userPay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+            <TextView
+                android:id="@+id/userFee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="總價"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="輸入訂單資訊"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider34" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="確認價格"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider14" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView2"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="0dp"
+                android:layout_height="240dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/book_chip_group" />
+
+            <!--            <EditText-->
+<!--                android:id="@+id/noteInput"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:ems="10"-->
+<!--                android:gravity="start|top"-->
+<!--                android:hint="note"-->
+<!--                android:inputType="textMultiLine"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView15"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/book_people_select_layout" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

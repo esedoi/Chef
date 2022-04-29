@@ -4,8 +4,9 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:drawable="@drawable/ic_heart_outline"
-    android:height="24dp"
-    android:width="24dp">
+    android:gravity="center"
+    android:height="16dp"
+    android:width="16dp">
 </item>
 
 </layer-list>
