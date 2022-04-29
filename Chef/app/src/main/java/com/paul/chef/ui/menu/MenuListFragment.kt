@@ -2,7 +2,6 @@ package com.paul.chef.ui.menu
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,7 @@ class MenuListFragment : Fragment(), ItemMenu {
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private var likeList = mutableListOf<String>()
+    private var likeIdList = mutableListOf<String>()
 
     lateinit var menuListViewModel:MenuListViewModel
 
@@ -61,13 +60,10 @@ class MenuListFragment : Fragment(), ItemMenu {
             menuListAdapter.notifyDataSetChanged()
         }
 
-        menuListViewModel.likeList.observe(viewLifecycleOwner){
-            likeList.addAll(it)
+        menuListViewModel.likeIdList.observe(viewLifecycleOwner){
+            likeIdList.clear()
+            likeIdList.addAll(it)
         }
-
-
-
-
 
         return root
     }
@@ -82,11 +78,11 @@ class MenuListFragment : Fragment(), ItemMenu {
     }
 
     override fun like(menuId:String) {
-        if(likeList.contains(menuId)){
-           likeList.remove(menuId)
+        if(likeIdList.contains(menuId)){
+           likeIdList.remove(menuId)
         }else{
-            likeList.add(menuId)
+            likeIdList.add(menuId)
         }
-        menuListViewModel.updateLikeList(likeList)
+        menuListViewModel.updateLikeList(likeIdList)
     }
 }

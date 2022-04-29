@@ -2,7 +2,6 @@ package com.paul.chef.ui.menu
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +10,8 @@ import com.paul.chef.MenuType
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.databinding.ItemMenuSimpleBinding
-import com.paul.chef.ui.chatRoom.ChatRoomAdapter
 
-class MenuListAdapter(private val itemMenu:ItemMenu?, menuViewModel:ViewModel?, val type:Int) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(MenuCallback()) {
+class MenuListAdapter(private val itemMenu:ItemMenu?, val menuViewModel:MenuListViewModel?, val type:Int) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(MenuCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -30,7 +28,7 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, menuViewModel:ViewModel?, 
 
 
         if (holder is FullHolder) {
-            holder.bind(item, itemMenu)
+            holder.bind(item, itemMenu, menuViewModel)
         }
 
     }
@@ -46,12 +44,15 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, menuViewModel:ViewModel?, 
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: ChefMenu, itemMenu: ItemMenu?) {
+        fun bind(item: ChefMenu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
             if(itemMenu!=null){
                 itemView.setOnClickListener {
                     itemMenu.goDetail(item)
                 }
-                binding.itemMenuLikeBtn.setOnClickListener {
+                binding.itemMenuLikeCheck.isChecked = menuViewModel?.likeIdList?.value?.contains(item.id) == true
+
+
+                binding.itemMenuLikeCheck.setOnClickListener{
                     itemMenu.like(item.id)
                 }
                 binding.menuTitle.text = item.menuName

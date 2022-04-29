@@ -1,16 +1,13 @@
 package com.paul.chef.ui.menu
 
 import android.app.Application
-import android.os.UserManager
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.UserManger
-import com.paul.chef.data.Chef
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.User
 
@@ -23,8 +20,12 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
         get() = _menuList
 
 
-    private var _likeList = MutableLiveData<List<String>>()
-    val likeList: LiveData<List<String>>
+    private var _likeIdList = MutableLiveData<List<String>>()
+    val likeIdList: LiveData<List<String>>
+        get() = _likeIdList
+
+    private var _likeList = MutableLiveData<List<ChefMenu>>()
+    val likeList: LiveData<List<ChefMenu>>
         get() = _likeList
     private val db = FirebaseFirestore.getInstance()
 
@@ -42,13 +43,8 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     val item = value?.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, User::class.java)
-                if(data.likeList?.isNotEmpty() == true){
-                    _likeList.value = data.likeList!!
-                }
-
+                    _likeIdList.value = data.likeList!!
             }
-
-
 
 
         db.collection("Menu")
@@ -67,6 +63,31 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                 }
                 _menuList.value = dataList
             }
+    }
+
+    fun getLikeList(newList:List<String>){
+        if(newList.isEmpty()){
+            _likeList.value = emptyList()
+        }else{
+            db.collection("Menu")
+                .whereIn("id",newList )
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w("notification", "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+                    dataList.clear()
+                    for (doc in value!!.documents) {
+                        val item = doc.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, ChefMenu::class.java)
+                        dataList.add(data)
+                        Log.d("likeviewmodel", "item=$item")
+                    }
+                    _likeList.value = dataList
+                }
+        }
+
     }
 
     fun updateLikeList(newList:List<String>){
