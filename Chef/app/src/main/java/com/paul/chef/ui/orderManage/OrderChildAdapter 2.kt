@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.GoOrderDetail
+import com.paul.chef.Mode
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.ItemOrderChildBinding
+import java.time.LocalDate
 
-class OrderChildAdapter(val goOrderDetail: GoOrderDetail) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
+class OrderChildAdapter(val goOrderDetail: GoOrderDetail, val mode:Int) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -24,7 +26,7 @@ class OrderChildAdapter(val goOrderDetail: GoOrderDetail) : ListAdapter<Order, R
         if (holder is OrderHolder) {
 
 
-            holder.bind(item,goOrderDetail)
+            holder.bind(item,goOrderDetail, mode)
         }
 
     }
@@ -34,19 +36,29 @@ class OrderChildAdapter(val goOrderDetail: GoOrderDetail) : ListAdapter<Order, R
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Order, goOrderDetail: GoOrderDetail) {
-            binding.root.setOnClickListener{
+        fun bind(item: Order, goOrderDetail: GoOrderDetail, mode:Int) {
+            Log.d("oderchildadapter", "mode=$mode")
+
+            when(mode){
+                Mode.CHEF.index->{
+                    binding.itemOrderName.text = item.userName
+                    Log.d("oderchildadapter", "item.userName=${item.userName}")
+                }
+                Mode.USER.index->{
+                    binding.itemOrderName.text = item.chefName
+                    Log.d("oderchildadapter", "item.chefName=${item.chefName}")
+                }
+            }
+            binding.itemOrderCardView.setOnClickListener {
                 goOrderDetail.goDetail(item)
                 Log.d("orderchildadapter", "item=$item")
             }
-//            itemView.setOnClickListener {
-//                goDetail.goDetail(item)
-//                Log.d("orderchildadapter", "item=$item")
-//            }
-            binding.itemOrderName.text = item.userName
-            binding.orderDate.text = item.time
-            binding.orderTime.text = item.date.toString()
-            binding.orderPeople.text = item.people.toString()
+
+
+            val localDate: LocalDate = LocalDate.ofEpochDay(item.date)
+            binding.orderDate.text = localDate.toString()
+            binding.orderTime.text = item.time
+            binding.orderPeople.text = item.people.toString()+" 位"
             binding.orderMenu.text = item.menuName
         }
 

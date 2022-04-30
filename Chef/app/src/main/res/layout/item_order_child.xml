@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/item_order_card_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -28,20 +29,19 @@
                 android:id="@+id/item_order_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintStart_toStartOf="@+id/orderMenu"
+                app:layout_constraintTop_toBottomOf="@+id/orderMenu" />
 
             <TextView
                 android:id="@+id/orderPeople"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="人數"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="@+id/item_order_name"
                 app:layout_constraintTop_toBottomOf="@+id/item_order_name" />
 
@@ -49,12 +49,13 @@
                 android:id="@+id/orderDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="日期"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/orderPeople"
-                app:layout_constraintStart_toEndOf="@+id/orderPeople"
-                app:layout_constraintTop_toTopOf="@+id/orderPeople" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/orderPeople"
+                app:layout_constraintTop_toBottomOf="@+id/orderPeople" />
 
             <TextView
                 android:id="@+id/orderTime"
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="時間"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toEndOf="@+id/orderDate"
                 app:layout_constraintTop_toTopOf="@+id/orderDate" />
 
@@ -70,20 +71,21 @@
                 android:id="@+id/orderMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
                 android:text="菜單"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/orderPeople"
-                app:layout_constraintTop_toBottomOf="@+id/orderPeople" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

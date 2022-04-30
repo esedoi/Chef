@@ -132,7 +132,6 @@ class MenuDetailFragment : Fragment() {
                 nameText.text = i.name
                 nameText.gravity = Gravity.CENTER
                 nameText.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
-
                 displayList[defaultType].displayRG.addView(nameText)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
 

@@ -3,6 +3,7 @@ package com.paul.chef.ui.book
 import android.annotation.SuppressLint
 import android.app.Application
 import android.icu.text.SimpleDateFormat
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -115,15 +116,16 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 
         val discount = originalPrice - total
 
+
         val order = Order(
             orderId,
             userId,
             chefId,
             userName,
             chefName,
-            menuName,
             userPic,
             chefPic,
+            menuName,
             type,
             address,
             orderTime,

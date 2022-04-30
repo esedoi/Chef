@@ -1,5 +1,6 @@
 package com.paul.chef.ui.orderDetail
 
+import android.graphics.Typeface
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Html
@@ -163,18 +164,18 @@ class OrderDetailFragment : Fragment() {
                 andText.text = and
                 andText.gravity = Gravity.CENTER
                 andText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
+                andText.setTextColor(resources.getColor(R.color.teal_200))
+                andText.setTypeface(null, Typeface.BOLD_ITALIC)
                 displayList[defaultType].displayRG.addView(andText)
             }
             // +textview
             val nameText = TextView(this.context)
-
+            nameText.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
             val name= if(i.extraPrice!=0){
-                "${i.name}    <font color = \"#03A9F4\">(+NT$ ${i.extraPrice})</font>"
+                "${i.name}    <I><font color = \"#03DAC5\">(+NT$ ${i.extraPrice})</font></I>"
             }else{
                 "${i.name}"
             }
-
-
             nameText.text = Html.fromHtml(name)
             nameText.gravity = Gravity.CENTER
             displayList[defaultType].displayRG.addView(nameText)

@@ -185,23 +185,19 @@ class BookFragment : Fragment() {
 
         setFragmentResultListener(PickerType.PICK_TIME.value) { requestKey, bundle ->
             pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
-            Log.d("bookfragment", "PICK_TIME.value_____picktime=$pickTime")
             binding.bookTimeSelect.setText(pickTime)
         }
         setFragmentResultListener(PickerType.PICK_SESSION_TIME.value) { requestKey, bundle ->
             pickTime = bundle.getString(PickerType.PICK_SESSION_TIME.value).toString()
-            Log.d("bookfragment", "PICK_SESSION_TIME.value_____picktime=$pickTime")
             binding.bookTimeSelect.setText(pickTime)
         }
         setFragmentResultListener(PickerType.PICK_CAPACITY.value) { requestKey, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_CAPACITY.value)
-            Log.d("bookfragment", "PICK_CAPACITY.value__ pickPeople=$ pickPeople")
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
         setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
-            Log.d("bookfragment", "ICK_SESSION_CAPACITY.value=$pickPeople")
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
