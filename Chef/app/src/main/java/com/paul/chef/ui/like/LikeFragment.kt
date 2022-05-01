@@ -44,12 +44,6 @@ class LikeFragment : Fragment(), ItemMenu {
         _binding = FragmentLikeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        likeViewModel =
-//            ViewModelProvider(this).get(LikeViewModel::class.java)
-
-
-
-
 
         //menuList recycler
         menuListAdapter = MenuListAdapter(this, menuListViewModel, MenuType.FULL.index)
@@ -70,8 +64,6 @@ class LikeFragment : Fragment(), ItemMenu {
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }
-
-
 
 
         return root

@@ -10,12 +10,24 @@
         android:name="com.paul.chef.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
+    <action
+        android:id="@+id/action_global_navigation_home"
+        app:destination="@id/navigation_home" />
 
 
     <fragment
         android:id="@+id/chefEditFragment"
         android:name="com.paul.chef.ui.chefEdit.ChefEditFragment"
-        android:label="ChefEditFragment" />
+        android:label="ChefEditFragment" >
+        <argument
+            android:name="editType"
+            app:argType="integer" />
+
+        <argument
+            android:name="profile"
+            app:argType="com.paul.chef.data.ProfileInfo" />
+
+    </fragment>
     <fragment
         android:id="@+id/chefFragment"
         android:name="com.paul.chef.ui.chef.ChefFragment"

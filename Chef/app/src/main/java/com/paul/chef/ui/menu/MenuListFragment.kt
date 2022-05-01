@@ -43,9 +43,7 @@ class MenuListFragment : Fragment(), ItemMenu {
          menuListViewModel =
             ViewModelProvider(this).get(MenuListViewModel::class.java)
 
-        val chefId = "9qKTEyvYbiXXEJSjDJGF"
 
-        val userId = UserManger().userId
 
 
         //menuList recycler
@@ -54,7 +52,7 @@ class MenuListFragment : Fragment(), ItemMenu {
         binding.menuListRecycler.layoutManager = layoutManager
         binding.menuListRecycler.adapter = menuListAdapter
 
-        //觀察 howmuch live data
+
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()

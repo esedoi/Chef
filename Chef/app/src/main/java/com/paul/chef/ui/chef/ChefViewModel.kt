@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.Chef
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Review
@@ -28,7 +29,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
 
-     val chefId = ChefManger().chefId
+     val chefId = UserManger.chef.id
     private val menuIdList = mutableListOf<String>()
 
 

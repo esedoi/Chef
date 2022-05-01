@@ -19,6 +19,7 @@ import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
+import com.paul.chef.ui.menuDetail.bindImage
 
 class ChefFragment : Fragment() {
 
@@ -34,7 +35,7 @@ class ChefFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private var reviewList = emptyList<Review>()
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +50,13 @@ class ChefFragment : Fragment() {
 
         val mode = this.context?.let { UserManger.readData("mode", it) }
         Log.d("cheffragment", "mode=$mode")
+
+
+        binding.chefPageLogout.setOnClickListener {
+            (activity as MainActivity).signOut()
+            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+        }
+
         if(mode ==Mode.USER.index){
             binding.turnToUser.text = "切換成廚師模式"
             binding.turnToUser.setOnClickListener {
@@ -68,6 +76,18 @@ class ChefFragment : Fragment() {
             Log.d("CHEFFRAGMENT","接收到資料")
             binding.chefName.text = it.profileInfo.name
             binding.chefIntro.text = it.profileInfo.introduce
+            if(it.ratingNumber!=null){
+                binding.chefPageReviewDown.text = it.ratingNumber.toString()+" 則評價"
+            }else{
+                binding.chefPageReviewDown.text = "0 則評價"
+            }
+            bindImage(binding.chefPageImgView, it.profileInfo.avatar)
+            val outlineProvider = ProfileOutlineProvider()
+            binding.chefPageImgView.outlineProvider = outlineProvider
+
+
+            bindImage( binding.chefPageImgView, it.profileInfo.avatar)
+
         }
 
 
@@ -77,15 +97,12 @@ class ChefFragment : Fragment() {
         }
 
         binding.editProfileBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user.profileInfo!!))
         }
 
         binding.bookSettingBtn.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.actionGlobalBookSetting())
         }
-
-
-
 
 
 

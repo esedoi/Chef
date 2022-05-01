@@ -38,21 +38,24 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
         get() = _hasData
 
 
-    val chefId = ChefManger().chefId
-    val userId = UserManger().userId
+
 
     var field = ""
     var value = ""
 
 
-    init{
 
-        when(UserManger.readData("mode", context)){
+    init{
+        val mode =UserManger.readData("mode", context)
+
+        when(mode){
             Mode.USER.index->{
+                val userId = UserManger.user.userId!!
                 field = "userId"
                 value = userId
             }
             Mode.CHEF.index->{
+                val chefId = UserManger.chef.id
                 field = "chefId"
                 value = chefId
             }

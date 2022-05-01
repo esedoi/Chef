@@ -47,8 +47,7 @@ class OrderDetailFragment : Fragment() {
 
         val order = arg.order
         var roomId = ""
-        val userId = UserManger().userId
-        val chefId = ChefManger().chefId
+
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
 

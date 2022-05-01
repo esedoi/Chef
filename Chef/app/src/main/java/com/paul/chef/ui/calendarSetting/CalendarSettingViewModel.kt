@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.DateSetting
 import com.paul.chef.data.DateStatus
 import com.paul.chef.data.MenuStatus
@@ -49,7 +50,7 @@ class CalendarSettingViewModel(application: Application) : AndroidViewModel(appl
 //            weekday.add(weekStatus)
 //         }
 
-        val chefId = ChefManger().chefId
+        val chefId = UserManger.chef.id
 
 
         for (i in date) {

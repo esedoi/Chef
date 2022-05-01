@@ -29,7 +29,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
         get() = _likeList
     private val db = FirebaseFirestore.getInstance()
 
-    val userId = UserManger().userId
+    val userId = UserManger.user.userId!!
 
     init {
 
@@ -43,7 +43,9 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     val item = value?.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, User::class.java)
+                if(data.likeList!=null){
                     _likeIdList.value = data.likeList!!
+                }
             }
 
 

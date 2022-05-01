@@ -91,10 +91,11 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
-        val userId = UserManger().userId
-        val userName = "Amy"
+        val userId = UserManger.user?.userId!!
+        val userName = UserManger.user!!.profileInfo?.name!!
         val chefName = chefMenu.chefName
-        val userPic = UserManger().userAvatar
+        //這裡要改成絕對不會空
+        val userPic = UserManger.user!!.profileInfo?.avatar?:"nullPic"
         val chefPic = chefMenu.chefAvatar
         val menuName = chefMenu.menuName
         val chefId = chefMenu.chefId

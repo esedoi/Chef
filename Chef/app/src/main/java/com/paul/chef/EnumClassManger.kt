@@ -64,3 +64,7 @@ enum class MenuType(val index: Int){
     FULL(0), SIMPLE(1)
 }
 
+enum class EditPageType(val index:Int){
+    CREATE_USER(0), EDIT_PROFILE(1)
+}
+

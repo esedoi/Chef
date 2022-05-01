@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.*
 
 class MenuEditViewModel (application: Application) : AndroidViewModel(application){
@@ -15,9 +16,9 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
     private val context = getApplication<Application>().applicationContext
 
     private val db = FirebaseFirestore.getInstance()
-    val chefId = ChefManger().chefId
-    val chefName = ChefManger().chefName
-    val avatar = ChefManger().chefPic
+    val chefId = UserManger.chef.id
+    val chefName = UserManger.chef.profileInfo.name
+    val avatar = UserManger.chef.profileInfo.avatar!!
 
 
 

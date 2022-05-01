@@ -36,7 +36,7 @@ class TransactionViewModel:ViewModel(){
         get() = _transactionList
 
 
-    val chefId = ChefManger().chefId
+    val chefId = UserManger.chef.id
 
 
 
@@ -131,7 +131,7 @@ class TransactionViewModel:ViewModel(){
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
         var idList = mutableListOf<String>()
-        val chefId = ChefManger().chefId
+
 
         for(i in unpaidList){
             idList.add(i.id)

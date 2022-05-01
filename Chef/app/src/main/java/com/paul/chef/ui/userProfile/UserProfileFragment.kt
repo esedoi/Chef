@@ -11,16 +11,21 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentUserProfileBinding
+import com.paul.chef.ui.bottomSheetPicker.PickerBottomSheetArgs
 import com.paul.chef.ui.chef.ChefViewModel
+import com.paul.chef.ui.menuDetail.bindImage
 import com.paul.chef.ui.orderDetail.OrderDetailViewModel
 
 class UserProfileFragment : Fragment() {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
+
+
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -34,39 +39,39 @@ class UserProfileFragment : Fragment() {
         val userProfileViewModel =
             ViewModelProvider(this).get(UserProfileViewModel::class.java)
 
-        val user = mainViewModel.user
+        val user = UserManger.user
         Log.d("userprofilefragment"," user= $user")
-        if (user != null) {
+
+        binding.userProfileIntro.text = user.profileInfo?.introduce!!
+        binding.userProfileNameText.text = user.profileInfo.name
+
+        bindImage(binding.userProfileImg, user.profileInfo.avatar)
+        val outlineProvider = ProfileOutlineProvider()
+        binding.userProfileImg.outlineProvider = outlineProvider
+        binding.userProfileLogout.setOnClickListener {
+            (activity as MainActivity).signOut()
+            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+        }
+
+
             if(user.chefId!=null){
                 findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
             }
-        }
 
-
-//        binding.createUser.setOnClickListener {
-//            val userName = "Amy"
-//            val userEmail = "amy@gmail.com"
-//            val userIntro = "i am a nice guest"
-//            userProfileViewModel.createUser(userEmail,userIntro, userName)
-//        }
 
         userProfileViewModel.chefId.observe(viewLifecycleOwner){
             Log.d("userprofilefragment","++++++++++++chefid = $it")
-            mainViewModel.getChef(it)
-            (activity as MainActivity).turnMode(Mode.CHEF.index)
-            findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+            userProfileViewModel.getChef(it)
+        }
+        userProfileViewModel.getChefDone.observe(viewLifecycleOwner){
+            if(it){
+                (activity as MainActivity).turnMode(Mode.CHEF.index)
+            }
         }
 
         binding.userProfileCreateChef.setOnClickListener {
-            if(mainViewModel.user!=null){
-                val name = mainViewModel.user!!.profileInfo.name
-                val intro = mainViewModel.user!!.profileInfo.introduce
-                val email = mainViewModel.user!!.profileInfo.email
-                val avatar = mainViewModel.user!!.profileInfo.avatar
-                userProfileViewModel.createChef(name, intro, email, avatar)
-//                (activity as MainActivity).turnMode(Mode.CHEF.index)
-//                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-            }
+            Log.d("userprofilemanager", "user=$user")
+            userProfileViewModel.createChef(user)
         }
 
 //        binding.turnToChef.setOnClickListener {

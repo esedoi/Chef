@@ -71,9 +71,8 @@ class DatePicker : BottomSheetDialogFragment() {
 
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
-//        val bookSetting = arg.bookSetting
         val chefId = arg.chefId
-//        datePickerViewModel.chefId = chefId
+        datePickerViewModel.getChefData(chefId)
 
 
         datePickerViewModel.bookSetting.observe(viewLifecycleOwner) {

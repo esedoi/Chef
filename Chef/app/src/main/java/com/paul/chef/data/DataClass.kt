@@ -1,5 +1,6 @@
 package com.paul.chef.data
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
@@ -153,22 +154,22 @@ data class Review(
     val date:Long
 ): Parcelable
 
-
+@Parcelize
 data class User(
-    val userId:	String,
-    val profileInfo:ProfileInfo,
+    val userId:	String?=null,
+    val profileInfo:ProfileInfo?=null,
     val chefId:String?=null,
     val likeList:List<String>?=null,
     val address:List<String>?=null
-)
+): Parcelable
 
-
+@Parcelize
 data class ProfileInfo(
     val name: String,
     val email:String,
-    val avatar:String,
-    val introduce: String
-)
+    val avatar: String? =null,
+    val introduce: String?=null
+): Parcelable
 
 
 data class BankInfo(
