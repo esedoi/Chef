@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.rpc.context.AttributeContext
+import com.paul.chef.ImgRecyclerType
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.R
 import com.paul.chef.data.Dish
@@ -86,7 +87,7 @@ class MenuDetailFragment : Fragment() {
 
 
         //imagesRecyclerView
-        imageAdapter = DetailImagesAdapter()
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.imagesRecycler.layoutManager = layoutManager
         binding.imagesRecycler.adapter = imageAdapter

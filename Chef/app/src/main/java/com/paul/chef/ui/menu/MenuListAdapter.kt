@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.paul.chef.ImgRecyclerType
 import com.paul.chef.ItemMenu
 import com.paul.chef.MenuType
 import com.paul.chef.data.ChefMenu
@@ -18,7 +19,7 @@ import com.paul.chef.ui.menuDetail.bindImage
 import kotlinx.coroutines.NonDisposableHandle
 import kotlinx.coroutines.NonDisposableHandle.parent
 
-class MenuListAdapter(private val itemMenu:ItemMenu?, val menuViewModel:MenuListViewModel?, val type:Int) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(MenuCallback()) {
+class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:MenuListViewModel?, val type:Int) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(MenuCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -55,7 +56,7 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, val menuViewModel:MenuList
 
         init{
             val context = itemView.context
-            imageAdapter = DetailImagesAdapter()
+            imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.itemMenuImgRecycler.layoutManager = layoutManager
             binding.itemMenuImgRecycler.adapter = imageAdapter

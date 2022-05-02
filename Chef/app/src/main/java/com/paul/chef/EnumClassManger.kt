@@ -68,3 +68,11 @@ enum class EditPageType(val index:Int){
     CREATE_USER(0), EDIT_PROFILE(1)
 }
 
+enum class ImgType(val index:Int){
+    AVATAR(0), MENU(1)
+}
+
+enum class ImgRecyclerType(val index:Int){
+    IMAGE(0), IMAGE_EDIT(1)
+}
+

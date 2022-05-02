@@ -38,47 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val mutableSelectedItem = MutableLiveData<Int>()
     val selectedItem: LiveData<Int> get() = mutableSelectedItem
 
-//    init {
-//        chef?.let {
-//            db.collection("Chef")
-//                .document(it.id)
-//                .addSnapshotListener { value, e ->
-//                    if (e != null) {
-//                        Log.w("notification", "Listen failed.", e)
-//                        return@addSnapshotListener
-//                    }
-//                    val item = value?.data
-//                    val json = Gson().toJson(item)
-//                    val data = Gson().fromJson(json, Chef::class.java)
-//                    UserManger.chef = data
-//                    Log.d("mainviewModel", "chef=$chef")
-//
-//                }
-//        }
-//
-//        userEmail?.let {
-//            db.collection("User")
-//                .whereEqualTo("profileInfo.email", it)
-//                .addSnapshotListener { value, e ->
-//                    if (e != null) {
-//                        Log.w("notification", "Listen failed.", e)
-//                        return@addSnapshotListener
-//                    }
-//                    if (value != null) {
-//                        _newUser.value = false
-//                        for(i in value.documents){
-//                            val json = Gson().toJson(i)
-//                            val data = Gson().fromJson(json, User::class.java)
-//                            UserManger.user = data
-//                            Log.d("mainviewModel", "chef=$user")
-//                        }
-//                    }else{
-//                        //new user
-//                        _newUser.value = true
-//                    }
-//                }
-//        }
-//    }
+
 
     fun getUser(email:String){
         db.collection("User")

@@ -1,11 +1,13 @@
 package com.paul.chef
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -128,13 +130,18 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = Firebase.auth
 
+
+        val currentUser = auth.currentUser
+        Log.d("mainactivity", "currentuser = $currentUser")
+        updateUI(currentUser)
+
     }
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
-        Log.d("mainactivity", "currentuser = $currentUser")
-        updateUI(currentUser)
+//        val currentUser = auth.currentUser
+//        Log.d("mainactivity", "currentuser = $currentUser")
+//        updateUI(currentUser)
     }
 
 
@@ -224,6 +231,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+
+
 
     companion object {
         private const val RC_SIGN_IN = 9001

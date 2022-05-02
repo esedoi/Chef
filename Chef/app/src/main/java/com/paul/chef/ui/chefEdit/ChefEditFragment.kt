@@ -8,18 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.firestore.FirebaseFirestore
-import com.paul.chef.EditPageType
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.ProfileOutlineProvider
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.FragmentChefEditBinding
 import com.paul.chef.ui.menuDetail.bindImage
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 
 class ChefEditFragment : Fragment() {
 
@@ -45,23 +44,43 @@ class ChefEditFragment : Fragment() {
 
         val editType = arg.editType
         val profileInfo = arg.profile
-
-
-
-
+        var avatar = profileInfo.avatar
 
         binding.profileEditEmail.text = profileInfo.email
         binding.profileEditNameLayout.editText?.setText(profileInfo.name)
 
-        bindImage(binding.profileEditImg, profileInfo.avatar)
+        bindImage(binding.profileEditImg, avatar)
         val outlineProvider = ProfileOutlineProvider()
         binding.profileEditImg.outlineProvider =outlineProvider
+
+
+        chefEditViewModel.userId.observe(viewLifecycleOwner){
+            chefEditViewModel.getUser(it)
+        }
+
+        chefEditViewModel.getUserDone.observe(viewLifecycleOwner){
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+        }
+
+        setFragmentResultListener("requestImg") { requestKey, bundle ->
+            val result = bundle.getString("downloadUri")
+            Log.d("chefeditfragment", "result=$result")
+            avatar = result
+            bindImage(binding.profileEditImg, avatar)
+        }
+
+
+
+        binding.profileEditAvatarBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalImageUploadFragment(ImgType.AVATAR.index))
+        }
+
 
         binding.profileEditConfirmBtn.setOnClickListener {
 
             val name = binding.profileEditNameLayout.editText?.text.toString()
             val intro = binding.profileEditIntro.editText?.text.toString()
-            val avatar = profileInfo.avatar
+
 
 //            @Parcelize
 //            data class ProfileInfo(
@@ -90,15 +109,6 @@ class ChefEditFragment : Fragment() {
                 }
             }
         }
-
-        chefEditViewModel.userId.observe(viewLifecycleOwner){
-            chefEditViewModel.getUser(it)
-        }
-
-        chefEditViewModel.getUserDone.observe(viewLifecycleOwner){
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
-        }
-
 
 
 //        binding.chefSave.setOnClickListener {

@@ -19,7 +19,7 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView3"
+                android:id="@+id/menu_edit_img_recycler"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -63,9 +63,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/menu_edit_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +92,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
             <TextView
                 android:id="@+id/textView29"
                 android:layout_width="wrap_content"
@@ -102,7 +101,7 @@
                 android:text="菜色"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView3" />
+                app:layout_constraintTop_toBottomOf="@+id/menu_edit_add_img" />
 
             <TextView
                 android:id="@+id/textView30"
@@ -187,13 +186,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/discountRecycler">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-
 
 
             <Button
@@ -265,6 +262,19 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/menu_edit_add_img"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="添加照片"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/menu_edit_img_recycler" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.paul.chef.ui.menuEdit
 
 
 import android.annotation.SuppressLint
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,20 +14,23 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.AddDiscount
-import com.paul.chef.R
+import com.paul.chef.*
 import com.paul.chef.data.Discount
 import com.paul.chef.data.Dish
 import com.paul.chef.databinding.FragmentMenuEditBinding
 import com.paul.chef.databinding.ItemAddDishBinding
 import com.paul.chef.databinding.ItemDishOptionalBinding
+import com.paul.chef.ui.menuDetail.DetailImagesAdapter
+import com.paul.chef.ui.menuDetail.bindImage
 
 
-class MenuEditFragment : Fragment(), AddDiscount {
+class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg  {
 
     private var _binding: FragmentMenuEditBinding? = null
     private val binding get() = _binding!!
@@ -51,6 +55,9 @@ class MenuEditFragment : Fragment(), AddDiscount {
     private lateinit var discountAdapter: DiscountAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
+    private lateinit var imageAdapter: DetailImagesAdapter
+
+
     var discountList = mutableListOf<Discount>()
     var people: Int = 0
 
@@ -59,6 +66,8 @@ class MenuEditFragment : Fragment(), AddDiscount {
     var dishList = mutableListOf<Dish>()
 
     private val arg: MenuEditFragmentArgs by navArgs()
+
+    var imgList = mutableListOf<String>()
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -80,8 +89,26 @@ class MenuEditFragment : Fragment(), AddDiscount {
         binding.discountRecycler.layoutManager = layoutManager
         binding.discountRecycler.adapter = discountAdapter
 
+        //imagesRecyclerView
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this)
+        layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.menuEditImgRecycler.layoutManager = layoutManager
+        binding.menuEditImgRecycler.adapter = imageAdapter
 
 
+
+        binding.menuEditAddImg.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalImageUploadFragment(ImgType.MENU.index))
+        }
+        setFragmentResultListener("requestImg") { requestKey, bundle ->
+            val result = bundle.getString("downloadUri")
+            Log.d("chefeditfragment", "result=$result")
+            if (result != null) {
+                imgList.add(result)
+                imageAdapter.submitList(imgList)
+                imageAdapter.notifyDataSetChanged()
+            }
+        }
 
 
         val items=
@@ -165,15 +192,15 @@ class MenuEditFragment : Fragment(), AddDiscount {
                 }
 
                 if (isNameFilled) {
-                    val images = listOf<String>("https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
-                        "https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
-                        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/738206-1-1591601705.jpg?crop=0.503xw:1.00xh;0,0&resize=640:*")
+//                    val images = listOf<String>("https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
+//                        "https://images.900.tw/upload_file/45/content/197caef1-59ee-2982-a639-d71fa44f3f1c.jpg",
+//                        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/738206-1-1591601705.jpg?crop=0.503xw:1.00xh;0,0&resize=640:*")
                     Log.d("menuEditfragment", "dishList = ${dishList}")
                     menuEditViewModel.createMenu(
                         menuName,
                         menuIntro,
                         perPrice,
-                        images,
+                        imgList,
                         discountList,
                         dishList
                     )
@@ -206,7 +233,6 @@ class MenuEditFragment : Fragment(), AddDiscount {
     @SuppressLint("NotifyDataSetChanged")
     override fun remove(position: Int, percentOff: Int) {
         discountList.removeAt(position)
-
         discountAdapter.submitList(discountList)
         Log.d("menueditfragment", "peopleNumber = $discountList")
         discountAdapter.notifyDataSetChanged()
@@ -266,5 +292,11 @@ class MenuEditFragment : Fragment(), AddDiscount {
             }
         }
         binding.dishTypeLinear.addView(dishTypeView.root)
+    }
+
+    override fun remove(position: Int) {
+        imgList.removeAt(position)
+        imageAdapter.submitList(imgList)
+        imageAdapter.notifyDataSetChanged()
     }
 }
