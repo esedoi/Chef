@@ -27,6 +27,10 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     val bookSetting: LiveData<BookSetting>
         get() = _bookSetting
 
+    private var _bookDone = MutableLiveData<Boolean>()
+    val bookDone: LiveData<Boolean>
+        get() = _bookDone
+
     var userPay = -1
     var chefReceive = -1
 
@@ -149,6 +153,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
                 Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
+                _bookDone.value = true
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)

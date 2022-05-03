@@ -29,10 +29,8 @@ import com.paul.chef.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
 
-
     private lateinit var binding: ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
-
 
 
 //    val navView: BottomNavigationView? = null
@@ -41,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    private lateinit var newUserProfile:ProfileInfo
+    private lateinit var newUserProfile: ProfileInfo
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +47,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-         mainViewModel =
+        mainViewModel =
             ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-
 
 
 //        app:menu="@menu/bottom_nav_menu"
@@ -76,24 +73,29 @@ class MainActivity : AppCompatActivity() {
 //            mainViewModel.getChef(it)
 //        }
 
-        mainViewModel.newUser.observe(this){
+        mainViewModel.newUser.observe(this) {
             Log.d("mainactivity", "newuser=$it")
-            if(it){
-                navController.navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.CREATE_USER.index,  newUserProfile))
-            }else{
+            if (it) {
+                navController.navigate(
+                    MobileNavigationDirections.actionGlobalChefEditFragment(
+                        EditPageType.CREATE_USER.index,
+                        newUserProfile
+                    )
+                )
+            } else {
 
 
-                when(val mode = UserManger.readData("mode", this)){
-                    Mode.CHEF.index->{
-                        if(UserManger.user.chefId !=null){
+                when (val mode = UserManger.readData("mode", this)) {
+                    Mode.CHEF.index -> {
+                        if (UserManger.user.chefId != null) {
                             turnMode(mode)
                             navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-                        }else{
+                        } else {
                             turnMode(Mode.USER.index)
                             navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
                         }
                     }
-                    else->{
+                    else -> {
                         turnMode(Mode.USER.index)
                         navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
                     }
@@ -104,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
 
         findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
-            when(navController.currentDestination?.id){
+            when (navController.currentDestination?.id) {
                 R.id.menuFragment,
                 R.id.likeFragment,
                 R.id.orderManageFragment,
@@ -112,14 +114,26 @@ class MainActivity : AppCompatActivity() {
                 R.id.userProfileFragment,
                 R.id.calendar,
                 R.id.transactionFragment,
-                R.id.chefFragment ->{ navView.visibility = View.VISIBLE
+                R.id.chefFragment -> {
+                    navView.visibility = View.VISIBLE
+                    binding.toolbar6.visibility = View.GONE
                 }
-                else->{
+                R.id.menuDetailFragment->{
                     navView.visibility = View.GONE
+                    binding.toolbar6.visibility = View.GONE
+                }
+                else -> {
+                    navView.visibility = View.GONE
+                    binding.toolbar6.visibility = View.VISIBLE
                 }
             }
-
         }
+        binding.mainActivityBackBtn.setOnClickListener {
+            navController.navigateUp()
+        }
+
+
+
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -137,12 +151,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-//        val currentUser = auth.currentUser
-//        Log.d("mainactivity", "currentuser = $currentUser")
-//        updateUI(currentUser)
-    }
 
 
 
@@ -151,20 +159,20 @@ class MainActivity : AppCompatActivity() {
         if (user != null) {
 
             Log.d("mainactivity", "useravatar=${user.photoUrl}")
-            val email  = user.email
+            val email = user.email
             val name = user.displayName
             val avatar = user.photoUrl.toString()
 
-            if(name!=null&&email!= null&&avatar!=null){
-                newUserProfile = ProfileInfo( name, email, avatar)
+            if (name != null && email != null && avatar != null) {
+                newUserProfile = ProfileInfo(name, email, avatar)
                 mainViewModel.getUser(email)
             }
 
         }
     }
 
-    fun  turnMode(mode:Int){
-        UserManger.saveData(mode,this)
+    fun turnMode(mode: Int) {
+        UserManger.saveData(mode, this)
         if (mode == Mode.USER.index) {
             binding.navView.menu.clear()
             binding.navView.inflateMenu(R.menu.bottom_nav_menu)
@@ -175,10 +183,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun hideNaveView(){
+    fun hideNaveView() {
         binding.navView.visibility = View.GONE
     }
-    fun showNaveView(){
+
+    fun showNaveView() {
         binding.navView.visibility = View.VISIBLE
     }
 
@@ -188,7 +197,7 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    fun signOut(){
+    fun signOut() {
         googleSignInClient.signOut()
         Firebase.auth.signOut()
         UserManger.saveData(Mode.LOGOUT.index, this)
@@ -202,7 +211,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("login info", data?.extras.toString())
             try {
                 val account = task.getResult(ApiException::class.java)
-                val email  = account?.email
+                val email = account?.email
                 val token = account?.idToken
                 firebaseAuthWithGoogle(account.idToken!!)
                 Log.i("givemepass", "email:$email, token:$token")
@@ -231,7 +240,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
-
 
 
     companion object {

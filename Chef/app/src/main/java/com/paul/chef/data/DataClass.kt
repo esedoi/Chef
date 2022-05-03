@@ -14,7 +14,7 @@ data class Chef(
     val address:List<String>?=null,
     val bookSetting: BookSetting? = null,
     val reviewRating: Float?=null,
-    val ratingNumber:Int? = null
+    val reviewNumber:Int? = null
 )
 
 //come with menu

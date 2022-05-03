@@ -250,6 +250,12 @@ class BookFragment : Fragment() {
             }
         }
 
+        bookViewModel.bookDone.observe(viewLifecycleOwner){
+            if(it){
+                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+            }
+        }
+
         return root
     }
 

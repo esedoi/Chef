@@ -93,9 +93,10 @@ class ImageUploadFragment : DialogFragment() {
         val uploadTask = storageReference.putFile(ImageUri )
             .addOnSuccessListener {
 
-                binding.imageView.setImageURI(null)
-                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT)
-                if(progressDialog.isShowing) progressDialog.dismiss()
+//                binding.imageView.setImageURI(null)
+//                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT)
+//                if(progressDialog.isShowing) progressDialog.dismiss()
+                Log.d("uploadfragment", "upload success,  and then get url")
                 
         }
             .addOnFailureListener{
@@ -113,6 +114,9 @@ class ImageUploadFragment : DialogFragment() {
             storageReference.downloadUrl
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                binding.imageView.setImageURI(null)
+                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT)
+                if(progressDialog.isShowing) progressDialog.dismiss()
                 val downloadUri = task.result
                 Log.d("imguploadfragment", "downloadUri}=${downloadUri}")
                 setFragmentResult("requestImg", bundleOf("downloadUri" to downloadUri.toString()))

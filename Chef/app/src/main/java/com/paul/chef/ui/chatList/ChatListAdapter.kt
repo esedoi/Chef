@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.GoChatRoom
 import com.paul.chef.ItemMenu
 import com.paul.chef.Mode
+import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Room
 import com.paul.chef.databinding.ItemChatListBinding
 import com.paul.chef.databinding.ItemMenuListBinding
+import com.paul.chef.ui.menuDetail.bindImage
 
 class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : ListAdapter<Room, RecyclerView.ViewHolder>(FriendListCallback()) {
 
@@ -24,12 +26,12 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-
         if (holder is RoomHolder) {
             holder.bind(item, nowMode, goChatRoom)
         }
 
     }
+
 
 
     class RoomHolder(private var binding: ItemChatListBinding) :
@@ -40,12 +42,18 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
             itemView.setOnClickListener {
                 goChatRoom.goChatRoom(item.id)
             }
+
+            val outlineProvider = ProfileOutlineProvider()
+            binding.userImage.outlineProvider =outlineProvider
+
             binding.time.text = item.time.toString()
             binding.chatContent.text = item.lastMsg.toString()
             if(nowMode == Mode.CHEF.index){
                 binding.userName.text = item.userName
+                bindImage(binding.userImage, item.userAvatar)
             }else{
                 binding.userName.text = item.chefName
+                bindImage(binding.userImage, item.chefAvatar)
             }
         }
 

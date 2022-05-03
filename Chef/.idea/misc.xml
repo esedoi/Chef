@@ -23,10 +23,18 @@
         <entry key="app/src/main/res/drawable/sl_favourite.xml" value="0.2265" />
         <entry key="app/src/main/res/drawable/smaller_heart_filled.xml" value="0.2345" />
         <entry key="app/src/main/res/drawable/smaller_heart_outline.xml" value="0.2345" />
+        <entry key="app/src/main/res/drawable/smaller_ic_calendar.xml" value="0.2555" />
+        <entry key="app/src/main/res/drawable/smaller_ic_chat.xml" value="0.2555" />
+        <entry key="app/src/main/res/drawable/smaller_ic_clipboard.xml" value="0.2555" />
+        <entry key="app/src/main/res/drawable/smaller_ic_dollar_coin.xml" value="0.2555" />
+        <entry key="app/src/main/res/drawable/smaller_ic_heart.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/smaller_ic_search.xml" value="0.2555" />
+        <entry key="app/src/main/res/drawable/smaller_ic_user.xml" value="0.2555" />
         <entry key="app/src/main/res/drawable/today_background.xml" value="0.138" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26752878824869786" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_dish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bottom_sheet_datepicker.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/bottom_sheet_picker.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bottom_sheet_time_picker.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/calendar_day_legend.xml" value="0.25" />
@@ -98,7 +106,7 @@
         <entry key="app/src/main/res/layout/item_menu_detail_images.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_menu_detail_review.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_menu_edit_img.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_menu_list.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/item_menu_list.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_menu_simple.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_option_dish.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_option_dish_add.xml" value="2.447100394112723" />

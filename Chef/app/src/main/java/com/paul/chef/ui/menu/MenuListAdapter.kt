@@ -68,6 +68,7 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
                 itemView.setOnClickListener {
                     itemMenu.goDetail(item)
                 }
+
                 imageAdapter.submitList(item.images)
 
 
@@ -79,8 +80,13 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
                 if (item.reviewRating!=null){
                     binding.ratingBar2.visibility = View.VISIBLE
                     binding.itemMenuRatingNum.visibility = View.VISIBLE
-                    binding.itemMenuRatingNum.text = item.reviewRating.toString()
+                    binding.itemMenuRating.visibility = View.VISIBLE
+                    binding.ratingBar2.rating = item.reviewRating
+                    val str :String = String.format("%.1f",item.reviewRating)
+                    binding.itemMenuRating.text = str
+                    binding.itemMenuRatingNum.text = item.reviewNumber.toString()+" 則評價"
                 }else{
+                    binding.itemMenuRating.visibility = View.GONE
                     binding.ratingBar2.visibility = View.GONE
                     binding.itemMenuRatingNum.visibility = View.GONE
                 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.rpc.context.AttributeContext
 import com.paul.chef.ImgRecyclerType
 import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.R
 import com.paul.chef.data.Dish
 import com.paul.chef.data.Review
@@ -69,15 +70,23 @@ class MenuDetailFragment : Fragment() {
         val selectedDish = mutableListOf<Dish>()
 
         menuDetailViewModel.getReview(menu.id)
+        val outlineProvider = ProfileOutlineProvider()
+        binding.imageView5.outlineProvider =outlineProvider
+        bindImage( binding.imageView5,menu.chefAvatar)
 
         binding.detailChefName.text = menu.chefName + "建立的菜單"
         if(menu.reviewRating!=null){
             binding.menuDetailRatingNum.visibility = View.VISIBLE
             binding.ratingBar4.visibility = View.VISIBLE
-            binding.menuDetailRatingNum.text = menu.reviewRating.toString()
+            binding.menuDetailRatingNum.text = menu.reviewNumber.toString()+" 則評價"
+            binding.ratingBar4.rating = menu.reviewRating
+            val str :String = String.format("%.1f",menu.reviewRating)
+            binding.menuDetailRatingTxt.text = str
             binding.menuDetailReviewTitle.visibility = View.VISIBLE
             binding.menuDetailMoreReviewBtn.visibility = View.VISIBLE
+            binding.menuDetailRatingTxt.visibility = View.VISIBLE
         }else{
+            binding.menuDetailRatingTxt.visibility = View.GONE
             binding.menuDetailRatingNum.visibility = View.GONE
             binding.ratingBar4.visibility = View.GONE
             binding.menuDetailReviewTitle.visibility = View.GONE

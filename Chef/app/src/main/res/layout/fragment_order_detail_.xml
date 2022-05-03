@@ -54,11 +54,12 @@
                 android:id="@+id/order_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:text="time"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintStart_toStartOf="@+id/order_detail_date"
-                app:layout_constraintTop_toBottomOf="@+id/order_detail_date" />
+                app:layout_constraintBottom_toBottomOf="@+id/order_detail_date"
+                app:layout_constraintStart_toEndOf="@+id/order_detail_date"
+                app:layout_constraintTop_toTopOf="@+id/order_detail_date" />
 
             <TextView
                 android:id="@+id/order_detail_people"
@@ -67,7 +68,7 @@
                 android:layout_marginTop="8dp"
                 android:text="people"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintStart_toStartOf="@+id/order_detail_time"
+                app:layout_constraintStart_toStartOf="@+id/order_detail_date"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_time" />
 
             <TextView
@@ -134,8 +135,6 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
             <TextView
@@ -264,6 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="替這個菜單撰寫評價"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/order_detail_people"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_cancel_btn" />
@@ -272,7 +272,7 @@
                 android:id="@+id/order_detail_rating_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/order_detail_review_txt"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_review_txt" />
@@ -284,7 +284,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
 
-                android:text="備註"
+                android:text="備註："
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_linear" />
 

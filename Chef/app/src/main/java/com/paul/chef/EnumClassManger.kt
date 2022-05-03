@@ -76,3 +76,7 @@ enum class ImgRecyclerType(val index:Int){
     IMAGE(0), IMAGE_EDIT(1)
 }
 
+enum class AddDishType(val index:Int){
+    FIXED(0),OPTIONAL(1)
+}
+

@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,8 +74,8 @@ class ChefFragment : Fragment() {
             Log.d("CHEFFRAGMENT","接收到資料")
             binding.chefName.text = it.profileInfo.name
             binding.chefIntro.text = it.profileInfo.introduce
-            if(it.ratingNumber!=null){
-                binding.chefPageReviewDown.text = it.ratingNumber.toString()+" 則評價"
+            if(it.reviewNumber!=null){
+                binding.chefPageReviewDown.text = it.reviewNumber.toString()+" 則評價"
             }else{
                 binding.chefPageReviewDown.text = "0 則評價"
             }

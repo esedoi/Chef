@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.ItemReviewBinding
 
@@ -31,6 +32,9 @@ class ReviewAdapter: ListAdapter<Review, RecyclerView.ViewHolder>(ReviewListCall
 
 
         fun bind(item: Review) {
+            val outlineProvider = ProfileOutlineProvider()
+            binding.itemReviewAvatar.outlineProvider =outlineProvider
+            bindImage(binding.itemReviewAvatar, item.userAvatar)
             binding.itemReviewContent.text = item.content
             binding.itemReviewUserName.text = item.userName
             binding.ratingBar3.isIndicator
