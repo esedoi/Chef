@@ -10,18 +10,24 @@
         android:name="com.paul.chef.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.paul.chef.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+    <action
+        android:id="@+id/action_global_navigation_home"
+        app:destination="@id/navigation_home" />
 
 
     <fragment
         android:id="@+id/chefEditFragment"
         android:name="com.paul.chef.ui.chefEdit.ChefEditFragment"
-        android:label="ChefEditFragment" />
+        android:label="ChefEditFragment" >
+        <argument
+            android:name="editType"
+            app:argType="integer" />
+
+        <argument
+            android:name="profile"
+            app:argType="com.paul.chef.data.ProfileInfo" />
+
+    </fragment>
     <fragment
         android:id="@+id/chefFragment"
         android:name="com.paul.chef.ui.chef.ChefFragment"
@@ -38,11 +44,15 @@
     <fragment
         android:id="@+id/menuEditFragment"
         android:name="com.paul.chef.ui.menuEdit.MenuEditFragment"
-        android:label="MenuEditFragment" >
+        android:label="MenuEditFragment">
+        <!--        <argument-->
+        <!--            android:name="type"-->
+        <!--            app:nullable="true"-->
+        <!--            app:argType="integer" />-->
         <argument
             android:name="dish"
-            app:nullable="true"
-            app:argType="com.paul.chef.data.Dish" />
+            app:argType="com.paul.chef.data.Dish"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -56,7 +66,9 @@
 
     <action
         android:id="@+id/action_global_chefFragment"
-        app:destination="@id/chefFragment" />
+        app:destination="@id/chefFragment"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/action_global_menuDetailFragment"
@@ -68,7 +80,9 @@
 
     <action
         android:id="@+id/action_global_menuFragment"
-        app:destination="@id/menuFragment" />
+        app:destination="@id/menuFragment"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/action_global_bookFragment"
@@ -83,7 +97,7 @@
         <argument
             android:name="selectedDish"
             app:argType="com.paul.chef.data.Dish[]" />
-    </fragment >
+    </fragment>
     <fragment
         android:id="@+id/calendar"
         android:name="com.paul.chef.ui.calendar.Calendar"
@@ -91,11 +105,13 @@
 
     <action
         android:id="@+id/action_global_calendar"
-        app:destination="@id/calendar" />
+        app:destination="@id/calendar"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/calendarSetting"
         android:name="com.paul.chef.ui.calendarSetting.CalendarSetting"
-        android:label="CalendarSetting" >
+        android:label="CalendarSetting">
         <argument
             android:name="selectedDates"
             app:argType="com.paul.chef.data.SelectedDates" />
@@ -116,7 +132,7 @@
     <dialog
         android:id="@+id/datePicker3"
         android:name="com.paul.chef.ui.datePicker.DatePicker"
-        android:label="DatePicker" >
+        android:label="DatePicker">
         <argument
             android:name="chefId"
             app:argType="string" />
@@ -144,7 +160,9 @@
 
     <action
         android:id="@+id/action_global_orderManageFragment"
-        app:destination="@id/orderManageFragment" />
+        app:destination="@id/orderManageFragment"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.paul.chef.ui.transaction.TransactionFragment"
@@ -159,7 +177,7 @@
         android:id="@+id/orderDetailFragment"
         android:name="com.paul.chef.ui.orderDetail.OrderDetailFragment"
         android:label="fragment_order_detail_"
-        tools:layout="@layout/fragment_order_detail_" >
+        tools:layout="@layout/fragment_order_detail_">
         <argument
             android:name="order"
             app:argType="com.paul.chef.data.Order" />
@@ -170,14 +188,14 @@
     <dialog
         android:id="@+id/pickerBottomSheet"
         android:name="com.paul.chef.ui.bottomSheetPicker.PickerBottomSheet"
-        android:label="PickerBottomSheet" >
+        android:label="PickerBottomSheet">
         <argument
             android:name="pickerType"
             app:argType="integer" />
         <argument
             android:name="chefId"
             app:argType="string"
-            app:nullable="true"/>
+            app:nullable="true" />
 
     </dialog>
     <action
@@ -187,7 +205,7 @@
         android:id="@+id/chatRoomFragment"
         android:name="com.paul.chef.ui.chatRoom.ChatRoomFragment"
         android:label="fragment_chat_room"
-        tools:layout="@layout/fragment_chat_room" >
+        tools:layout="@layout/fragment_chat_room">
         <argument
             android:name="roomId"
             app:argType="string" />
@@ -199,19 +217,44 @@
         android:id="@+id/reviewFragment"
         android:name="com.paul.chef.ui.review.ReviewFragment"
         android:label="bottom_sheet_review"
-        tools:layout="@layout/bottom_sheet_review" >
+        tools:layout="@layout/bottom_sheet_review">
         <argument
             android:name="rating"
             app:argType="integer" />
         <argument
             android:name="order"
-            app:argType="com.paul.chef.data.Order"/>
+            app:argType="com.paul.chef.data.Order" />
 
     </dialog>
 
     <action
         android:id="@+id/action_global_reviewFragment"
         app:destination="@id/reviewFragment" />
+
+    <fragment
+        android:id="@+id/reviewPage"
+        android:name="com.paul.chef.ui.reviewPage.ReviewPage"
+        android:label="ReviewPage" >
+        <argument
+            android:name="review"
+            app:argType="com.paul.chef.data.Review[]" />
+
+    </fragment>
+    <action
+        android:id="@+id/action_global_reviewPage"
+        app:destination="@id/reviewPage" />
+    <dialog
+        android:id="@+id/imageUploadFragment"
+        android:name="com.paul.chef.ui.imageUpload.ImageUploadFragment"
+        android:label="ImageUploadFragment" >
+    <argument
+        android:name="imageType"
+        app:argType="integer" />
+
+</dialog>
+    <action
+        android:id="@+id/action_global_imageUploadFragment"
+        app:destination="@id/imageUploadFragment" />
 
 
 </navigation>

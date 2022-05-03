@@ -27,6 +27,7 @@ class TransactionFragment : Fragment() {
     var penddingMoney = 0
     var processingMoney = 0
     var receivedMoney = 0
+    var idList = mutableListOf<String>()
 
     val transactionViewModel:TransactionViewModel  by viewModels()
 
@@ -62,12 +63,12 @@ class TransactionFragment : Fragment() {
         }.attach()
 
         transactionViewModel.orderList.observe(viewLifecycleOwner){
-
+            penddingMoney = 0
             for (i in it){
                 penddingMoney+=i.chefReceive
+                idList.add(i.id)
             }
             binding.transactionPenddingTxt.text = penddingMoney.toString()
-
         }
 
         transactionViewModel.transactionList.observe(viewLifecycleOwner){
@@ -75,14 +76,14 @@ class TransactionFragment : Fragment() {
             Log.d("transactionfragment", "transactionViewModel.processingList= ${transactionViewModel.processingList}")
             Log.d("transactionfragment", "transactionViewModel.receivedList= ${transactionViewModel.receivedList}")
 
-
+            receivedMoney = 0
+            processingMoney = 0
             for(i in transactionViewModel.processingList){
                 processingMoney += i.chefReceive
             }
             for(i in transactionViewModel.receivedList){
                 receivedMoney += i.chefReceive
             }
-
             binding.transactionCompletedTxt.text = receivedMoney.toString()
             binding.transactionProcessingTxt.text = processingMoney.toString()
         }
@@ -92,8 +93,10 @@ class TransactionFragment : Fragment() {
         binding.transactionApplyBtn.setOnClickListener {
             Log.d("transactionfragment", "processingMoney = $penddingMoney")
             transactionViewModel.applyMoney(penddingMoney)
-            penddingMoney = 0
-            binding.transactionPenddingTxt.text = penddingMoney.toString()
+            for (i in idList){
+                transactionViewModel.changeStatus(i, OrderStatus.APPLIED.index)
+            }
+            super.onCreateView(inflater, container, savedInstanceState)
         }
 
         return root

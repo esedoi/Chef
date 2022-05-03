@@ -3,6 +3,7 @@ package com.paul.chef.ui.book
 import android.annotation.SuppressLint
 import android.app.Application
 import android.icu.text.SimpleDateFormat
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -25,6 +26,10 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     private var _bookSetting = MutableLiveData<BookSetting>()
     val bookSetting: LiveData<BookSetting>
         get() = _bookSetting
+
+    private var _bookDone = MutableLiveData<Boolean>()
+    val bookDone: LiveData<Boolean>
+        get() = _bookDone
 
     var userPay = -1
     var chefReceive = -1
@@ -90,10 +95,11 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
-        val userId = UserManger().userId
-        val userName = "Amy"
+        val userId = UserManger.user?.userId!!
+        val userName = UserManger.user!!.profileInfo?.name!!
         val chefName = chefMenu.chefName
-        val userPic = UserManger().userAvatar
+        //這裡要改成絕對不會空
+        val userPic = UserManger.user!!.profileInfo?.avatar?:"nullPic"
         val chefPic = chefMenu.chefAvatar
         val menuName = chefMenu.menuName
         val chefId = chefMenu.chefId
@@ -115,15 +121,16 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
 
         val discount = originalPrice - total
 
+
         val order = Order(
             orderId,
             userId,
             chefId,
             userName,
             chefName,
-            menuName,
             userPic,
             chefPic,
+            menuName,
             type,
             address,
             orderTime,
@@ -146,6 +153,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
                 Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
+                _bookDone.value = true
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)

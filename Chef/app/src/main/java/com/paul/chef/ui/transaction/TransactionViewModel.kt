@@ -3,6 +3,7 @@ package com.paul.chef.ui.transaction
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -35,7 +36,7 @@ class TransactionViewModel:ViewModel(){
         get() = _transactionList
 
 
-    val chefId = ChefManger().chefId
+    val chefId = UserManger.chef.id
 
 
 
@@ -109,13 +110,28 @@ class TransactionViewModel:ViewModel(){
 
     }
 
+    fun changeStatus(orderId:String, status:Int){
+        //set firebase資料
+        db.collection("Order").document(orderId)
+            .update(mapOf(
+                "status" to status,
+            ))
+            .addOnSuccessListener { documentReference ->
+                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("click", "Error adding document", e)
+            }
+
+    }
+
 
 
     fun applyMoney(chefReceive:Int){
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
         var idList = mutableListOf<String>()
-        val chefId = ChefManger().chefId
+
 
         for(i in unpaidList){
             idList.add(i.id)

@@ -2,14 +2,13 @@ package com.paul.chef.ui.chef
 
 import android.app.Application
 import android.util.Log
-import android.view.Menu
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.Chef
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Review
@@ -25,12 +24,19 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
         get() = _chefInfo
 
     private val dataList = mutableListOf<Review>()
+
     private var _reviewList = MutableLiveData<List<Review>>()
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
 
-     val chefId = ChefManger().chefId
-    private val menuList = mutableListOf<String>()
+     val chefId = UserManger.chef.id
+    private val menuIdList = mutableListOf<String>()
+
+
+    private val menuList = mutableListOf<ChefMenu>()
+    private var _liveMenu = MutableLiveData<List<ChefMenu>>()
+    val liveMenu: LiveData<List<ChefMenu>>
+        get() = _liveMenu
 
 
 
@@ -52,6 +58,8 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
+        dataList.clear()
+
         db.collection("Menu")
             .whereEqualTo("chefId",chefId )
             .get()
@@ -62,35 +70,37 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
                         val item = item.data
                         val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, ChefMenu::class.java)
-                        menuList.add(data.id)
+                        menuIdList.add(data.id)
+                        menuList.add(data)
                     }
+                    _liveMenu.value = menuList
+                    Log.d("chefviewmodel", "menuidlist=$menuIdList")
 
-                    for(i in menuList){
+
+                    for(i in menuIdList){
                         var menuId = i
-
                         db.collection("Menu").document(menuId)
                             .collection("Review")
                             .get()
                             .addOnSuccessListener { value ->
                                 if (value.documents.isNotEmpty()) {
-                                    dataList.clear()
                                     for (item in value.documents){
                                         val item = item.data
                                         val json = Gson().toJson(item)
                                         val data = Gson().fromJson(json, Review::class.java)
                                         dataList.add(data)
                                     }
+                                    Log.d("chefviewmodel", "+++++++datalist=$dataList")
+                                    _reviewList.value = dataList
                                 } else {
-                                    Log.d("orderdetailviewmodel", "No such document")
+                                    Log.d("chefviewmodel", "No such document")
                                 }
-                                _reviewList.value = dataList
                             }
                             .addOnFailureListener { exception ->
-                                Log.d("orderdetailviewmodel", "get failed with ", exception)
+                                Log.d("chefviewmodel", "get failed with ", exception)
                             }
-
-
                     }
+
                 } else {
                     Log.d("orderdetailviewmodel", "No such document")
                 }

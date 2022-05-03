@@ -26,7 +26,7 @@ enum class OrderStatus(val index: Int, val value: String) {
     COMPLETED(2, "已完成"),
     CANCELLED(3, "已取消"),
     SCORED(4,"已評價"),
-//    UNPAID(5,"未處理的款項"),
+    APPLIED(5,"已申請的款項"),
 //    PROCESSING(6,"處理中的款項"),
 //    RECEIVED(7,"已完成的款項")
 }
@@ -54,5 +54,29 @@ enum class MsgType(val index: Int) {
 
 enum class TransactionStatus(val index:Int, val value: String){
     PENDING(0, "未處理"), PROCESSING(1, "處理中"), COMPLETED(2, "已完成")
+}
+
+enum class MenuEditType(val index:Int){
+    FIRST_TIME(0), CREATE(1), EDIT(2)
+}
+
+enum class MenuType(val index: Int){
+    FULL(0), SIMPLE(1)
+}
+
+enum class EditPageType(val index:Int){
+    CREATE_USER(0), EDIT_PROFILE(1)
+}
+
+enum class ImgType(val index:Int){
+    AVATAR(0), MENU(1)
+}
+
+enum class ImgRecyclerType(val index:Int){
+    IMAGE(0), IMAGE_EDIT(1)
+}
+
+enum class AddDishType(val index:Int){
+    FIXED(0),OPTIONAL(1)
 }
 

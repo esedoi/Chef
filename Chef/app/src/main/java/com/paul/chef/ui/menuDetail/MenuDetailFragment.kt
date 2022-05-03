@@ -1,6 +1,7 @@
 package com.paul.chef.ui.menuDetail
 
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -17,8 +18,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.rpc.context.AttributeContext
+import com.paul.chef.ImgRecyclerType
 import com.paul.chef.MobileNavigationDirections
+import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.R
 import com.paul.chef.data.Dish
+import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
 
 class MenuDetailFragment : Fragment() {
@@ -34,6 +40,8 @@ class MenuDetailFragment : Fragment() {
 
     private lateinit var reviewAdapter: ReviewAdapter
     private var reviewLayoutManager: RecyclerView.LayoutManager? = null
+
+    private var reviewList = emptyList<Review>()
 
     //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
@@ -62,10 +70,33 @@ class MenuDetailFragment : Fragment() {
         val selectedDish = mutableListOf<Dish>()
 
         menuDetailViewModel.getReview(menu.id)
+        val outlineProvider = ProfileOutlineProvider()
+        binding.imageView5.outlineProvider =outlineProvider
+        bindImage( binding.imageView5,menu.chefAvatar)
+
+        binding.detailChefName.text = menu.chefName + "建立的菜單"
+        if(menu.reviewRating!=null){
+            binding.menuDetailRatingNum.visibility = View.VISIBLE
+            binding.ratingBar4.visibility = View.VISIBLE
+            binding.menuDetailRatingNum.text = menu.reviewNumber.toString()+" 則評價"
+            binding.ratingBar4.rating = menu.reviewRating
+            val str :String = String.format("%.1f",menu.reviewRating)
+            binding.menuDetailRatingTxt.text = str
+            binding.menuDetailReviewTitle.visibility = View.VISIBLE
+            binding.menuDetailMoreReviewBtn.visibility = View.VISIBLE
+            binding.menuDetailRatingTxt.visibility = View.VISIBLE
+        }else{
+            binding.menuDetailRatingTxt.visibility = View.GONE
+            binding.menuDetailRatingNum.visibility = View.GONE
+            binding.ratingBar4.visibility = View.GONE
+            binding.menuDetailReviewTitle.visibility = View.GONE
+            binding.menuDetailMoreReviewBtn.visibility = View.GONE
+        }
+        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString()+"  則評價"
 
 
         //imagesRecyclerView
-        imageAdapter = DetailImagesAdapter()
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.imagesRecycler.layoutManager = layoutManager
         binding.imagesRecycler.adapter = imageAdapter
@@ -77,7 +108,11 @@ class MenuDetailFragment : Fragment() {
         binding.menuDetailReviewRecycler.layoutManager = reviewLayoutManager
         binding.menuDetailReviewRecycler.adapter = reviewAdapter
         menuDetailViewModel.reviewList.observe(viewLifecycleOwner){
-            reviewAdapter.submitList(it)
+            reviewList = it
+            val filterList = it.filterIndexed { index, review ->
+                index<2
+            }
+            reviewAdapter.submitList(filterList)
         }
 
 
@@ -98,12 +133,15 @@ class MenuDetailFragment : Fragment() {
                     andText.text = and
                     andText.gravity = Gravity.CENTER
                     andText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
+                    andText.setTextColor(resources.getColor(R.color.teal_200))
+                    andText.setTypeface(null, Typeface.BOLD_ITALIC);
                     displayList[defaultType].displayRG.addView(andText)
                 }
                 // +textview
                 val nameText = TextView(this.context)
                 nameText.text = i.name
                 nameText.gravity = Gravity.CENTER
+                nameText.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
                 displayList[defaultType].displayRG.addView(nameText)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
 
@@ -118,15 +156,16 @@ class MenuDetailFragment : Fragment() {
                     //+or
                     val orText = TextView(this.context)
                     orText.text = or
-
                     orText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
+                    orText.setTextColor(resources.getColor(R.color.teal_200))
+                    orText.setTypeface(null, Typeface.BOLD_ITALIC)
                     displayList[defaultType].displayRG.addView(orText)
                 }
                 //+radiobutton  +price
 
 //                val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
                 val radioText = if (i.extraPrice != 0) {
-                    "${i.name}    <font color = \"#03A9F4\">(+NT$ ${i.extraPrice})</font>"
+                    "${i.name}    <I><font color = \"#03DAC5\">(+NT$ ${i.extraPrice})</font></I>"
                 } else {
                     "${i.name}"
                 }
@@ -135,6 +174,7 @@ class MenuDetailFragment : Fragment() {
                 nameRadioBtn.text = Html.fromHtml(radioText)
                 nameRadioBtn.id = View.generateViewId()
                 nameRadioBtn.tag = i
+                nameRadioBtn.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
                 displayList[defaultType].displayRG.addView(nameRadioBtn)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
             }
@@ -144,6 +184,10 @@ class MenuDetailFragment : Fragment() {
 
         binding.detailName.text = menu.menuName
         binding.detailMenuIntro.text = menu.intro
+        binding.menuDetailMoreReviewBtn.setOnClickListener {
+
+            findNavController().navigate(MobileNavigationDirections.actionGlobalReviewPage(reviewList.toTypedArray()))
+        }
 
         binding.choice.setOnClickListener {
 

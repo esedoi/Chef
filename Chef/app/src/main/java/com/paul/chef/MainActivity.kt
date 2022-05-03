@@ -1,40 +1,53 @@
 package com.paul.chef
 
-import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.ActivityMainBinding
-import com.paul.chef.ui.datePicker.DatePickerViewModel
 
 class MainActivity : AppCompatActivity() {
 
 
-
     private lateinit var binding: ActivityMainBinding
+    lateinit var mainViewModel: MainViewModel
+
 
 //    val navView: BottomNavigationView? = null
+
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private lateinit var newUserProfile: ProfileInfo
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val mainViewModel =
+
+
+        mainViewModel =
             ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -56,23 +69,44 @@ class MainActivity : AppCompatActivity() {
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+//        mainViewModel.chefId.observe(this){
+//            mainViewModel.getChef(it)
+//        }
+
+        mainViewModel.newUser.observe(this) {
+            Log.d("mainactivity", "newuser=$it")
+            if (it) {
+                navController.navigate(
+                    MobileNavigationDirections.actionGlobalChefEditFragment(
+                        EditPageType.CREATE_USER.index,
+                        newUserProfile
+                    )
+                )
+            } else {
 
 
+                when (val mode = UserManger.readData("mode", this)) {
+                    Mode.CHEF.index -> {
+                        if (UserManger.user.chefId != null) {
+                            turnMode(mode)
+                            navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                        } else {
+                            turnMode(Mode.USER.index)
+                            navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+                        }
+                    }
+                    else -> {
+                        turnMode(Mode.USER.index)
+                        navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+                    }
 
-        when(val mode = UserManger.readData("mode", this)){
-            Mode.CHEF.index->{
-                turnMode(mode)
-                navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-
-            }
-            Mode.USER.index->{
-                turnMode(mode)
-                navController.navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+                }
             }
         }
 
+
         findNavController(R.id.nav_host_fragment_activity_main).addOnDestinationChangedListener { navController: NavController, _: NavDestination, _: Bundle? ->
-            when(navController.currentDestination?.id){
+            when (navController.currentDestination?.id) {
                 R.id.menuFragment,
                 R.id.likeFragment,
                 R.id.orderManageFragment,
@@ -80,21 +114,65 @@ class MainActivity : AppCompatActivity() {
                 R.id.userProfileFragment,
                 R.id.calendar,
                 R.id.transactionFragment,
-                R.id.chefFragment ->{ navView.visibility = View.VISIBLE
+                R.id.chefFragment -> {
+                    navView.visibility = View.VISIBLE
+                    binding.toolbar6.visibility = View.GONE
                 }
-                else->{
+                R.id.menuDetailFragment->{
                     navView.visibility = View.GONE
+                    binding.toolbar6.visibility = View.GONE
+                }
+                else -> {
+                    navView.visibility = View.GONE
+                    binding.toolbar6.visibility = View.VISIBLE
                 }
             }
-//
         }
+        binding.mainActivityBackBtn.setOnClickListener {
+            navController.navigateUp()
+        }
+
+
+
+
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(BuildConfig.client_id)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        auth = Firebase.auth
+
+
+        val currentUser = auth.currentUser
+        Log.d("mainactivity", "currentuser = $currentUser")
+        updateUI(currentUser)
 
     }
 
-    fun  turnMode(mode:Int){
 
-        UserManger.saveData(mode,this)
 
+
+    private fun updateUI(user: FirebaseUser?) {
+
+        if (user != null) {
+
+            Log.d("mainactivity", "useravatar=${user.photoUrl}")
+            val email = user.email
+            val name = user.displayName
+            val avatar = user.photoUrl.toString()
+
+            if (name != null && email != null && avatar != null) {
+                newUserProfile = ProfileInfo(name, email, avatar)
+                mainViewModel.getUser(email)
+            }
+
+        }
+    }
+
+    fun turnMode(mode: Int) {
+        UserManger.saveData(mode, this)
         if (mode == Mode.USER.index) {
             binding.navView.menu.clear()
             binding.navView.inflateMenu(R.menu.bottom_nav_menu)
@@ -104,10 +182,67 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun hideNaveView(){
+
+    fun hideNaveView() {
         binding.navView.visibility = View.GONE
     }
-    fun showNaveView(){
+
+    fun showNaveView() {
         binding.navView.visibility = View.VISIBLE
+    }
+
+    fun signIn() {
+
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    fun signOut() {
+        googleSignInClient.signOut()
+        Firebase.auth.signOut()
+        UserManger.saveData(Mode.LOGOUT.index, this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            Log.d("login info", data?.extras.toString())
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val email = account?.email
+                val token = account?.idToken
+                firebaseAuthWithGoogle(account.idToken!!)
+                Log.i("givemepass", "email:$email, token:$token")
+                Toast.makeText(this, "R.string.login_success", Toast.LENGTH_SHORT).show()
+            } catch (e: ApiException) {
+                Log.i("givemepass", "signInResult:failed code=" + e.message)
+                Toast.makeText(this, "R.string.login_fail", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("TAG", "signInWithCredential:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("TAG", "signInWithCredential:failure", task.exception)
+                    updateUI(null)
+                }
+            }
+    }
+
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
     }
 }

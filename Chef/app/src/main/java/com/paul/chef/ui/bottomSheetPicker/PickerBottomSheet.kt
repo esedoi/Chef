@@ -52,8 +52,8 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         val thirty = "30"
         var min=true
         var timeList = mutableListOf<String>()
-        var pickSessionList :List<String>
-        var pickTimeList :List<String>
+        var pickSessionList = emptyList<String>()
+        var pickTimeList = emptyList<String>()
 
         for(h in 0..23){
             for(m in 1..2){
@@ -110,7 +110,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
 //            index in 5..36
 //        }
 
-        Log.d("pickbottomsheet", "timeList = $timeList")
+
 //        Log.d("pickbottomsheet", "timeList = $filterList")
 
         Log.d("pickbottomsheet", "pickerType = $pickerType")
@@ -139,6 +139,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
             var time=""
             var key=""
             Log.d("pickbottomsheet", "value  = $value ")
+            Log.d("pickbottomsheet","pickSessionList = $pickSessionList")
             var requestKey = ""
 
             when(pickerType){
@@ -171,13 +172,13 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
 
                 PickerType.PICK_TIME.index->{
                     key=PickerType.PICK_TIME.value
-                    time = timeList[value]
+                    time = pickTimeList[value]
                     setFragmentResult(key, bundleOf(key to time))
 
                 }
                 PickerType.PICK_SESSION_TIME.index->{
                     key=PickerType.PICK_SESSION_TIME.value
-                    time = timeList[value]
+                    time = pickSessionList[value]
                     setFragmentResult(key, bundleOf(key to time))
 
                 }

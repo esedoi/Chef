@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.ChefManger
+import com.paul.chef.UserManger
 import com.paul.chef.data.BookSetting
 import com.paul.chef.data.Chef
 import com.paul.chef.data.DateStatus
@@ -34,7 +35,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val bookSetting: LiveData<BookSetting>
         get() = _bookSetting
 
-    val chefId = ChefManger().chefId
+    val chefId = UserManger.chef?.id
 
     init {
         db.collection("Order")
@@ -89,7 +90,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                     val item = value?.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Chef::class.java)
+                if(data.bookSetting!=null){
                     _bookSetting.value = data.bookSetting!!
+                }
                 Log.d("calendarviewmodel", "接收到Chef資料=$data")
             }
 

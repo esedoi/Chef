@@ -1,17 +1,17 @@
 package com.paul.chef
 
-import android.annotation.SuppressLint
-import android.app.Application
+
 import android.content.Context
 import android.content.SharedPreferences
-import android.provider.CalendarContract
+import com.paul.chef.data.Chef
+import com.paul.chef.data.User
 
 class UserManger  {
 
 
     val userFee = 300
-    val userId = "V6FaQPxE9EskaO2v27fl"
-    val userAvatar = "userPic"
+//    val userId = "V6FaQPxE9EskaO2v27fl"
+//    val userAvatar = "userPic"
 
 
 
@@ -20,8 +20,10 @@ class UserManger  {
 //            var loginStatus: Boolean = false
 //            var userToken: String = "userToken"
 //        @SuppressLint("StaticFieldLeak")
-//            private var context: Context = Context
 
+
+        lateinit var user: User
+        lateinit var chef: Chef
 
         //宣告繼承 SharedPreferences 的變數
         private lateinit var settings: SharedPreferences

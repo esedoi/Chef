@@ -22,4 +22,8 @@ interface AddDiscount{
         fun goChatRoom(roomId:String)
     }
 
+    interface MenuEditImg{
+        fun remove(position:Int)
+    }
+
 

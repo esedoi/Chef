@@ -67,8 +67,10 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
             orderChildAdapter.submitList(it)
         }
 
+        val mode = UserManger.readData("mode", (activity as MainActivity))
+
         //menuList recycler
-        orderChildAdapter = OrderChildAdapter(this)
+        orderChildAdapter = mode?.let { OrderChildAdapter(this, it) }!!
         layoutManager = LinearLayoutManager(this.context)
         binding.orderRecycler.layoutManager = layoutManager
         binding.orderRecycler.adapter = orderChildAdapter

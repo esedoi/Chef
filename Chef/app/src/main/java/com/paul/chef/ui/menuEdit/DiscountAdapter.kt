@@ -32,13 +32,12 @@ class DiscountAdapter(val addDiscount:AddDiscount) : ListAdapter<Discount, Recyc
 
 
         fun bind(item: Discount, addDiscount: AddDiscount, position: Int) {
+//            binding.discountDiscription.text = "你的 ${item.people} 人價格，扣除${item.percentOff}% 的折扣後是"
             binding.peopleNumber.text = item.people.toString()
             binding.percentOff.text = item.percentOff.toString()
             binding.remove.setOnClickListener {
                 addDiscount.remove(position, item.percentOff)
             }
-
-
 
         }
 

@@ -34,8 +34,9 @@ class TransactionChildAdapter() : ListAdapter<Transaction, RecyclerView.ViewHold
 
 
         fun bind(item: Transaction) {
-
-          Log.d("transaction", "child_____________")
+            binding.transacOrder.text = item.orderList.size.toString()
+            binding.transacDate.text = item.time.toString()
+            binding.transacChefReceive.text = item.chefReceive.toString()
         }
 
         companion object {

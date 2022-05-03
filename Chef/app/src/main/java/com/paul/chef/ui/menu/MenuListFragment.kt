@@ -2,7 +2,6 @@ package com.paul.chef.ui.menu
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.ItemMenu
-import com.paul.chef.Like
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.databinding.FragmentMenuListBinding
 
@@ -26,7 +22,7 @@ class MenuListFragment : Fragment(), ItemMenu {
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private var likeList = mutableListOf<String>()
+    private var likeIdList = mutableListOf<String>()
 
     lateinit var menuListViewModel:MenuListViewModel
 
@@ -47,34 +43,25 @@ class MenuListFragment : Fragment(), ItemMenu {
          menuListViewModel =
             ViewModelProvider(this).get(MenuListViewModel::class.java)
 
-        val chefId = "9qKTEyvYbiXXEJSjDJGF"
-
-        val userId = UserManger().userId
-
-
-
 
 
 
         //menuList recycler
-        menuListAdapter = MenuListAdapter(this,menuListViewModel )
+        menuListAdapter = MenuListAdapter(this,menuListViewModel,MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
         binding.menuListRecycler.layoutManager = layoutManager
         binding.menuListRecycler.adapter = menuListAdapter
 
-        //觀察 howmuch live data
+
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }
 
-        menuListViewModel.likeList.observe(viewLifecycleOwner){
-            likeList.addAll(it)
+        menuListViewModel.likeIdList.observe(viewLifecycleOwner){
+            likeIdList.clear()
+            likeIdList.addAll(it)
         }
-
-
-
-
 
         return root
     }
@@ -89,11 +76,11 @@ class MenuListFragment : Fragment(), ItemMenu {
     }
 
     override fun like(menuId:String) {
-        if(likeList.contains(menuId)){
-           likeList.remove(menuId)
+        if(likeIdList.contains(menuId)){
+           likeIdList.remove(menuId)
         }else{
-            likeList.add(menuId)
+            likeIdList.add(menuId)
         }
-        menuListViewModel.updateLikeList(likeList)
+        menuListViewModel.updateLikeList(likeIdList)
     }
 }
