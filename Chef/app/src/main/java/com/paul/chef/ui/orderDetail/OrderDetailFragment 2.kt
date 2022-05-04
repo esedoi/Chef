@@ -82,9 +82,7 @@ class OrderDetailFragment : Fragment() {
                         OrderStatus.PENDING.index -> "拒絕此訂單"
                         else -> "取消訂單"
                     }
-//                    orderDetailCancelBtn.setOnClickListener {
-//                        viewModel.changeStatus(order.id, OrderStatus.CANCELLED.index)
-//                    }
+
                 }
                 Mode.USER.index -> {
                     bindImage(imageView3, order.chefAvatar)
