@@ -1,0 +1,218 @@
+[
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_right_chat.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_right_chat.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_transaction_unpaid.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_transaction_unpaid.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_display_dish.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_display_dish.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_display_optional_dish.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_display_optional_dish.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_home.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_home.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_address_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_address_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/bottom_sheet_review.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/bottom_sheet_review.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_add_address.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_add_address.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_book_setting.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_book_setting.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_calendar.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_calendar.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_address_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_address_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_menu_detail.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_menu_detail.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_image_upload.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_image_upload.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_review_page.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_review_page.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_transaction_child.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_transaction_child.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_menu_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_menu_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_order_child.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_order_child.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_review.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_review.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_chat_room.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_chat_room.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_order_child.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_order_child.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_calendar_setting.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_calendar_setting.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_book.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_book.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_menu_edit.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_menu_edit.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_user_profile.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_user_profile.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_like.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_like.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_order_manage.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_order_manage.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_chat_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_chat_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_transaction_.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_transaction_.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_calendar_menu.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_calendar_menu.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_added_discount.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_added_discount.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_chat.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_chat.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/calendar_day_layout.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/calendar_day_layout.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/bottom_sheet_datepicker.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/bottom_sheet_datepicker.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_menu_simple.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_menu_simple.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_dish_optional.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_dish_optional.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_dashboard.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_menu_edit_img.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_menu_edit_img.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_chef_page.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_chef_page.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_main.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/calendar_day_legend.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/calendar_day_legend.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_transaction_child.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_transaction_child.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_display_fixed_dish.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_display_fixed_dish.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_left_chat.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_left_chat.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_menu_detail_review.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_menu_detail_review.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/bottom_sheet_picker.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/bottom_sheet_picker.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_add_dish.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_add_dish.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_menu_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_menu_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/list_people_item.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/list_people_item.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_order_detail_.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_order_detail_.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_chef_edit.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_chef_edit.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_chat_list.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_chat_list.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/item_menu_detail_images.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/item_menu_detail_images.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_notifications.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/fragment_notifications.xml"
+    },
+    {
+        "merged": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/calendar_month_header_layout.xml",
+        "source": "/Users/paulchen/Desktop/appworksSchool/psersonal/Chef/app/src/main/res/layout/calendar_month_header_layout.xml"
+    }
+]

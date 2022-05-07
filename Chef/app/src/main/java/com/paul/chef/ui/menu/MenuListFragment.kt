@@ -44,8 +44,6 @@ class MenuListFragment : Fragment(), ItemMenu {
             ViewModelProvider(this).get(MenuListViewModel::class.java)
 
 
-
-
         //menuList recycler
         menuListAdapter = MenuListAdapter(this,menuListViewModel,MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)

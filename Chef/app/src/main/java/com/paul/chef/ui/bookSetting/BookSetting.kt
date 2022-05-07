@@ -2,6 +2,7 @@ package com.paul.chef.ui.bookSetting
 
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,14 @@ class BookSetting : Fragment() {
             ViewModelProvider(this).get(BookSettingViewModel::class.java)
 
 
+        var calendarTypeResult = -1
+        val calendarTypeList =
+            arrayOf("未來所有日期", "預設所有日期為不可訂")
+
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
+        (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+
 
         binding.apply {
             userSpaceCardView.setOnClickListener {
@@ -67,12 +76,7 @@ class BookSetting : Fragment() {
         }
 
 
-        var calendarTypeResult = -1
-        val calendarTypeList =
-            arrayOf("未來所有日期", "預設所有日期為不可訂")
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
-        (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
 
         binding.bookSetChefSpaceTime.setOnClickListener {
@@ -120,7 +124,7 @@ class BookSetting : Fragment() {
             )
         }
         binding.bookSetChefSpaceAddress.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
         }
 
 
@@ -154,6 +158,62 @@ class BookSetting : Fragment() {
             address = bundle.getParcelable<Address>("address")!!
             val addressTxt = address?.addressTxt ?: ""
             binding.bookSetChefSpaceAddress.setText(addressTxt)
+        }
+
+        orderSettingViewModel.bookSetting.observe(viewLifecycleOwner){
+            calendarTypeResult = it.type
+            capacity = it.userSpace?.capacity!!
+            sessionCapacity = it.chefSpace?.sessionCapacity!!
+            sessionTime.clear()
+            sessionTime.addAll(it.chefSpace.session)
+            startTime = it.userSpace.starTime
+            endTime = it.userSpace.endTime
+            address = it.chefSpace.address
+
+            if (it!=null){
+                binding.bookSetCalenderDefaultEditTxt.setText(
+                    if(it.type==CalendarType.AllDayClose.index){
+                        "預設所有日期為不可訂"
+                    }else{
+                        "未來所有日期"
+                    }
+                )
+                val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
+                (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                binding.bookSetChefSpaceAddress.setText(it.chefSpace.address.addressTxt.toString())
+                binding.bookSetUserSpaceCapacity.setText(it.userSpace.capacity.toString())
+                binding.bookSetUserSpaceStartTime.setText(it.userSpace.starTime)
+                binding.bookSetUserSpaceEndTime.setText(it.userSpace.endTime)
+                binding.bookSetChefSpaceCapacity.setText(it.chefSpace.sessionCapacity.toString())
+
+                when(it.type){
+                    BookSettingType.AcceptAll.index->{
+                        binding.chefSpaceCardView.isChecked = true
+                        binding.userSpaceCardView.isChecked = true
+                        binding.chefSpaceHelper.visibility = View.GONE
+                        binding.userSpaceHelper.visibility = View.GONE
+
+                    }
+                    BookSettingType.OnlyUserSpace.index->{
+                        binding.chefSpaceCardView.isChecked = false
+                        binding.userSpaceCardView.isChecked = true
+                        binding.chefSpaceHelper.visibility = View.VISIBLE
+                        binding.userSpaceHelper.visibility = View.GONE
+                    }
+                    BookSettingType.OnlyChefSpace.index->{
+                        binding.chefSpaceCardView.isChecked = true
+                        binding.userSpaceCardView.isChecked = false
+                        binding.chefSpaceHelper.visibility = View.GONE
+                        binding.userSpaceHelper.visibility = View.VISIBLE
+                    }
+                    BookSettingType.RefuseAll.index->{
+                        binding.chefSpaceCardView.isChecked = false
+                        binding.userSpaceCardView.isChecked = false
+                        binding.chefSpaceHelper.visibility = View.VISIBLE
+                        binding.userSpaceHelper.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
 
 

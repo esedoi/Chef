@@ -12,6 +12,8 @@
     <string name="title_transaction">Transaction</string>
     <string name="title_chef_profile">Profile</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
+    <string name="nt$">NT$</string>
+    <string name="people"> 位</string>
 
 
 </resources>

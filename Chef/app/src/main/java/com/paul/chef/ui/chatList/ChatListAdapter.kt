@@ -1,5 +1,7 @@
 package com.paul.chef.ui.chatList
 
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
@@ -15,6 +17,7 @@ import com.paul.chef.data.Room
 import com.paul.chef.databinding.ItemChatListBinding
 import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.ui.menuDetail.bindImage
+import java.util.*
 
 class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : ListAdapter<Room, RecyclerView.ViewHolder>(FriendListCallback()) {
 
@@ -29,7 +32,6 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
         if (holder is RoomHolder) {
             holder.bind(item, nowMode, goChatRoom)
         }
-
     }
 
 
@@ -45,8 +47,11 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
 
             val outlineProvider = ProfileOutlineProvider()
             binding.userImage.outlineProvider =outlineProvider
+            Log.d("chatlistAdapter", "${item.time}")
 
-            binding.time.text = item.time.toString()
+            val sdf = SimpleDateFormat("MM.dd HH:mm")
+            binding.time.text = sdf.format(item.time?.let { Date(it.toLong()) })
+
             binding.chatContent.text = item.lastMsg.toString()
             if(nowMode == Mode.CHEF.index){
                 binding.userName.text = item.userName

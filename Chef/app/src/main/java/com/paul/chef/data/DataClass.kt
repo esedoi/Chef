@@ -135,22 +135,7 @@ data class Dish(
     val typeNumber:Int = -1
 ): Parcelable
 
-@Parcelize
-data class DisplayDish(
-    val type:String, //甜點、開胃菜
-    val option:Int, //固定菜色, 可替換, 加價替換
-    val name:String? = "",
-    val extraPrice:Int? = -1,
-    val displayType:Int
-): Parcelable
 
-@Parcelize
-data class ExtraDish(
-    val type:String, //甜點、開胃菜
-    val number:Int,
-    val extraPrice:Int,
-    val name:String
-): Parcelable
 
 @Parcelize
 data class Review(

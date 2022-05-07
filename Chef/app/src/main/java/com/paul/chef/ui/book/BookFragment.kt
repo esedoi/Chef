@@ -205,7 +205,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
             when(checkedId){
                 R.id.book_user_space_chip->{
-                    findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
                     binding.bookEditAddress.visibility = View.VISIBLE
                 }
                 R.id.book_chef_space_chip->{
@@ -226,7 +226,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.bookEditAddress.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
         }
 
 
@@ -335,6 +335,8 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        val default = LatLng(25.0, 121.0)
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(default))
     }
 }
 

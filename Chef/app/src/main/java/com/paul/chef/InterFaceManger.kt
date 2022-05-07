@@ -29,6 +29,7 @@ interface AddDiscount{
 
     interface AddressList{
         fun select(item: Address)
+        fun delete(item:Address)
     }
 
 

@@ -145,7 +145,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/book_address" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -289,15 +289,15 @@
 
             <TextView
                 android:id="@+id/book_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/addressTextView"
+                android:layout_marginTop="16dp"
+                android:text="--"
                 app:layout_constraintEnd_toStartOf="@+id/book_edit_address"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/addressTextView"
-                app:layout_constraintTop_toTopOf="@+id/addressTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
             <View
                 android:id="@+id/divider14"
@@ -481,12 +481,12 @@
                 app:cardCornerRadius="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/book_chip_group" >
+                app:layout_constraintTop_toBottomOf="@+id/book_chip_group">
 
                 <fragment
                     android:id="@+id/book_map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
+                    android:layout_width="371dp"
                     android:layout_height="match_parent" />
             </com.google.android.material.card.MaterialCardView>
 

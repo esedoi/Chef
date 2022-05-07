@@ -139,7 +139,7 @@ class ChefFragment : Fragment() {
             }
 
         binding.chefPageAddressListBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.NORMAL.index))
         }
 
 

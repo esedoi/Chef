@@ -21,13 +21,12 @@ class AddressListViewModel(application: Application) : AndroidViewModel(applicat
     val addressList: LiveData<List<Address>>
         get() = _addressList
 
-   var _lastSelection = MutableLiveData<Int>()
+   private var _lastSelection = MutableLiveData<Int>()
     val lastSelection: LiveData<Int>
         get() = _lastSelection
 
     private val db = FirebaseFirestore.getInstance()
     val userId = UserManger.user?.userId
-
 
 
     init {
@@ -70,4 +69,10 @@ class AddressListViewModel(application: Application) : AndroidViewModel(applicat
                 }
             }
         }
+
+
+    fun deleteAddress(item:Address){
+        Log.d("addressListViewModel", "item=$item")
+
+    }
     }

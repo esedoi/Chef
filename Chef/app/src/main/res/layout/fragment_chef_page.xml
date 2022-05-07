@@ -209,7 +209,7 @@
 
             <Button
                 android:id="@+id/chef_page_review_more"
-                style="?attr/materialButtonOutlinedStyle"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

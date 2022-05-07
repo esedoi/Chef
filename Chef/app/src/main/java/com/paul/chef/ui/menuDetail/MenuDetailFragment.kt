@@ -19,10 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.rpc.context.AttributeContext
-import com.paul.chef.ImgRecyclerType
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.ProfileOutlineProvider
-import com.paul.chef.R
+import com.paul.chef.*
 import com.paul.chef.data.Dish
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
@@ -71,28 +68,28 @@ class MenuDetailFragment : Fragment() {
 
         menuDetailViewModel.getReview(menu.id)
         val outlineProvider = ProfileOutlineProvider()
-        binding.imageView5.outlineProvider =outlineProvider
-        bindImage( binding.imageView5,menu.chefAvatar)
+        binding.imageView5.outlineProvider = outlineProvider
+        bindImage(binding.imageView5, menu.chefAvatar)
 
-        binding.detailChefName.text = menu.chefName + "建立的菜單"
-        if(menu.reviewRating!=null){
+        binding.detailChefName.text = menu.chefName + " 建立的菜單"
+        if (menu.reviewRating != null) {
             binding.menuDetailRatingNum.visibility = View.VISIBLE
             binding.ratingBar4.visibility = View.VISIBLE
-            binding.menuDetailRatingNum.text = menu.reviewNumber.toString()+" 則評價"
+            binding.menuDetailRatingNum.text = menu.reviewNumber.toString() + " 則評價"
             binding.ratingBar4.rating = menu.reviewRating
-            val str :String = String.format("%.1f",menu.reviewRating)
+            val str: String = String.format("%.1f", menu.reviewRating)
             binding.menuDetailRatingTxt.text = str
             binding.menuDetailReviewTitle.visibility = View.VISIBLE
             binding.menuDetailMoreReviewBtn.visibility = View.VISIBLE
             binding.menuDetailRatingTxt.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.menuDetailRatingTxt.visibility = View.GONE
             binding.menuDetailRatingNum.visibility = View.GONE
             binding.ratingBar4.visibility = View.GONE
             binding.menuDetailReviewTitle.visibility = View.GONE
             binding.menuDetailMoreReviewBtn.visibility = View.GONE
         }
-        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString()+"  則評價"
+        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString() + "  則評價"
 
 
         //imagesRecyclerView
@@ -107,10 +104,10 @@ class MenuDetailFragment : Fragment() {
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.menuDetailReviewRecycler.layoutManager = reviewLayoutManager
         binding.menuDetailReviewRecycler.adapter = reviewAdapter
-        menuDetailViewModel.reviewList.observe(viewLifecycleOwner){
+        menuDetailViewModel.reviewList.observe(viewLifecycleOwner) {
             reviewList = it
             val filterList = it.filterIndexed { index, review ->
-                index<2
+                index < 2
             }
             reviewAdapter.submitList(filterList)
         }
@@ -181,57 +178,63 @@ class MenuDetailFragment : Fragment() {
         }
 
 
+        binding.menuDetailPerPrice.text = "NT$" + menu.perPrice.toString()
 
         binding.detailName.text = menu.menuName
         binding.detailMenuIntro.text = menu.intro
         binding.menuDetailMoreReviewBtn.setOnClickListener {
 
-            findNavController().navigate(MobileNavigationDirections.actionGlobalReviewPage(reviewList.toTypedArray()))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalReviewPage(
+                    reviewList.toTypedArray()
+                )
+            )
         }
 
         binding.choice.setOnClickListener {
 
-            var isRadioSelected = true
-            var typeInt = -1
+            if (menu.chefId != UserManger.user?.chefId ?:"" ) {
+                var isRadioSelected = true
+                var typeInt = -1
 
-
-            for (i in dishList) {
-                if (i.option == 0) {
-                    selectedDish.add(i)
-                    typeInt = i.typeNumber
-                } else {
-                    if (typeInt != i.typeNumber) {
-                        val selectedId = displayList[i.typeNumber].displayRG.checkedRadioButtonId
-                        if (selectedId != -1) {
-                            val radioButton = root.findViewById<RadioButton>(selectedId)
-                            val radioDish: Dish = radioButton.tag as Dish
-                            selectedDish.add(radioDish)
-                            typeInt = i.typeNumber
-                        } else {
-                            isRadioSelected = false
-
+                for (i in dishList) {
+                    if (i.option == 0) {
+                        selectedDish.add(i)
+                        typeInt = i.typeNumber
+                    } else {
+                        if (typeInt != i.typeNumber) {
+                            val selectedId = displayList[i.typeNumber].displayRG.checkedRadioButtonId
+                            if (selectedId != -1) {
+                                val radioButton = root.findViewById<RadioButton>(selectedId)
+                                val radioDish: Dish = radioButton.tag as Dish
+                                selectedDish.add(radioDish)
+                                typeInt = i.typeNumber
+                            } else {
+                                isRadioSelected = false
+                            }
                         }
                     }
                 }
-            }
 
-            if (isRadioSelected) {
+                if (isRadioSelected) {
 
-                Log.d("menudetailfragment", "selectedDish=${selectedDish}")
-                val list = selectedDish.toTypedArray()
-                findNavController().navigate(
-                    MobileNavigationDirections.actionGlobalBookFragment(
-                        menu,
-                        list
+                    Log.d("menudetailfragment", "selectedDish=${selectedDish}")
+                    val list = selectedDish.toTypedArray()
+                    findNavController().navigate(
+                        MobileNavigationDirections.actionGlobalBookFragment(
+                            menu,
+                            list
+                        )
                     )
-                )
-            } else {
-                Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
-                selectedDish.clear()
+                } else {
+                    Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
+                    selectedDish.clear()
+                }
+            }else{
+                Toast.makeText(this.context, "無法預訂自己的菜單", Toast.LENGTH_SHORT).show()
             }
 
         }
-
         return root
     }
 

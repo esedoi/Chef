@@ -10,8 +10,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -20,7 +23,7 @@ import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.PickerType
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
-
+import com.paul.chef.ui.book.BookFragmentArgs
 
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
@@ -32,6 +35,9 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     private var layoutManager: RecyclerView.LayoutManager? = null
     var addressList = mutableListOf<Address>()
 
+    private val arg: AddressListFragmentArgs by navArgs()
+
+    private lateinit var addressListViewModel: AddressListViewModel
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -41,15 +47,24 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         savedInstanceState: Bundle?
     ): View {
 
-        val addressListViewModel =
+        addressListViewModel =
             ViewModelProvider(this).get(AddressListViewModel::class.java)
 
 
         _binding = FragmentAddressListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val listType = arg.listType
 
-        addressListAdapter = AddressListAdapter(this)
+        binding.addressListCancel.setOnClickListener {
+            dismiss()
+        }
+        binding.addressListDismiss.setOnClickListener{
+            dismiss()
+        }
+
+
+        addressListAdapter = AddressListAdapter(this, listType)
         layoutManager = LinearLayoutManager(this.context)
         binding.addressListRecycler.layoutManager = layoutManager
         binding.addressListRecycler.adapter = addressListAdapter
@@ -57,13 +72,13 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
             findNavController().navigate(MobileNavigationDirections.actionGlobalAddAddressFragment())
         }
 
-        addressListViewModel.addressList.observe(viewLifecycleOwner){
+        addressListViewModel.addressList.observe(viewLifecycleOwner) {
             addressList.clear()
             addressList.addAll(it)
             addressListAdapter.submitList(addressList)
             addressListAdapter.notifyDataSetChanged()
         }
-        addressListViewModel.lastSelection.observe(viewLifecycleOwner){
+        addressListViewModel.lastSelection.observe(viewLifecycleOwner) {
             addressListAdapter.notifyDataSetChanged()
         }
 
@@ -76,8 +91,12 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         }
 
 
-
         return root
+    }
+
+
+    override fun delete(item: Address) {
+        addressListViewModel.deleteAddress(item)
     }
 
 

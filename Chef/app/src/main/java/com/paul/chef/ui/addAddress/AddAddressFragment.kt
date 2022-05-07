@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,6 +30,7 @@ import com.paul.chef.MainActivity
 import com.paul.chef.R
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddAddressBinding
+import com.paul.chef.ui.addressList.AddressListFragmentArgs
 import com.paul.chef.ui.addressList.AddressListViewModel
 
 class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
@@ -40,6 +42,8 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
     lateinit var address:Address
 
     private lateinit var placesClient: PlacesClient
+
+
 
     var mark:LatLng = LatLng(-34.0, 151.0)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +58,10 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
     ): View? {
         _binding = FragmentAddAddressBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.addAddressCancel.setOnClickListener {
+            dismiss()
+        }
 
 
         val info = (activity as MainActivity).applicationContext.packageManager
@@ -75,7 +83,6 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         placesClient = Places.createClient(requireActivity())
-
 
 
 
@@ -131,11 +138,9 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions()
-//            .position(mark)
-//            .title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(mark))
+        val default = LatLng(25.0, 121.0)
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(default))
 
     }
 
