@@ -12,8 +12,8 @@
     <string name="title_transaction">Transaction</string>
     <string name="title_chef_profile">Profile</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
-    <string name="nt$">NT$</string>
-    <string name="people"> 位</string>
-
+    <string name="new_taiwan_dollar">NT$%1$s</string>
+    <string name="people">%1$d 位</string>
+    <string name="transaction_number">%1$d 筆</string>
 
 </resources>

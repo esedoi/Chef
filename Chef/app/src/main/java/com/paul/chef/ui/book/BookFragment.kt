@@ -91,23 +91,24 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                 binding.apply {
                     orginalPerPrice.visibility = View.VISIBLE
                     orginalTotal.visibility = View.VISIBLE
-                    orginalPerPrice.text = menu.perPrice.toString()
-                    orginalTotal.text = it["originalPrice"].toString()
+
+                    orginalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
+                    orginalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["originalPrice"]))
                     orginalPerPrice.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
                     orginalTotal.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
-                    finalPerPrice.text = it["discountPerPrice"].toString()
-                    finalTotal.text = it["total"].toString()
-                    userFee.text = it["userFee"].toString()
-                    userPay.text = it["userPay"].toString()
+                    finalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["discountPerPrice"]))
+                    finalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
+                    userFee.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
+                    userPay.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
                 }
             } else {
                 binding.apply {
                     orginalPerPrice.visibility = View.GONE
                     orginalTotal.visibility = View.GONE
-                    finalPerPrice.text = menu.perPrice.toString()
-                    finalTotal.text = it["total"].toString()
-                    userFee.text = it["userFee"].toString()
-                    userPay.text = it["userPay"].toString()
+                    finalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
+                    finalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
+                    userFee.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
+                    userPay.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
                 }
             }
         }

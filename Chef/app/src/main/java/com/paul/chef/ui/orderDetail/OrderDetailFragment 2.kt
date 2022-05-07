@@ -68,6 +68,8 @@ class OrderDetailFragment : Fragment() {
                     orderDetailName.text = order.userName
                     orderDetailPaymentText.text = "你的收款"
                     orderDetailTotal.text = "NT$ " + order.chefReceive.toString()
+//                    orderDetailTotal.text = getString(R.string.new_taiwan_dollar, order.chefReceive.toString())
+
                     if (order.status == OrderStatus.PENDING.index) {
                         orderDetailAcceptBtn.visibility = View.VISIBLE
                     } else {

@@ -101,7 +101,7 @@
 
     <Button
         android:id="@+id/transaction_apply_btn"
-
+        style="?attr/materialButtonOutlinedStyle"
         android:elevation="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
