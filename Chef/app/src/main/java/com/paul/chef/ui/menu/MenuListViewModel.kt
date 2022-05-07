@@ -29,7 +29,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
         get() = _likeList
     private val db = FirebaseFirestore.getInstance()
 
-    val userId = UserManger.user.userId!!
+    val userId = UserManger.user?.userId!!
 
     init {
 

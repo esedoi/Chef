@@ -23,9 +23,9 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
     private val db = FirebaseFirestore.getInstance()
 
-    private var _bookSetting = MutableLiveData<BookSetting>()
-    val bookSetting: LiveData<BookSetting>
-        get() = _bookSetting
+    private var _chefSpaceAddress = MutableLiveData<Address>()
+    val chefSpaceAddress: LiveData<Address>
+        get() = _chefSpaceAddress
 
     private var _bookDone = MutableLiveData<Boolean>()
     val bookDone: LiveData<Boolean>
@@ -57,6 +57,27 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     private var _priceResult = MutableLiveData<Map<String,Int>>()
     val priceResult: LiveData<Map<String,Int>>
         get() = _priceResult
+
+    fun getAddress(chefId:String){
+        db.collection("Chef")
+            .document(chefId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+
+                        val item = document.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, Chef::class.java)
+                       _chefSpaceAddress.value =  data.bookSetting?.chefSpace?.address
+
+                } else {
+                    Log.d("pickerViewModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
+    }
 
 
     fun orderPrice(chefMenu: ChefMenu, people:Int){
@@ -92,7 +113,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun book(chefMenu: ChefMenu,type:Int,address:String,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
+    fun book(chefMenu: ChefMenu,type:Int,address:Address,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
         val userId = UserManger.user?.userId!!

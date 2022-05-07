@@ -39,34 +39,78 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val selectedItem: LiveData<Int> get() = mutableSelectedItem
 
 
+    init {
+        if(UserManger.user?.userId !=null){
+
+            db.collection("User")
+                .document(UserManger.user?.userId?:"")
+                .addSnapshotListener { document, e ->
+                    if (e != null) {
+                        Log.w("notification", "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+                    if(document!=null){
+                        val json = Gson().toJson(document.data)
+                        val data = Gson().fromJson(json, User::class.java)
+                        UserManger.user = data
+                        Log.d("mainviewmodel", "update user")
+                        if (data.chefId!=null){
+                            getChef(data.chefId)
+                        }
+                    }
+                }
+            }
+         }
 
     fun getUser(email:String){
+        Log.d("mainviewmodel", "fun get user")
         db.collection("User")
             .whereEqualTo("profileInfo.email", email)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
+            .get()
+            .addOnSuccessListener { value ->
                 if (value != null) {
-                    for(i in value.documents){
-                        val json = Gson().toJson(i.data)
+                    for (i in value.documents){
+                        val item = i.data
+                        val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, User::class.java)
-                            UserManger.user = data
+                        UserManger.user = data
                         if (data.chefId!=null){
                             getChef(data.chefId)
                         }
                     }
                     _newUser.value = value.documents.isEmpty()
+                } else {
+                    Log.d("pickerViewModel", "No such document")
                 }
             }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
+
+//            .addSnapshotListener { value, e ->
+//                if (e != null) {
+//                    Log.w("notification", "Listen failed.", e)
+//                    return@addSnapshotListener
+//                }
+//                if (value != null) {
+//                    for(i in value.documents){
+//                        val json = Gson().toJson(i.data)
+//                        val data = Gson().fromJson(json, User::class.java)
+//                            UserManger.user = data
+//                        if (data.chefId!=null){
+//                            getChef(data.chefId)
+//                        }
+//                    }
+//                    _newUser.value = value.documents.isEmpty()
+//                }
+//            }
          }
 
 
 
 
     private fun getChef(chefId:String){
-            Log.d("mainviewmodel", "+++++++++++++++++++++chefid=$chefId")
+            Log.d("mainviewmodel", "fun getchef")
             db.collection("Chef")
                 .document(chefId)
                 .addSnapshotListener { value, e ->

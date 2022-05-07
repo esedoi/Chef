@@ -14,7 +14,7 @@ class LikeViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
-    val userId = UserManger.user.userId!!
+    val userId = UserManger.user?.userId!!
 
 //    private var _likeList = MutableLiveData<List<String>>()
 //    val likeList: LiveData<List<String>>

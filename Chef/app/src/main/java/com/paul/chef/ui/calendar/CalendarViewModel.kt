@@ -61,40 +61,44 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                 _orderList.value = dateList
             }
 
-        db.collection("Chef")
-            .document(chefId).collection("dateSetting")
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                if (value != null) {
-                    for(i in value.documents){
-                        val item = i.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, DateStatus::class.java)
-                        dateStatus.add(data)
+        if (chefId != null) {
+            db.collection("Chef")
+                .document(chefId).collection("dateSetting")
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w("notification", "Listen failed.", e)
+                        return@addSnapshotListener
                     }
-                    _dateSetting.value = dateStatus
-                }
+                    if (value != null) {
+                        for (i in value.documents) {
+                            val item = i.data
+                            val json = Gson().toJson(item)
+                            val data = Gson().fromJson(json, DateStatus::class.java)
+                            dateStatus.add(data)
+                        }
+                        _dateSetting.value = dateStatus
+                    }
 
-            }
-
-        db.collection("Chef")
-            .document(chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
                 }
+        }
+
+        if (chefId != null) {
+            db.collection("Chef")
+                .document(chefId)
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w("notification", "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
                     val item = value?.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Chef::class.java)
-                if(data.bookSetting!=null){
-                    _bookSetting.value = data.bookSetting!!
+                    if (data.bookSetting != null) {
+                        _bookSetting.value = data.bookSetting!!
+                    }
+                    Log.d("calendarviewmodel", "接收到Chef資料=$data")
                 }
-                Log.d("calendarviewmodel", "接收到Chef資料=$data")
-            }
+        }
 
     }
 }

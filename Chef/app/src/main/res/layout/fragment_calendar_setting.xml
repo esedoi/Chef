@@ -18,119 +18,90 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Switch
-                android:id="@+id/switch3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="chefPlace"
-                app:layout_constraintStart_toStartOf="@+id/spinner8"
-                app:layout_constraintTop_toBottomOf="@+id/spinner8" />
-
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="可定狀態"
+                android:text="可訂狀態"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintStart_toStartOf="@+id/settingTypeText"
-                app:layout_constraintTop_toBottomOf="@+id/selectdatesType" />
+                app:layout_constraintStart_toStartOf="@+id/calendar_set_select_date_txt"
+                app:layout_constraintTop_toBottomOf="@+id/calendar_set_select_date_txt" />
 
-            <Switch
+            <!--            <RadioGroup-->
+<!--                android:id="@+id/selectdatesType"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="16dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:visibility="visible"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/calendar_set_select_date_txt"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/calendar_set_select_date_txt">-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioButton6"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="今天" />-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioButton5"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="每個星期三" />-->
+<!--            </RadioGroup>-->
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/dateOpenSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="可訂"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-            <RadioGroup
-                android:id="@+id/selectdatesType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/settingTypeText"
-                app:layout_constraintTop_toBottomOf="@+id/settingTypeText">
-
-                <RadioButton
-                    android:id="@+id/radioButton6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="今天" />
-
-                <RadioButton
-                    android:id="@+id/radioButton5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="每個星期三" />
-            </RadioGroup>
-
-            <Switch
-                android:id="@+id/switch2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="userPlace"
-                app:layout_constraintStart_toStartOf="@+id/recyclerView6"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView6" />
-
-            <Spinner
-                android:id="@+id/spinner7"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="@+id/switch2"
-                app:layout_constraintTop_toBottomOf="@+id/switch2" />
-
-            <Spinner
-                android:id="@+id/spinner9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="@+id/switch3"
-                app:layout_constraintTop_toBottomOf="@+id/switch3" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="24dp"
+                android:minWidth="50dp"
+                android:minHeight="70dp"
+                android:padding="15dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toBottomOf="@+id/calendar_set_switch_txt"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/dateOpenSwitch"
-                app:layout_constraintTop_toBottomOf="@+id/dateOpenSwitch" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toTopOf="@+id/calendar_set_switch_txt" />
 
             <TextView
-                android:id="@+id/settingTypeText"
+                android:id="@+id/calendar_set_select_date_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:text="TextView"
+                android:text="select_date"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/spinner8"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@+id/spinner7"
-                app:layout_constraintTop_toBottomOf="@+id/spinner7" />
 
             <Button
                 android:id="@+id/dateSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="save"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="儲存"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner9" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/calendar_set_switch_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="關閉中"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

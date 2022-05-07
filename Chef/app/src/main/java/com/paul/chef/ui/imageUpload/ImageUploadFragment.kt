@@ -87,7 +87,7 @@ class ImageUploadFragment : DialogFragment() {
 
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm", Locale.getDefault())
         val now = Date()
-        val userId = UserManger.user.userId
+        val userId = UserManger.user?.userId!!
         val fileName = userId+"_"+formatter.format(now)
          val storageReference = FirebaseStorage.getInstance().getReference("images/$fileName")
         val uploadTask = storageReference.putFile(ImageUri )

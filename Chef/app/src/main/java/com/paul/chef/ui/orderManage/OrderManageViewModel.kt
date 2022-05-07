@@ -50,12 +50,12 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
 
         when(mode){
             Mode.USER.index->{
-                val userId = UserManger.user.userId!!
+                val userId = UserManger.user?.userId!!
                 field = "userId"
                 value = userId
             }
             Mode.CHEF.index->{
-                val chefId = UserManger.chef.id
+                val chefId = UserManger.chef?.id!!
                 field = "chefId"
                 value = chefId
             }
@@ -75,10 +75,11 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                 completedList.clear()
                 cancelledList.clear()
                 for (doc in value!!.documents) {
+                    Log.d("ordermangeviewmodel", "doc=$doc")
                     val item = doc.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Order::class.java)
-                    Log.d("calendarviewmodel", "接收到order資料${data}")
+                    Log.d("ordermangeviewmodel", "接收到order資料${data}")
 
                     when(data.status){
                         OrderStatus.PENDING.index->{

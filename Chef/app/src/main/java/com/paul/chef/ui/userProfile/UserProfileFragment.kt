@@ -42,7 +42,7 @@ class UserProfileFragment : Fragment() {
         val user = UserManger.user
         Log.d("userprofilefragment"," user= $user")
 
-        binding.userProfileIntro.text = user.profileInfo?.introduce!!
+        binding.userProfileIntro.text = user?.profileInfo?.introduce!!
         binding.userProfileNameText.text = user.profileInfo.name
 
         bindImage(binding.userProfileImg, user.profileInfo.avatar)

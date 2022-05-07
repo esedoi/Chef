@@ -95,7 +95,7 @@ class ChefFragment : Fragment() {
         }
 
         binding.editProfileBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user.profileInfo!!))
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user?.profileInfo!!))
         }
 
         binding.bookSettingBtn.setOnClickListener {
@@ -138,7 +138,9 @@ class ChefFragment : Fragment() {
                 }
             }
 
-
+        binding.chefPageAddressListBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+        }
 
 
         return root

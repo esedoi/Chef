@@ -23,7 +23,7 @@ class HomeViewModel : ViewModel() {
     val userAvatar= ""
 
     fun login(){
-        val userId = UserManger.user.userId!!
+        val userId = UserManger.user?.userId!!
         db.collection("User")
             .document(userId)
             .get()

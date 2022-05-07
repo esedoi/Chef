@@ -16,9 +16,9 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
     private val context = getApplication<Application>().applicationContext
 
     private val db = FirebaseFirestore.getInstance()
-    val chefId = UserManger.chef.id
-    val chefName = UserManger.chef.profileInfo.name
-    val avatar = UserManger.chef.profileInfo.avatar!!
+    val chefId = UserManger.chef?.id!!
+    val chefName = UserManger.chef?.profileInfo?.name!!
+    val avatar = UserManger.chef?.profileInfo?.avatar!!
 
 
 

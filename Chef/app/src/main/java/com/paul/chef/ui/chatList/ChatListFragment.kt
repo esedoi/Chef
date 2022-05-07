@@ -49,8 +49,8 @@ class ChatListFragment : Fragment(),GoChatRoom {
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
         nowId = when(mode){
-            Mode.USER.index-> UserManger.user.userId!!
-            Mode.CHEF.index-> UserManger.chef.id
+            Mode.USER.index-> UserManger.user?.userId!!
+            Mode.CHEF.index-> UserManger.chef?.id!!
             else->""
         }
         if(mode!=null){

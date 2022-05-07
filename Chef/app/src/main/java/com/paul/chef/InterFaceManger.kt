@@ -1,5 +1,6 @@
 package com.paul.chef
 
+import com.paul.chef.data.Address
 import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
 
@@ -24,6 +25,10 @@ interface AddDiscount{
 
     interface MenuEditImg{
         fun remove(position:Int)
+    }
+
+    interface AddressList{
+        fun select(item: Address)
     }
 
 

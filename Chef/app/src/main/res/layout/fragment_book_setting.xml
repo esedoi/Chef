@@ -162,15 +162,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_add_session"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginEnd="24dp"-->
-<!--                        android:text="增添場次"-->
-<!--                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_pick_session"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="@+id/book_setting_pick_session" />-->
 
                     <TextView
                         android:id="@+id/textView19"
@@ -183,14 +174,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/book_set_chef_space_time_layout" />
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_pick_session"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="136dp"-->
-<!--                        android:text="選擇場次"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView20"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/book_set_chef_space_capacity_layout"
@@ -200,9 +183,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
                         android:hint="選擇人數"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView19">
@@ -216,16 +197,8 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_session_capacity"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="32dp"-->
-<!--                        android:layout_marginBottom="8dp"-->
-<!--                        android:text="選擇人數"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView19"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/textView19" />-->
+
+
 
                     <TextView
                         android:id="@+id/textView14"
@@ -263,6 +236,42 @@
                         android:textColor="@color/example_4_grey_past"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView35"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="廚房地址"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/book_set_chef_space_capacity_layout" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/book_set_chef_space_address_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:hint="選擇地址"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView35">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/book_set_chef_space_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -349,23 +358,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!--                    <Button-->
-                    <!--                        android:id="@+id/book_setting_start_pick"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:text="選擇時間"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView27" />-->
-
-                    <!--                    <Button-->
-                    <!--                        android:id="@+id/book_setting_end_pick"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginStart="32dp"-->
-                    <!--                        android:text="選擇時間"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_start_pick"-->
-                    <!--                        app:layout_constraintStart_toEndOf="@+id/book_setting_start_pick"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView27" />-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/book_set_user_space_end_time_layout"
@@ -418,16 +410,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_capacity"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:layout_marginBottom="16dp"-->
-<!--                        android:text="選擇人數"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView28"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/textView28" />-->
+
 
                     <TextView
                         android:id="@+id/textView16"

@@ -29,7 +29,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
 
-     val chefId = UserManger.chef.id
+
     private val menuIdList = mutableListOf<String>()
 
 
@@ -41,6 +41,8 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
 
 
     init {
+        Log.d("chefviewmodel", "UserManger.chef${UserManger.chef}")
+        val chefId = UserManger.chef?.id!!
         db.collection("Chef")
             .whereEqualTo("id", chefId)
             .addSnapshotListener { value, e ->

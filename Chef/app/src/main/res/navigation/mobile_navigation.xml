@@ -255,6 +255,21 @@
     <action
         android:id="@+id/action_global_imageUploadFragment"
         app:destination="@id/imageUploadFragment" />
+    <dialog
+        android:id="@+id/addAddressFragment"
+        android:name="com.paul.chef.ui.addAddress.AddAddressFragment"
+        android:label="fragment_add_address"
+        tools:layout="@layout/fragment_add_address" />
+    <action
+        android:id="@+id/action_global_addAddressFragment"
+        app:destination="@id/addAddressFragment" />
+    <dialog
+        android:id="@+id/addressListFragment"
+        android:name="com.paul.chef.ui.addressList.AddressListFragment"
+        android:label="AddressListFragment" />
+    <action
+        android:id="@+id/action_global_addressListFragment"
+        app:destination="@id/addressListFragment" />
 
 
 </navigation>

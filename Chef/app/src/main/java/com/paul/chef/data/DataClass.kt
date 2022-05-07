@@ -2,6 +2,8 @@ package com.paul.chef.data
 
 import android.net.Uri
 import android.os.Parcelable
+import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import java.time.LocalDate
@@ -11,7 +13,7 @@ data class Chef(
     val id:	String,
     val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
-    val address:List<String>?=null,
+    val address:List<Address>?=null,
     val bookSetting: BookSetting? = null,
     val reviewRating: Float?=null,
     val reviewNumber:Int? = null
@@ -33,10 +35,10 @@ data class MenuStatus(
 )
 
 
-
 data class ChefSpace(
     val sessionCapacity:Int,
     val session:List<String>,
+    val address:Address
 )
 
 data class UserSpace(
@@ -79,7 +81,7 @@ data class Order(
     val chefAvatar:String,
     val menuName:String,
     val type:Int, //userspace, chef space
-    val address: String,
+    val address: Address,
     val orderTime:Long,
     val date:Long,
     val time:String,
@@ -95,6 +97,12 @@ data class Order(
 ): Parcelable
 
 
+@Parcelize
+data class Address(
+    val addressTxt:String,
+    val latitude:Double,
+    val longitude:Double
+): Parcelable
 
 @Parcelize
 data class ChefMenu( ///menu
@@ -160,7 +168,7 @@ data class User(
     val profileInfo:ProfileInfo?=null,
     val chefId:String?=null,
     val likeList:List<String>?=null,
-    val address:List<String>?=null
+    val address:@RawValue List<Address>?=null
 ): Parcelable
 
 @Parcelize

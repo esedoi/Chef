@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("mainactivity", "oncreate")
 
 
 
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
                 when (val mode = UserManger.readData("mode", this)) {
                     Mode.CHEF.index -> {
-                        if (UserManger.user.chefId != null) {
+                        if (UserManger.user?.chefId != null) {
                             turnMode(mode)
                             navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
                         } else {

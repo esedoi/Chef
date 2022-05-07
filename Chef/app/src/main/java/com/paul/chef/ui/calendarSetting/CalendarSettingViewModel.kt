@@ -28,29 +28,19 @@ class CalendarSettingViewModel(application: Application) : AndroidViewModel(appl
 
 
     fun settingDate(
-        type: Int,
         status: Int,
-        menuList: List<MenuStatus>,
         selectDates: List<LocalDate>,
-        selectWeekDay: String,
-        session: List<String>?,
-        startTime: String?,
-        endTime: String?
     ) {
 
-        if (type == 1) {
+
             for (i in selectDates) {
                 val long = i.toEpochDay()
                 val dateStatus = DateStatus(status, long)
                 date.add(dateStatus)
             }
-        }
-//        else{
-//        val weekStatus = WeekStatus(1, "三", listOf("11:00"), "10:00", "21:30")
-//            weekday.add(weekStatus)
-//         }
 
-        val chefId = UserManger.chef.id
+
+        val chefId = UserManger.chef?.id!!
 
 
         for (i in date) {
@@ -67,9 +57,5 @@ class CalendarSettingViewModel(application: Application) : AndroidViewModel(appl
                 }
                 .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
         }
-
-
     }
-
-
 }

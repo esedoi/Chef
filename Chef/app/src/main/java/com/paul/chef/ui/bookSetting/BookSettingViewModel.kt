@@ -19,7 +19,7 @@ class BookSettingViewModel(application: Application) : AndroidViewModel(applicat
 
     fun setting(type:Int, calendarDefault:Int, chefSpace:ChefSpace, userSpace:UserSpace) {
 
-        val chefId = UserManger.user.chefId
+        val chefId = UserManger.user?.chefId
 
         if (chefId != null) {
             db.collection("Chef").document(chefId)

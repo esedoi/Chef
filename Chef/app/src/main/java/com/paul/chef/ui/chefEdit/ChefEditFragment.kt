@@ -100,11 +100,9 @@ class ChefEditFragment : Fragment() {
                         chefEditViewModel.createUser(newProfile)
                     }
                     EditPageType.EDIT_PROFILE.index->{
-                        val userId = UserManger.user.userId
-                        val chefId = UserManger.user.chefId
-                        if (chefId != null&&userId!=null) {
-                            chefEditViewModel.saveChef(newProfile,userId, chefId )
-                        }
+                        val userId = UserManger.user?.userId!!
+                        val chefId = UserManger.user?.chefId!!
+                        chefEditViewModel.saveChef(newProfile,userId, chefId )
                     }
                 }
             }

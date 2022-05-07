@@ -1,47 +1,44 @@
 package com.paul.chef.ui.book
 
-import android.annotation.SuppressLint
+
+import android.content.pm.PackageManager
 import android.graphics.Paint
-import android.icu.text.SimpleDateFormat
-import android.location.Address
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.paul.chef.BookType
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.PickerType
-import com.paul.chef.R
-import com.paul.chef.data.BookSetting
-import com.paul.chef.data.Dish
-import com.paul.chef.data.SelectedDate
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.paul.chef.*
+import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentBookBinding
-import com.paul.chef.databinding.FragmentChefPageBinding
-import com.paul.chef.ui.chef.ChefViewModel
-import com.paul.chef.ui.menuDetail.MenuDetailFragmentArgs
 import java.time.LocalDate
-import java.util.*
 
-class BookFragment : Fragment() {
+
+class BookFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentBookBinding? = null
     private val binding get() = _binding!!
     var selectDate: Long? = null
+    private lateinit var mMap: GoogleMap
     var picker: LocalDate? = null
+    private lateinit var placesClient: PlacesClient
 //    var bookSetting: BookSetting? = null
+    private var chefAddress: Address?=null
+    private var userAddress: Address?=null
 
     //safe args
     private val arg: BookFragmentArgs by navArgs()
@@ -57,10 +54,35 @@ class BookFragment : Fragment() {
         _binding = FragmentBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val info = (activity as MainActivity).applicationContext.packageManager
+            .getApplicationInfo(
+                (activity as MainActivity).packageName,
+                PackageManager.GET_META_DATA
+            )
+        val key = info.metaData[resources.getString(R.string.map_api_key_name)].toString()
+
+
+        if (!Places.isInitialized()) {
+            Places.initialize(requireActivity(), key);
+        }
+
+
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.book_map) as SupportMapFragment
+
+        mapFragment.getMapAsync(this)
+
+        placesClient = Places.createClient(requireActivity())
+
 
         //navigation safe args
         val menu = arg.chefMenu
         val selectedDish = arg.selectedDish.toList()
+        bookViewModel.getAddress(menu.chefId)
+        bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner){
+            chefAddress = it
+        }
+
 
 
         bookViewModel.priceResult.observe(viewLifecycleOwner) {
@@ -180,6 +202,31 @@ class BookFragment : Fragment() {
             binding.bookTimeSelect.text?.clear()
             binding.bookPeopleSelect.text?.clear()
             binding.bookDateSelect.text?.clear()
+
+            when(checkedId){
+                R.id.book_user_space_chip->{
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
+                    binding.bookEditAddress.visibility = View.VISIBLE
+                }
+                R.id.book_chef_space_chip->{
+                    binding.bookEditAddress.visibility = View.GONE
+                    mMap.clear()
+                    if(chefAddress!=null){
+                        val latLng = LatLng(chefAddress?.latitude!!,chefAddress?.longitude!!)
+
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(latLng)
+                                .title("Marker in chefSpace"))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                        binding.bookAddress.text = chefAddress?.addressTxt
+                    }
+                }
+            }
+        }
+
+        binding.bookEditAddress.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment())
         }
 
 
@@ -200,6 +247,25 @@ class BookFragment : Fragment() {
             pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
+        }
+        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
+            pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
+            bookViewModel.orderPrice(menu, pickPeople)
+            binding.bookPeopleSelect.setText(pickPeople.toString())
+        }
+        setFragmentResultListener("selectAddress") { requestKey, bundle ->
+           val  newAddress = bundle.getParcelable<Address>("address")!!
+            val addressTxt = newAddress.addressTxt
+            val latLng = LatLng(newAddress.latitude,newAddress.longitude,)
+            userAddress = newAddress
+
+            mMap.clear()
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title("Marker in userSpace"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+            binding.bookAddress.text = addressTxt
         }
 
 
@@ -227,26 +293,29 @@ class BookFragment : Fragment() {
                 Log.d("bookfragment", "typeId = $typeId")
                 Log.d("bookfragment", "typeInt = $typeInt")
 
-                val address: String = if (typeInt == 1) {
-                    "chefAddress"
+                val address: Address? = if (typeInt == BookType.ChefSpace.index) {
+                    chefAddress
                 } else {
-                    "userAddress"
+                    userAddress
                 }
 
 
                 val note = binding.bookNoteLayout.editText?.text.toString()
 
-                bookViewModel.book(
-                    menu,
-                    typeInt,
-                    address,
-                    selectDate!!,
-                    pickTime,
-                    note,
-                    pickPeople,
-                    selectedDish
-                )
-
+                if (address != null) {
+                    bookViewModel.book(
+                        menu,
+                        typeInt,
+                        address,
+                        selectDate!!,
+                        pickTime,
+                        note,
+                        pickPeople,
+                        selectedDish
+                    )
+                }else{
+                    Toast.makeText(this.context, "請選擇地址", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -262,6 +331,10 @@ class BookFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
     }
 }
 

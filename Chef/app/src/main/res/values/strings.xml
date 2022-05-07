@@ -11,6 +11,7 @@
     <string name="title_calendar">Calendar</string>
     <string name="title_transaction">Transaction</string>
     <string name="title_chef_profile">Profile</string>
+    <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
 
 
 </resources>

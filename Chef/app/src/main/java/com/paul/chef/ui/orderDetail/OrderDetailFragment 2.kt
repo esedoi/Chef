@@ -124,6 +124,7 @@ class OrderDetailFragment : Fragment() {
                 OrderStatus.SCORED.index->OrderStatus.SCORED.value
                 else -> "something went wrong"
             }
+            orderDetailAddress.text = order.address.addressTxt
             orderDetailDate.text = LocalDate.ofEpochDay(order.date).toString()
             orderDetailTime.text = order.time
             orderDetailMenuName.text = order.menuName

@@ -45,7 +45,7 @@ class UserProfileViewModel : ViewModel() {
         val id = db.collection("Chef").document().id
 
         val profileInfo = user.profileInfo
-        val userId = UserManger.user.userId
+        val userId = UserManger.user?.userId
         if(profileInfo!=null&&userId!=null){
             val temp = Chef(id, profileInfo)
             //set firebase資料
