@@ -19,7 +19,7 @@ data class Chef(
     val reviewNumber:Int? = null
 )
 
-//come with menu
+
 @Parcelize
 data class BookSetting(
     val type:Int = -1, //chef place,userplace,都接受, 都不接受
@@ -105,7 +105,7 @@ data class Address(
 ): Parcelable
 
 @Parcelize
-data class ChefMenu( ///menu
+data class ChefMenu(
     val id:String,
     val chefId:String,
     val menuName:String,
@@ -117,7 +117,9 @@ data class ChefMenu( ///menu
     val discount:@RawValue List<Discount>,
     val dishes:@RawValue List<Dish>,
     val reviewRating: Float? = null,
-    val reviewNumber:Int?=null
+    val reviewNumber:Int?=null,
+    val tagList:List<String>?=null
+
 ): Parcelable
 
 @Parcelize

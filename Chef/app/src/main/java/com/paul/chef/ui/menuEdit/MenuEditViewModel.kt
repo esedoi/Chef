@@ -27,11 +27,12 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
                    perPrice:Int,
                    images:List<String>,
                    discountList:List<Discount>,
-                   dishList:List<Dish>){
+                   dishList:List<Dish>,
+                   tagList:List<String>){
         val id = db.collection("Menu").document().id
 
 
-        val menu = ChefMenu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList)
+        val menu = ChefMenu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList, tagList = tagList)
 
 
         //set firebase資料

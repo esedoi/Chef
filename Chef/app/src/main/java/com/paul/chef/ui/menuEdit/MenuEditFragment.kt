@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.paul.chef.*
 import com.paul.chef.data.Discount
 import com.paul.chef.data.Dish
@@ -68,6 +69,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     private val arg: MenuEditFragmentArgs by navArgs()
 
     var imgList = mutableListOf<String>()
+    var tagList = mutableListOf<String>()
 
 
     var bindingItemCountList = mutableListOf<Int>()
@@ -162,6 +164,29 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             addDish(container, AddDishType.OPTIONAL.index)
         }
 
+        binding.menuEditAddTagBtn.setOnClickListener {
+            binding.menuEditTagsGroup.removeAllViews()
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddTagFragment())
+        }
+
+        setFragmentResultListener("tagList") { requestKey, bundle ->
+            val newList = bundle.getStringArrayList("tagList")
+            Log.d("menuEditfragment", "tagList = $tagList")
+            if (newList != null) {
+                tagList.addAll(newList)
+                tagList.forEach { it ->
+                    val chip = Chip(this.context)
+                    chip.text = it
+                    chip.isCloseIconVisible= true
+                    chip.setOnCloseIconClickListener { view ->
+                        binding.menuEditTagsGroup.removeView(view)
+                    }
+                    binding.menuEditTagsGroup.addView(chip)
+                }
+            }
+
+        }
+
 
         //create Menu
         binding.build.setOnClickListener {
@@ -219,13 +244,16 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                         perPrice,
                         imgList,
                         discountList,
-                        dishList
+                        dishList,
+                        tagList
                     )
                     dishList.clear()
+                    findNavController().navigateUp()
 //                typeNumber = -1
                 }
             }
         }
+
 
 
         return root

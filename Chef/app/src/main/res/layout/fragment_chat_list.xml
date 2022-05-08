@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
                     app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:title="聊聊" />
+                    app:title="聊天" />
             </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView

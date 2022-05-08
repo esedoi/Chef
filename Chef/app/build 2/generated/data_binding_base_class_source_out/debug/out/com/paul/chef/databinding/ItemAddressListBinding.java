@@ -60,7 +60,7 @@ public final class ItemAddressListBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.imageButton2;
+      id = R.id.add_tag_add_tag;
       ImageButton imageButton2 = ViewBindings.findChildViewById(rootView, id);
       if (imageButton2 == null) {
         break missingId;
