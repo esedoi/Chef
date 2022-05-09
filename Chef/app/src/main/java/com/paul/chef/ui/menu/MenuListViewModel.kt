@@ -8,15 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.UserManger
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.data.Menu
 import com.paul.chef.data.User
 
 class MenuListViewModel(application: Application) : AndroidViewModel(application){
 
 
-    private val dataList = mutableListOf<ChefMenu>()
-    private var _menuList = MutableLiveData<List<ChefMenu>>()
-    val menuList: LiveData<List<ChefMenu>>
+    private val dataList = mutableListOf<Menu>()
+    private var _menuList = MutableLiveData<List<Menu>>()
+    val menuList: LiveData<List<Menu>>
         get() = _menuList
 
 
@@ -24,8 +24,8 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
     val likeIdList: LiveData<List<String>>
         get() = _likeIdList
 
-    private var _likeList = MutableLiveData<List<ChefMenu>>()
-    val likeList: LiveData<List<ChefMenu>>
+    private var _likeList = MutableLiveData<List<Menu>>()
+    val likeList: LiveData<List<Menu>>
         get() = _likeList
     private val db = FirebaseFirestore.getInstance()
 
@@ -59,7 +59,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                 for (doc in value!!.documents) {
                     val item = doc.data
                     val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, ChefMenu::class.java)
+                    val data = Gson().fromJson(json, Menu::class.java)
                     dataList.add(data)
                     Log.d("menufragment", "item=$item")
                 }
@@ -82,7 +82,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     for (doc in value!!.documents) {
                         val item = doc.data
                         val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, ChefMenu::class.java)
+                        val data = Gson().fromJson(json, Menu::class.java)
                         dataList.add(data)
                         Log.d("likeviewmodel", "item=$item")
                     }

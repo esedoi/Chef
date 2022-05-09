@@ -6,15 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.*
-import com.paul.chef.data.BookSetting
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
-import java.time.LocalDate
 
 class OrderManageViewModel(application: Application) : AndroidViewModel(application){
     @SuppressLint("StaticFieldLeak")

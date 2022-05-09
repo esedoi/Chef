@@ -18,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.rpc.context.AttributeContext
 import com.paul.chef.*
 import com.paul.chef.data.Dish
 import com.paul.chef.data.Review
@@ -58,7 +57,7 @@ class MenuDetailFragment : Fragment() {
 
 
         //navigation safe args
-        val menu = arg.chefMenu
+        val menu = arg.menu
         val dishList = menu.dishes
         var defaultType = -1
         val or = "or"

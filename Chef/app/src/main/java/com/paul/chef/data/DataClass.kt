@@ -105,7 +105,7 @@ data class Address(
 ): Parcelable
 
 @Parcelize
-data class ChefMenu(
+data class Menu(
     val id:String,
     val chefId:String,
     val menuName:String,

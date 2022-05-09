@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.navigation.NavArgs;
-import com.paul.chef.data.ChefMenu;
+import com.paul.chef.data.Menu;
 import com.paul.chef.data.Dish;
 import java.io.Serializable;
 import java.lang.IllegalArgumentException;

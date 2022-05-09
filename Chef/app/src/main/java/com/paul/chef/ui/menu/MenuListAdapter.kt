@@ -1,6 +1,5 @@
 package com.paul.chef.ui.menu
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +10,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.ImgRecyclerType
 import com.paul.chef.ItemMenu
 import com.paul.chef.MenuType
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.data.Menu
 import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.databinding.ItemMenuSimpleBinding
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
 import com.paul.chef.ui.menuDetail.bindImage
-import kotlinx.coroutines.NonDisposableHandle
-import kotlinx.coroutines.NonDisposableHandle.parent
 
-class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:MenuListViewModel?, val type:Int) : ListAdapter<ChefMenu, RecyclerView.ViewHolder>(MenuCallback()) {
+class MenuListAdapter(
+    private val itemMenu: ItemMenu?,
+    private val menuViewModel: MenuListViewModel?,
+    val type: Int
+) : ListAdapter<Menu, RecyclerView.ViewHolder>(MenuCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        return FullHolder.from(parent)
-        return when(type){
-            MenuType.FULL.index-> FullHolder.from(parent)
+        return when (type) {
+            MenuType.FULL.index -> FullHolder.from(parent)
             else -> SimpleHolder.from(parent)
         }
 
@@ -34,18 +36,16 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-        when(holder){
-            is FullHolder->{
+        when (holder) {
+            is FullHolder -> {
                 holder.bind(item, itemMenu, menuViewModel)
             }
-            is SimpleHolder ->{
+            is SimpleHolder -> {
                 holder.bind(item)
             }
         }
 
     }
-
-
 
 
     class FullHolder(private var binding: ItemMenuListBinding) :
@@ -54,7 +54,7 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
         private lateinit var imageAdapter: DetailImagesAdapter
         private var layoutManager: RecyclerView.LayoutManager? = null
 
-        init{
+        init {
             val context = itemView.context
             imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -62,35 +62,38 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
             binding.itemMenuImgRecycler.adapter = imageAdapter
         }
 
-        fun bind(item: ChefMenu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
-            if(itemMenu!=null){
+        fun bind(item: Menu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
+            if (itemMenu != null) {
 
                 itemView.setOnClickListener {
                     itemMenu.goDetail(item)
                 }
 
                 imageAdapter.submitList(item.images)
+                val outlineProvider = ProfileOutlineProvider()
+                binding.itemMenuChefAvatar.outlineProvider = outlineProvider
+                bindImage(binding.itemMenuChefAvatar, item.chefAvatar)
 
-
-                binding.itemMenuLikeCheck.isChecked = menuViewModel?.likeIdList?.value?.contains(item.id) == true
-                binding.itemMenuLikeCheck.setOnClickListener{
+                binding.itemMenuLikeCheck.isChecked =
+                    menuViewModel?.likeIdList?.value?.contains(item.id) == true
+                binding.itemMenuLikeCheck.setOnClickListener {
                     itemMenu.like(item.id)
                 }
                 binding.menuTitle.text = item.menuName
-                if (item.reviewRating!=null){
+                if (item.reviewRating != null) {
                     binding.ratingBar2.visibility = View.VISIBLE
                     binding.itemMenuRatingNum.visibility = View.VISIBLE
                     binding.itemMenuRating.visibility = View.VISIBLE
                     binding.ratingBar2.rating = item.reviewRating
-                    val str :String = String.format("%.1f",item.reviewRating)
+                    val str: String = String.format("%.1f", item.reviewRating)
                     binding.itemMenuRating.text = str
-                    binding.itemMenuRatingNum.text = item.reviewNumber.toString()+" 則評價"
-                }else{
+                    binding.itemMenuRatingNum.text = item.reviewNumber.toString() + " 則評價"
+                } else {
                     binding.itemMenuRating.visibility = View.GONE
                     binding.ratingBar2.visibility = View.GONE
                     binding.itemMenuRatingNum.visibility = View.GONE
                 }
-                binding.itemMenuPerPrice.text = "NT$"+item.perPrice.toString()+"/人"
+                binding.itemMenuPerPrice.text = "NT$" + item.perPrice.toString() + "/人"
 
             }
         }
@@ -108,7 +111,7 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
     class SimpleHolder(private var binding: ItemMenuSimpleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ChefMenu) {
+        fun bind(item: Menu) {
 //            itemView.setOnClickListener {
 //                itemMenu.goDetail(item)
 //            }
@@ -122,23 +125,25 @@ class MenuListAdapter(private val itemMenu:ItemMenu?, private val menuViewModel:
         companion object {
             fun from(parent: ViewGroup): SimpleHolder {
                 val menu =
-                    ItemMenuSimpleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemMenuSimpleBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return SimpleHolder(menu)
             }
         }
     }
 
 
-
-
 }
 
-class MenuCallback : DiffUtil.ItemCallback<ChefMenu>() {
-    override fun areItemsTheSame(oldItem: ChefMenu, newItem: ChefMenu): Boolean {
+class MenuCallback : DiffUtil.ItemCallback<Menu>() {
+    override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: ChefMenu, newItem: ChefMenu): Boolean {
+    override fun areContentsTheSame(oldItem: Menu, newItem: Menu): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
 

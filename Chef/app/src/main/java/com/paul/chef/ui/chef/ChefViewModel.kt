@@ -7,10 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.Chef
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 
 class ChefViewModel(application: Application) : AndroidViewModel(application) {
@@ -33,9 +32,9 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
     private val menuIdList = mutableListOf<String>()
 
 
-    private val menuList = mutableListOf<ChefMenu>()
-    private var _liveMenu = MutableLiveData<List<ChefMenu>>()
-    val liveMenu: LiveData<List<ChefMenu>>
+    private val menuList = mutableListOf<Menu>()
+    private var _liveMenu = MutableLiveData<List<Menu>>()
+    val liveMenu: LiveData<List<Menu>>
         get() = _liveMenu
 
 
@@ -71,7 +70,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
                     for (item in value.documents){
                         val item = item.data
                         val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, ChefMenu::class.java)
+                        val data = Gson().fromJson(json, Menu::class.java)
                         menuIdList.add(data.id)
                         menuList.add(data)
                     }

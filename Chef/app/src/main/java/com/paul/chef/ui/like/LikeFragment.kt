@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.ItemMenu
 import com.paul.chef.MenuType
 import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentLikeBinding
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menu.MenuListViewModel
@@ -75,7 +75,7 @@ class LikeFragment : Fragment(), ItemMenu {
         _binding = null
     }
 
-    override fun goDetail(menu: ChefMenu) {
+    override fun goDetail(menu: Menu) {
         findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
     }
 

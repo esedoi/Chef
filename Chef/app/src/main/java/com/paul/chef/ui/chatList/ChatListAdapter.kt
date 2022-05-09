@@ -4,18 +4,14 @@ import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.GoChatRoom
-import com.paul.chef.ItemMenu
 import com.paul.chef.Mode
 import com.paul.chef.ProfileOutlineProvider
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Room
 import com.paul.chef.databinding.ItemChatListBinding
-import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.ui.menuDetail.bindImage
 import java.util.*
 
@@ -50,7 +46,10 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
             Log.d("chatlistAdapter", "${item.time}")
 
             val sdf = SimpleDateFormat("MM.dd HH:mm")
-            binding.time.text = sdf.format(item.time?.let { Date(it.toLong()) })
+            if(item.time!=null){
+                binding.time.text = sdf.format(Date(item.time.toLong()))
+            }
+
 
             binding.chatContent.text = item.lastMsg.toString()
             if(nowMode == Mode.CHEF.index){

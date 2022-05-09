@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
 
@@ -32,7 +31,7 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
         val id = db.collection("Menu").document().id
 
 
-        val menu = ChefMenu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList, tagList = tagList)
+        val menu = Menu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList, tagList = tagList)
 
 
         //set firebase資料

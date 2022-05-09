@@ -109,10 +109,12 @@
         android:id="@+id/menuTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/noto_sans"
         android:text="title"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/item_menu_chef_avatar"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <RatingBar
@@ -130,8 +132,9 @@
         android:id="@+id/item_menu_perPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/noto_sans"
         android:text="perPrice"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -143,6 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/noto_sans"
         android:text="(number)"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:visibility="visible"
@@ -154,10 +158,20 @@
         android:id="@+id/item_menu_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/noto_sans"
         android:text="TextView"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/menuTitle"
         app:layout_constraintTop_toBottomOf="@+id/menuTitle" />
+
+    <ImageView
+        android:id="@+id/item_menu_chef_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:srcCompat="@drawable/round" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

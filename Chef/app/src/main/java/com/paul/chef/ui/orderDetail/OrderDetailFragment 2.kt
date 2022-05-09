@@ -78,6 +78,7 @@ class OrderDetailFragment : Fragment() {
 
                     orderDetailAcceptBtn.setOnClickListener {
                         viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
+                        findNavController().navigateUp()
 
                     }
                     orderDetailCancelBtn.text = when (order.status) {

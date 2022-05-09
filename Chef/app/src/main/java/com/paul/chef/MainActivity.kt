@@ -119,7 +119,9 @@ class MainActivity : AppCompatActivity() {
                     navView.visibility = View.VISIBLE
                     binding.toolbar6.visibility = View.GONE
                 }
-                R.id.menuDetailFragment->{
+                R.id.menuDetailFragment,
+                R.id.navigation_home,
+                R.id.loginFragment->{
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.GONE
                 }
@@ -158,7 +160,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
 
         if (user != null) {
-
             Log.d("mainactivity", "useravatar=${user.photoUrl}")
             val email = user.email
             val name = user.displayName
@@ -168,7 +169,8 @@ class MainActivity : AppCompatActivity() {
                 newUserProfile = ProfileInfo(name, email, avatar)
                 mainViewModel.getUser(email)
             }
-
+        }else{
+            findNavController(R.id.nav_host_fragment_activity_main).navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
     }
 

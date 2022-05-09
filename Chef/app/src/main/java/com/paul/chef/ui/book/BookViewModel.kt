@@ -2,8 +2,6 @@ package com.paul.chef.ui.book
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.icu.text.SimpleDateFormat
-import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -14,7 +12,6 @@ import com.google.gson.Gson
 import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
-import java.time.LocalDate
 import java.util.*
 
 class BookViewModel(application: Application) : AndroidViewModel(application) {
@@ -80,14 +77,14 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun orderPrice(chefMenu: ChefMenu, people:Int){
-        val originalPrice = chefMenu.perPrice * people
+    fun orderPrice(menu: Menu, people:Int){
+        val originalPrice = menu.perPrice * people
         var total = originalPrice
         var isDiscount = 0
         var userFee = UserManger().userFee
         var chefFee = ChefManger().chefFee
 
-        for(i in chefMenu.discount){
+        for(i in menu.discount){
             if(people>=i.people){
                 val d:Double = (i.percentOff.toDouble() / 100)
                 Log.d("bookviewmodel", "d=$d")
@@ -113,25 +110,25 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun book(chefMenu: ChefMenu,type:Int,address:Address,datePicker:Long,time:String, note:String,people:Int, selectedDish:List<Dish> ) {
+    fun book(menu: Menu, type:Int, address:Address, datePicker:Long, time:String, note:String, people:Int, selectedDish:List<Dish> ) {
 
         val orderId = db.collection("Order").document().id
         val userId = UserManger.user?.userId!!
         val userName = UserManger.user!!.profileInfo?.name!!
-        val chefName = chefMenu.chefName
+        val chefName = menu.chefName
         //這裡要改成絕對不會空
         val userPic = UserManger.user!!.profileInfo?.avatar?:"nullPic"
-        val chefPic = chefMenu.chefAvatar
-        val menuName = chefMenu.menuName
-        val chefId = chefMenu.chefId
+        val chefPic = menu.chefAvatar
+        val menuName = menu.menuName
+        val chefId = menu.chefId
         val orderTime = Calendar.getInstance().timeInMillis
         val date = datePicker
-        val menuId = chefMenu.id
+        val menuId = menu.id
         val status = 0
-        val originalPrice = chefMenu.perPrice * people
+        val originalPrice = menu.perPrice * people
         var total = originalPrice
 
-        for(i in chefMenu.discount){
+        for(i in menu.discount){
             if(people>=i.people){
                 val d:Double = (i.percentOff.toDouble() / 100)
                 Log.d("bookviewmodel", "d=$d")

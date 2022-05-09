@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavDirections;
 import com.paul.chef.MobileNavigationDirections;
-import com.paul.chef.data.ChefMenu;
+import com.paul.chef.data.Menu;
 import com.paul.chef.data.Dish;
 import com.paul.chef.data.Order;
 import com.paul.chef.data.ProfileInfo;

@@ -21,9 +21,8 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 style="?attr/collapsingToolbarLayoutLargeStyle"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+                android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
 
 
                 <HorizontalScrollView
@@ -35,9 +34,9 @@
                         android:id="@+id/menu_list_chip_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="88dp"
+                        android:layout_marginTop="68dp"
                         android:paddingStart="16dp"
-                        app:chipSpacing="40dp"
+                        app:chipSpacing="16dp"
                         app:chipSpacingHorizontal="16dp"
                         app:singleLine="true">
 
@@ -47,7 +46,7 @@
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:layout_width="wrap_content"
-                    android:layout_height="72dp"
+                    android:layout_height="48dp"
                     android:elevation="0dp"
                    />
 
@@ -56,7 +55,7 @@
                     android:layout_width="100dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="14dp"
                     app:srcCompat="@drawable/logo_chef" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -65,11 +64,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="132dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="14dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     app:boxStrokeWidth="0dp"
-
                     app:boxStrokeWidthFocused="0dp"
                     app:boxCornerRadiusBottomEnd="25dp"
                     app:boxCornerRadiusBottomStart="25dp"

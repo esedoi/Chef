@@ -76,7 +76,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
 
         //navigation safe args
-        val menu = arg.chefMenu
+        val menu = arg.menu
         val selectedDish = arg.selectedDish.toList()
         bookViewModel.getAddress(menu.chefId)
         bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner){

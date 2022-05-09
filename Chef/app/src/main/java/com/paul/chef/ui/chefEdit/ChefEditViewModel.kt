@@ -77,6 +77,7 @@ class ChefEditViewModel(application: Application) : AndroidViewModel(application
                         val json = Gson().toJson(value.data)
                         val data = Gson().fromJson(json, User::class.java)
                         UserManger.user = data
+                    _getUserDone.value = true
                 }
             }
     }

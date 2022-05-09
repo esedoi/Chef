@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.paul.chef.*
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentMenuListBinding
 
 class MenuListFragment : Fragment(), ItemMenu {
@@ -28,7 +28,7 @@ class MenuListFragment : Fragment(), ItemMenu {
 
     lateinit var menuListViewModel:MenuListViewModel
 
-    val menuList = mutableListOf<ChefMenu>()
+    val menuList = mutableListOf<Menu>()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -84,7 +84,7 @@ class MenuListFragment : Fragment(), ItemMenu {
                     }
                     Log.d("menulistfragment", "chipTxtList=$chipTxtList")
 
-                    val newMenuList = mutableListOf<ChefMenu>()
+                    val newMenuList = mutableListOf<Menu>()
 
                     if(menuList.isNotEmpty()){
                         for(menu in menuList){
@@ -115,7 +115,7 @@ class MenuListFragment : Fragment(), ItemMenu {
         _binding = null
     }
 
-    override fun goDetail(menu: ChefMenu) {
+    override fun goDetail(menu: Menu) {
         findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
     }
 

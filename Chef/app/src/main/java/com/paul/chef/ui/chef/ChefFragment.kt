@@ -52,7 +52,7 @@ class ChefFragment : Fragment() {
 
         binding.chefPageLogout.setOnClickListener {
             (activity as MainActivity).signOut()
-            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
 
         if(mode ==Mode.USER.index){

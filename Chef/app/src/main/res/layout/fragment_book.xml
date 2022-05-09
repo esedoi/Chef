@@ -66,7 +66,6 @@
             </com.google.android.material.chip.ChipGroup>
 
 
-
             <Button
                 android:id="@+id/pay"
                 android:layout_width="0dp"
@@ -78,8 +77,10 @@
                 android:text="送出訂單"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView21"

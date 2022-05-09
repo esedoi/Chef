@@ -7,12 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.data.Chat
-import com.paul.chef.data.Chef
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Room
 
 class OrderDetailViewModel(application: Application) : AndroidViewModel(application){

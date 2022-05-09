@@ -15,5 +15,7 @@
     <string name="new_taiwan_dollar">NT$%1$s</string>
     <string name="people">%1$d 位</string>
     <string name="transaction_number">%1$d 筆</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

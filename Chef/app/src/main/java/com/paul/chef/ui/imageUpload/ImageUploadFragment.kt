@@ -85,10 +85,14 @@ class ImageUploadFragment : DialogFragment() {
          progressDialog.setCancelable(false)
         progressDialog.show()
 
-        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm", Locale.getDefault())
-        val now = Date()
-        val userId = UserManger.user?.userId!!
-        val fileName = userId+"_"+formatter.format(now)
+//        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm", Locale.getDefault())
+//        val now = Date()
+//        val userId = UserManger.user?.userId!!
+//        val fileName = userId+"_"+formatter.format(now)
+
+        val rnds:Long = (0..999).random().toLong()
+        val time = Calendar.getInstance().timeInMillis
+        val fileName = (rnds+time).toString()
          val storageReference = FirebaseStorage.getInstance().getReference("images/$fileName")
         val uploadTask = storageReference.putFile(ImageUri )
             .addOnSuccessListener {

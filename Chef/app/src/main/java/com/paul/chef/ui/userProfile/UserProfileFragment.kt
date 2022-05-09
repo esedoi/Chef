@@ -66,6 +66,7 @@ class UserProfileFragment : Fragment() {
         userProfileViewModel.getChefDone.observe(viewLifecycleOwner){
             if(it){
                 (activity as MainActivity).turnMode(Mode.CHEF.index)
+                findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
             }
         }
 

@@ -5,12 +5,9 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.navArgs
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Review
-import com.paul.chef.data.Room
 
 class MenuDetailViewModel(application: Application) : AndroidViewModel(application){
 

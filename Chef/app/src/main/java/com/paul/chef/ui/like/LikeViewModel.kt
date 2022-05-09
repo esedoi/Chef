@@ -1,14 +1,8 @@
 package com.paul.chef.ui.like
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.UserManger
-import com.paul.chef.data.ChefMenu
-import com.paul.chef.data.User
 
 class LikeViewModel : ViewModel() {
 

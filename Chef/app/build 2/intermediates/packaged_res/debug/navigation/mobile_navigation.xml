@@ -38,7 +38,7 @@
         android:label="MenuDetailFragment">
         <argument
             android:name="chefMenu"
-            app:argType="com.paul.chef.data.ChefMenu" />
+            app:argType="com.paul.chef.data.Menu" />
     </fragment>
 
     <fragment
@@ -93,7 +93,7 @@
         android:label="BookFragment">
         <argument
             android:name="chefMenu"
-            app:argType="com.paul.chef.data.ChefMenu" />
+            app:argType="com.paul.chef.data.Menu" />
         <argument
             android:name="selectedDish"
             app:argType="com.paul.chef.data.Dish[]" />

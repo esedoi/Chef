@@ -161,7 +161,7 @@ class BookSetting : Fragment() {
         }
 
         orderSettingViewModel.bookSetting.observe(viewLifecycleOwner){
-            calendarTypeResult = it.type
+            calendarTypeResult = it.calendarDefault
             capacity = it.userSpace?.capacity!!
             sessionCapacity = it.chefSpace?.sessionCapacity!!
             sessionTime.clear()
@@ -169,10 +169,11 @@ class BookSetting : Fragment() {
             startTime = it.userSpace.starTime
             endTime = it.userSpace.endTime
             address = it.chefSpace.address
+            Log.d("booksettingfragment", "calendarTypeResult=$calendarTypeResult")
 
             if (it!=null){
                 binding.bookSetCalenderDefaultEditTxt.setText(
-                    if(it.type==CalendarType.AllDayClose.index){
+                    if(it.calendarDefault==CalendarType.AllDayClose.index){
                         "預設所有日期為不可訂"
                     }else{
                         "未來所有日期"
