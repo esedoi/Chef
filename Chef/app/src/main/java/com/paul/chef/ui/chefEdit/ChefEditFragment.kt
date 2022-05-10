@@ -40,14 +40,17 @@ class ChefEditFragment : Fragment() {
         _binding = FragmentChefEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
         val editType = arg.editType
         val profileInfo = arg.profile
         var avatar = profileInfo.avatar
 
         binding.profileEditEmail.text = profileInfo.email
         binding.profileEditNameLayout.editText?.setText(profileInfo.name)
+        if(editType==EditPageType.EDIT_PROFILE.index&&profileInfo.introduce!=null){
+                binding.profileEditIntro.editText?.setText(profileInfo.introduce)
+        }
+
+
 
         bindImage(binding.profileEditImg, avatar)
         val outlineProvider = ProfileOutlineProvider()
@@ -82,13 +85,6 @@ class ChefEditFragment : Fragment() {
             val intro = binding.profileEditIntro.editText?.text.toString()
 
 
-//            @Parcelize
-//            data class ProfileInfo(
-//                val name: String,
-//                val email:String,
-//                val avatar: String? =null,
-//                val introduce: String?=null
-//            ): Parcelable
 
             if (name == "" || intro == "") {
                 Toast.makeText(this.context, "欄位未填寫完成", Toast.LENGTH_SHORT).show()
@@ -100,11 +96,9 @@ class ChefEditFragment : Fragment() {
                         chefEditViewModel.createUser(newProfile)
                     }
                     EditPageType.EDIT_PROFILE.index->{
-                        val userId = UserManger.user.userId
-                        val chefId = UserManger.user.chefId
-                        if (chefId != null&&userId!=null) {
-                            chefEditViewModel.saveChef(newProfile,userId, chefId )
-                        }
+                        val userId = UserManger.user?.userId!!
+                        val chefId = UserManger.user?.chefId!!
+                        chefEditViewModel.saveChef(newProfile,userId, chefId )
                     }
                 }
             }

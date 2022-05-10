@@ -1,15 +1,17 @@
 package com.paul.chef.ui.transaction
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.GoOrderDetail
+import com.paul.chef.R
 import com.paul.chef.data.Order
-import com.paul.chef.databinding.ItemOrderChildBinding
 import com.paul.chef.databinding.ItemTransactionUnpaidBinding
+import java.time.LocalDate
+
+
 
 class TransactionUnpaidAdapter() : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
 
@@ -33,10 +35,15 @@ class TransactionUnpaidAdapter() : ListAdapter<Order, RecyclerView.ViewHolder>(O
 
 
         fun bind(item: Order) {
+
             binding.unpaidChefReceive.text = item.chefReceive.toString()
-            binding.unpaidDate.text = item.date.toString()
-            binding.unpaidName.text = item.userName.toString()
-            binding.unpaidPeople.text = item.people.toString()
+            val str = String.format("%,d", item.chefReceive)
+            binding.unpaidChefReceive.text = binding.root.context.getString(R.string.new_taiwan_dollar, str)
+
+            binding.unpaidDate.text = LocalDate.ofEpochDay( item.date).toString()
+            binding.unpaidName.text = item.userName
+            binding.unpaidPeople.text =  binding.root.context.getString(R.string.people, item.people)
+
 
         }
 

@@ -1,7 +1,9 @@
 package com.paul.chef
 
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.data.Address
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Order
+import com.paul.chef.data.Review
 
 
 interface AddDiscount{
@@ -10,7 +12,7 @@ interface AddDiscount{
        }
 
     interface ItemMenu{
-        fun goDetail(menu:ChefMenu)
+        fun goDetail(menu:Menu)
         fun like(menuId:String)
     }
 
@@ -24,6 +26,16 @@ interface AddDiscount{
 
     interface MenuEditImg{
         fun remove(position:Int)
+    }
+
+    interface AddressList{
+        fun select(item: Address)
+        fun delete(item:Address)
+    }
+
+    interface Block{
+        fun blockReview(userId: String)
+        fun blockMenu(menuId:String)
     }
 
 

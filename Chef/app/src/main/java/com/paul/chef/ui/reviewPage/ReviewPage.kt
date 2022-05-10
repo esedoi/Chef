@@ -12,17 +12,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.MainActivity
-import com.paul.chef.MainViewModel
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.Mode
+import com.paul.chef.*
 import com.paul.chef.databinding.FragmentHomeBinding
 import com.paul.chef.databinding.FragmentReviewPageBinding
 import com.paul.chef.ui.bottomSheetPicker.PickerBottomSheetArgs
 import com.paul.chef.ui.home.HomeViewModel
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 
-class ReviewPage: Fragment() {
+class ReviewPage: Fragment(), Block {
 
     private var _binding: FragmentReviewPageBinding? = null
     private val binding get() = _binding!!
@@ -43,7 +40,7 @@ class ReviewPage: Fragment() {
         _binding = FragmentReviewPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        reviewAdapter = ReviewAdapter()
+        reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.reviewPageRecycler.layoutManager = reviewLayoutManager
         binding.reviewPageRecycler.adapter = reviewAdapter
@@ -67,5 +64,13 @@ class ReviewPage: Fragment() {
         super.onDestroyView()
         _binding = null
 
+    }
+
+    override fun blockReview(userId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun blockMenu(menuId: String) {
+        TODO("Not yet implemented")
     }
 }

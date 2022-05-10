@@ -3,6 +3,6 @@
     <corners android:bottomLeftRadius="13dp"
         android:bottomRightRadius="13dp"
         android:topRightRadius="13dp"
-        android:topLeftRadius="0dp"/>
-    <solid android:color="@color/teal_200"/>
+        android:topLeftRadius="13dp"/>
+    <solid android:color="@color/md_theme_light_errorContainer"/>
 </shape>

@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/chefEditFragment"
         android:name="com.paul.chef.ui.chefEdit.ChefEditFragment"
-        android:label="ChefEditFragment" >
+        android:label="ChefEditFragment">
         <argument
             android:name="editType"
             app:argType="integer" />
@@ -37,21 +37,18 @@
         android:name="com.paul.chef.ui.menuDetail.MenuDetailFragment"
         android:label="MenuDetailFragment">
         <argument
-            android:name="chefMenu"
-            app:argType="com.paul.chef.data.ChefMenu" />
+            android:name="menu"
+            app:argType="com.paul.chef.data.Menu" />
     </fragment>
 
     <fragment
         android:id="@+id/menuEditFragment"
         android:name="com.paul.chef.ui.menuEdit.MenuEditFragment"
         android:label="MenuEditFragment">
-        <!--        <argument-->
-        <!--            android:name="type"-->
-        <!--            app:nullable="true"-->
-        <!--            app:argType="integer" />-->
+
         <argument
-            android:name="dish"
-            app:argType="com.paul.chef.data.Dish"
+            android:name="menu"
+            app:argType="com.paul.chef.data.Menu"
             app:nullable="true" />
     </fragment>
 
@@ -92,8 +89,8 @@
         android:name="com.paul.chef.ui.book.BookFragment"
         android:label="BookFragment">
         <argument
-            android:name="chefMenu"
-            app:argType="com.paul.chef.data.ChefMenu" />
+            android:name="menu"
+            app:argType="com.paul.chef.data.Menu" />
         <argument
             android:name="selectedDish"
             app:argType="com.paul.chef.data.Dish[]" />
@@ -234,7 +231,7 @@
     <fragment
         android:id="@+id/reviewPage"
         android:name="com.paul.chef.ui.reviewPage.ReviewPage"
-        android:label="ReviewPage" >
+        android:label="ReviewPage">
         <argument
             android:name="review"
             app:argType="com.paul.chef.data.Review[]" />
@@ -246,15 +243,55 @@
     <dialog
         android:id="@+id/imageUploadFragment"
         android:name="com.paul.chef.ui.imageUpload.ImageUploadFragment"
-        android:label="ImageUploadFragment" >
-    <argument
-        android:name="imageType"
-        app:argType="integer" />
+        android:label="ImageUploadFragment">
+        <argument
+            android:name="imageType"
+            app:argType="integer" />
 
-</dialog>
+    </dialog>
     <action
         android:id="@+id/action_global_imageUploadFragment"
         app:destination="@id/imageUploadFragment" />
+    <dialog
+        android:id="@+id/addAddressFragment"
+        android:name="com.paul.chef.ui.addAddress.AddAddressFragment"
+        android:label="fragment_add_address"
+        tools:layout="@layout/fragment_add_address" />
+
+
+    <action
+        android:id="@+id/action_global_addAddressFragment"
+        app:destination="@id/addAddressFragment" />
+    <dialog
+        android:id="@+id/addressListFragment"
+        android:name="com.paul.chef.ui.addressList.AddressListFragment"
+        android:label="AddressListFragment">
+        <argument
+            android:name="listType"
+            app:argType="integer" />
+
+    </dialog>
+    <action
+        android:id="@+id/action_global_addressListFragment"
+        app:destination="@id/addressListFragment" />
+    <dialog
+        android:id="@+id/addTagFragment"
+        android:name="com.paul.chef.ui.addTag.AddTagFragment"
+        android:label="fragment_add_tag"
+        tools:layout="@layout/fragment_add_tag" />
+    <action
+        android:id="@+id/action_global_addTagFragment"
+        app:destination="@id/addTagFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.paul.chef.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true"/>
 
 
 </navigation>

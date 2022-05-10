@@ -36,24 +36,16 @@
 
     <TextView
         android:id="@+id/user_profile_intro"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
         android:text="intro"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/user_profile_img"
         app:layout_constraintTop_toBottomOf="@+id/divider12" />
-
-    <TextView
-        android:id="@+id/user_profile_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="address"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toStartOf="@+id/user_profile_name_text"
-        app:layout_constraintTop_toBottomOf="@+id/divider13" />
 
     <Button
 
@@ -107,13 +99,13 @@
         android:id="@+id/user_profile_create_chef"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:text="成為廚師"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_address" />
+        app:layout_constraintTop_toBottomOf="@+id/divider13" />
 
     <Button
         android:id="@+id/user_profile_logout"

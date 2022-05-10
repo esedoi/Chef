@@ -22,12 +22,6 @@ class ChatRoomViewModel (application: Application) : AndroidViewModel(applicatio
 
 
 
-//    data class Msg(
-//        val message: String,
-//        val dataType: Int,  //0String, 1image,
-//        val senderId: String, //userId,chefId
-//        val time: Long, //用來排序
-//    )
 
     fun sendMsg(roomId:String, msg:String, nowId:String){
         val id = db.collection("Chat").document().id
@@ -48,20 +42,11 @@ class ChatRoomViewModel (application: Application) : AndroidViewModel(applicatio
             }
 
 
-
-//        val id: String,
-//        val lastMsg: String?=null,
-//        val lastDataType: Int?=null,  //0String, 1image,
-//        val attendance: List<String>, //userId,chefId
-////    val chat:List<Chat>? = null,
-//        val lastTime: Long?=null, //用來排序
-
-        //
         db.collection("Room").document(roomId)
             .update(mapOf(
                 "lastMsg" to msg,
                 "lastDataType" to MsgType.String.index,
-                "lastTime" to time
+                "time" to time
             ))
             .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
 

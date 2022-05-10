@@ -56,8 +56,8 @@ class ChatRoomFragment : Fragment() {
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
         nowId = when(mode){
-            Mode.USER.index->UserManger.user.userId!!
-            Mode.CHEF.index->UserManger.chef.id
+            Mode.USER.index->UserManger.user?.userId!!
+            Mode.CHEF.index->UserManger.chef?.id!!
             else->""
         }
 
@@ -94,13 +94,14 @@ class ChatRoomFragment : Fragment() {
             }
 
 
-        binding.textbtn.setOnClickListener {
+        binding.chatRoomSendBtn.setOnClickListener {
             if (nowId!=""){
-                val msg = binding.editText.text.toString()
-                chatRoomViewModel.sendMsg(roomId,msg,nowId)
-
-                binding.editText.setText("")
-                binding.chatRoomRecycler.scrollToPosition(chatList.size-1) //move focus on last message
+                val msg = binding.editText.editText?.text.toString()
+                if(msg!=""){
+                    chatRoomViewModel.sendMsg(roomId,msg,nowId)
+                    binding.editText.editText?.setText("")
+                    binding.chatRoomRecycler.scrollToPosition(chatList.size-1) //move focus on last message
+                }
             }
         }
 

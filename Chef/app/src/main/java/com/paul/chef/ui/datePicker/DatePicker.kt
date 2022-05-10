@@ -86,6 +86,13 @@ class DatePicker : BottomSheetDialogFragment() {
             binding.datePickerCalendarView.notifyCalendarChanged()
         }
 
+        binding.datePickerCancel.setOnClickListener {
+            dismiss()
+        }
+        binding.datePickerDismiss.setOnClickListener {
+            dismiss()
+        }
+
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // With ViewBinding
@@ -162,9 +169,7 @@ class DatePicker : BottomSheetDialogFragment() {
                         }
                     }
                 }
-
             }
-
         }
 
 
@@ -224,7 +229,7 @@ class DatePicker : BottomSheetDialogFragment() {
                         }
                         today == day.date -> {
                             container.textView.setTextColor(Color.BLACK)
-                            container.textView.setBackgroundResource(R.drawable.today_background)
+                            container.textView.setBackgroundResource(R.drawable.today_bg)
                         }
                         else -> {
                             container.textView.setTextColor(Color.BLACK)

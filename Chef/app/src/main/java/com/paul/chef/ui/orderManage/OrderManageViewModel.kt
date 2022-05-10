@@ -6,15 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.*
-import com.paul.chef.data.BookSetting
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
-import java.time.LocalDate
 
 class OrderManageViewModel(application: Application) : AndroidViewModel(application){
     @SuppressLint("StaticFieldLeak")
@@ -50,12 +45,12 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
 
         when(mode){
             Mode.USER.index->{
-                val userId = UserManger.user.userId!!
+                val userId = UserManger.user?.userId!!
                 field = "userId"
                 value = userId
             }
             Mode.CHEF.index->{
-                val chefId = UserManger.chef.id
+                val chefId = UserManger.chef?.id!!
                 field = "chefId"
                 value = chefId
             }
@@ -75,10 +70,11 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                 completedList.clear()
                 cancelledList.clear()
                 for (doc in value!!.documents) {
+                    Log.d("ordermangeviewmodel", "doc=$doc")
                     val item = doc.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Order::class.java)
-                    Log.d("calendarviewmodel", "接收到order資料${data}")
+                    Log.d("ordermangeviewmodel", "接收到order資料${data}")
 
                     when(data.status){
                         OrderStatus.PENDING.index->{

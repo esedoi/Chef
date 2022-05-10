@@ -68,6 +68,8 @@ class OrderDetailFragment : Fragment() {
                     orderDetailName.text = order.userName
                     orderDetailPaymentText.text = "你的收款"
                     orderDetailTotal.text = "NT$ " + order.chefReceive.toString()
+//                    orderDetailTotal.text = getString(R.string.new_taiwan_dollar, order.chefReceive.toString())
+
                     if (order.status == OrderStatus.PENDING.index) {
                         orderDetailAcceptBtn.visibility = View.VISIBLE
                     } else {
@@ -76,15 +78,14 @@ class OrderDetailFragment : Fragment() {
 
                     orderDetailAcceptBtn.setOnClickListener {
                         viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
+                        findNavController().navigateUp()
 
                     }
                     orderDetailCancelBtn.text = when (order.status) {
                         OrderStatus.PENDING.index -> "拒絕此訂單"
                         else -> "取消訂單"
                     }
-//                    orderDetailCancelBtn.setOnClickListener {
-//                        viewModel.changeStatus(order.id, OrderStatus.CANCELLED.index)
-//                    }
+
                 }
                 Mode.USER.index -> {
                     bindImage(imageView3, order.chefAvatar)
@@ -126,6 +127,7 @@ class OrderDetailFragment : Fragment() {
                 OrderStatus.SCORED.index->OrderStatus.SCORED.value
                 else -> "something went wrong"
             }
+            orderDetailAddress.text = order.address.addressTxt
             orderDetailDate.text = LocalDate.ofEpochDay(order.date).toString()
             orderDetailTime.text = order.time
             orderDetailMenuName.text = order.menuName

@@ -71,31 +71,31 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
             when(pickerType){
 
                 PickerType.PICK_SESSION_CAPACITY.index ->{
-
                     binding.numberPicker.minValue = 1
                     binding.numberPicker.maxValue = it.chefSpace?.sessionCapacity ?: 0
+                    binding.pickerTitle.text = "人數"
                 }
                 PickerType.PICK_CAPACITY.index ->{
                     binding.numberPicker.minValue = 1
                     binding.numberPicker.maxValue = it.userSpace?.capacity ?: 0
+                    binding.pickerTitle.text = "人數"
                 }
 
                 PickerType.PICK_SESSION_TIME.index->{
                     pickSessionList = it.chefSpace?.session!!
                     binding.numberPicker.minValue = 0
                     binding.numberPicker.maxValue = pickSessionList.size-1
-
+                    binding.pickerTitle.text = "時間"
                     val arrayList = pickSessionList.toTypedArray()
                     binding.numberPicker.displayedValues = arrayList
                 }
                 PickerType.PICK_TIME.index->{
                     val startTimeIndex = timeList.indexOf(it.userSpace?.starTime)
                     val endTimeIndex = timeList.indexOf(it.userSpace?.endTime)
-
+                    binding.pickerTitle.text = "時間"
                     pickTimeList = timeList.filterIndexed { index, s ->
                         index in startTimeIndex..endTimeIndex
                     }
-
                     binding.numberPicker.minValue = 0
                     binding.numberPicker.maxValue = pickTimeList.size-1
                     val arrayList = pickTimeList.toTypedArray()
@@ -125,13 +125,21 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                 binding.numberPicker.maxValue = timeList.size-1
                 val arrayList = timeList.toTypedArray()
                 binding.numberPicker.displayedValues = arrayList
+                 binding.pickerTitle.text = "時間"
             }
 
             PickerType.SET_CAPACITY.index, PickerType.SET_SESSION_CAPACITY.index ->{
                 binding.numberPicker.minValue = 1
                 binding.numberPicker.maxValue = 30
+                binding.pickerTitle.text = "人數"
             }
 
+        }
+        binding.pickerCancel.setOnClickListener {
+            dismiss()
+        }
+        binding.pickerDismiss.setOnClickListener {
+            dismiss()
         }
 
         binding.pickerCheck.setOnClickListener {

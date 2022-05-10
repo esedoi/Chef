@@ -1,13 +1,11 @@
 package com.paul.chef
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -44,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("mainactivity", "oncreate")
 
 
 
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                 when (val mode = UserManger.readData("mode", this)) {
                     Mode.CHEF.index -> {
-                        if (UserManger.user.chefId != null) {
+                        if (UserManger.user?.chefId != null) {
                             turnMode(mode)
                             navController.navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
                         } else {
@@ -118,7 +117,9 @@ class MainActivity : AppCompatActivity() {
                     navView.visibility = View.VISIBLE
                     binding.toolbar6.visibility = View.GONE
                 }
-                R.id.menuDetailFragment->{
+                R.id.menuDetailFragment,
+                R.id.navigation_home,
+                R.id.loginFragment->{
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.GONE
                 }
@@ -131,8 +132,6 @@ class MainActivity : AppCompatActivity() {
         binding.mainActivityBackBtn.setOnClickListener {
             navController.navigateUp()
         }
-
-
 
 
 
@@ -152,12 +151,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun updateUI(user: FirebaseUser?) {
 
         if (user != null) {
-
             Log.d("mainactivity", "useravatar=${user.photoUrl}")
             val email = user.email
             val name = user.displayName
@@ -167,7 +163,8 @@ class MainActivity : AppCompatActivity() {
                 newUserProfile = ProfileInfo(name, email, avatar)
                 mainViewModel.getUser(email)
             }
-
+        }else{
+            findNavController(R.id.nav_host_fragment_activity_main).navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
     }
 
@@ -240,6 +237,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+
+
+
+    fun block(userId:String,blockMenuList:List<String>?,blockReviewList: List<String>? ){
+
+        if(blockMenuList!=null){
+            mainViewModel.block(userId, blockMenuList, null)
+        }
+
+        if(blockReviewList!=null){
+            mainViewModel.block(userId, null, blockReviewList)
+        }
+    }
+
+
 
 
     companion object {

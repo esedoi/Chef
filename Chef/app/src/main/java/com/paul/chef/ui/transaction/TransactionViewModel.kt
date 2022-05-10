@@ -36,7 +36,7 @@ class TransactionViewModel:ViewModel(){
         get() = _transactionList
 
 
-    val chefId = UserManger.chef.id
+    val chefId = UserManger.chef?.id!!
 
 
 

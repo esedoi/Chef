@@ -1,6 +1,9 @@
 package com.paul.chef.ui.menuDetail
 
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
@@ -13,21 +16,20 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.rpc.context.AttributeContext
-import com.paul.chef.ImgRecyclerType
-import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.ProfileOutlineProvider
-import com.paul.chef.R
+import com.paul.chef.*
 import com.paul.chef.data.Dish
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
 
-class MenuDetailFragment : Fragment() {
+class MenuDetailFragment : Fragment(), Block {
 
     private var _binding: FragmentMenuDetailBinding? = null
     private val binding get() = _binding!!
@@ -43,9 +45,22 @@ class MenuDetailFragment : Fragment() {
 
     private var reviewList = emptyList<Review>()
 
+    lateinit var menuDetailViewModel: MenuDetailViewModel
+    lateinit var menu: Menu
+
+    var openBoolean: Boolean = false
+
     //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d("menudetailfragment", "onattach")
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,12 +71,12 @@ class MenuDetailFragment : Fragment() {
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val menuDetailViewModel =
+        menuDetailViewModel =
             ViewModelProvider(this)[MenuDetailViewModel::class.java]
 
 
         //navigation safe args
-        val menu = arg.chefMenu
+        menu = arg.menu
         val dishList = menu.dishes
         var defaultType = -1
         val or = "or"
@@ -71,28 +86,28 @@ class MenuDetailFragment : Fragment() {
 
         menuDetailViewModel.getReview(menu.id)
         val outlineProvider = ProfileOutlineProvider()
-        binding.imageView5.outlineProvider =outlineProvider
-        bindImage( binding.imageView5,menu.chefAvatar)
+        binding.imageView5.outlineProvider = outlineProvider
+        bindImage(binding.imageView5, menu.chefAvatar)
 
-        binding.detailChefName.text = menu.chefName + "建立的菜單"
-        if(menu.reviewRating!=null){
+        binding.detailChefName.text = menu.chefName + " 建立的菜單"
+        if (menu.reviewRating != null) {
             binding.menuDetailRatingNum.visibility = View.VISIBLE
             binding.ratingBar4.visibility = View.VISIBLE
-            binding.menuDetailRatingNum.text = menu.reviewNumber.toString()+" 則評價"
-            binding.ratingBar4.rating = menu.reviewRating
-            val str :String = String.format("%.1f",menu.reviewRating)
+            binding.menuDetailRatingNum.text = menu.reviewNumber.toString() + " 則評價"
+            binding.ratingBar4.rating = menu.reviewRating!!
+            val str: String = String.format("%.1f", menu.reviewRating)
             binding.menuDetailRatingTxt.text = str
             binding.menuDetailReviewTitle.visibility = View.VISIBLE
             binding.menuDetailMoreReviewBtn.visibility = View.VISIBLE
             binding.menuDetailRatingTxt.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.menuDetailRatingTxt.visibility = View.GONE
             binding.menuDetailRatingNum.visibility = View.GONE
             binding.ratingBar4.visibility = View.GONE
             binding.menuDetailReviewTitle.visibility = View.GONE
             binding.menuDetailMoreReviewBtn.visibility = View.GONE
         }
-        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString()+"  則評價"
+        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString() + "  則評價"
 
 
         //imagesRecyclerView
@@ -103,16 +118,40 @@ class MenuDetailFragment : Fragment() {
         imageAdapter.submitList(menu.images)
 
 
-        reviewAdapter = ReviewAdapter()
+        reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.menuDetailReviewRecycler.layoutManager = reviewLayoutManager
         binding.menuDetailReviewRecycler.adapter = reviewAdapter
-        menuDetailViewModel.reviewList.observe(viewLifecycleOwner){
-            reviewList = it
-            val filterList = it.filterIndexed { index, review ->
-                index<2
+
+        menuDetailViewModel.reviewList.observe(viewLifecycleOwner) { review ->
+
+
+            reviewList = if (UserManger.user?.blockReviewList != null) {
+                review.filter {
+                    !UserManger.user?.blockReviewList!!.contains(it.userId)
+                }
+            } else {
+                review
+            }
+            val filterList = reviewList.filterIndexed { index, review ->
+                index < 2
             }
             reviewAdapter.submitList(filterList)
+            reviewAdapter.notifyDataSetChanged()
+        }
+
+        binding.menuDetailBlockMenuBtn.setOnClickListener {
+
+            val alertDialog=AlertDialog.Builder(this.context)
+            alertDialog.setTitle("封鎖此菜單？")
+                .setMessage("${menu.menuName}")
+                .setPositiveButton("確認"){_,_->
+                    blockMenu(menu.id)
+                }
+                .setNegativeButton("取消"){dialog,_->
+                  dialog.dismiss()
+                }
+                .show()
         }
 
 
@@ -181,56 +220,80 @@ class MenuDetailFragment : Fragment() {
         }
 
 
+        binding.menuDetailPerPrice.text = "NT$" + menu.perPrice.toString()
 
         binding.detailName.text = menu.menuName
         binding.detailMenuIntro.text = menu.intro
         binding.menuDetailMoreReviewBtn.setOnClickListener {
 
-            findNavController().navigate(MobileNavigationDirections.actionGlobalReviewPage(reviewList.toTypedArray()))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalReviewPage(
+                    reviewList.toTypedArray()
+                )
+            )
         }
+
+        menuDetailViewModel.checkOpen(menu.chefId)
+        menuDetailViewModel.openBoolean.observe(viewLifecycleOwner){
+            if(!it){
+                binding.choice.isEnabled = false
+                binding.choice.text = "不開放"
+            }else{
+                binding.choice.isEnabled = true
+                binding.choice.text = "預訂"
+            }
+        }
+
 
         binding.choice.setOnClickListener {
 
-            var isRadioSelected = true
-            var typeInt = -1
+            if (menu.chefId != UserManger.user?.chefId ?: "") {
+                var isRadioSelected = true
+                var typeInt = -1
 
-
-            for (i in dishList) {
-                if (i.option == 0) {
-                    selectedDish.add(i)
-                    typeInt = i.typeNumber
-                } else {
-                    if (typeInt != i.typeNumber) {
-                        val selectedId = displayList[i.typeNumber].displayRG.checkedRadioButtonId
-                        if (selectedId != -1) {
-                            val radioButton = root.findViewById<RadioButton>(selectedId)
-                            val radioDish: Dish = radioButton.tag as Dish
-                            selectedDish.add(radioDish)
-                            typeInt = i.typeNumber
-                        } else {
-                            isRadioSelected = false
-
+                for (i in dishList) {
+                    if (i.option == 0) {
+                        selectedDish.add(i)
+                        typeInt = i.typeNumber
+                    } else {
+                        if (typeInt != i.typeNumber) {
+                            val selectedId =
+                                displayList[i.typeNumber].displayRG.checkedRadioButtonId
+                            if (selectedId != -1) {
+                                val radioButton = root.findViewById<RadioButton>(selectedId)
+                                val radioDish: Dish = radioButton.tag as Dish
+                                selectedDish.add(radioDish)
+                                typeInt = i.typeNumber
+                            } else {
+                                isRadioSelected = false
+                            }
                         }
                     }
                 }
-            }
 
-            if (isRadioSelected) {
+                if (isRadioSelected) {
 
-                Log.d("menudetailfragment", "selectedDish=${selectedDish}")
-                val list = selectedDish.toTypedArray()
-                findNavController().navigate(
-                    MobileNavigationDirections.actionGlobalBookFragment(
-                        menu,
-                        list
+                    Log.d("menudetailfragment", "selectedDish=${selectedDish}")
+                    val list = selectedDish.toTypedArray()
+                    findNavController().navigate(
+                        MobileNavigationDirections.actionGlobalBookFragment(
+                            menu,
+                            list
+                        )
                     )
-                )
+                } else {
+                    Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
+                    selectedDish.clear()
+                }
             } else {
-                Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
-                selectedDish.clear()
+                Toast.makeText(this.context, "無法預訂自己的菜單", Toast.LENGTH_SHORT).show()
             }
 
         }
+
+
+
+
 
         return root
     }
@@ -239,4 +302,32 @@ class MenuDetailFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+    override fun blockReview(blockUserId: String) {
+
+        val blockReviewList = mutableListOf<String>()
+        if (UserManger.user?.blockReviewList != null) {
+            blockReviewList.addAll(UserManger.user?.blockMenuList!!)
+        }
+        blockReviewList.add(blockUserId)
+        (activity as MainActivity).block(UserManger.user?.userId!!, null, blockReviewList)
+        UserManger.user?.blockReviewList = blockReviewList
+        menuDetailViewModel.getReview(menu.id)
+
+    }
+
+    override fun blockMenu(blockMenuId: String) {
+
+        val blockMenuList = mutableListOf<String>()
+        if (UserManger.user?.blockMenuList != null) {
+            blockMenuList.addAll(UserManger.user?.blockMenuList!!)
+        }
+        blockMenuList.add(blockMenuId)
+        (activity as MainActivity).block(UserManger.user?.userId!!, blockMenuList, null)
+        UserManger.user?.blockMenuList = blockMenuList
+        findNavController().navigateUp()
+
+    }
+
 }

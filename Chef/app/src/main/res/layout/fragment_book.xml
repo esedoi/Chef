@@ -65,30 +65,6 @@
 
             </com.google.android.material.chip.ChipGroup>
 
-<!--            <RadioGroup-->
-<!--                android:id="@+id/orderTypeGroup"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginTop="80dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
-
-<!--                <RadioButton-->
-<!--                    android:id="@+id/userSpace"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="邀請至我的場地擁餐" />-->
-
-<!--                <RadioButton-->
-<!--                    android:id="@+id/chefSpace"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="前往 Chef 的廚房用餐" />-->
-
-<!--            </RadioGroup>-->
 
             <Button
                 android:id="@+id/pay"
@@ -101,8 +77,10 @@
                 android:text="送出訂單"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView21"
@@ -145,7 +123,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/book_address" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -288,25 +266,16 @@
 <!--                tools:layout_editor_absoluteY="386dp" />-->
 
             <TextView
-                android:id="@+id/dateTextview"
-                android:layout_width="wrap_content"
+                android:id="@+id/book_address"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/addressTextView"
-                app:layout_constraintEnd_toStartOf="@+id/editAddress"
+                android:layout_marginTop="16dp"
+                android:text="--"
+                app:layout_constraintEnd_toStartOf="@+id/book_edit_address"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/addressTextView"
-                app:layout_constraintTop_toTopOf="@+id/addressTextView" />
-
-            <TextView
-                android:id="@+id/editAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="編輯"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/dateTextview" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
             <View
                 android:id="@+id/divider14"
@@ -336,7 +305,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="單價"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
@@ -346,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="菜單"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -356,7 +325,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="平台服務費"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="@+id/textView12"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -453,7 +422,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="總價"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
@@ -490,18 +459,24 @@
                 app:cardCornerRadius="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/book_chip_group" />
+                app:layout_constraintTop_toBottomOf="@+id/book_chip_group">
 
-            <!--            <EditText-->
-<!--                android:id="@+id/noteInput"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:ems="10"-->
-<!--                android:gravity="start|top"-->
-<!--                android:hint="note"-->
-<!--                android:inputType="textMultiLine"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/textView15"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/book_people_select_layout" />-->
+                <fragment
+                    android:id="@+id/book_map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="371dp"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/book_edit_address"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="編輯"
+                app:layout_constraintBottom_toBottomOf="@+id/book_address"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/book_address" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

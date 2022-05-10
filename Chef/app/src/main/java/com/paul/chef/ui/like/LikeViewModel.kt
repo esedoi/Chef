@@ -1,20 +1,14 @@
 package com.paul.chef.ui.like
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.UserManger
-import com.paul.chef.data.ChefMenu
-import com.paul.chef.data.User
 
 class LikeViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
-    val userId = UserManger.user.userId!!
+    val userId = UserManger.user?.userId!!
 
 //    private var _likeList = MutableLiveData<List<String>>()
 //    val likeList: LiveData<List<String>>

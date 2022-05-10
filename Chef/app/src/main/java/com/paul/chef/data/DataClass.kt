@@ -2,6 +2,8 @@ package com.paul.chef.data
 
 import android.net.Uri
 import android.os.Parcelable
+import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import java.time.LocalDate
@@ -11,16 +13,16 @@ data class Chef(
     val id:	String,
     val profileInfo:ProfileInfo,
     val bankInfo:BankInfo?=null,
-    val address:List<String>?=null,
+    val address:List<Address>?=null,
     val bookSetting: BookSetting? = null,
     val reviewRating: Float?=null,
     val reviewNumber:Int? = null
 )
 
-//come with menu
+
 @Parcelize
 data class BookSetting(
-    val type:Int = -1, //chef place,userplace,都接受, 都不接受
+    val type:Int = -1,
     val calendarDefault:Int, //all open, all close
     val chefSpace: @RawValue ChefSpace? = null,
     val userSpace: @RawValue UserSpace? = null,
@@ -33,10 +35,10 @@ data class MenuStatus(
 )
 
 
-
 data class ChefSpace(
     val sessionCapacity:Int,
     val session:List<String>,
+    val address:Address
 )
 
 data class UserSpace(
@@ -79,7 +81,7 @@ data class Order(
     val chefAvatar:String,
     val menuName:String,
     val type:Int, //userspace, chef space
-    val address: String,
+    val address: Address,
     val orderTime:Long,
     val date:Long,
     val time:String,
@@ -95,9 +97,15 @@ data class Order(
 ): Parcelable
 
 
+@Parcelize
+data class Address(
+    val addressTxt:String,
+    val latitude:Double,
+    val longitude:Double
+): Parcelable
 
 @Parcelize
-data class ChefMenu( ///menu
+data class Menu(
     val id:String,
     val chefId:String,
     val menuName:String,
@@ -109,7 +117,9 @@ data class ChefMenu( ///menu
     val discount:@RawValue List<Discount>,
     val dishes:@RawValue List<Dish>,
     val reviewRating: Float? = null,
-    val reviewNumber:Int?=null
+    val reviewNumber:Int?=null,
+    val tagList:List<String>?=null,
+    val open:Boolean
 ): Parcelable
 
 @Parcelize
@@ -127,22 +137,7 @@ data class Dish(
     val typeNumber:Int = -1
 ): Parcelable
 
-@Parcelize
-data class DisplayDish(
-    val type:String, //甜點、開胃菜
-    val option:Int, //固定菜色, 可替換, 加價替換
-    val name:String? = "",
-    val extraPrice:Int? = -1,
-    val displayType:Int
-): Parcelable
 
-@Parcelize
-data class ExtraDish(
-    val type:String, //甜點、開胃菜
-    val number:Int,
-    val extraPrice:Int,
-    val name:String
-): Parcelable
 
 @Parcelize
 data class Review(
@@ -160,7 +155,10 @@ data class User(
     val profileInfo:ProfileInfo?=null,
     val chefId:String?=null,
     val likeList:List<String>?=null,
-    val address:List<String>?=null
+    val address:@RawValue List<Address>?=null,
+    var blockMenuList:List<String>?=null,
+    var blockReviewList: List<String>?=null
+
 ): Parcelable
 
 @Parcelize

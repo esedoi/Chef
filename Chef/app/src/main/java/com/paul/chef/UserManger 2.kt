@@ -22,8 +22,10 @@ class UserManger  {
 //        @SuppressLint("StaticFieldLeak")
 
 
-        lateinit var user: User
-        lateinit var chef: Chef
+        var user: User?=null
+         var chef: Chef?=null
+        var lastSelectedPosition = -1
+
 
         //宣告繼承 SharedPreferences 的變數
         private lateinit var settings: SharedPreferences

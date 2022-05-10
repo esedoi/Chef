@@ -11,10 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.*
-import com.paul.chef.data.ChefMenu
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
-import com.paul.chef.ui.menu.MenuListAdapter
 
 class OrderChildFragment: Fragment(), GoOrderDetail{
 

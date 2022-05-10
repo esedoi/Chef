@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.navArgs
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.data.ChefMenu
+import com.paul.chef.BookSettingType
+import com.paul.chef.data.Chef
 import com.paul.chef.data.Review
-import com.paul.chef.data.Room
 
 class MenuDetailViewModel(application: Application) : AndroidViewModel(application){
 
@@ -22,6 +21,36 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
     private var _reviewList = MutableLiveData<List<Review>>()
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
+
+    private var _openBoolean = MutableLiveData<Boolean>()
+    val openBoolean: LiveData<Boolean>
+        get() = _openBoolean
+
+
+
+
+    fun checkOpen(chefId:String){
+        db.collection("Chef")
+            .document(chefId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d("pickerViewModel", "DocumentSnapshot data: ${document.data}")
+                    val item = document.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Chef::class.java)
+                    _openBoolean.value = data.bookSetting!=null&&data.bookSetting.type!= BookSettingType.RefuseAll.index
+
+                } else {
+                    Log.d("pickerViewModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
+    }
+
+
 
     fun getReview(menuId:String){
 
@@ -45,7 +74,6 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
             .addOnFailureListener { exception ->
                 Log.d("orderdetailviewmodel", "get failed with ", exception)
             }
-
 
     }
 

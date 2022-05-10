@@ -2,24 +2,19 @@ package com.paul.chef.ui.review
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.R
+import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.databinding.BottomSheetReviewBinding
-import com.paul.chef.ui.orderDetail.OrderDetailFragmentArgs
-import com.paul.chef.ui.orderDetail.OrderDetailViewModel
+import com.paul.chef.ui.menuDetail.bindImage
 
 
-class ReviewFragment : BottomSheetDialogFragment() {
+class ReviewFragment : DialogFragment() {
 
     private var _binding: BottomSheetReviewBinding? = null
     private val binding get() = _binding!!
@@ -27,6 +22,11 @@ class ReviewFragment : BottomSheetDialogFragment() {
     private val arg: ReviewFragmentArgs by navArgs()
 
     private lateinit var reviewViewModel: ReviewViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,16 +41,19 @@ class ReviewFragment : BottomSheetDialogFragment() {
         val rating = arg.rating
 
         binding.apply {
-            reviewMenuName.text = order.chefName
-            reviewRatingbar.rating = rating.toFloat()
             reviewMenuName.text = order.menuName
-            reviewOrderDate.text = order.date.toString()
+            reviewRatingbar.rating = rating.toFloat()
+            reviewMenuChef.text = "由 " + order.chefName + " 提供"
+            reviewDate.text = order.date.toString()
+            val outlineProvider = ProfileOutlineProvider()
+            reviewChefAvatar.outlineProvider = outlineProvider
+            bindImage(reviewChefAvatar, order.chefAvatar)
             reviewConfirmBtn.setOnClickListener {
-                val reviewTxt = reviewEdittext.text.toString()
+                val reviewTxt = reviewDescription.editText?.text.toString()
                 val newRating = reviewRatingbar.rating
 
-           reviewViewModel.rating(reviewTxt, newRating, order)
-                reviewEdittext.setText("")
+                reviewViewModel.rating(reviewTxt, newRating, order)
+                reviewDescription.editText?.setText("")
                 findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
             }
             reviewClose.setOnClickListener {
@@ -58,14 +61,13 @@ class ReviewFragment : BottomSheetDialogFragment() {
             }
         }
 
-        return  root
+        return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
 
 }

@@ -30,31 +30,17 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
 
-        homeViewModel.userData.observe(viewLifecycleOwner){
-            mainViewModel.user = it
-            (activity as MainActivity).turnMode(Mode.USER.index)
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
-        }
+//        homeViewModel.userData.observe(viewLifecycleOwner){
+//            mainViewModel.user = it
+//            (activity as MainActivity).turnMode(Mode.USER.index)
+//            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
+//        }
 
-        binding.signInButton.setOnClickListener {
-            (activity as MainActivity).signIn()
-        }
-
-        binding.signOut.setOnClickListener {
-            (activity as MainActivity).signOut()
-        }
-
-
-            binding.login.setOnClickListener{
-                homeViewModel.login()
-                (activity as MainActivity).turnMode(Mode.USER.index)
-            }
 
 
 
         return root
     }
-
 
 
     override fun onDestroyView() {

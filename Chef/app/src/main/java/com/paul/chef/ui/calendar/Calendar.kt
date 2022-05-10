@@ -148,6 +148,7 @@ class Calendar : Fragment() {
                         container.textView.paint.flags =
                             Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
                         Log.d("calendar", "畫線")
+
                     } else {
                         container.textView.paint.flags = 0
                         container.textView.paint.isAntiAlias = true
@@ -155,7 +156,6 @@ class Calendar : Fragment() {
 
                 for (i in dateList) {
                     val localDate: LocalDate = LocalDate.ofEpochDay(i.date)
-
                     if (localDate == day.date) {
                         if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
                             container.textView.paint.flags =
@@ -175,7 +175,7 @@ class Calendar : Fragment() {
                 if (day.owner == DayOwner.THIS_MONTH) {
                     container.textView.visibility = View.VISIBLE
                     when {
-//
+
                         day.date.isBefore(today) -> {
                             container.textView.setTextColor(resources.getColor(R.color.example_4_grey_past))
                             container.textView.paint.flags =
@@ -189,7 +189,7 @@ class Calendar : Fragment() {
                         }
                         today == day.date -> {
                             container.textView.setTextColor(Color.BLACK)
-                            container.textView.setBackgroundResource(R.drawable.today_background)
+                            container.textView.setBackgroundResource(R.drawable.today_bg)
                         }
                         orderList.contains(day.date) -> {
                             Log.d("calendar", "dateList=$orderList")
@@ -205,7 +205,6 @@ class Calendar : Fragment() {
                 } else {
                     container.textView.visibility = View.INVISIBLE
                 }
-                ////////
 
             }
         }

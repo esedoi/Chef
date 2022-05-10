@@ -9,5 +9,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="DefaultNumberPickerTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+
 </resources>
 

@@ -1,18 +1,20 @@
 package com.paul.chef.ui.transaction
 
-import android.util.Log
+
+import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.paul.chef.GoOrderDetail
-import com.paul.chef.data.Order
+import com.paul.chef.R
 import com.paul.chef.data.Transaction
-import com.paul.chef.databinding.ItemOrderChildBinding
 import com.paul.chef.databinding.ItemTransactionChildBinding
+import java.time.LocalDate
+import java.util.*
 
-class TransactionChildAdapter() : ListAdapter<Transaction, RecyclerView.ViewHolder>(TransactionCallback()) {
+class TransactionChildAdapter() :
+    ListAdapter<Transaction, RecyclerView.ViewHolder>(TransactionCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,15 +36,23 @@ class TransactionChildAdapter() : ListAdapter<Transaction, RecyclerView.ViewHold
 
 
         fun bind(item: Transaction) {
-            binding.transacOrder.text = item.orderList.size.toString()
-            binding.transacDate.text = item.time.toString()
-            binding.transacChefReceive.text = item.chefReceive.toString()
+            binding.transacOrder.text =
+                binding.root.context.getString(R.string.transaction_number, item.orderList.size)
+            val sdf = SimpleDateFormat("yyyy MM-dd")
+            binding.transacDate.text = sdf.format(Date(item.time))
+            val str = String.format("%,d", item.chefReceive)
+            binding.transacChefReceive.text =
+                binding.root.context.getString(R.string.new_taiwan_dollar, str)
         }
 
         companion object {
             fun from(parent: ViewGroup): OrderHolder {
                 val order =
-                    ItemTransactionChildBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemTransactionChildBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return OrderHolder(order)
             }
         }

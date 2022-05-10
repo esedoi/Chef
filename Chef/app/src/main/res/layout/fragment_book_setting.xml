@@ -64,11 +64,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/book_set_calender_default"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="客人可以提前多久預訂？"
@@ -77,6 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView31">
 
                 <AutoCompleteTextView
+                    android:id="@+id/book_set_calender_default_edit_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -127,7 +127,7 @@
                         android:text="客人可以預訂的場次"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_chef_space_title" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
@@ -162,15 +162,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_add_session"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginEnd="24dp"-->
-<!--                        android:text="增添場次"-->
-<!--                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_pick_session"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="@+id/book_setting_pick_session" />-->
 
                     <TextView
                         android:id="@+id/textView19"
@@ -183,14 +174,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/book_set_chef_space_time_layout" />
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_pick_session"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="136dp"-->
-<!--                        android:text="選擇場次"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView20"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/book_set_chef_space_capacity_layout"
@@ -200,9 +183,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
                         android:hint="選擇人數"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView19">
@@ -216,19 +197,11 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_session_capacity"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="32dp"-->
-<!--                        android:layout_marginBottom="8dp"-->
-<!--                        android:text="選擇人數"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView19"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/textView19" />-->
+
+
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/book_setting_chef_space_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -238,19 +211,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/book_set_check_chef"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/round"
-                        android:backgroundTint="@color/md_theme_light_primary"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_check_24"
-                        app:tint="@color/close_background" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/book_set_check_chef"-->
+<!--                        android:layout_width="32dp"-->
+<!--                        android:layout_height="32dp"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:layout_marginEnd="16dp"-->
+<!--                        android:background="@drawable/round"-->
+<!--                        android:backgroundTint="@color/md_theme_light_primary"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:srcCompat="@drawable/ic_baseline_check_24"-->
+<!--                        app:tint="@color/close_background" />-->
 
                     <TextView
                         android:id="@+id/chef_space_helper"
@@ -258,11 +231,47 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="點一下來開啟"
+                        android:text="關閉中，點一下來開啟"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/example_4_grey_past"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView35"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="廚房地址"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/book_set_chef_space_capacity_layout" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/book_set_chef_space_address_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:hint="選擇地址"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView35">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/book_set_chef_space_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -289,19 +298,19 @@
                     android:layout_height="match_parent"
                     android:visibility="visible">
 
-                    <ImageView
-                        android:id="@+id/book_set_check_user"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/round"
-                        android:backgroundTint="@color/md_theme_light_primary"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_check_24"
-                        app:tint="@color/close_background" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/book_set_check_user"-->
+<!--                        android:layout_width="32dp"-->
+<!--                        android:layout_height="32dp"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:layout_marginEnd="16dp"-->
+<!--                        android:background="@drawable/round"-->
+<!--                        android:backgroundTint="@color/md_theme_light_primary"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:srcCompat="@drawable/ic_baseline_check_24"-->
+<!--                        app:tint="@color/close_background" />-->
 
                     <TextView
                         android:id="@+id/textView27"
@@ -312,7 +321,7 @@
                         android:text="提供的時段"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_user_space_title" />
 
                     <TextView
                         android:id="@+id/textView28"
@@ -349,23 +358,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!--                    <Button-->
-                    <!--                        android:id="@+id/book_setting_start_pick"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:text="選擇時間"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView27" />-->
-
-                    <!--                    <Button-->
-                    <!--                        android:id="@+id/book_setting_end_pick"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginStart="32dp"-->
-                    <!--                        android:text="選擇時間"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="@+id/book_setting_start_pick"-->
-                    <!--                        app:layout_constraintStart_toEndOf="@+id/book_setting_start_pick"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView27" />-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/book_set_user_space_end_time_layout"
@@ -418,19 +410,10 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-<!--                    <Button-->
-<!--                        android:id="@+id/book_setting_capacity"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="8dp"-->
-<!--                        android:layout_marginBottom="16dp"-->
-<!--                        android:text="選擇人數"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="@+id/textView28"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/textView28" />-->
+
 
                     <TextView
-                        android:id="@+id/textView16"
+                        android:id="@+id/book_setting_user_space_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -446,7 +429,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="點一下來開啟"
+                        android:text="關閉中，點一下來開啟"
                         android:textColor="@color/example_4_grey_past"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

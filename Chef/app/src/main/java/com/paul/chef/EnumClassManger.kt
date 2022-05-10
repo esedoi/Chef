@@ -80,3 +80,7 @@ enum class AddDishType(val index:Int){
     FIXED(0),OPTIONAL(1)
 }
 
+enum class AddressListType(val index:Int){
+    NORMAL(0), SELECT(1)
+}
+

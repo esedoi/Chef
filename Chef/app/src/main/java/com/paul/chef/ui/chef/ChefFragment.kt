@@ -19,7 +19,7 @@ import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
 
-class ChefFragment : Fragment() {
+class ChefFragment : Fragment(), Block {
 
     private var _binding: FragmentChefPageBinding? = null
     private val binding get() = _binding!!
@@ -52,7 +52,7 @@ class ChefFragment : Fragment() {
 
         binding.chefPageLogout.setOnClickListener {
             (activity as MainActivity).signOut()
-            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
 
         if(mode ==Mode.USER.index){
@@ -95,7 +95,7 @@ class ChefFragment : Fragment() {
         }
 
         binding.editProfileBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user.profileInfo!!))
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user?.profileInfo!!))
         }
 
         binding.bookSettingBtn.setOnClickListener {
@@ -115,7 +115,7 @@ class ChefFragment : Fragment() {
         }
 
 
-        reviewAdapter = ReviewAdapter()
+        reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.chefPageReviewRecycler.layoutManager = reviewLayoutManager
         binding.chefPageReviewRecycler.adapter = reviewAdapter
@@ -138,7 +138,9 @@ class ChefFragment : Fragment() {
                 }
             }
 
-
+        binding.chefPageAddressListBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.NORMAL.index))
+        }
 
 
         return root
@@ -147,5 +149,13 @@ class ChefFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun blockReview(userId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun blockMenu(menuId: String) {
+        TODO("Not yet implemented")
     }
 }

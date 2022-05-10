@@ -7,23 +7,24 @@
     tools:context=".ui.transaction.TransactionFragment">
 
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="wrap_content"
-        android:layout_height="136dp"
-        android:background="@color/md_theme_light_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <View-->
+<!--        android:id="@+id/view2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="136dp"-->
+<!--        android:background="@color/md_theme_light_primary"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/transaction_tabs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView46" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/transaction_viewpager2"
@@ -44,7 +45,7 @@
         android:layout_marginTop="24dp"
         android:text="未處理的款項"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +56,7 @@
         android:layout_marginTop="16dp"
         android:text="處理中的款項"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView43"
         app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
@@ -66,7 +67,7 @@
         android:layout_marginTop="16dp"
         android:text="已完成的款項"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView44"
         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
@@ -75,7 +76,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/textView43"
         app:layout_constraintStart_toEndOf="@+id/textView43" />
 
@@ -84,7 +84,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/textView44"
         app:layout_constraintStart_toEndOf="@+id/textView44"
         app:layout_constraintTop_toTopOf="@+id/textView44" />
@@ -94,7 +93,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/textView46"
         app:layout_constraintStart_toEndOf="@+id/textView46"
         app:layout_constraintTop_toTopOf="@+id/textView46" />
@@ -102,10 +100,10 @@
     <Button
         android:id="@+id/transaction_apply_btn"
 
-        android:elevation="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
+        android:elevation="3dp"
         android:enabled="true"
         android:text="收款"
         app:layout_constraintBottom_toTopOf="@+id/transaction_tabs"
