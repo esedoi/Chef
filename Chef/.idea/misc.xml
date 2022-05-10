@@ -134,6 +134,7 @@
         <entry key="app/src/main/res/layout/list_people_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/menu/chef_bottom_nav_menu.xml" value="0.18177083333333333" />
+        <entry key="app/src/main/res/menu/menu_block.xml" value="0.25" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>

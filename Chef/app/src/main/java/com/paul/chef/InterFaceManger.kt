@@ -3,6 +3,7 @@ package com.paul.chef
 import com.paul.chef.data.Address
 import com.paul.chef.data.Menu
 import com.paul.chef.data.Order
+import com.paul.chef.data.Review
 
 
 interface AddDiscount{
@@ -30,6 +31,11 @@ interface AddDiscount{
     interface AddressList{
         fun select(item: Address)
         fun delete(item:Address)
+    }
+
+    interface Block{
+        fun blockReview(userId: String)
+        fun blockMenu(menuId:String)
     }
 
 

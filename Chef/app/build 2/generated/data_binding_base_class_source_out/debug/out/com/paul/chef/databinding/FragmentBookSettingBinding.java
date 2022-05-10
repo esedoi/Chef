@@ -319,13 +319,13 @@ public final class FragmentBookSettingBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView14;
+      id = R.id.book_setting_chef_space_title;
       TextView textView14 = ViewBindings.findChildViewById(rootView, id);
       if (textView14 == null) {
         break missingId;
       }
 
-      id = R.id.textView16;
+      id = R.id.book_setting_user_space_title;
       TextView textView16 = ViewBindings.findChildViewById(rootView, id);
       if (textView16 == null) {
         break missingId;

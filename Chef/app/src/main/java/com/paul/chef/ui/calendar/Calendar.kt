@@ -175,7 +175,7 @@ class Calendar : Fragment() {
                 if (day.owner == DayOwner.THIS_MONTH) {
                     container.textView.visibility = View.VISIBLE
                     when {
-//
+
                         day.date.isBefore(today) -> {
                             container.textView.setTextColor(resources.getColor(R.color.example_4_grey_past))
                             container.textView.paint.flags =
@@ -205,7 +205,6 @@ class Calendar : Fragment() {
                 } else {
                     container.textView.visibility = View.INVISIBLE
                 }
-                ////////
 
             }
         }

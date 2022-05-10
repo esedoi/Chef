@@ -75,6 +75,8 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     var bindingItemCountList = mutableListOf<Int>()
     var bindingItemCount = 0
 
+   var openBoolean: Boolean = false
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -135,8 +137,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             discountAdapter.submitList(editMenu.discount)
             imageAdapter.submitList(editMenu.images)
 
-//            iiiiiiiiii
-//            iiii, iiii, iiii,
+
 
 
             for(i in 0..editMenu.dishes.last().typeNumber){
@@ -205,6 +206,10 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
         }
 
+        menuEditViewModel.openBoolean.observe(viewLifecycleOwner){
+            openBoolean = it
+        }
+
 
         //create Menu
         binding.build.setOnClickListener {
@@ -263,7 +268,8 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                         imgList,
                         discountList,
                         dishList,
-                        tagList
+                        tagList,
+                        openBoolean
                     )
                     dishList.clear()
                     findNavController().navigateUp()

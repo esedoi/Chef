@@ -26,6 +26,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/like_topAppBar"
                 android:layout_width="match_parent"
+
                 android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"

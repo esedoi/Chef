@@ -127,7 +127,7 @@
                         android:text="客人可以預訂的場次"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_chef_space_title" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
@@ -201,7 +201,7 @@
 
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/book_setting_chef_space_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -231,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="點一下來開啟"
+                        android:text="關閉中，點一下來開啟"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/example_4_grey_past"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -321,7 +321,7 @@
                         android:text="提供的時段"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_setting_user_space_title" />
 
                     <TextView
                         android:id="@+id/textView28"
@@ -413,7 +413,7 @@
 
 
                     <TextView
-                        android:id="@+id/textView16"
+                        android:id="@+id/book_setting_user_space_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -429,7 +429,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="點一下來開啟"
+                        android:text="關閉中，點一下來開啟"
                         android:textColor="@color/example_4_grey_past"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

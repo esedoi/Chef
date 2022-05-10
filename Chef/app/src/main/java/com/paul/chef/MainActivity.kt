@@ -1,13 +1,11 @@
 package com.paul.chef
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -137,8 +135,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.client_id)
             .requestEmail()
@@ -153,8 +149,6 @@ class MainActivity : AppCompatActivity() {
         updateUI(currentUser)
 
     }
-
-
 
 
     private fun updateUI(user: FirebaseUser?) {
@@ -243,6 +237,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+
+
+
+    fun block(userId:String,blockMenuList:List<String>?,blockReviewList: List<String>? ){
+
+        if(blockMenuList!=null){
+            mainViewModel.block(userId, blockMenuList, null)
+        }
+
+        if(blockReviewList!=null){
+            mainViewModel.block(userId, null, blockReviewList)
+        }
+    }
+
+
 
 
     companion object {

@@ -44,8 +44,6 @@ class MenuListFragment : Fragment(), ItemMenu {
             ViewModelProvider(this).get(MenuListViewModel::class.java)
 
 
-
-
         //menuList recycler
         menuListAdapter = MenuListAdapter(this,menuListViewModel,MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
@@ -54,8 +52,17 @@ class MenuListFragment : Fragment(), ItemMenu {
 
 
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
-            menuList.addAll(it)
-            menuListAdapter.submitList(it)
+            val newMenuList = if(UserManger.user?.blockMenuList!=null){
+                it.filter {itemMenu->
+                    !UserManger.user?.blockMenuList!!.contains(itemMenu.id)
+                }
+
+            }else{
+                it
+            }
+
+            menuList.addAll(newMenuList)
+            menuListAdapter.submitList(newMenuList)
             menuListAdapter.notifyDataSetChanged()
         }
 

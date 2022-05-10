@@ -40,7 +40,6 @@ class BookSettingViewModel(application: Application) : AndroidViewModel(applicat
                         _bookSetting.value = data.bookSetting!!
                     }
 
-
                 } else {
                     Log.d("pickerViewModel", "No such document")
                 }
@@ -51,7 +50,7 @@ class BookSettingViewModel(application: Application) : AndroidViewModel(applicat
     }
 
 
-    fun setting(type:Int, calendarDefault:Int, chefSpace:ChefSpace, userSpace:UserSpace) {
+    fun setting(type:Int, calendarDefault:Int, chefSpace:ChefSpace?, userSpace:UserSpace?) {
 
             db.collection("Chef").document(chefId)
                 .update(

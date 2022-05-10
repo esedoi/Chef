@@ -22,7 +22,7 @@ data class Chef(
 
 @Parcelize
 data class BookSetting(
-    val type:Int = -1, //chef place,userplace,都接受, 都不接受
+    val type:Int = -1,
     val calendarDefault:Int, //all open, all close
     val chefSpace: @RawValue ChefSpace? = null,
     val userSpace: @RawValue UserSpace? = null,
@@ -118,8 +118,8 @@ data class Menu(
     val dishes:@RawValue List<Dish>,
     val reviewRating: Float? = null,
     val reviewNumber:Int?=null,
-    val tagList:List<String>?=null
-
+    val tagList:List<String>?=null,
+    val open:Boolean
 ): Parcelable
 
 @Parcelize
@@ -155,7 +155,10 @@ data class User(
     val profileInfo:ProfileInfo?=null,
     val chefId:String?=null,
     val likeList:List<String>?=null,
-    val address:@RawValue List<Address>?=null
+    val address:@RawValue List<Address>?=null,
+    var blockMenuList:List<String>?=null,
+    var blockReviewList: List<String>?=null
+
 ): Parcelable
 
 @Parcelize

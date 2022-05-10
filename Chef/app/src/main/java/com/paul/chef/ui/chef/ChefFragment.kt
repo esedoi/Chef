@@ -19,7 +19,7 @@ import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
 
-class ChefFragment : Fragment() {
+class ChefFragment : Fragment(), Block {
 
     private var _binding: FragmentChefPageBinding? = null
     private val binding get() = _binding!!
@@ -115,7 +115,7 @@ class ChefFragment : Fragment() {
         }
 
 
-        reviewAdapter = ReviewAdapter()
+        reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.chefPageReviewRecycler.layoutManager = reviewLayoutManager
         binding.chefPageReviewRecycler.adapter = reviewAdapter
@@ -149,5 +149,13 @@ class ChefFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun blockReview(userId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun blockMenu(menuId: String) {
+        TODO("Not yet implemented")
     }
 }

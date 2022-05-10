@@ -1,6 +1,7 @@
 package com.paul.chef.ui.bookSetting
 
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -57,7 +58,6 @@ class BookSetting : Fragment() {
                     }
                     false -> {
                         userSpaceHelper.visibility = View.VISIBLE
-
                     }
                 }
 
@@ -74,8 +74,6 @@ class BookSetting : Fragment() {
                 }
             }
         }
-
-
 
 
 
@@ -162,14 +160,23 @@ class BookSetting : Fragment() {
 
         orderSettingViewModel.bookSetting.observe(viewLifecycleOwner){
             calendarTypeResult = it.calendarDefault
-            capacity = it.userSpace?.capacity!!
-            sessionCapacity = it.chefSpace?.sessionCapacity!!
-            sessionTime.clear()
-            sessionTime.addAll(it.chefSpace.session)
-            startTime = it.userSpace.starTime
-            endTime = it.userSpace.endTime
-            address = it.chefSpace.address
-            Log.d("booksettingfragment", "calendarTypeResult=$calendarTypeResult")
+            if(it.userSpace!=null){
+                capacity = it.userSpace.capacity
+                startTime = it.userSpace.starTime
+                endTime = it.userSpace.endTime
+                binding.bookSetUserSpaceCapacity.setText(it.userSpace.capacity.toString())
+                binding.bookSetUserSpaceStartTime.setText(it.userSpace.starTime)
+                binding.bookSetUserSpaceEndTime.setText(it.userSpace.endTime)
+            }
+
+            if(it.chefSpace!=null){
+                sessionCapacity = it.chefSpace.sessionCapacity
+                sessionTime.clear()
+                sessionTime.addAll(it.chefSpace.session)
+                address = it.chefSpace.address
+                binding.bookSetChefSpaceAddress.setText(it.chefSpace.address.addressTxt.toString())
+                binding.bookSetChefSpaceCapacity.setText(it.chefSpace.sessionCapacity.toString())
+            }
 
             if (it!=null){
                 binding.bookSetCalenderDefaultEditTxt.setText(
@@ -181,11 +188,7 @@ class BookSetting : Fragment() {
                 )
                 val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
                 (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-                binding.bookSetChefSpaceAddress.setText(it.chefSpace.address.addressTxt.toString())
-                binding.bookSetUserSpaceCapacity.setText(it.userSpace.capacity.toString())
-                binding.bookSetUserSpaceStartTime.setText(it.userSpace.starTime)
-                binding.bookSetUserSpaceEndTime.setText(it.userSpace.endTime)
-                binding.bookSetChefSpaceCapacity.setText(it.chefSpace.sessionCapacity.toString())
+
 
                 when(it.type){
                     BookSettingType.AcceptAll.index->{
@@ -193,7 +196,6 @@ class BookSetting : Fragment() {
                         binding.userSpaceCardView.isChecked = true
                         binding.chefSpaceHelper.visibility = View.GONE
                         binding.userSpaceHelper.visibility = View.GONE
-
                     }
                     BookSettingType.OnlyUserSpace.index->{
                         binding.chefSpaceCardView.isChecked = false
@@ -220,7 +222,6 @@ class BookSetting : Fragment() {
 
         binding.save.setOnClickListener {
 
-
             val chefSpaceCheck = binding.chefSpaceCardView.isChecked
             val userSpaceCheck = binding.userSpaceCardView.isChecked
             val calendarTxt = binding.bookSetCalenderDefault.editText?.text.toString()
@@ -233,32 +234,39 @@ class BookSetting : Fragment() {
                 Toast.makeText(this.context, "請選擇可預訂期間", Toast.LENGTH_SHORT).show()
             } else {
 
-                val type: Int = when {
-                    chefSpaceCheck && userSpaceCheck -> BookSettingType.AcceptAll.index
-                    !chefSpaceCheck && userSpaceCheck -> BookSettingType.OnlyUserSpace.index
-                    chefSpaceCheck && !userSpaceCheck -> BookSettingType.OnlyChefSpace.index
-                    !chefSpaceCheck && !userSpaceCheck -> BookSettingType.RefuseAll.index
-                    else -> {
-                        -1
-                    }
-                }
-                //bookSetting
-                val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
-                val userSpace = UserSpace(capacity, startTime, endTime)
-
-
-
                 calendarTypeResult = if (calendarTxt == "未來所有日期") {
                     CalendarType.AllDayOpen.index
                 } else {
                     CalendarType.AllDayClose.index
                 }
 
-                orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace)
-                findNavController().navigateUp()
-
+                when {
+                    chefSpaceCheck && userSpaceCheck -> {
+                        val type = BookSettingType.AcceptAll.index
+                        val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
+                        val userSpace = UserSpace(capacity, startTime, endTime)
+                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace)
+                        findNavController().navigateUp()
+                    }
+                    !chefSpaceCheck && userSpaceCheck -> {
+                        val type = BookSettingType.OnlyUserSpace.index
+                        val userSpace = UserSpace(capacity, startTime, endTime)
+                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace=null, userSpace)
+                        findNavController().navigateUp()
+                    }
+                    chefSpaceCheck && !userSpaceCheck -> {
+                        val type = BookSettingType.OnlyChefSpace.index
+                        val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
+                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace=null)
+                        findNavController().navigateUp()
+                    }
+                    !chefSpaceCheck && !userSpaceCheck -> {
+                        val type = BookSettingType.RefuseAll.index
+                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace=null, userSpace=null)
+                        findNavController().navigateUp()
+                    }
+                }
             }
-
         }
 
 

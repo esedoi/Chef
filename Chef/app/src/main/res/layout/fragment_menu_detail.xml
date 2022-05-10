@@ -363,11 +363,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <Button
-                android:id="@+id/menu_detail_report_btn"
+                android:id="@+id/menu_detail_block_menu_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Button.TextButton"
-                android:text="檢舉此菜單"
+                android:text="檢舉並封鎖此菜單"
                 app:layout_constraintTop_toBottomOf="@id/cardView"
                 app:layout_constraintStart_toStartOf="@id/cardView"
                 app:layout_constraintBottom_toBottomOf="parent"

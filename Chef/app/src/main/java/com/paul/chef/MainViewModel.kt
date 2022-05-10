@@ -2,6 +2,7 @@ package com.paul.chef
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,10 +19,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = FirebaseFirestore.getInstance()
 
-    var user: User? = null
-    var chef: Chef? = null
-    var userEmail:String? = null
-
 
     private var _chefId = MutableLiveData<String>()
     val chefId: LiveData<String>
@@ -35,46 +32,43 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isChef: LiveData<Boolean>
         get() = _isChef
 
-    private val mutableSelectedItem = MutableLiveData<Int>()
-    val selectedItem: LiveData<Int> get() = mutableSelectedItem
-
 
     init {
-        if(UserManger.user?.userId !=null){
+        if (UserManger.user?.userId != null) {
 
             db.collection("User")
-                .document(UserManger.user?.userId?:"")
+                .document(UserManger.user?.userId ?: "")
                 .addSnapshotListener { document, e ->
                     if (e != null) {
                         Log.w("notification", "Listen failed.", e)
                         return@addSnapshotListener
                     }
-                    if(document!=null){
+                    if (document != null) {
                         val json = Gson().toJson(document.data)
                         val data = Gson().fromJson(json, User::class.java)
                         UserManger.user = data
                         Log.d("mainviewmodel", "update user")
-                        if (data.chefId!=null){
+                        if (data.chefId != null) {
                             getChef(data.chefId)
                         }
                     }
                 }
-            }
-         }
+        }
+    }
 
-    fun getUser(email:String){
+    fun getUser(email: String) {
         Log.d("mainviewmodel", "fun get user")
         db.collection("User")
             .whereEqualTo("profileInfo.email", email)
             .get()
             .addOnSuccessListener { value ->
                 if (value != null) {
-                    for (i in value.documents){
+                    for (i in value.documents) {
                         val item = i.data
                         val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, User::class.java)
                         UserManger.user = data
-                        if (data.chefId!=null){
+                        if (data.chefId != null) {
                             getChef(data.chefId)
                         }
                     }
@@ -87,41 +81,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 Log.d("pickerViewModel", "get failed with ", exception)
             }
 
-//            .addSnapshotListener { value, e ->
-//                if (e != null) {
-//                    Log.w("notification", "Listen failed.", e)
-//                    return@addSnapshotListener
-//                }
-//                if (value != null) {
-//                    for(i in value.documents){
-//                        val json = Gson().toJson(i.data)
-//                        val data = Gson().fromJson(json, User::class.java)
-//                            UserManger.user = data
-//                        if (data.chefId!=null){
-//                            getChef(data.chefId)
-//                        }
-//                    }
-//                    _newUser.value = value.documents.isEmpty()
-//                }
-//            }
-         }
+    }
 
 
+    private fun getChef(chefId: String) {
+        Log.d("mainviewmodel", "fun getchef")
+        db.collection("Chef")
+            .document(chefId)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                val item = value?.data
+                val json = Gson().toJson(item)
+                val data = Gson().fromJson(json, Chef::class.java)
+                UserManger.chef = data
+            }
+    }
 
 
-    private fun getChef(chefId:String){
-            Log.d("mainviewmodel", "fun getchef")
-            db.collection("Chef")
-                .document(chefId)
-                .addSnapshotListener { value, e ->
-                    if (e != null) {
-                        Log.w("notification", "Listen failed.", e)
-                        return@addSnapshotListener
-                    }
-                    val item = value?.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                    UserManger.chef = data
-                    }
-                 }
-             }
+    fun block(userId: String, blockMenuList: List<String>?, blockReviewList: List<String>?) {
+
+        if (blockMenuList != null) {
+            db.collection("User").document(userId)
+                .update(
+                    mapOf(
+                        "blockMenuList" to blockMenuList,
+                    )
+                )
+                .addOnSuccessListener {
+                    Log.d("notification", "DocumentSnapshot successfully updated!")
+                }
+                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+        }
+
+        if (blockReviewList != null) {
+            db.collection("User").document(userId)
+                .update(
+                    mapOf(
+                        "blockReviewList" to blockReviewList,
+                    )
+                )
+                .addOnSuccessListener {
+                    Log.d("notification", "DocumentSnapshot successfully updated!")
+
+                }
+                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+        }
+    }
+}
