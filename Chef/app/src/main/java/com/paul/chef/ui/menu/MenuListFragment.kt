@@ -6,15 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.paul.chef.*
+import com.paul.chef.data.Address
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentMenuListBinding
+import java.time.LocalDate
 
 class MenuListFragment : Fragment(), ItemMenu {
 
@@ -43,6 +48,34 @@ class MenuListFragment : Fragment(), ItemMenu {
          menuListViewModel =
             ViewModelProvider(this).get(MenuListViewModel::class.java)
 
+
+
+
+        binding.menuListFilterLayout.editText.setOnClickListener {
+          
+        }
+//            val items =
+//                listOf("廚師來我的空間", "前往廚師的廚房")
+//            val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, items)
+//            (binding.menuListFilterLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+
+
+        setFragmentResultListener("filter") { requestKey, bundle ->
+
+            val space: Int? = bundle.getInt("space")
+            val place: Address? = bundle.getParcelable<Address>("place")
+            val date: Long? = bundle.getLong("date")
+            val people: Int? = bundle.getInt("people")
+            if(date!=null){
+                val localDate: LocalDate = LocalDate.ofEpochDay(date)
+            }
+            Log.d("menulistfragment", "space=$space")
+            Log.d("menulistfragment", "space=$place")
+            Log.d("menulistfragment", "space=$date")
+            Log.d("menulistfragment", "space=$people")
+
+        }
 
         //menuList recycler
         menuListAdapter = MenuListAdapter(this,menuListViewModel,MenuType.FULL.index)

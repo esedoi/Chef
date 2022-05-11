@@ -38,6 +38,5 @@ class PickerViewModel(application: Application) : AndroidViewModel(application) 
                         Log.d("pickerViewModel", "get failed with ", exception)
                     }
 
-
     }
 }

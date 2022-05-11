@@ -132,7 +132,8 @@
         android:label="DatePicker">
         <argument
             android:name="chefId"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"/>
 
     </dialog>
 
@@ -292,6 +293,14 @@
         app:destination="@id/loginFragment"
         app:popUpTo="@+id/mobile_navigation"
         app:popUpToInclusive="true"/>
+    <dialog
+        android:id="@+id/filterFragment"
+        android:name="com.paul.chef.ui.filterSheet.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" />
+    <action
+        android:id="@+id/action_global_filterFragment"
+        app:destination="@id/filterFragment" />
 
 
 </navigation>

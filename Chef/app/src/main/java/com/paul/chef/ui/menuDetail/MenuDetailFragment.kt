@@ -16,8 +16,6 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -84,10 +82,15 @@ class MenuDetailFragment : Fragment(), Block {
         val displayList = mutableListOf<ItemDisplayDishBinding>()
         val selectedDish = mutableListOf<Dish>()
 
+
         menuDetailViewModel.getReview(menu.id)
         val outlineProvider = ProfileOutlineProvider()
         binding.imageView5.outlineProvider = outlineProvider
         bindImage(binding.imageView5, menu.chefAvatar)
+
+        binding.menuDetailBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.detailChefName.text = menu.chefName + " 建立的菜單"
         if (menu.reviewRating != null) {

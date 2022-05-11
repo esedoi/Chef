@@ -111,6 +111,5 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         addressListAdapter.notifyDataSetChanged()
         setFragmentResult("selectAddress", bundleOf("address" to item))
         dismiss()
-
     }
 }

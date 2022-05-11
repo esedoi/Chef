@@ -119,13 +119,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menuDetailFragment,
                 R.id.navigation_home,
-                R.id.loginFragment->{
+                R.id.loginFragment,
+                R.id.filterFragment->{
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.GONE
                 }
                 else -> {
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.VISIBLE
+                    if(navController.currentDestination?.id==R.id.bookFragment){
+                        binding.toolBarTitle.text = "確認訂單"
+                    }
                 }
             }
         }

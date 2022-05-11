@@ -44,6 +44,7 @@
         <entry key="app/src/main/res/layout/calendar_day_legend.xml" value="0.25" />
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/dialog_add.xml" value="0.19656677246093746" />
+        <entry key="app/src/main/res/layout/filter_fragment.xml" value="0.21329639889196675" />
         <entry key="app/src/main/res/layout/fragment_add_address.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_add_adress.xml" value="0.30268096923828125" />
         <entry key="app/src/main/res/layout/fragment_add_tag.xml" value="0.25" />
@@ -60,6 +61,7 @@
         <entry key="app/src/main/res/layout/fragment_chef_page.xml" value="0.3488372093023256" />
         <entry key="app/src/main/res/layout/fragment_create_chef.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3441025641025641" />
+        <entry key="app/src/main/res/layout/fragment_filter.xml" value="0.24615384615384617" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18762088974854932" />
         <entry key="app/src/main/res/layout/fragment_image_upload.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_kitchen_detail.xml" value="0.43206787109375" />
@@ -69,7 +71,7 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.2359375" />
         <entry key="app/src/main/res/layout/fragment_menu_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_menu_edit.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_menu_list.xml" value="0.22533111572265627" />
+        <entry key="app/src/main/res/layout/fragment_menu_list.xml" value="0.2451202392578125" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.24075936341897036" />
         <entry key="app/src/main/res/layout/fragment_order_child.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/layout/fragment_order_detail_.xml" value="0.375" />
@@ -120,7 +122,8 @@
         <entry key="app/src/main/res/layout/item_menu_detail_review.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_menu_edit_img.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_menu_list.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/item_menu_list_chip.xml" value="0.2719879150390625" />
+        <entry key="app/src/main/res/layout/item_menu_list_chip 2.xml" value="0.13385416666666666" />
+        <entry key="app/src/main/res/layout/item_menu_list_chip.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_menu_simple.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_option_dish.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_option_dish_add.xml" value="2.447100394112723" />

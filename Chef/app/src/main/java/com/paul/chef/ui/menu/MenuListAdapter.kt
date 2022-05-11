@@ -1,5 +1,6 @@
 package com.paul.chef.ui.menu
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ class MenuListAdapter(
         when (holder) {
             is FullHolder -> {
                 holder.bind(item, itemMenu, menuViewModel)
+
             }
             is SimpleHolder -> {
                 holder.bind(item)
