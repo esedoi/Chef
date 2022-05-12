@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -23,13 +24,14 @@ import com.paul.chef.databinding.FragmentFilterBinding
 import com.paul.chef.ui.datePicker.DatePickerViewModel
 import java.time.LocalDate
 
-class FilterFragment : BottomSheetDialogFragment() {
+class FilterFragment : DialogFragment() {
 
     private var _binding: FragmentFilterBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, com.airbnb.lottie.R.style.Base_Theme_AppCompat_Light_Dialog)
 
 
     }
@@ -49,56 +51,56 @@ class FilterFragment : BottomSheetDialogFragment() {
         var date: Long? = null
         var people: Int? = null
 
-        binding.filterCancel.setOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.filterDismiss.setOnClickListener {
-            findNavController().navigateUp()
-        }
+//        binding.filterCancel.setOnClickListener {
+//            findNavController().navigateUp()
+//        }
+//        binding.filterDismiss.setOnClickListener {
+//            findNavController().navigateUp()
+//        }
 
 
-        binding.filterPeopleSelect.setOnClickListener {
-            findNavController().navigate(
-                MobileNavigationDirections.actionGlobalPickerBottomSheet(
-                    PickerType.FILTER_PEOPLE.index,
-                    null
-                )
-            )
-        }
-        setFragmentResultListener(PickerType.FILTER_PEOPLE.value) { requestKey, bundle ->
-            val result = bundle.getInt(PickerType.FILTER_PEOPLE.value)
-            people = result
-            binding.filterPeopleSelect.setText(result.toString())
-        }
+//        binding.filterPeopleSelect.setOnClickListener {
+//            findNavController().navigate(
+//                MobileNavigationDirections.actionGlobalPickerBottomSheet(
+//                    PickerType.FILTER_PEOPLE.index,
+//                    null
+//                )
+//            )
+//        }
+//        setFragmentResultListener(PickerType.FILTER_PEOPLE.value) { requestKey, bundle ->
+//            val result = bundle.getInt(PickerType.FILTER_PEOPLE.value)
+//            people = result
+//            binding.filterPeopleSelect.setText(result.toString())
+//        }
 
 
-        binding.filterAddressTxt.setOnClickListener {
-            findNavController().navigate(
-                MobileNavigationDirections.actionGlobalAddressListFragment(
-                    AddressListType.SELECT.index
-                )
-            )
-        }
-        setFragmentResultListener("selectAddress") { requestKey, bundle ->
-            val result = bundle.getParcelable<Address>("address")!!
-            val addressTxt = result.addressTxt
-            val latLng = LatLng(result.latitude, result.longitude)
-            place = result
-            binding.filterAddressTxt.setText(addressTxt)
-        }
+//        binding.filterAddressTxt.setOnClickListener {
+//            findNavController().navigate(
+//                MobileNavigationDirections.actionGlobalAddressListFragment(
+//                    AddressListType.SELECT.index
+//                )
+//            )
+//        }
+//        setFragmentResultListener("selectAddress") { requestKey, bundle ->
+//            val result = bundle.getParcelable<Address>("address")!!
+//            val addressTxt = result.addressTxt
+//            val latLng = LatLng(result.latitude, result.longitude)
+//            place = result
+//            binding.filterAddressTxt.setText(addressTxt)
+//        }
 
 
-        binding.filterDateSelect.setOnClickListener {
-            findNavController().navigate(
-                MobileNavigationDirections.actionGlobalDatePicker3(null)
-            )
-        }
-        setFragmentResultListener("filterDate") { requestKey, bundle ->
-            val result = bundle.getLong("date")
-            val localDate: LocalDate = LocalDate.ofEpochDay(result)
-            date = result
-            binding.filterDateSelect.setText(localDate.toString())
-        }
+//        binding.filterDateSelect.setOnClickListener {
+//            findNavController().navigate(
+//                MobileNavigationDirections.actionGlobalDatePicker3(null)
+//            )
+//        }
+//        setFragmentResultListener("filterDate") { requestKey, bundle ->
+//            val result = bundle.getLong("date")
+//            val localDate: LocalDate = LocalDate.ofEpochDay(result)
+//            date = result
+//            binding.filterDateSelect.setText(localDate.toString())
+//        }
 
 
         binding.filterCheck.setOnClickListener {

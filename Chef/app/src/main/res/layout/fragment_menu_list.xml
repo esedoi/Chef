@@ -25,14 +25,16 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
 
-                <ImageView
-                    android:id="@+id/imageView12"
+                <ImageButton
+                    android:id="@+id/menu_list_tag_filter_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="96dp"
-                    app:tint="@color/md_theme_light_secondary"
-                    app:srcCompat="@drawable/filter_results_button" />
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/filter_results_button"
+                    app:tint="@color/md_theme_light_secondary" />
 
 
                 <View
@@ -97,7 +99,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/menu_list_filter_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="132dp"
@@ -117,16 +119,17 @@
                     <AutoCompleteTextView
                         android:id="@+id/menu_list_filter"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:backgroundTint="@color/close_background"
                         android:fontFamily="@font/noto_sans"
-                        android:gravity="center"
                         android:inputType="none"
+                        android:gravity="center"
                         android:clickable="true"
                         android:focusable="false"
+                        android:letterSpacing="0.1"
                         android:hint="在哪裡用餐?"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textStyle="bold" />
+                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

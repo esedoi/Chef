@@ -192,6 +192,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             val newList = bundle.getStringArrayList("tagList")
             Log.d("menuEditfragment", "tagList = $tagList")
             if (newList != null) {
+                tagList.clear()
                 tagList.addAll(newList)
                 tagList.forEach { it ->
                     val chip = Chip(this.context)
@@ -203,7 +204,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                     binding.menuEditTagsGroup.addView(chip)
                 }
             }
-
         }
 
         menuEditViewModel.openBoolean.observe(viewLifecycleOwner){

@@ -7,7 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.paul.chef.BookSettingType
+import com.paul.chef.BookType
 import com.paul.chef.UserManger
+import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
 import com.paul.chef.data.User
 
@@ -27,6 +30,8 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
     private var _likeList = MutableLiveData<List<Menu>>()
     val likeList: LiveData<List<Menu>>
         get() = _likeList
+
+    val chefList  = mutableListOf<String>()
     private val db = FirebaseFirestore.getInstance()
 
     val userId = UserManger.user?.userId!!
@@ -90,6 +95,60 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                 }
         }
 
+    }
+
+    fun getChefId(bookType: Int){
+        Log.d("menuListViewmodel", "getChefId")
+        val settingType = mutableListOf<Int>()
+        settingType.add(BookSettingType.AcceptAll.index)
+        if(bookType ==BookType.UserSpace.index){
+            settingType.add(BookSettingType.OnlyUserSpace.index)
+        }else{
+            settingType.add(BookSettingType.OnlyChefSpace.index)
+        }
+        db.collection("Chef")
+            .whereIn("bookSetting.type", settingType)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                for (doc in value!!.documents) {
+                    val item = doc.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Chef::class.java)
+                   chefList.add(data.id)
+                    if(value.documents.indexOf(doc)==value.documents.size-1){
+                        getFilterMenuList(chefList)
+                    }
+                }
+            }
+    }
+
+    fun getFilterMenuList(chefIdList:List<String>){
+        db.collection("Menu")
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                dataList.clear()
+                for (doc in value!!.documents) {
+                    val item = doc.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Menu::class.java)
+                    dataList.add(data)
+
+                    if(value.documents.indexOf(doc)==value.documents.size-1){
+                        val  filterList = dataList.filter {
+                            chefIdList.contains(it.chefId)
+                        }
+                        _menuList.value = filterList
+                        chefList.clear()
+
+                    }
+                }
+            }
     }
 
     fun updateLikeList(newList:List<String>){
