@@ -11,7 +11,7 @@
         android:title="@string/title_chat" />
 
     <item
-        android:id="@+id/calendar"
+        android:id="@+id/calendar_set_open_radio"
         android:icon="@drawable/smaller_ic_calendar"
         android:title="@string/title_calendar" />
 

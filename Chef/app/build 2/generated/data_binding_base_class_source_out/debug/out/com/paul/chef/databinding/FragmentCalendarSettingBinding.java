@@ -99,7 +99,7 @@ public final class FragmentCalendarSettingBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView3;
+      id = R.id.menu_detail_go_chef_txt_btn;
       TextView textView3 = ViewBindings.findChildViewById(rootView, id);
       if (textView3 == null) {
         break missingId;

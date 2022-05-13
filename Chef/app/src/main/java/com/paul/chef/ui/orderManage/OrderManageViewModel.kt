@@ -101,10 +101,10 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
 
         when(status) {
             OrderStatus.PENDING.index -> {
-                if(pendingList.size>=1) {
+//                if(pendingList.size>=1) {
                     Log.d("orderviewmodel", "pendingList=$pendingList")
                     _orderList.value = pendingList
-                }
+//                }
             }
             OrderStatus.UPCOMING.index -> {
                 _orderList.value = upComingList

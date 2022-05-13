@@ -99,7 +99,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         binding.discountRecycler.adapter = discountAdapter
 
         //imagesRecyclerView
-        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this)
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this, null, null)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.menuEditImgRecycler.layoutManager = layoutManager
         binding.menuEditImgRecycler.adapter = imageAdapter

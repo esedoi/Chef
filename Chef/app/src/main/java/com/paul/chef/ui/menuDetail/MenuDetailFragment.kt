@@ -73,6 +73,8 @@ class MenuDetailFragment : Fragment(), Block {
             ViewModelProvider(this)[MenuDetailViewModel::class.java]
 
 
+
+
         //navigation safe args
         menu = arg.menu
         val dishList = menu.dishes
@@ -81,6 +83,30 @@ class MenuDetailFragment : Fragment(), Block {
         val and = "and"
         val displayList = mutableListOf<ItemDisplayDishBinding>()
         val selectedDish = mutableListOf<Dish>()
+        val likeIdList = mutableListOf<String>()
+
+        menuDetailViewModel.likeIdList.observe(viewLifecycleOwner){
+            likeIdList.clear()
+            likeIdList.addAll(it)
+            binding.menuDetailLikeCheck.isChecked = it.contains(menu.id)
+
+        }
+
+        binding.menuDetailLikeCheck.setOnClickListener {
+            if (likeIdList.contains(menu.id)) {
+                likeIdList.remove(menu.id)
+            } else {
+                likeIdList.add(menu.id)
+            }
+
+            Log.d("menudetailfragment","updatelikeidlist")
+            menuDetailViewModel.updateLikeList(likeIdList)
+        }
+
+        binding.menuDetailGoChefTxtBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalDisplayChefFragment(menu.chefId))
+        }
+
 
 
         menuDetailViewModel.getReview(menu.id)
@@ -114,7 +140,7 @@ class MenuDetailFragment : Fragment(), Block {
 
 
         //imagesRecyclerView
-        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null, null, menu)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.imagesRecycler.layoutManager = layoutManager
         binding.imagesRecycler.adapter = imageAdapter

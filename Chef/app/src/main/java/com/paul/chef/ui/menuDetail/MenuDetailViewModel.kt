@@ -8,8 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.BookSettingType
+import com.paul.chef.UserManger
 import com.paul.chef.data.Chef
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
+import com.paul.chef.data.User
 
 class MenuDetailViewModel(application: Application) : AndroidViewModel(application){
 
@@ -25,6 +28,30 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
     private var _openBoolean = MutableLiveData<Boolean>()
     val openBoolean: LiveData<Boolean>
         get() = _openBoolean
+
+    private var _likeIdList = MutableLiveData<List<String>>()
+    val likeIdList: LiveData<List<String>>
+        get() = _likeIdList
+
+    val userId = UserManger.user?.userId!!
+
+
+    init{
+        db.collection("User")
+            .document(userId)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                val item = value?.data
+                val json = Gson().toJson(item)
+                val data = Gson().fromJson(json, User::class.java)
+                if(data.likeList!=null){
+                    _likeIdList.value = data.likeList!!
+                }
+            }
+    }
 
 
 
@@ -74,6 +101,18 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
             .addOnFailureListener { exception ->
                 Log.d("orderdetailviewmodel", "get failed with ", exception)
             }
+    }
+
+    fun updateLikeList(newList:List<String>){
+
+        db.collection("User").document(userId)
+            .update(mapOf(
+                "likeList" to newList,
+            ))
+            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
+
+            }
+            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
 
     }
 

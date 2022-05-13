@@ -56,15 +56,28 @@ class MenuListAdapter(
         private lateinit var imageAdapter: DetailImagesAdapter
         private var layoutManager: RecyclerView.LayoutManager? = null
 
-        init {
+//        init {
+//            val context = itemView.context
+//            imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//            binding.itemMenuImgRecycler.layoutManager = layoutManager
+//            binding.itemMenuImgRecycler.adapter = imageAdapter
+//
+//        }
+
+        fun bind(item: Menu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
+
+
+
             val context = itemView.context
-            imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
+            imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null, itemMenu!!, item)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.itemMenuImgRecycler.layoutManager = layoutManager
             binding.itemMenuImgRecycler.adapter = imageAdapter
-        }
+           
 
-        fun bind(item: Menu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
+
+
             if (itemMenu != null) {
 
                 itemView.setOnClickListener {

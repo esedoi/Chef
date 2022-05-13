@@ -14,7 +14,7 @@ import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
 import com.paul.chef.data.User
 
-class MenuListViewModel(application: Application) : AndroidViewModel(application){
+class MenuListViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private val dataList = mutableListOf<Menu>()
@@ -31,7 +31,7 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
     val likeList: LiveData<List<Menu>>
         get() = _likeList
 
-    val chefList  = mutableListOf<String>()
+    val chefList = mutableListOf<String>()
     private val db = FirebaseFirestore.getInstance()
 
     val userId = UserManger.user?.userId!!
@@ -45,10 +45,10 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     Log.w("notification", "Listen failed.", e)
                     return@addSnapshotListener
                 }
-                    val item = value?.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, User::class.java)
-                if(data.likeList!=null){
+                val item = value?.data
+                val json = Gson().toJson(item)
+                val data = Gson().fromJson(json, User::class.java)
+                if (data.likeList != null) {
                     _likeIdList.value = data.likeList!!
                 }
             }
@@ -66,18 +66,19 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Menu::class.java)
                     dataList.add(data)
-                    Log.d("menufragment", "item=$item")
+                    if (value.documents.indexOf(doc) == value.documents.size - 1) {
+                        Log.d("menulistviewmodel", "init _menu")
+                        _menuList.value = dataList
+                    }
                 }
-                _menuList.value = dataList
             }
     }
 
-    fun getLikeList(newList:List<String>){
-        if(newList.isEmpty()){
+    fun getLikeList(newList: List<String>) {
+        if (newList.isEmpty()) {
             _likeList.value = emptyList()
-        }else{
+        } else {
             db.collection("Menu")
-                .whereIn("id",newList )
                 .addSnapshotListener { value, e ->
                     if (e != null) {
                         Log.w("notification", "Listen failed.", e)
@@ -88,76 +89,91 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
                         val item = doc.data
                         val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, Menu::class.java)
-                        dataList.add(data)
-                        Log.d("likeviewmodel", "item=$item")
+                        if (newList.contains(data.id)) {
+                            dataList.add(data)
+                        }
+                        if (value.documents.indexOf(doc) == value.size() - 1) {
+                            _likeList.value = dataList
+                        }
                     }
-                    _likeList.value = dataList
                 }
-        }
+         }
 
     }
 
-    fun getChefId(bookType: Int){
+    fun getChefId(bookType: Int) {
         Log.d("menuListViewmodel", "getChefId")
         val settingType = mutableListOf<Int>()
         settingType.add(BookSettingType.AcceptAll.index)
-        if(bookType ==BookType.UserSpace.index){
+        if (bookType == BookType.UserSpace.index) {
             settingType.add(BookSettingType.OnlyUserSpace.index)
-        }else{
+        } else {
             settingType.add(BookSettingType.OnlyChefSpace.index)
         }
         db.collection("Chef")
             .whereIn("bookSetting.type", settingType)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                   chefList.add(data.id)
-                    if(value.documents.indexOf(doc)==value.documents.size-1){
-                        getFilterMenuList(chefList)
-                    }
-                }
-            }
-    }
-
-    fun getFilterMenuList(chefIdList:List<String>){
-        db.collection("Menu")
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                dataList.clear()
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Menu::class.java)
-                    dataList.add(data)
-
-                    if(value.documents.indexOf(doc)==value.documents.size-1){
-                        val  filterList = dataList.filter {
-                            chefIdList.contains(it.chefId)
+            .get()
+            .addOnSuccessListener { value ->
+                if (value != null) {
+                    chefList.clear()
+                    for (i in value.documents) {
+                        val item = i.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, Chef::class.java)
+                        chefList.add(data.id)
+                        if (value.documents.indexOf(i) == value.documents.size - 1) {
+                            getFilterMenuList(chefList)
                         }
-                        _menuList.value = filterList
-                        chefList.clear()
-
                     }
+                } else {
+                    Log.d("pickerViewModel", "No such document")
                 }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
+
+    }
+
+    fun getFilterMenuList(chefIdList: List<String>) {
+        db.collection("Menu")
+            .get()
+            .addOnSuccessListener { value ->
+                if (value != null) {
+                    dataList.clear()
+                    for (i in value.documents) {
+                        val item = i.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, Menu::class.java)
+                        dataList.add(data)
+                        if (value.documents.indexOf(i) == value.documents.size - 1) {
+                            val filterList = dataList.filter {
+                                chefIdList.contains(it.chefId)
+                            }
+                            Log.d("menulistviewmodel", "fun getFilterMenuList")
+                            _menuList.value = filterList
+                            chefList.clear()
+                        }
+                    }
+                } else {
+                    Log.d("pickerViewModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
             }
     }
 
-    fun updateLikeList(newList:List<String>){
+    fun updateLikeList(newList: List<String>) {
 
         db.collection("User").document(userId)
-            .update(mapOf(
-                "likeList" to newList,
-            ))
-            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
+            .update(
+                mapOf(
+                    "likeList" to newList,
+                )
+            )
+            .addOnSuccessListener {
+                Log.d("notification", "DocumentSnapshot successfully updated!")
 
             }
             .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }

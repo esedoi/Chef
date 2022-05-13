@@ -19,30 +19,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.card.MaterialCardView
-                style="?attr/materialCardViewFilledStyle"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+
+            <CheckBox
+                android:id="@+id/menu_detail_like_check"
+                android:layout_width="41dp"
+                android:layout_height="41dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:scaleType="centerInside"
+                android:elevation="3dp"
+                android:focusable="auto"
                 android:background="@drawable/round"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="90dp"
-                app:cardElevation="1dp"
+                android:backgroundTint="@color/white"
+                android:foregroundGravity="center"
+                android:foreground="@drawable/sl_favourite"
+                android:button="@null"
+                android:layout_gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <CheckBox
-                    android:id="@+id/menu_detail_like_check"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:button="@drawable/sl_favourite"
-                    android:elevation="2dp"
-                    android:focusable="auto"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </com.google.android.material.card.MaterialCardView>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imagesRecycler"
@@ -54,8 +50,9 @@
 
             <ImageButton
                 android:id="@+id/menu_detail_back"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:elevation="3dp"
+                android:layout_width="41dp"
+                android:layout_height="41dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/round"
@@ -70,10 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
                 android:fontFamily="@font/noto_sans"
                 android:text="Chef chef name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
@@ -388,6 +385,16 @@
 
             </Button>
 
+            <TextView
+                android:id="@+id/menu_detail_go_chef_txt_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:text="查看廚師資訊"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintTop_toBottomOf="@+id/detailChefName" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

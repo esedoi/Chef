@@ -61,6 +61,17 @@ class LikeFragment : Fragment(), ItemMenu {
 
         menuListViewModel.likeList.observe(viewLifecycleOwner) {
             Log.d("likefragment","likelist=$it")
+
+
+
+
+            if(it.isEmpty()){
+                binding.chatUserEmptyImg.visibility = View.VISIBLE
+                binding.chatEmptyTxt.visibility = View.VISIBLE
+            }else{
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.GONE
+            }
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }

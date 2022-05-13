@@ -45,14 +45,14 @@
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.18489583333333334" />
         <entry key="app/src/main/res/layout/dialog_add.xml" value="0.19656677246093746" />
         <entry key="app/src/main/res/layout/filter_fragment.xml" value="0.21329639889196675" />
-        <entry key="app/src/main/res/layout/fragment_add_address.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_add_address.xml" value="0.47650634765625" />
         <entry key="app/src/main/res/layout/fragment_add_adress.xml" value="0.30268096923828125" />
         <entry key="app/src/main/res/layout/fragment_add_tag.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_address_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_book.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_book_setting.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.34546152750651044" />
-        <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_chat_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_chat_room.xml" value="0.45" />
@@ -80,7 +80,8 @@
         <entry key="app/src/main/res/layout/fragment_order_setting.xml" value="0.4456258138020833" />
         <entry key="app/src/main/res/layout/fragment_review_.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_review_page.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_transaction_.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_terms.xml" value="0.22239583333333332" />
+        <entry key="app/src/main/res/layout/fragment_transaction_.xml" value="0.32222900390625" />
         <entry key="app/src/main/res/layout/fragment_transaction_child 2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_transaction_child.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.375" />

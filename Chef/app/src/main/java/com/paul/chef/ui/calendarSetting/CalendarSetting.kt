@@ -52,34 +52,38 @@ class CalendarSetting : Fragment() {
             binding.calendarSetSelectDateTxt.text = "已選定 ${selectedDates.size} 個日期"
         }
 
-        if(binding.dateOpenSwitch.isChecked){
-            binding.calendarSetSwitchTxt.text = "開放中"
-        }else{
-            binding.calendarSetSwitchTxt.text = "不可訂"
-        }
-        binding.dateOpenSwitch.setOnCheckedChangeListener { compoundButton, b ->
-            if(compoundButton.isChecked){
-                binding.calendarSetSwitchTxt.text = "開放中"
-            }else{
-                binding.calendarSetSwitchTxt.text = "不可訂"
-            }
-        }
+
+
+
+
+
+//        if(binding.dateOpenSwitch.isChecked){
+//            binding.calendarSetSwitchTxt.text = "開放中"
+//        }else{
+//            binding.calendarSetSwitchTxt.text = "不可訂"
+//        }
+//
+//        binding.dateOpenSwitch.setOnCheckedChangeListener { compoundButton, b ->
+//            if(compoundButton.isChecked){
+//                binding.calendarSetSwitchTxt.text = "開放中"
+//            }else{
+//                binding.calendarSetSwitchTxt.text = "不可訂"
+//            }
+//        }
 
 
 
         Log.d("calendarsetting", "selectedDates=${selectedDates}")
 
-//        if(selectedDates.size == 1){
-//            binding.selectdatesType.visibility = View.VISIBLE
-//        }else{
-//            binding.selectdatesType.visibility = View.GONE
-//        }
 
 
         binding.dateSave.setOnClickListener {
 
-            val switch = binding.dateOpenSwitch.isChecked
-            val status = if (switch) {
+//            val switch = binding.dateOpenSwitch.isChecked
+            val radio = binding.calendarRadioGroup.checkedRadioButtonId
+
+
+            val status = if (radio==binding.calendarSetOpenRadio.id) {
                 DateStatus.OPEN.index
             } else {
                 DateStatus.CLOSE.index

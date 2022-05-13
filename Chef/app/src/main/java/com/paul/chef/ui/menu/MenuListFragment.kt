@@ -67,6 +67,7 @@ class MenuListFragment : Fragment(), ItemMenu {
 
         binding.menuListFilter.addTextChangedListener {
             Log.d("menulistfragment", "text = ${it.toString()}")
+
             val filterType = when (it.toString()) {
                 BookType.ChefSpace.userTxt -> {
                     BookType.ChefSpace.index
@@ -78,12 +79,15 @@ class MenuListFragment : Fragment(), ItemMenu {
                     -1
                 }
             }
-            menuListViewModel.getChefId(filterType)
+            if(filterType!=-1){
+                menuListViewModel.getChefId(filterType)
+            }
         }
 
 
         //default menuList
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
+            Log.d("menulistfragment", "observe it.size=${it.size}")
             val newMenuList = if (UserManger.user?.blockMenuList != null) {
                 it.filter { itemMenu ->
                     !UserManger.user?.blockMenuList!!.contains(itemMenu.id)

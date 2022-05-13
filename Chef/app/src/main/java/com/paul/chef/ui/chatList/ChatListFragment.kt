@@ -40,6 +40,8 @@ class ChatListFragment : Fragment(),GoChatRoom {
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+
         val chatListViewModel =
             ViewModelProvider(this).get(ChatListViewModel::class.java)
 
@@ -48,11 +50,19 @@ class ChatListFragment : Fragment(),GoChatRoom {
         var nowMode =-1
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
-        nowId = when(mode){
-            Mode.USER.index-> UserManger.user?.userId!!
-            Mode.CHEF.index-> UserManger.chef?.id!!
-            else->""
+        when(mode){
+            Mode.USER.index-> {
+                nowId = UserManger.user?.userId!!
+                binding.topAppBar.title = "來自廚師的訊息"
+            }
+            Mode.CHEF.index-> {
+                nowId = UserManger.chef?.id!!
+                binding.topAppBar.title = "來自客人的訊息"
+            }
         }
+
+
+
         if(mode!=null){
             nowMode = mode
         }
@@ -82,6 +92,30 @@ class ChatListFragment : Fragment(),GoChatRoom {
 
 
                     roomList.sortBy { it.time }
+
+                    when{
+                        roomList.isEmpty()&&mode==Mode.USER.index->{
+                            binding.chatUserEmptyImg.visibility = View.VISIBLE
+                            binding.chatEmptyTxt.visibility = View.VISIBLE
+                            binding.chatChefEmptyImg.visibility = View.GONE
+                        }
+                        roomList.isEmpty()&&mode==Mode.CHEF.index->{
+                            binding.chatUserEmptyImg.visibility = View.GONE
+                            binding.chatEmptyTxt.visibility = View.VISIBLE
+                            binding.chatChefEmptyImg.visibility = View.VISIBLE
+                        }
+                        roomList.isNotEmpty()&&mode==Mode.USER.index->{
+                            binding.chatUserEmptyImg.visibility = View.GONE
+                            binding.chatEmptyTxt.visibility = View.GONE
+                            binding.chatChefEmptyImg.visibility = View.GONE
+                        }
+                        roomList.isNotEmpty()&&mode==Mode.CHEF.index->{
+                            binding.chatUserEmptyImg.visibility = View.GONE
+                            binding.chatEmptyTxt.visibility = View.GONE
+                            binding.chatChefEmptyImg.visibility = View.GONE
+                        }
+                    }
+
                     chatListAdapter.submitList(roomList)
                     chatListAdapter.notifyDataSetChanged()
 

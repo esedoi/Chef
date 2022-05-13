@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
-import com.paul.chef.OrderStatus
-import com.paul.chef.R
-import com.paul.chef.UserManger
+import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentOrderManageBinding
 
@@ -27,6 +25,17 @@ class OrderManageFragment : Fragment() {
     ): View? {
         _binding = FragmentOrderManageBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val mode = UserManger.readData("mode", (activity as MainActivity))
+        when(mode){
+            Mode.USER.index-> {
+                binding.orderManageTitle.text = "享用美味"
+            }
+            Mode.CHEF.index-> {
+
+                binding.orderManageTitle.text = "接收訂單"
+            }
+        }
 
         //viewPager2
         orderAdapter = OrderAdapter(this)

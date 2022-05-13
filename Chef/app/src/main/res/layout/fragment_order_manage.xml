@@ -6,13 +6,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/order_manage_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="訂單"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+        app:layout_constraintTop_toBottomOf="@+id/order_manage_title" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager2"
@@ -37,5 +37,6 @@
         app:layout_constraintEnd_toEndOf="@+id/tabs"
         app:layout_constraintStart_toStartOf="@+id/tabs"
         app:layout_constraintTop_toBottomOf="@+id/tabs" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
