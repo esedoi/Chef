@@ -7,7 +7,7 @@
     tools:context=".ui.chatList.ChatListFragment">
 
     <ImageView
-        android:id="@+id/chat_user_empty_img"
+        android:id="@+id/chat_user_empty_sticker"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/chat_chef_empty_img"
+        android:id="@+id/chat_chef_empty_sticker"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_gravity="center"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/chat_empty_txt"
+        android:id="@+id/chat_empty_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

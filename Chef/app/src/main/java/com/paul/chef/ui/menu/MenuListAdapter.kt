@@ -4,10 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.paul.chef.ImgRecyclerType
 import com.paul.chef.ItemMenu
 import com.paul.chef.MenuType
@@ -74,6 +71,17 @@ class MenuListAdapter(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.itemMenuImgRecycler.layoutManager = layoutManager
             binding.itemMenuImgRecycler.adapter = imageAdapter
+            binding.itemMenuImgRecycler.onFlingListener = null;
+            val linearSnapHelper = LinearSnapHelper().apply {
+                attachToRecyclerView(binding.itemMenuImgRecycler)
+            }
+            binding.itemMenuImgRecycler.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+                val snapView = linearSnapHelper.findSnapView(binding.itemMenuImgRecycler.layoutManager)
+                if (snapView != null) {
+                    val position = binding.itemMenuImgRecycler.layoutManager?.getPosition(snapView)
+                   binding.itemMenuPositionTxt.text = "${position?.plus(1)}/${item.images.size}"
+                }
+            }
            
 
 

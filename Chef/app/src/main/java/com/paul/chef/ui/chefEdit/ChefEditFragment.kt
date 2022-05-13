@@ -62,6 +62,7 @@ class ChefEditFragment : Fragment() {
         }
 
         chefEditViewModel.getUserDone.observe(viewLifecycleOwner){
+            UserManger.tempMode = Mode.USER.index
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
 

@@ -54,14 +54,6 @@ class ChatRoomViewModel (application: Application) : AndroidViewModel(applicatio
             .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
 
 
-
-
-
-
-
-
-
-
     }
 
 }

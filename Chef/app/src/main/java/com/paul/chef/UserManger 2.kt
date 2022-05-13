@@ -23,8 +23,9 @@ class UserManger  {
 
 
         var user: User?=null
-         var chef: Chef?=null
+        var chef: Chef?=null
         var lastSelectedPosition = -1
+        var tempMode = -1
 
 
         //宣告繼承 SharedPreferences 的變數
@@ -43,6 +44,7 @@ class UserManger  {
         }
 
         fun saveData(mode:Int, context: Context) {
+            tempMode = mode
             settings = context.getSharedPreferences(
                 "DATA",
                 Context.MODE_PRIVATE

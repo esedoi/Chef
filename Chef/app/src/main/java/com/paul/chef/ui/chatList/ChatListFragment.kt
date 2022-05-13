@@ -72,57 +72,43 @@ class ChatListFragment : Fragment(),GoChatRoom {
         binding.chatListRecycler.layoutManager = layoutManager
         binding.chatListRecycler.adapter = chatListAdapter
 
-        db.collection("Room")
-            .whereArrayContains("attendance", nowId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
+
+
+        chatListViewModel.roomList.observe(viewLifecycleOwner){
+            it.sortedBy { sort->
+                sort.time
+            }
+            roomList.clear()
+            roomList.addAll(it)
+            Log.d("chatlistfragment", "getRoomdata")
+
+            when{
+                roomList.isEmpty()&&mode==Mode.USER.index->{
+                    binding.chatUserEmptySticker.visibility = View.VISIBLE
+                    binding.chatEmptyText.visibility = View.VISIBLE
+                    binding.chatChefEmptySticker.visibility = View.GONE
                 }
-                roomList.clear()
-                if (value != null) {
-                    for(document in value.documents){
-                        val item = document.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Room::class.java)
-                        if(data.lastMsg!=null){
-                            roomList.add(data)
-                        }
-                    }
-
-
-                    roomList.sortBy { it.time }
-
-                    when{
-                        roomList.isEmpty()&&mode==Mode.USER.index->{
-                            binding.chatUserEmptyImg.visibility = View.VISIBLE
-                            binding.chatEmptyTxt.visibility = View.VISIBLE
-                            binding.chatChefEmptyImg.visibility = View.GONE
-                        }
-                        roomList.isEmpty()&&mode==Mode.CHEF.index->{
-                            binding.chatUserEmptyImg.visibility = View.GONE
-                            binding.chatEmptyTxt.visibility = View.VISIBLE
-                            binding.chatChefEmptyImg.visibility = View.VISIBLE
-                        }
-                        roomList.isNotEmpty()&&mode==Mode.USER.index->{
-                            binding.chatUserEmptyImg.visibility = View.GONE
-                            binding.chatEmptyTxt.visibility = View.GONE
-                            binding.chatChefEmptyImg.visibility = View.GONE
-                        }
-                        roomList.isNotEmpty()&&mode==Mode.CHEF.index->{
-                            binding.chatUserEmptyImg.visibility = View.GONE
-                            binding.chatEmptyTxt.visibility = View.GONE
-                            binding.chatChefEmptyImg.visibility = View.GONE
-                        }
-                    }
-
-                    chatListAdapter.submitList(roomList)
-                    chatListAdapter.notifyDataSetChanged()
-
+                roomList.isEmpty()&&mode==Mode.CHEF.index->{
+                    binding.chatUserEmptySticker.visibility = View.GONE
+                    binding.chatEmptyText.visibility = View.VISIBLE
+                    binding.chatChefEmptySticker.visibility = View.VISIBLE
+                }
+                roomList.isNotEmpty()&&mode==Mode.USER.index->{
+                    binding.chatUserEmptySticker.visibility = View.GONE
+                    binding.chatEmptyText.visibility = View.GONE
+                    binding.chatChefEmptySticker.visibility = View.GONE
+                }
+                roomList.isNotEmpty()&&mode==Mode.CHEF.index->{
+                    binding.chatUserEmptySticker.visibility = View.GONE
+                    binding.chatEmptyText.visibility = View.GONE
+                    binding.chatChefEmptySticker.visibility = View.GONE
                 }
             }
 
+            chatListAdapter.submitList(roomList)
+            chatListAdapter.notifyDataSetChanged()
 
+        }
 
 
 
