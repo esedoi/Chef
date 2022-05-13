@@ -75,6 +75,11 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         addressListViewModel.addressList.observe(viewLifecycleOwner) {
             addressList.clear()
             addressList.addAll(it)
+            if(it.isEmpty()){
+                binding.addressListEmptyTxt.visibility = View.VISIBLE
+            }else{
+                binding.addressListEmptyTxt.visibility = View.GONE
+            }
             addressListAdapter.submitList(addressList)
             addressListAdapter.notifyDataSetChanged()
         }
@@ -111,6 +116,5 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         addressListAdapter.notifyDataSetChanged()
         setFragmentResult("selectAddress", bundleOf("address" to item))
         dismiss()
-
     }
 }

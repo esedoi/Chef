@@ -9,7 +9,9 @@ import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.paul.chef.MainActivity
+import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.databinding.FragmentLoginBinding
 
 
@@ -31,6 +33,15 @@ class LoginFragment : Fragment() {
     ): View? {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        binding.signInButton.isEnabled = false
+
+        binding.loginTermsTxt.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.actionGlobalTermsFragment())
+        }
+        binding.checkBox.setOnCheckedChangeListener { compoundButton, b ->
+            binding.signInButton.isEnabled = compoundButton.isChecked
+        }
 
         binding.signInButton.setOnClickListener {
             (activity as MainActivity).signIn()

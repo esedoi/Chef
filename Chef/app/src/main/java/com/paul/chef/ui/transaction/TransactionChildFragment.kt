@@ -70,6 +70,13 @@ class TransactionChildFragment: Fragment() {
                 transactionViewModel.getList(status)
                 transactionViewModel.orderList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", "orderList_observe, it = $it")
+                    if(it.isEmpty()){
+                        binding.chatChefEmptyImg.visibility = View.VISIBLE
+                        binding.chatEmptyTxt.visibility = View.VISIBLE
+                    }else{
+                        binding.chatChefEmptyImg.visibility = View.GONE
+                        binding.chatEmptyTxt.visibility = View.GONE
+                    }
                     transactionUnpaidAdapter.submitList(it)
                     transactionUnpaidAdapter.notifyDataSetChanged()
                 }
@@ -82,6 +89,13 @@ class TransactionChildFragment: Fragment() {
                 transactionViewModel.getList(status)
                 transactionViewModel.transactionList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", " transactionList_1_observe , it = $it")
+                    if(it.isEmpty()){
+                        binding.chatChefEmptyImg.visibility = View.VISIBLE
+                        binding.chatEmptyTxt.visibility = View.VISIBLE
+                    }else{
+                        binding.chatChefEmptyImg.visibility = View.GONE
+                        binding.chatEmptyTxt.visibility = View.GONE
+                    }
                     transactionChildAdapter.submitList( transactionViewModel.processingList)
                     transactionChildAdapter.notifyDataSetChanged()
                 }
@@ -94,6 +108,13 @@ class TransactionChildFragment: Fragment() {
                 transactionViewModel.getList(status)
                 transactionViewModel.transactionList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", " transactionList_2_observe , it = $it")
+                    if(it.isEmpty()){
+                        binding.chatChefEmptyImg.visibility = View.VISIBLE
+                        binding.chatEmptyTxt.visibility = View.VISIBLE
+                    }else{
+                        binding.chatChefEmptyImg.visibility = View.GONE
+                        binding.chatEmptyTxt.visibility = View.GONE
+                    }
 
                     transactionChildAdapter.submitList(transactionViewModel.receivedList)
                     transactionChildAdapter.notifyDataSetChanged()

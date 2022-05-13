@@ -270,7 +270,7 @@ public final class FragmentChefPageBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView5;
+      id = R.id.chef_page_set_txt;
       TextView textView5 = ViewBindings.findChildViewById(rootView, id);
       if (textView5 == null) {
         break missingId;

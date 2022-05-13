@@ -43,7 +43,7 @@ class AddressListViewModel(application: Application) : AndroidViewModel(applicat
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, User::class.java)
 
-                     data.address?.let { _addressList.value = it}
+                     _addressList.value = data.address?: emptyList()
                 }
             }
         }

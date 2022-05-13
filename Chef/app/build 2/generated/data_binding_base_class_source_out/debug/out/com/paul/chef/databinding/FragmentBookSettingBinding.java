@@ -307,7 +307,7 @@ public final class FragmentBookSettingBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.linearLayout;
+      id = R.id.book_set_linear;
       LinearLayout linearLayout = ViewBindings.findChildViewById(rootView, id);
       if (linearLayout == null) {
         break missingId;

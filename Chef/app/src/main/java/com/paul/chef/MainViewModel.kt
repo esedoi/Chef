@@ -80,7 +80,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .addOnFailureListener { exception ->
                 Log.d("pickerViewModel", "get failed with ", exception)
             }
-
     }
 
 

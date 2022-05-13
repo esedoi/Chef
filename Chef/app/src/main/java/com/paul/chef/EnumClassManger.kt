@@ -5,7 +5,7 @@ enum class BookSettingType(val index: Int) {
 }
 
 enum class BookType(val index: Int, val userTxt: String, val chefTxt:String) {
-    UserSpace(0, "預訂廚師來我的空間料理", "前往客人空間料理"), ChefSpace(1, "前往廚師空間用餐", "來我的廚房用餐")
+    UserSpace(0, "廚師來我的空間料理", "前往客人空間料理"), ChefSpace(1, "前往廚師空間用餐", "來我的廚房用餐")
 }
 
 enum class CalendarType(val index: Int) {
@@ -40,7 +40,8 @@ enum class PickerType(val index: Int, val value: String) {
     PICK_CAPACITY(5, "pickCapacity"),
     PICK_SESSION_CAPACITY(6, "pickSessionCapacity"),
     PICK_SESSION_TIME(7, "pickSessionTime"),
-    PICK_TIME(8, "pickTime")
+    PICK_TIME(8, "pickTime"),
+    FILTER_PEOPLE(9, "filterPeople")
 }
 
 enum class Like(val index: Int) {

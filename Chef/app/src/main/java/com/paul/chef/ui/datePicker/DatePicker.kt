@@ -4,19 +4,15 @@ package com.paul.chef.ui.datePicker
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -27,15 +23,10 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.paul.chef.BookSettingType
 import com.paul.chef.CalendarType
 import com.paul.chef.R
-import com.paul.chef.data.BookSetting
 import com.paul.chef.data.DateStatus
-import com.paul.chef.data.SelectedDate
 import com.paul.chef.databinding.*
-import com.paul.chef.ui.book.BookFragmentArgs
-import com.paul.chef.ui.calendarSetting.CalendarSettingViewModel
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.temporal.ChronoField
 import java.time.temporal.WeekFields
 import java.util.*
 
@@ -71,8 +62,11 @@ class DatePicker : BottomSheetDialogFragment() {
 
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
-        val chefId = arg.chefId
-        datePickerViewModel.getChefData(chefId)
+
+        if (arg.chefId != null) {
+            val chefId = arg.chefId
+            datePickerViewModel.getChefData(chefId!!)
+        }
 
 
         datePickerViewModel.bookSetting.observe(viewLifecycleOwner) {
@@ -266,11 +260,14 @@ class DatePicker : BottomSheetDialogFragment() {
 
 
         binding.dateSelected.setOnClickListener {
-
             val result = selectedDate?.toEpochDay()
             Log.d("datePicker", "result=$result")
 
-            setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            if (arg.chefId != null) {
+                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            } else {
+                setFragmentResult("filterDate", bundleOf("date" to result))
+            }
             dismiss()
             selectedDate = null
         }

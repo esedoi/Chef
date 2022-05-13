@@ -57,11 +57,34 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
         Log.d("orderchildfragment", "status=$status")
 
         orderViewModel.hasData.observe(viewLifecycleOwner){
-                    orderViewModel.getList(status)
+            orderViewModel.getList(status)
         }
 
         orderViewModel.orderList.observe(viewLifecycleOwner){
             Log.d("orderfragment", "it = $it")
+            val mode = UserManger.readData("mode", (activity as MainActivity))
+            when{
+                it.isEmpty()&&mode==Mode.USER.index->{
+                    binding.chatUserEmptyImg.visibility = View.VISIBLE
+                    binding.chatEmptyTxt.visibility = View.VISIBLE
+                    binding.chatChefEmptyImg.visibility = View.GONE
+                }
+                it.isEmpty()&&mode==Mode.CHEF.index->{
+                    binding.chatUserEmptyImg.visibility = View.GONE
+                    binding.chatEmptyTxt.visibility = View.VISIBLE
+                    binding.chatChefEmptyImg.visibility = View.VISIBLE
+                }
+                it.isNotEmpty()&&mode==Mode.USER.index->{
+                    binding.chatUserEmptyImg.visibility = View.GONE
+                    binding.chatEmptyTxt.visibility = View.GONE
+                    binding.chatChefEmptyImg.visibility = View.GONE
+                }
+                it.isNotEmpty()&&mode==Mode.CHEF.index->{
+                    binding.chatUserEmptyImg.visibility = View.GONE
+                    binding.chatEmptyTxt.visibility = View.GONE
+                    binding.chatChefEmptyImg.visibility = View.GONE
+                }
+            }
             orderChildAdapter.submitList(it)
         }
 

@@ -2,20 +2,204 @@
     <string name="app_name">Chef</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_menu">Menu</string>
-    <string name="title_like">Like</string>
-    <string name="title_user_order">Order</string>
-    <string name="title_chat">Chat</string>
-    <string name="title_user_profile">Profile</string>
-    <string name="title_chef_order">Order</string>
-    <string name="title_calendar">Calendar</string>
-    <string name="title_transaction">Transaction</string>
-    <string name="title_chef_profile">Profile</string>
+    <string name="title_menu">探索</string>
+    <string name="title_like">收藏</string>
+    <string name="title_user_order">訂單</string>
+    <string name="title_chat">訊息</string>
+    <string name="title_user_profile">個人</string>
+    <string name="title_chef_order">訂單</string>
+    <string name="title_calendar">日曆</string>
+    <string name="title_transaction">交易</string>
+    <string name="title_chef_profile">個人</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
     <string name="new_taiwan_dollar">NT$%1$s</string>
     <string name="people">%1$d 位</string>
     <string name="transaction_number">%1$d 筆</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="user_terms">"Terms of Use Template for Websites with User-Generated Content
+
+chef Terms of Use
+(Effective as of 2022-05-13)
+
+Welcome to the chef’s Terms of Use agreement. For purposes of this agreement, “Site” refers to the Company’s mobile application. “Service” refers to the Company’s services accessed via the Site, in which users can book an order or receive order . The terms “we,” “us,” and “our” refer to the Company. “You” refers to you, as a user of our Site or our Service.
+
+The following Terms of Use apply when you view or use the Service by accessing the Service through clicking on the application (the “chef”) on your mobile device.
+Please review the following terms carefully. By accessing or using the Service, you signify your agreement to these Terms of Use. If you do not agree to be bound by these Terms of Use in their entirety, you may not access or use the Service.  
+
+PRIVACY POLICY
+The Company respects the privacy of its Service users. Please refer to the Company’s Privacy Policy (found here: https://www.privacypolicies.com/live/f05be66c-7a45-4902-9c22-caff10cf4699) which explains how we collect, use, and disclose information that pertains to your privacy. When you access or use the Service, you signify your agreement to the Privacy Policy as well as these Terms of Use.
+
+ABOUT THE SERVICE
+The Service allows you to book order or receive order.  
+
+REGISTRATION; RULES FOR USER CONDUCT AND USE OF THE SERVICE
+You need to be at least 18 years old and a resident of the United States to register for and use the Service.
+If you are a user who signs up for the Service, you will create a personalized account which includes a unique username and a password to access the Service and to receive messages from the Company. You agree to notify us immediately of any unauthorized use of your password and/or account. The Company will not be responsible for any liabilities, losses, or damages arising out of the unauthorized use of your member name, password and/or account.
+
+USE RESTRICTIONS
+Your permission to use the Site is conditioned upon the following use, posting and conduct restrictions:
+You agree that you will not under any circumstances:
+·    access the Service for any reason other than your personal, non-commercial use solely as permitted by the normal functionality of the Service,
+·    collect or harvest any personal data of any user of the Site or the Service
+·    use the Site or the Service for the solicitation of business in the course of trade or in connection with a commercial enterprise;
+·    distribute any part or parts of the Site or the Service without our explicit written permission (we grant the operators of public search engines permission to use spiders to copy materials from the site for the sole purpose of creating publicly-available searchable indices but retain the right to revoke this permission at any time on a general or specific basis);
+·    use the Service for any unlawful purpose or for the promotion of illegal activities;
+·    attempt to, or harass, abuse or harm another person or group;
+·    use another user’s account without permission;
+·    intentionally allow another user to access your account;
+·    provide false or inaccurate information when registering an account;
+·    interfere or attempt to interfere with the proper functioning of the Service;
+·    make any automated use of the Site, the Service or the related systems, or take any action that we deem to impose or to potentially impose an unreasonable or disproportionately large load on our servers or network infrastructure;
+·    bypass any robot exclusion headers or other measures we take to restrict access to the Service, or use any software, technology, or device to scrape, spider, or crawl the Service or harvest or manipulate data;
+·    circumvent, disable or otherwise interfere with any security-related features of the Service or features that prevent or restrict use or copying of content, or enforce limitations on use of the Service or the content accessible via the Service; or
+·    publish or link to malicious content of any sort, including that intended to damage or disrupt another user’s browser or computer.
+
+POSTING AND CONDUCT RESTRICTIONS
+When you create your own personalized account, you may be able to provide name, address (“User Content”) to the Service. You are solely responsible for the User Content that you post, upload, link to or otherwise make available via the Service.
+ You agree that we are only acting as a passive conduit for your online distribution and publication of your User Content. The Company, however, reserves the right to remove any User Content from the Service at its sole discretion.
+We grant you permission to use and access the Service, subject to the following express conditions surrounding User Content. You agree that failure to adhere to any of these conditions constitutes a material breach of these Terms.
+By transmitting and submitting any User Content while using the Service, you agree as follows:
+·    You are solely responsible for your account and the activity that occurs while signed in to or while using your account;
+·    You will not post information that is malicious, libelous, false or inaccurate;
+·    You will not post any information that is abusive, threatening, obscene, defamatory, libelous, or racially, sexually, religiously, or otherwise objectionable and offensive;
+·    You retain all ownership rights in your User Content but you are required to grant the following rights to the Site and to users of the Service as set forth more fully under the “License Grant” and “Intellectual Property” provisions below: When you upload or post User Content to the Site or the Service, you grant to the Site a worldwide, non-exclusive, royalty-free, transferable license to use, reproduce, distribute, prepare derivative works of, display, and perform that Content in connection with the provision of the Service; and you grant to each user of the Service, a worldwide, non-exclusive, royalty-free license to access your User Content through the Service, and to use, reproduce, distribute, prepare derivative works of, display and perform such Content to the extent permitted by the Service and under these Terms of Use;
+·    You will not submit content that is copyrighted or subject to third party proprietary rights, including privacy, publicity, trade secret, or others, unless you are the owner of such rights or have the appropriate permission from their rightful owner to specifically submit such content; and
+·    You hereby agree that we have the right to determine whether your User Content submissions are appropriate and comply with these Terms of Service, remove any and/or all of your submissions, and terminate your account with or without prior notice.
+
+You understand and agree that any liability, loss or damage that occurs as a result of the use of any User Content that you make available or access through your use of the Service is solely your responsibility. The Site is not responsible for any public display or misuse of your User Content.
+The Site does not, and cannot, pre-screen or monitor all User Content. However, at our discretion, we, or technology we employ, may monitor and/or record your interactions with the Service or with other Users.
+
+ONLINE CONTENT DISCLAIMER
+Opinions, advice, statements, offers, or other information or content made available through the Service, but not directly by the Site, are those of their respective authors, and should not necessarily be relied upon. Such authors are solely responsible for such content.
+
+We do not guarantee the accuracy, completeness, or usefulness of any information on the Site or the Service nor do we adopt nor endorse, nor are we responsible for, the accuracy or reliability of any opinion, advice, or statement made by other parties. We take no responsibility and assume no liability for any User Content that you or any other user or third party posts or sends via the Service. Under no circumstances will we be responsible for any loss or damage resulting from anyone’s reliance on information or other content posted on the Service, or transmitted to users.
+Though we strive to enforce these Terms of Use, you may be exposed to User Content that is inaccurate or objectionable when you use or access the Site or the Service. We reserve the right, but have no obligation, to monitor the materials posted in the public areas of the Site or the Service or to limit or deny a user’s access to the Service or take other appropriate action if a user violates these Terms of Use or engages in any activity that violates the rights of any person or entity or which we deem unlawful, offensive, abusive, harmful or malicious. E-mails sent between you and other participants that are not readily accessible to the general public will be treated by us as private to the extent required by applicable law. The Company shall have the right to remove any material that in its sole opinion violates, or is alleged to violate, the law or this agreement or which might be offensive, or that might violate the rights, harm, or threaten the safety of users or others.  Unauthorized use may result in criminal and/or civil prosecution under Federal, State and local law.
+LINKS TO OTHER SITES AND/OR MATERIALS
+As part of the Service, we may provide you with convenient links to third party website(s) (“Third Party Sites”) as well as content or items belonging to or originating from third parties (the “Third Party Applications, Software or Content”). These links are provided as a courtesy to Service subscribers. We have no control over Third Party Sites or Third Party Applications, Software or Content or the promotions, materials, information, goods or services available on these Third Party Sites or Third Party Applications, Software or Content. Such Third Party Sites and Third Party Applications, Software or Content are not investigated, monitored or checked for accuracy, appropriateness, or completeness, and we are not responsible for any Third Party Sites accessed through the Site or any Third Party Applications, Software or Content posted on, available through or installed from the Site, including the content, accuracy, offensiveness, opinions, reliability, privacy practices or other policies of or contained in the Third Party Sites or the Third Party Applications, Software or Content. Inclusion of, linking to or permitting the use or installation of any Third Party Site or any Third Party Applications, Software or Content does not imply our approval or endorsement. If you decide to leave the Site and access the Third Party Sites or to use or install any Third Party Applications, Software or Content, you do so at your own risk and you should be aware that our terms and policies, including these Terms of Use, no longer govern. You should review the applicable terms and policies, including privacy and data gathering practices, of any Third Party Site to which you navigate from the Site or relating to any applications you use or install from the Third Party Site.
+
+COPYRIGHT COMPLAINTS AND COPYRIGHT AGENT
+(a) Termination of Repeat Infringer Accounts. We respect the intellectual property rights of others and requires that the users do the same. Pursuant to 17 U.S.C. 512(i) of the United States Copyright Act, we have adopted and implemented a policy that provides for the termination in appropriate circumstances of users of the Service who are repeat infringers. We may terminate access for participants or users who are found repeatedly to provide or post protected third party content without necessary rights and permissions.
+(b) DMCA Take-Down Notices.  
+1.   The date of your notification;
+2.   A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed;
+3.   A description of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site;
+4.   A description of the material that is claimed to be infringing or to be the subject of infringing activity and information sufficient to enable us to locate such work;
+5.   Information reasonably sufficient to permit the service provider to contact you, such as an address, telephone number, and/or email address;
+6.   A statement that you have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law; and
+7.   A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
+(c) Counter-Notices. If you believe that your User Content that has been removed from the Site is not infringing, or that you have the authorization from the copyright owner, the copyright owner's agent, or pursuant to the law, to post and use the content in your User Content, you may send a counter-notice containing the following information to our copyright agent using the contact information set forth above:
+
+1.   Your physical or electronic signature;
+2.   A description of the content that has been removed and the location at which the content appeared before it was removed;
+3.   A statement that you have a good faith belief that the content was removed as a result of mistake or a misidentification of the content; and
+4.   Your name, address, telephone number, and email address, a statement that you consent to the jurisdiction of the federal court in a statement that you will accept service of process from the person who provided notification of the alleged infringement.
+If a counter-notice is received by our copyright agent, we may send a copy of the counter-notice to the original complaining party informing such person that it may reinstate the removed content in ten (10) business days. Unless the copyright owner files an action seeking a court order against the content provider, member or user, the removed content may (in our sole discretion) be reinstated on the Site in ten (10) to fourteen (14) business days or more after receipt of the counter-notice.
+
+LICENSE GRANT
+By posting any User Content via the Service, you expressly grant, and you represent and warrant that you have a right to grant, to the Company a royalty-free, sublicensable, transferable, perpetual, irrevocable, non-exclusive, worldwide license to use, reproduce, modify, publish, list information regarding, edit, translate, distribute, publicly perform, publicly display, and make derivative works of all such User Content and your name, voice, and/or likeness as contained in your User Content, if applicable, in whole or in part, and in any form, media or technology, whether now known or hereafter developed, for use in connection with the Service.
+
+INTELLECTUAL PROPERTY
+You acknowledge and agree that we and our licensors retain ownership of all intellectual property rights of any kind related to the Service, including applicable copyrights, trademarks and other proprietary rights. Other product and company names that are mentioned on the Service may be trademarks of their respective owners. We reserve all rights that are not expressly granted to you under these Terms of Use.
+
+EMAIL MAY NOT BE USED TO PROVIDE NOTICE
+Communications made through the Service’s email and messaging system will not constitute legal notice to the Site, the Service, or any of its officers, employees, agents or representatives in any situation where legal notice is required by contract or any law or regulation.
+
+USER CONSENT TO RECEIVE COMMUNICATIONS IN ELECTRONIC FORM
+For contractual purposes, you: (a) consent to receive communications from us in an electronic form via the email address you have submitted; and (b) agree that all Terms of Use, agreements, notices, disclosures, and other communications that we provide to you electronically satisfy any legal requirement that such communications would satisfy if it were in writing. The foregoing does not affect your non-waivable rights.
+
+We may also use your email address to send you other messages, including information about the Site or the Service and special offers. You may opt out of such email by changing your account settings, using the “Unsubscribe” link in the message, or by sending an email to esedoijen@gmail.com or mail to the following postal address:
+Customer Support
+
+Opting out may prevent you from receiving messages regarding the Site, the Service or special offers."</string>
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+
+        "The foundational elements of print based design typography, grids, space, scale, color, "
+        "and use of imagery guide visual treatments. These elements do far more than please the "
+        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
+        "imagery, large scale typography, and intentional white space create a bold and graphic "
+        "interface that immerse the user in the experience.\n"
+        "An emphasis on user actions makes core functionality immediately apparent and provides "
+        "waypoints for the user.\n\n"
+
+        "Motion provides meaning.\n\n"
+
+        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "inflection points that initiate motion, transforming the whole design.\n"
+        "All action takes place in a single environment. Objects are presented to the user without "
+        "breaking the continuity of experience even as they transform and reorganize.\n"
+        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
+        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+
+        "3D world.\n\n"
+
+        "The material environment is a 3D space, which means all objects have x, y, and z "
+        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
+        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
+        "position along the z-axis and has a standard 1dp thickness.\n"
+        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
+        "emulated by manipulating the y-axis.\n\n"
+
+        "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+
+        "Resting elevation.\n\n"
+
+        "All material objects, regardless of size, have a resting elevation, or default elevation "
+        "that does not change. If an object changes elevation, it should return to its resting "
+        "elevation as soon as possible.\n\n"
+
+        "Component elevations.\n\n"
+
+        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
+        "does not vary from 6dp in one app to 16dp in another app).\n"
+        "Components may have different resting elevations across platforms, depending on the depth "
+        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
+
+        "Responsive elevation and dynamic elevation offsets.\n\n"
+
+        "Some component types have responsive elevation, meaning they change elevation in response "
+        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "changes are consistently implemented using dynamic elevation offsets.\n"
+        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
+        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "across actions and component types. For example, all components that lift on press have "
+        "the same elevation change relative to their resting elevation.\n"
+        "Once the input event is completed or cancelled, the component will return to its resting "
+        "elevation.\n\n"
+
+        "Avoiding elevation interference.\n\n"
+
+        "Components with responsive elevations may encounter other components as they move between "
+        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
+        "through other material, components avoid interfering with one another any number of ways, "
+        "whether on a per component basis or using the entire app layout.\n"
+        "On a component level, components can move or be removed before they cause interference. "
+        "For example, a floating action button (FAB) can disappear or move off screen before a "
+        "user picks up a card, or it can move if a snackbar appears.\n"
+        "On the layout level, design your app layout to minimize opportunities for interference. "
+        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
 
 </resources>

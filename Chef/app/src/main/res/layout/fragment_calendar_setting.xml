@@ -18,15 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="可訂狀態"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintStart_toStartOf="@+id/calendar_set_select_date_txt"
-                app:layout_constraintTop_toBottomOf="@+id/calendar_set_select_date_txt" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="可訂狀態"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/calendar_set_select_date_txt"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/calendar_set_select_date_txt" />-->
 
             <!--            <RadioGroup-->
 <!--                android:id="@+id/selectdatesType"-->
@@ -51,23 +51,23 @@
 <!--                    android:text="每個星期三" />-->
 <!--            </RadioGroup>-->
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/dateOpenSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="24dp"
-                android:minWidth="50dp"
-                android:minHeight="70dp"
-                android:padding="15dp"
-                android:scaleX="1.2"
-                android:scaleY="1.2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintBottom_toBottomOf="@+id/calendar_set_switch_txt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="@+id/calendar_set_switch_txt" />
+<!--            <com.google.android.material.switchmaterial.SwitchMaterial-->
+<!--                android:id="@+id/dateOpenSwitch"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:minWidth="50dp"-->
+<!--                android:minHeight="70dp"-->
+<!--                android:padding="15dp"-->
+<!--                android:scaleX="1.2"-->
+<!--                android:scaleY="1.2"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/calendar_set_switch_txt"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="1.0"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView3"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/calendar_set_switch_txt" />-->
 
             <TextView
                 android:id="@+id/calendar_set_select_date_txt"
@@ -93,15 +93,48 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/calendar_set_switch_txt"
-                android:layout_width="wrap_content"
+<!--            <TextView-->
+<!--                android:id="@+id/calendar_set_switch_txt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="關閉中"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView3"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
+
+            <RadioGroup
+                android:id="@+id/calendar_radio_group"
+                android:layout_width="278dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="關閉中"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/dateSave"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/calendar_set_select_date_txt"
+                app:layout_constraintVertical_bias="0.0">
+
+                <RadioButton
+                    android:id="@+id/calendar_set_open_radio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:paddingStart="16dp"
+                    android:text="設為可以預訂"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <RadioButton
+                    android:id="@+id/calendar_set_close_radio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:paddingStart="16dp"
+
+                    android:text="設為不可供預訂"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

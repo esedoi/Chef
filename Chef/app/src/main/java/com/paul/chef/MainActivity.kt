@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.orderManageFragment,
                 R.id.chatFragment,
                 R.id.userProfileFragment,
-                R.id.calendar,
+                R.id.calendar_set_open_radio,
                 R.id.transactionFragment,
                 R.id.chefFragment -> {
                     navView.visibility = View.VISIBLE
@@ -119,13 +119,41 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menuDetailFragment,
                 R.id.navigation_home,
-                R.id.loginFragment->{
+                R.id.loginFragment,
+                R.id.filterFragment->{
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.GONE
                 }
                 else -> {
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.VISIBLE
+                    when(navController.currentDestination?.id){
+                        R.id.bookFragment->{
+                            binding.toolBarTitle.text = "確認訂單"
+                        }
+                        R.id.menuEditFragment->{
+                            binding.toolBarTitle.text = "完成菜單"
+                        }
+                        R.id.calendarSetting->{
+                            binding.toolBarTitle.text = "可訂狀態"
+                        }
+                        R.id.bookSetting->{
+                            binding.toolBarTitle.text = "預訂設定"
+                        }
+                        R.id.orderDetailFragment->{
+                            binding.toolBarTitle.text = "訂單資訊"
+                        }
+                        R.id.displayChefFragment->{
+                            binding.toolBarTitle.text = "廚師資訊"
+                        }
+                        R.id.termsFragment->{
+                            binding.toolBarTitle.text = "Terms of Use"
+                        }
+                        else->{
+                            binding.toolBarTitle.text = ""
+                        }
+
+                    }
                 }
             }
         }

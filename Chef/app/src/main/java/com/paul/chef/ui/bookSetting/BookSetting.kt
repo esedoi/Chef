@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 import com.paul.chef.*
 import com.paul.chef.data.Address
 import com.paul.chef.data.ChefSpace
@@ -142,7 +143,25 @@ class BookSetting : Fragment() {
             binding.bookSetChefSpaceCapacity.setText(sessionCapacity.toString())
         }
         setFragmentResultListener(PickerType.SET_SESSION_TIME.value) { requestKey, bundle ->
-            bundle.getString(PickerType.SET_SESSION_TIME.value)?.let { sessionTime.add(it) }
+
+           val session =  bundle.getString(PickerType.SET_SESSION_TIME.value)
+            if (session != null) {
+                sessionTime.add(session)
+            }
+
+            val chip = Chip(this.context)
+            chip.text = session
+            chip.isCheckable = true
+            chip.isCloseIconVisible = true
+            chip.setOnCloseIconClickListener { view ->
+                binding.bookSetChefSpaceTimeLayout.removeView(view)
+                Log.d("booksetting fragment", "chip.text=${chip.text}")
+                sessionTime.remove(chip.text)
+            }
+            binding.bookSetChefSpaceTimeLayout.addView(chip)
+
+
+
         }
         setFragmentResultListener(PickerType.SET_START_TIME.value) { requestKey, bundle ->
             startTime = bundle.getString(PickerType.SET_START_TIME.value).toString()

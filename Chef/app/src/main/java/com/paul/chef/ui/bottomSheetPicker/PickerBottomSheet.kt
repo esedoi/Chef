@@ -106,12 +106,6 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
 
         }
 
-//        val filterList = timeList.filterIndexed { index, s ->
-//            index in 5..36
-//        }
-
-
-//        Log.d("pickbottomsheet", "timeList = $filterList")
 
         Log.d("pickbottomsheet", "pickerType = $pickerType")
 
@@ -128,7 +122,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                  binding.pickerTitle.text = "時間"
             }
 
-            PickerType.SET_CAPACITY.index, PickerType.SET_SESSION_CAPACITY.index ->{
+            PickerType.SET_CAPACITY.index, PickerType.SET_SESSION_CAPACITY.index, PickerType.FILTER_PEOPLE.index ->{
                 binding.numberPicker.minValue = 1
                 binding.numberPicker.maxValue = 30
                 binding.pickerTitle.text = "人數"
@@ -151,11 +145,14 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
             var requestKey = ""
 
             when(pickerType){
+                PickerType.FILTER_PEOPLE.index->{
+                    key=PickerType.FILTER_PEOPLE.value
+                    setFragmentResult(key, bundleOf(key to value))
+                }
                 PickerType.SET_SESSION_TIME.index->{
                     key=PickerType.SET_SESSION_TIME.value
                     time = timeList[value]
                     setFragmentResult(key, bundleOf(key to time))
-
                 }
                 PickerType.SET_START_TIME.index->{
                     key=PickerType.SET_START_TIME.value

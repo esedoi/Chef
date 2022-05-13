@@ -64,7 +64,7 @@ class AddTagFragment : DialogFragment() {
                 chipTxtList.add(text.toString())
             }
             val arrayList:ArrayList<String> = chipTxtList as ArrayList
-            setFragmentResult("tagList", bundleOf("tagList" to arrayList))
+            setFragmentResult("tagList", bundleOf("tagList" to arrayList, "filterTagList" to arrayList))
             chipIdList.clear()
             chipTxtList.clear()
             dismiss()

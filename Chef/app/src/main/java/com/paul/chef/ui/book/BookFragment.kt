@@ -36,11 +36,10 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     var picker: LocalDate? = null
     private lateinit var placesClient: PlacesClient
-//    var bookSetting: BookSetting? = null
-    private var chefAddress: Address?=null
-    private var userAddress: Address?=null
 
-    //safe args
+    private var chefAddress: Address? = null
+    private var userAddress: Address? = null
+
     private val arg: BookFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -54,24 +53,20 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+        //map
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
                 (activity as MainActivity).packageName,
                 PackageManager.GET_META_DATA
             )
         val key = info.metaData[resources.getString(R.string.map_api_key_name)].toString()
-
-
         if (!Places.isInitialized()) {
             Places.initialize(requireActivity(), key);
         }
-
-
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.book_map) as SupportMapFragment
-
         mapFragment.getMapAsync(this)
-
         placesClient = Places.createClient(requireActivity())
 
 
@@ -79,12 +74,12 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         val menu = arg.menu
         val selectedDish = arg.selectedDish.toList()
         bookViewModel.getAddress(menu.chefId)
-        bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner){
+        bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner) {
             chefAddress = it
         }
 
 
-
+        //price result
         bookViewModel.priceResult.observe(viewLifecycleOwner) {
             Log.d("bookfragment", "isdiscount=${it["isDiscount"]}")
             if (it["isDiscount"] == 1) {
@@ -92,28 +87,40 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                     orginalPerPrice.visibility = View.VISIBLE
                     orginalTotal.visibility = View.VISIBLE
 
-                    orginalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
-                    orginalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["originalPrice"]))
+                    orginalPerPrice.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
+                    orginalTotal.text = getString(
+                        R.string.new_taiwan_dollar,
+                        String.format("%,d", it["originalPrice"])
+                    )
                     orginalPerPrice.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
                     orginalTotal.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
-                    finalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["discountPerPrice"]))
-                    finalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
-                    userFee.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
-                    userPay.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
+                    finalPerPrice.text = getString(
+                        R.string.new_taiwan_dollar,
+                        String.format("%,d", it["discountPerPrice"])
+                    )
+                    finalTotal.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
+                    userFee.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
+                    userPay.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
                 }
             } else {
                 binding.apply {
                     orginalPerPrice.visibility = View.GONE
                     orginalTotal.visibility = View.GONE
-                    finalPerPrice.text = getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
-                    finalTotal.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
-                    userFee.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
-                    userPay.text = getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
+                    finalPerPrice.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
+                    finalTotal.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
+                    userFee.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
+                    userPay.text =
+                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
                 }
             }
         }
-
-
 
 
         binding.bookDateSelect.setOnClickListener {
@@ -151,14 +158,14 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                     BookType.ChefSpace.index
                 }
 
-                val safeArg = if(typeInt ==BookType.UserSpace.index){
+                val safeArg = if (typeInt == BookType.UserSpace.index) {
                     PickerType.PICK_CAPACITY.index
-                }else{
+                } else {
                     PickerType.PICK_SESSION_CAPACITY.index
                 }
                 findNavController().navigate(
                     MobileNavigationDirections.actionGlobalPickerBottomSheet(
-                        safeArg,menu.chefId
+                        safeArg, menu.chefId
                     )
                 )
             }
@@ -176,20 +183,19 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                     BookType.ChefSpace.index
                 }
 
-                val safeArg = if(typeInt ==BookType.UserSpace.index){
+                val safeArg = if (typeInt == BookType.UserSpace.index) {
                     PickerType.PICK_TIME.index
-                }else{
+                } else {
                     PickerType.PICK_SESSION_TIME.index
                 }
 
                 findNavController().navigate(
                     MobileNavigationDirections.actionGlobalPickerBottomSheet(
-                        safeArg,menu.chefId
+                        safeArg, menu.chefId
                     )
                 )
             }
         }
-
 
 
         var pickPeople = -1
@@ -204,21 +210,26 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             binding.bookPeopleSelect.text?.clear()
             binding.bookDateSelect.text?.clear()
 
-            when(checkedId){
-                R.id.book_user_space_chip->{
-                    findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
+            when (checkedId) {
+                R.id.book_user_space_chip -> {
+                    findNavController().navigate(
+                        MobileNavigationDirections.actionGlobalAddressListFragment(
+                            AddressListType.SELECT.index
+                        )
+                    )
                     binding.bookEditAddress.visibility = View.VISIBLE
                 }
-                R.id.book_chef_space_chip->{
+                R.id.book_chef_space_chip -> {
                     binding.bookEditAddress.visibility = View.GONE
                     mMap.clear()
-                    if(chefAddress!=null){
-                        val latLng = LatLng(chefAddress?.latitude!!,chefAddress?.longitude!!)
+                    if (chefAddress != null) {
+                        val latLng = LatLng(chefAddress?.latitude!!, chefAddress?.longitude!!)
 
                         mMap.addMarker(
                             MarkerOptions()
                                 .position(latLng)
-                                .title("Marker in chefSpace"))
+                                .title("Marker in chefSpace")
+                        )
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
                         binding.bookAddress.text = chefAddress?.addressTxt
                     }
@@ -227,7 +238,11 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.bookEditAddress.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalAddressListFragment(
+                    AddressListType.SELECT.index
+                )
+            )
         }
 
 
@@ -255,16 +270,17 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
         setFragmentResultListener("selectAddress") { requestKey, bundle ->
-           val  newAddress = bundle.getParcelable<Address>("address")!!
+            val newAddress = bundle.getParcelable<Address>("address")!!
             val addressTxt = newAddress.addressTxt
-            val latLng = LatLng(newAddress.latitude,newAddress.longitude,)
+            val latLng = LatLng(newAddress.latitude, newAddress.longitude)
             userAddress = newAddress
 
             mMap.clear()
             mMap.addMarker(
                 MarkerOptions()
                     .position(latLng)
-                    .title("Marker in userSpace"))
+                    .title("Marker in userSpace")
+            )
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
             binding.bookAddress.text = addressTxt
         }
@@ -280,11 +296,11 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                 Toast.makeText(this.context, "請選擇日期", Toast.LENGTH_SHORT).show()
             } else if (typeId == -1) {
                 Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
-            } else if(pickPeople == -1){
+            } else if (pickPeople == -1) {
                 Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
-            }else if(pickTime == ""){
+            } else if (pickTime == "") {
                 Toast.makeText(this.context, "請選擇用餐時間", Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
 
                 val typeInt = if (typeId == R.id.book_user_space_chip) {
                     BookType.UserSpace.index
@@ -314,14 +330,14 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                         pickPeople,
                         selectedDish
                     )
-                }else{
+                } else {
                     Toast.makeText(this.context, "請選擇地址", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        bookViewModel.bookDone.observe(viewLifecycleOwner){
-            if(it){
+        bookViewModel.bookDone.observe(viewLifecycleOwner) {
+            if (it) {
                 findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
             }
         }
