@@ -64,6 +64,8 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
             dataList.clear()
+            menuIdList.clear()
+            menuList.clear()
 
             db.collection("Menu")
                 .whereEqualTo("chefId", chefId)
@@ -82,6 +84,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
                         Log.d("chefviewmodel", "menuidlist=$menuIdList")
 
 
+                        dataList.clear()
                         for (i in menuIdList) {
                             var menuId = i
                             db.collection("Menu").document(menuId)

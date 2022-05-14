@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <ImageView
         android:id="@+id/chat_user_empty_img"
         android:layout_width="240dp"
@@ -43,7 +44,8 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            >
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 style="?attr/collapsingToolbarLayoutLargeStyle"
@@ -106,7 +108,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/logo_chef" />
+                    app:srcCompat="@drawable/green_logo" />
 
 <!--                <TextView-->
 <!--                    android:layout_width="wrap_content"-->
@@ -147,7 +149,7 @@
                         android:id="@+id/menu_list_filter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/close_background"
+                        android:backgroundTint="@color/md_theme_light_secondaryContainer"
                         android:fontFamily="@font/noto_sans"
                         android:inputType="none"
                         android:gravity="center"

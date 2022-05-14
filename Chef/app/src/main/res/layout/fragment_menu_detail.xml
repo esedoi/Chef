@@ -24,39 +24,38 @@
                 android:id="@+id/menu_detail_like_check"
                 android:layout_width="41dp"
                 android:layout_height="41dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:scaleType="centerInside"
+                android:background="@drawable/round"
+                android:backgroundTint="@color/md_theme_light_background"
+                android:button="@null"
                 android:elevation="3dp"
                 android:focusable="auto"
-                android:background="@drawable/round"
-                android:backgroundTint="@color/white"
-                android:foregroundGravity="center"
                 android:foreground="@drawable/sl_favourite"
-                android:button="@null"
-                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                android:scaleType="centerInside"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imagesRecycler"
                 android:layout_width="0dp"
                 android:layout_height="240dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/menu_detail_back"
-                android:elevation="3dp"
                 android:layout_width="41dp"
                 android:layout_height="41dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/round"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/md_theme_light_background"
+                android:elevation="3dp"
                 android:scaleType="centerInside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -91,6 +90,7 @@
             <RatingBar
                 android:id="@+id/ratingBar4"
                 style="?android:attr/ratingBarStyleSmall"
+                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -238,10 +238,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
                 style="?attr/materialCardViewFilledStyle"
+
                 android:layout_width="0dp"
                 android:layout_height="180dp"
                 android:layout_margin="16dp"
-                android:backgroundTint="@color/close_background"
+                android:backgroundTint="@color/md_theme_light_secondaryContainer"
                 android:elevation="0dp"
                 app:cardCornerRadius="15dp"
                 app:cardMaxElevation="0dp"
@@ -404,7 +405,7 @@
         android:id="@+id/view5"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
-        android:background="@color/white"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

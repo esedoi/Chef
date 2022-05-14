@@ -72,11 +72,40 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
         //navigation safe args
         val menu = arg.menu
+
         val selectedDish = arg.selectedDish.toList()
         bookViewModel.getAddress(menu.chefId)
         bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner) {
             chefAddress = it
+            when(arg.type){
+                BookSettingType.OnlyChefSpace.index->{
+                    binding.bookChefSpaceChip.isChecked = true
+                    binding.bookChefSpaceChip.isEnabled = true
+                    binding.bookUserSpaceChip.isChecked = false
+                    binding.bookUserSpaceChip.isEnabled = false
+                    binding.bookEditAddress.visibility = View.GONE
+                    mMap.clear()
+                    if (chefAddress != null) {
+                        val latLng = LatLng(chefAddress?.latitude!!, chefAddress?.longitude!!)
+
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(latLng)
+                                .title("Marker in chefSpace")
+                        )
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                        binding.bookAddress.text = chefAddress?.addressTxt
+                    }
+                }
+                BookSettingType.OnlyUserSpace.index->{
+                    binding.bookChefSpaceChip.isChecked = false
+                    binding.bookChefSpaceChip.isEnabled = false
+                    binding.bookUserSpaceChip.isChecked = true
+                    binding.bookUserSpaceChip.isEnabled = true
+                }
+            }
         }
+
 
 
         //price result
@@ -209,6 +238,8 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             binding.bookTimeSelect.text?.clear()
             binding.bookPeopleSelect.text?.clear()
             binding.bookDateSelect.text?.clear()
+            binding.bookAddress.text = "--"
+
 
             when (checkedId) {
                 R.id.book_user_space_chip -> {
@@ -351,9 +382,11 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+
         mMap = googleMap
         val default = LatLng(25.0, 121.0)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(default))
+
     }
 }
 

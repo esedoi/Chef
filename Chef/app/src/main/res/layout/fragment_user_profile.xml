@@ -8,6 +8,7 @@
 
     <Button
         android:id="@+id/turnToChef"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -54,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:gravity="top|end"
+        android:gravity="center"
         android:text="編輯"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/user_profile_img" />
@@ -97,6 +98,7 @@
 
     <Button
         android:id="@+id/user_profile_create_chef"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -109,7 +111,6 @@
 
     <Button
         android:id="@+id/user_profile_logout"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

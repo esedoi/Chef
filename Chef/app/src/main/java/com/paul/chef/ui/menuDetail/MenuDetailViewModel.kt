@@ -25,9 +25,14 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
 
-    private var _openBoolean = MutableLiveData<Boolean>()
-    val openBoolean: LiveData<Boolean>
-        get() = _openBoolean
+
+//    private var _openBoolean = MutableLiveData<Boolean>()
+//    val openBoolean: LiveData<Boolean>
+//        get() = _openBoolean
+
+    private var _bookSettingType = MutableLiveData<Int?>()
+    val bookSettingType: LiveData<Int?>
+        get() = _bookSettingType
 
     private var _likeIdList = MutableLiveData<List<String>>()
     val likeIdList: LiveData<List<String>>
@@ -66,7 +71,14 @@ class MenuDetailViewModel(application: Application) : AndroidViewModel(applicati
                     val item = document.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Chef::class.java)
-                    _openBoolean.value = data.bookSetting!=null&&data.bookSetting.type!= BookSettingType.RefuseAll.index
+
+                    _bookSettingType.value = if(data.bookSetting==null){
+                        null
+                    }else{
+                        data.bookSetting.type
+                    }
+
+//                    _openBoolean.value = data.bookSetting!=null&&data.bookSetting.type!= BookSettingType.RefuseAll.index
 
                 } else {
                     Log.d("pickerViewModel", "No such document")

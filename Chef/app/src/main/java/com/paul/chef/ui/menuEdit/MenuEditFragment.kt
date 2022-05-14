@@ -366,6 +366,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
                 val dishBindingList = mutableListOf<ItemDishOptionalBinding>()
                 dishBindingList.add(dishView)
+                dishView.menuDishNameInput.dispatchSetSelected(true)
 
                 for (d in dishBindingList) {
                     dishType = dishTypeView.menuAddDishType.editText?.text.toString()

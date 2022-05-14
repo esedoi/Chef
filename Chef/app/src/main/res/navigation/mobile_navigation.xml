@@ -97,6 +97,9 @@
         <argument
             android:name="selectedDish"
             app:argType="com.paul.chef.data.Dish[]" />
+        <argument
+            android:name="type"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/calendar_set_open_radio"

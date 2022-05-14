@@ -164,10 +164,11 @@ class MenuListFragment : Fragment(), ItemMenu {
 
             if (newList != null) {
                 for (tag in newList) {
-                    val chip = binding.menuListChipGroup.findViewById<Chip>(tagList.indexOf(tag))
-                    if (chip.text == tag) {
-
-                        chip.isChecked = true
+                    if(tagList.contains(tag)){
+                        val chip = binding.menuListChipGroup.findViewById<Chip>(tagList.indexOf(tag))
+                        if (chip.text == tag) {
+                            chip.isChecked = true
+                        }
                     }
                 }
             }

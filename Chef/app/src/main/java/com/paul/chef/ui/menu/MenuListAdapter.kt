@@ -53,18 +53,8 @@ class MenuListAdapter(
         private lateinit var imageAdapter: DetailImagesAdapter
         private var layoutManager: RecyclerView.LayoutManager? = null
 
-//        init {
-//            val context = itemView.context
-//            imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null)
-//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//            binding.itemMenuImgRecycler.layoutManager = layoutManager
-//            binding.itemMenuImgRecycler.adapter = imageAdapter
-//
-//        }
 
         fun bind(item: Menu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
-
-
 
             val context = itemView.context
             imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null, itemMenu!!, item)
@@ -82,8 +72,6 @@ class MenuListAdapter(
                    binding.itemMenuPositionTxt.text = "${position?.plus(1)}/${item.images.size}"
                 }
             }
-           
-
 
 
             if (itemMenu != null) {

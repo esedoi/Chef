@@ -263,13 +263,24 @@ class MenuDetailFragment : Fragment(), Block {
         }
 
         menuDetailViewModel.checkOpen(menu.chefId)
-        menuDetailViewModel.openBoolean.observe(viewLifecycleOwner){
-            if(!it){
-                binding.choice.isEnabled = false
-                binding.choice.text = "不開放"
-            }else{
+//        menuDetailViewModel.openBoolean.observe(viewLifecycleOwner){
+//            if(!it){
+//                binding.choice.isEnabled = false
+//                binding.choice.text = "不開放"
+//            }else{
+//                binding.choice.isEnabled = true
+//                binding.choice.text = "預訂"
+//            }
+//        }
+        var bookSettingType = -1
+        menuDetailViewModel.bookSettingType.observe(viewLifecycleOwner){
+            bookSettingType = it ?: -1
+            if(bookSettingType!=-1&&bookSettingType!=BookSettingType.RefuseAll.index){
                 binding.choice.isEnabled = true
                 binding.choice.text = "預訂"
+            }else{
+                binding.choice.isEnabled = false
+                binding.choice.text = "不開放"
             }
         }
 
@@ -307,7 +318,8 @@ class MenuDetailFragment : Fragment(), Block {
                     findNavController().navigate(
                         MobileNavigationDirections.actionGlobalBookFragment(
                             menu,
-                            list
+                            list,
+                            bookSettingType
                         )
                     )
                 } else {

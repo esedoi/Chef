@@ -273,8 +273,9 @@
 
             <RatingBar
                 android:id="@+id/order_detail_rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="2dp"
+                android:theme="@style/RatingBar"
+                android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:stepSize="1"
                 android:visibility="gone"

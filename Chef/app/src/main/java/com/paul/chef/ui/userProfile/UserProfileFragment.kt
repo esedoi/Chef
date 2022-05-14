@@ -7,25 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
-import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentUserProfileBinding
-import com.paul.chef.ui.bottomSheetPicker.PickerBottomSheetArgs
-import com.paul.chef.ui.chef.ChefViewModel
 import com.paul.chef.ui.menuDetail.bindImage
-import com.paul.chef.ui.orderDetail.OrderDetailViewModel
+
 
 class UserProfileFragment : Fragment() {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
-
-
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -40,7 +32,7 @@ class UserProfileFragment : Fragment() {
             ViewModelProvider(this).get(UserProfileViewModel::class.java)
 
         val user = UserManger.user
-        Log.d("userprofilefragment"," user= $user")
+        Log.d("userprofilefragment", " user= $user")
 
         binding.userProfileIntro.text = user?.profileInfo?.introduce!!
         binding.userProfileNameText.text = user.profileInfo.name
@@ -50,42 +42,42 @@ class UserProfileFragment : Fragment() {
         binding.userProfileImg.outlineProvider = outlineProvider
         binding.userProfileLogout.setOnClickListener {
             (activity as MainActivity).signOut()
-            findNavController().navigate(MobileNavigationDirections.actionGlobalNavigationHome())
+            findNavController().navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
 
-
-            if(user.chefId!=null){
-                findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
-            }
-
-
-        userProfileViewModel.chefId.observe(viewLifecycleOwner){
-            Log.d("userprofilefragment","++++++++++++chefid = $it")
+        userProfileViewModel.chefId.observe(viewLifecycleOwner) {
+            Log.d("userprofilefragment", "++++++++++++chefid = $it")
             userProfileViewModel.getChef(it)
         }
-        userProfileViewModel.getChefDone.observe(viewLifecycleOwner){
-            if(it){
+        userProfileViewModel.getChefDone.observe(viewLifecycleOwner) {
+            if (it) {
                 (activity as MainActivity).turnMode(Mode.CHEF.index)
                 findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
             }
         }
 
-        binding.userProfileCreateChef.setOnClickListener {
-            Log.d("userprofilemanager", "user=$user")
-            userProfileViewModel.createChef(user)
+
+        if (user.chefId != null) {
+            binding.userProfileCreateChef.text = "切換廚師模式"
+            binding.userProfileCreateChef.setOnClickListener {
+                (activity as MainActivity).turnMode(Mode.CHEF.index)
+                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+            }
+        } else {
+            binding.userProfileCreateChef.text = "成為廚師"
+            binding.userProfileCreateChef.setOnClickListener {
+                Log.d("userprofilemanager", "user=$user")
+                userProfileViewModel.createChef(user)
+            }
         }
 
-//        binding.turnToChef.setOnClickListener {
-//            (activity as MainActivity).turnMode(Mode.CHEF.index)
-//            findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-//        }
-        return  root
+
+        return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
 }
