@@ -40,7 +40,7 @@ class MenuListAdapter(
 
             }
             is SimpleHolder -> {
-                holder.bind(item)
+                holder.bind(item, itemMenu)
             }
         }
 
@@ -74,39 +74,36 @@ class MenuListAdapter(
             }
 
 
-            if (itemMenu != null) {
-
-                itemView.setOnClickListener {
-                    itemMenu.goDetail(item)
-                }
-
-                imageAdapter.submitList(item.images)
-                val outlineProvider = ProfileOutlineProvider()
-                binding.itemMenuChefAvatar.outlineProvider = outlineProvider
-                bindImage(binding.itemMenuChefAvatar, item.chefAvatar)
-
-                binding.itemMenuLikeCheck.isChecked =
-                    menuViewModel?.likeIdList?.value?.contains(item.id) == true
-                binding.itemMenuLikeCheck.setOnClickListener {
-                    itemMenu.like(item.id)
-                }
-                binding.menuTitle.text = item.menuName
-                if (item.reviewRating != null) {
-                    binding.ratingBar2.visibility = View.VISIBLE
-                    binding.itemMenuRatingNum.visibility = View.VISIBLE
-                    binding.itemMenuRating.visibility = View.VISIBLE
-                    binding.ratingBar2.rating = item.reviewRating
-                    val str: String = String.format("%.1f", item.reviewRating)
-                    binding.itemMenuRating.text = str
-                    binding.itemMenuRatingNum.text = item.reviewNumber.toString() + " 則評價"
-                } else {
-                    binding.itemMenuRating.visibility = View.GONE
-                    binding.ratingBar2.visibility = View.GONE
-                    binding.itemMenuRatingNum.visibility = View.GONE
-                }
-                binding.itemMenuPerPrice.text = "NT$" + item.perPrice.toString() + "/人"
-
+            itemView.setOnClickListener {
+                itemMenu.goDetail(item)
             }
+
+            imageAdapter.submitList(item.images)
+            val outlineProvider = ProfileOutlineProvider()
+            binding.itemMenuChefAvatar.outlineProvider = outlineProvider
+            bindImage(binding.itemMenuChefAvatar, item.chefAvatar)
+
+            binding.itemMenuLikeCheck.isChecked =
+                menuViewModel?.likeIdList?.value?.contains(item.id) == true
+            binding.itemMenuLikeCheck.setOnClickListener {
+                itemMenu.like(item.id)
+            }
+            binding.menuTitle.text = item.menuName
+            if (item.reviewRating != null) {
+                binding.ratingBar2.visibility = View.VISIBLE
+                binding.itemMenuRatingNum.visibility = View.VISIBLE
+                binding.itemMenuRating.visibility = View.VISIBLE
+                binding.ratingBar2.rating = item.reviewRating
+                val str: String = String.format("%.1f", item.reviewRating)
+                binding.itemMenuRating.text = str
+                binding.itemMenuRatingNum.text = item.reviewNumber.toString() + " 則評價"
+            } else {
+                binding.itemMenuRating.visibility = View.GONE
+                binding.ratingBar2.visibility = View.GONE
+                binding.itemMenuRatingNum.visibility = View.GONE
+            }
+            binding.itemMenuPerPrice.text = "NT$" + item.perPrice.toString() + "/人"
+
         }
 
         companion object {
@@ -122,10 +119,10 @@ class MenuListAdapter(
     class SimpleHolder(private var binding: ItemMenuSimpleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Menu) {
-//            itemView.setOnClickListener {
-//                itemMenu.goDetail(item)
-//            }
+        fun bind(item: Menu, itemMenu:ItemMenu?) {
+            itemView.setOnClickListener {
+                itemMenu?.goDetail(item)
+            }
 
 
             binding.itemMenuSimpleTitle.text = item.menuName

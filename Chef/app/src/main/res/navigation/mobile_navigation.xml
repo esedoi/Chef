@@ -326,5 +326,18 @@
     <action
         android:id="@+id/action_global_termsFragment"
         app:destination="@id/termsFragment" />
+    <dialog
+        android:id="@+id/doneFragment"
+        android:name="com.paul.chef.ui.doneDialog.DoneFragment"
+        android:label="fragment_done"
+        tools:layout="@layout/fragment_done" >
+        <argument
+            android:name="direction"
+            app:argType="string" />
+
+    </dialog>
+    <action
+        android:id="@+id/action_global_doneFragment"
+        app:destination="@id/doneFragment" />
 
 </navigation>

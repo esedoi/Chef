@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/ic_clipboard"
         android:height="24dp"
-        android:width="24dp">
+        android:width="24dp"
+        android:state_checked="false">
     </item>
-
-</layer-list>
+    <item
+        android:drawable="@drawable/ic_filled_clipboard__2_"
+        android:height="24dp"
+        android:width="24dp"
+        android:state_checked="true">
+    </item>
+</selector>

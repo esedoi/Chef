@@ -34,7 +34,8 @@
         <entry key="app/src/main/res/drawable/smaller_ic_user.xml" value="0.2555" />
         <entry key="app/src/main/res/drawable/today_background.xml" value="0.138" />
         <entry key="app/src/main/res/drawable/today_bg.xml" value="0.1965" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.26752878824869786" />
+        <entry key="app/src/main/res/drawable/toolbar_dropshadow.xml" value="0.2555" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.21052631578947367" />
         <entry key="app/src/main/res/layout/bottom_sheet_add_dish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bottom_sheet_datepicker.xml" value="0.335" />
         <entry key="app/src/main/res/layout/bottom_sheet_picker.xml" value="0.25" />
@@ -61,6 +62,7 @@
         <entry key="app/src/main/res/layout/fragment_chef_page.xml" value="0.3488372093023256" />
         <entry key="app/src/main/res/layout/fragment_create_chef.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3441025641025641" />
+        <entry key="app/src/main/res/layout/fragment_done.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/fragment_filter.xml" value="0.24615384615384617" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18762088974854932" />
         <entry key="app/src/main/res/layout/fragment_image_upload.xml" value="0.25" />
@@ -88,7 +90,7 @@
         <entry key="app/src/main/res/layout/fragmeny_address_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_add_btn.xml" value="0.221875" />
         <entry key="app/src/main/res/layout/item_add_discount.xml" value="0.40625" />
-        <entry key="app/src/main/res/layout/item_add_dish.xml" value="0.2922374429223744" />
+        <entry key="app/src/main/res/layout/item_add_dish.xml" value="0.23412628173828123" />
         <entry key="app/src/main/res/layout/item_add_dish_extra.xml" value="0.40625" />
         <entry key="app/src/main/res/layout/item_add_dish_extra_first.xml" value="0.43854166666666666" />
         <entry key="app/src/main/res/layout/item_add_dish_fixed.xml" value="0.221875" />
@@ -137,7 +139,7 @@
         <entry key="app/src/main/res/layout/item_transaction_unpaid 2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_transaction_unpaid.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_people_item.xml" value="0.25" />
-        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.18177083333333333" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/chef_bottom_nav_menu.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/menu/menu_block.xml" value="0.25" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />

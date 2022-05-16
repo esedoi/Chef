@@ -89,7 +89,7 @@ class TransactionChildFragment: Fragment() {
                 transactionViewModel.getList(status)
                 transactionViewModel.transactionList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", " transactionList_1_observe , it = $it")
-                    if(it.isEmpty()){
+                    if(transactionViewModel.processingList.isEmpty()){
                         binding.chatChefEmptyImg.visibility = View.VISIBLE
                         binding.chatEmptyTxt.visibility = View.VISIBLE
                     }else{
@@ -108,7 +108,7 @@ class TransactionChildFragment: Fragment() {
                 transactionViewModel.getList(status)
                 transactionViewModel.transactionList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", " transactionList_2_observe , it = $it")
-                    if(it.isEmpty()){
+                    if(transactionViewModel.receivedList.isEmpty()){
                         binding.chatChefEmptyImg.visibility = View.VISIBLE
                         binding.chatEmptyTxt.visibility = View.VISIBLE
                     }else{

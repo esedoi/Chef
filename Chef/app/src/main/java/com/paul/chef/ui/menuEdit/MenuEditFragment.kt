@@ -272,7 +272,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                         openBoolean
                     )
                     dishList.clear()
-                    findNavController().navigateUp()
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalDoneFragment("chefPage"))
 //                typeNumber = -1
                 }
             }

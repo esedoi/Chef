@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:drawable="@drawable/ic_search"
-        android:height="24dp"
-        android:width="24dp">
-    </item>
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item-->
+<!--        android:drawable="@drawable/ic_search"-->
+<!--        android:height="24dp"-->
+<!--        android:width="24dp">-->
+<!--    </item>-->
 
-</layer-list>
+<!--</layer-list>-->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:drawable="@drawable/ic_search"
+    android:height="24dp"
+    android:width="24dp"
+    android:state_checked="false">
+</item>
+<item
+    android:drawable="@drawable/ic_filled_search__1_"
+    android:height="24dp"
+    android:width="24dp"
+    android:state_checked="true">
+</item>
+</selector>

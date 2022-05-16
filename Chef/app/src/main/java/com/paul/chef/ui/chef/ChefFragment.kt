@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.ui.book.BookFragmentArgs
@@ -21,7 +22,7 @@ import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
 
-class ChefFragment : Fragment(), Block {
+class ChefFragment : Fragment(), Block, ItemMenu {
 
     private var _binding: FragmentChefPageBinding? = null
     private val binding get() = _binding!!
@@ -80,13 +81,14 @@ class ChefFragment : Fragment(), Block {
 
 
         //menuList recycler
-        menuListAdapter = MenuListAdapter(null, null,type=MenuType.SIMPLE.index)
+        menuListAdapter = MenuListAdapter(this, null,type=MenuType.SIMPLE.index)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.chefPageMenuRecycler.layoutManager = layoutManager
         binding.chefPageMenuRecycler.adapter = menuListAdapter
 
         chefViewModel.liveMenu.observe(viewLifecycleOwner){
             menuListAdapter.submitList(it)
+            menuListAdapter.notifyDataSetChanged()
         }
 
 
@@ -178,6 +180,14 @@ class ChefFragment : Fragment(), Block {
     }
 
     override fun blockMenu(menuId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun goDetail(menu: Menu) {
+        findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
+    }
+
+    override fun like(menuId: String) {
         TODO("Not yet implemented")
     }
 }

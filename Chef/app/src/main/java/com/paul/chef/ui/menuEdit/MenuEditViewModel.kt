@@ -71,7 +71,7 @@ class MenuEditViewModel (application: Application) : AndroidViewModel(applicatio
             .set(menu)
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
+
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)

@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/likeFragment"
-        android:icon="@drawable/ic_heart__4_"
+        android:icon="@drawable/smaller_ic_heart"
         android:title="@string/title_like"
         />
 

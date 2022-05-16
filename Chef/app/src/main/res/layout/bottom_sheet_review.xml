@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.review.ReviewFragment">
+    tools:context=".ui.review.ReviewFragment"
+    android:background="@color/md_theme_light_background">
 
     <TextView
         android:id="@+id/review_date"

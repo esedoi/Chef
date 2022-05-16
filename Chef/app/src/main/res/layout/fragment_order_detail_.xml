@@ -95,12 +95,14 @@
                 android:id="@+id/order_detail_accept_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:text="accept"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:text="接受"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/order_detail_cancel_btn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/order_detail_cancel_btn" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/order_detail_send_btn" />
 
             <Button
                 android:id="@+id/order_detail_cancel_btn"
@@ -254,7 +256,6 @@
                 android:text="傳送訊息"
                 app:layout_constraintBottom_toBottomOf="@+id/order_detail_cancel_btn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/order_detail_accept_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/order_detail_cancel_btn"
                 app:layout_constraintTop_toTopOf="@+id/order_detail_cancel_btn"
@@ -269,16 +270,18 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/order_detail_people"
-                app:layout_constraintTop_toBottomOf="@+id/order_detail_cancel_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/order_detail_accept_btn" />
 
             <RatingBar
                 android:id="@+id/order_detail_rating_bar"
-                android:layout_width="2dp"
-                android:theme="@style/RatingBar"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:stepSize="1"
+                android:theme="@style/RatingBar"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.02"
                 app:layout_constraintStart_toStartOf="@+id/order_detail_review_txt"
                 app:layout_constraintTop_toBottomOf="@+id/order_detail_review_txt" />
 

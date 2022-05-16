@@ -149,6 +149,9 @@ class MainActivity : AppCompatActivity() {
                         R.id.termsFragment->{
                             binding.toolBarTitle.text = "Terms of Use"
                         }
+                        R.id.chatRoomFragment->{
+                            binding.toolBarTitle.text = "聊天室"
+                        }
                         else->{
                             binding.toolBarTitle.text = ""
                         }

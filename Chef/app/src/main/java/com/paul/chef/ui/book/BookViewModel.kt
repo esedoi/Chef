@@ -170,7 +170,6 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             .set(order)
             .addOnSuccessListener { documentReference ->
                 Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
                 _bookDone.value = true
             }
             .addOnFailureListener { e ->

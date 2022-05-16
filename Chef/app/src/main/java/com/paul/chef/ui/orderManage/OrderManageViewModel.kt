@@ -70,12 +70,9 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
                 completedList.clear()
                 cancelledList.clear()
                 for (doc in value!!.documents) {
-                    Log.d("ordermangeviewmodel", "doc=$doc")
                     val item = doc.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Order::class.java)
-                    Log.d("ordermangeviewmodel", "接收到order資料${data}")
-
                     when(data.status){
                         OrderStatus.PENDING.index->{
                             pendingList.add(data)
@@ -96,15 +93,10 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun getList(status:Int){
-        Log.d("orderviewmodel", "status=$status")
-        Log.d("orderviewmodel", "OrderStatus.PENDING.index=${OrderStatus.PENDING.index}")
 
         when(status) {
             OrderStatus.PENDING.index -> {
-//                if(pendingList.size>=1) {
-                    Log.d("orderviewmodel", "pendingList=$pendingList")
                     _orderList.value = pendingList
-//                }
             }
             OrderStatus.UPCOMING.index -> {
                 _orderList.value = upComingList

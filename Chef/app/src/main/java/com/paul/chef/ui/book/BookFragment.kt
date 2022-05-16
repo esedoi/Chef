@@ -369,7 +369,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
         bookViewModel.bookDone.observe(viewLifecycleOwner) {
             if (it) {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                findNavController().navigate(MobileNavigationDirections.actionGlobalDoneFragment("orderMange"))
             }
         }
 

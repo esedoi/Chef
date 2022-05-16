@@ -38,88 +38,87 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
         get() = _liveMenu
 
 
+    //
+    fun getChef(chefId: String) {
 
 
-        //
-        fun getChef(chefId:String) {
+        Log.d("chefviewmodel", "UserManger.chef${UserManger.chef}")
 
+        db.collection("Chef")
+            .whereEqualTo("id", chefId)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
 
-            Log.d("chefviewmodel", "UserManger.chef${UserManger.chef}")
+                for (doc in value!!.documents) {
+                    val item = doc.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Chef::class.java)
+                    _chefInfo.value = data
+                }
+            }
 
-            db.collection("Chef")
-                .whereEqualTo("id", chefId)
-                .addSnapshotListener { value, e ->
-                    if (e != null) {
-                        Log.w("notification", "Listen failed.", e)
-                        return@addSnapshotListener
-                    }
+        dataList.clear()
+        menuIdList.clear()
+        menuList.clear()
 
-                    for (doc in value!!.documents) {
+        db.collection("Menu")
+            .whereEqualTo("chefId", chefId)
+            .get()
+            .addOnSuccessListener { value ->
+                if (value.documents.isNotEmpty()) {
+                    dataList.clear()
+                    for (doc in value.documents) {
                         val item = doc.data
                         val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Chef::class.java)
-                        _chefInfo.value = data
+                        val data = Gson().fromJson(json, Menu::class.java)
+                        menuIdList.add(data.id)
+                        menuList.add(data)
 
-                    }
-                }
-
-            dataList.clear()
-            menuIdList.clear()
-            menuList.clear()
-
-            db.collection("Menu")
-                .whereEqualTo("chefId", chefId)
-                .get()
-                .addOnSuccessListener { value ->
-                    if (value.documents.isNotEmpty()) {
-                        dataList.clear()
-                        for (item in value.documents) {
-                            val item = item.data
-                            val json = Gson().toJson(item)
-                            val data = Gson().fromJson(json, Menu::class.java)
-                            menuIdList.add(data.id)
-                            menuList.add(data)
+                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
+                            _liveMenu.value = menuList
                         }
-                        _liveMenu.value = menuList
-                        Log.d("chefviewmodel", "menuidlist=$menuIdList")
+                    }
 
 
-                        dataList.clear()
-                        for (i in menuIdList) {
-                            var menuId = i
-                            db.collection("Menu").document(menuId)
-                                .collection("Review")
-                                .get()
-                                .addOnSuccessListener { value ->
-                                    if (value.documents.isNotEmpty()) {
-                                        for (item in value.documents) {
-                                            val item = item.data
-                                            val json = Gson().toJson(item)
-                                            val data = Gson().fromJson(json, Review::class.java)
-                                            dataList.add(data)
+                    dataList.clear()
+                    for (i in menuIdList) {
+                        var menuId = i
+                        db.collection("Menu").document(menuId)
+                            .collection("Review")
+                            .get()
+                            .addOnSuccessListener { value ->
+                                if (value.documents.isNotEmpty()) {
+                                    for (doc in value.documents) {
+                                        val item = doc.data
+                                        val json = Gson().toJson(item)
+                                        val data = Gson().fromJson(json, Review::class.java)
+                                        dataList.add(data)
+
+                                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
+                                            _reviewList.value = dataList
                                         }
-                                        Log.d("chefviewmodel", "+++++++datalist=$dataList")
-                                        _reviewList.value = dataList
-                                    } else {
-                                        Log.d("chefviewmodel", "No such document")
                                     }
-                                }
-                                .addOnFailureListener { exception ->
-                                    Log.d("chefviewmodel", "get failed with ", exception)
-                                }
-                        }
 
-                    } else {
-                        Log.d("orderdetailviewmodel", "No such document")
+                                } else {
+                                    Log.d("chefviewmodel", "No such document")
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d("chefviewmodel", "get failed with ", exception)
+                            }
                     }
+
+                } else {
+                    Log.d("orderdetailviewmodel", "No such document")
                 }
-                .addOnFailureListener { exception ->
-                    Log.d("orderdetailviewmodel", "get failed with ", exception)
-                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("orderdetailviewmodel", "get failed with ", exception)
+            }
 
-
-        }
-        //
-
+    }
 
 }

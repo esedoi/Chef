@@ -52,6 +52,7 @@ class ChatRoomFragment : Fragment() {
 
         var roomId = arg.roomId
 
+
         var nowId = ""
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
@@ -89,7 +90,7 @@ class ChatRoomFragment : Fragment() {
                     chatList.sortBy { it.time }
                     chatRoomAdapter.submitList(chatList)
                     chatRoomAdapter.notifyDataSetChanged()
-                        binding.chatRoomRecycler.scrollToPosition(chatList.size-1)
+                    binding.chatRoomRecycler.scrollToPosition(chatList.size-1)
                 }
             }
 
