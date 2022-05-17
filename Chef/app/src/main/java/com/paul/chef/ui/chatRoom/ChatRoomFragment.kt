@@ -23,7 +23,7 @@ class ChatRoomFragment : Fragment() {
     private var _binding: FragmentChatRoomBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var chatRoomAdapter: ChatRoomAdapter
+    private lateinit var chatRoomAdapter: ChatRoomAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private val arg: ChatRoomFragmentArgs by navArgs()
@@ -32,9 +32,6 @@ class ChatRoomFragment : Fragment() {
 
     private val chatList = mutableListOf<Chat>()
 
-
-
-    private lateinit var viewModel: ChatRoomViewModel
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -48,18 +45,17 @@ class ChatRoomFragment : Fragment() {
         val root: View = binding.root
 
         val chatRoomViewModel =
-            ViewModelProvider(this).get(ChatRoomViewModel::class.java)
+            ViewModelProvider(this)[ChatRoomViewModel::class.java]
 
-        var roomId = arg.roomId
+        val roomId = arg.roomId
 
-
-        var nowId = ""
+        val nowId: String
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
-        nowId = when(mode){
-            Mode.USER.index->UserManger.user?.userId!!
-            Mode.CHEF.index->UserManger.chef?.id!!
-            else->""
+        nowId = when (mode) {
+            Mode.USER.index -> UserManger.user?.userId!!
+            Mode.CHEF.index -> UserManger.chef?.id!!
+            else -> ""
         }
 
         chatRoomAdapter = ChatRoomAdapter(nowId)
@@ -68,7 +64,7 @@ class ChatRoomFragment : Fragment() {
         binding.chatRoomRecycler.adapter = chatRoomAdapter
 
 
-        var value = ""
+
 
         db.collection("Room")
             .document(roomId)
@@ -80,28 +76,27 @@ class ChatRoomFragment : Fragment() {
                 }
                 chatList.clear()
                 if (value != null) {
-                    for(document in value.documents){
+                    for (document in value.documents) {
                         val item = document.data
                         val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, Chat::class.java)
                         chatList.add(data)
                     }
-                    Log.d("chatroomfragment","chatlist=$chatList")
                     chatList.sortBy { it.time }
                     chatRoomAdapter.submitList(chatList)
                     chatRoomAdapter.notifyDataSetChanged()
-                    binding.chatRoomRecycler.scrollToPosition(chatList.size-1)
+                    binding.chatRoomRecycler.scrollToPosition(chatList.size - 1)
                 }
             }
 
 
         binding.chatRoomSendBtn.setOnClickListener {
-            if (nowId!=""){
+            if (nowId != "") {
                 val msg = binding.editText.editText?.text.toString()
-                if(msg!=""){
-                    chatRoomViewModel.sendMsg(roomId,msg,nowId)
+                if (msg != "") {
+                    chatRoomViewModel.sendMsg(roomId, msg, nowId)
                     binding.editText.editText?.setText("")
-                    binding.chatRoomRecycler.scrollToPosition(chatList.size-1) //move focus on last message
+                    binding.chatRoomRecycler.scrollToPosition(chatList.size - 1) //move focus on last message
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.paul.chef.ui.chatList
 
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,7 +14,8 @@ import com.paul.chef.databinding.ItemChatListBinding
 import com.paul.chef.ui.menuDetail.bindImage
 import java.util.*
 
-class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : ListAdapter<Room, RecyclerView.ViewHolder>(FriendListCallback()) {
+class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: Int) :
+    ListAdapter<Room, RecyclerView.ViewHolder>(ChatListCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -31,7 +31,6 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
     }
 
 
-
     class RoomHolder(private var binding: ItemChatListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -42,20 +41,19 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
             }
 
             val outlineProvider = ProfileOutlineProvider()
-            binding.userImage.outlineProvider =outlineProvider
-            Log.d("chatlistAdapter", "${item.time}")
+            binding.userImage.outlineProvider = outlineProvider
 
             val sdf = SimpleDateFormat("MM.dd HH:mm")
-            if(item.time!=null){
+            if (item.time != null) {
                 binding.time.text = sdf.format(Date(item.time.toLong()))
             }
 
 
             binding.chatContent.text = item.lastMsg.toString()
-            if(nowMode == Mode.CHEF.index){
+            if (nowMode == Mode.CHEF.index) {
                 binding.userName.text = item.userName
                 bindImage(binding.userImage, item.userAvatar)
-            }else{
+            } else {
                 binding.userName.text = item.chefName
                 bindImage(binding.userImage, item.chefAvatar)
             }
@@ -72,7 +70,7 @@ class ChatListAdapter(val goChatRoom: GoChatRoom, private val nowMode:Int) : Lis
 
 }
 
-class FriendListCallback : DiffUtil.ItemCallback<Room>() {
+class ChatListCallback : DiffUtil.ItemCallback<Room>() {
     override fun areItemsTheSame(oldItem: Room, newItem: Room): Boolean {
         return oldItem == newItem
     }

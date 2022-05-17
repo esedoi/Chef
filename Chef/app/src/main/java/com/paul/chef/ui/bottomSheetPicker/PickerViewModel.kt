@@ -17,26 +17,24 @@ class PickerViewModel(application: Application) : AndroidViewModel(application) 
         get() = _bookSetting
 
 
-
     private val db = FirebaseFirestore.getInstance()
-    fun getBookSetting(chefId:String){
-                db.collection("Chef")
-                    .document(chefId)
-                    .get()
-                    .addOnSuccessListener { document ->
-                        if (document != null) {
-                            Log.d("pickerViewModel", "DocumentSnapshot data: ${document.data}")
-                            val item = document.data
-                val json = Gson().toJson(item)
-                val data = Gson().fromJson(json, Chef::class.java)
-                _bookSetting.value = data.bookSetting!!
-                        } else {
-                            Log.d("pickerViewModel", "No such document")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("pickerViewModel", "get failed with ", exception)
-                    }
+    fun getBookSetting(chefId: String) {
+        db.collection("Chef")
+            .document(chefId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val item = document.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Chef::class.java)
+                    _bookSetting.value = data.bookSetting!!
+                } else {
+                    Log.d("pickerViewModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
 
     }
 }

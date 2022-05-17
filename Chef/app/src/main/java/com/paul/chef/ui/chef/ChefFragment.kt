@@ -2,22 +2,18 @@ package com.paul.chef.ui.chef
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
 import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
-import com.paul.chef.ui.book.BookFragmentArgs
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
@@ -33,10 +29,9 @@ class ChefFragment : Fragment(), Block, ItemMenu {
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private val db = FirebaseFirestore.getInstance()
     private var reviewList = emptyList<Review>()
 
-    lateinit var  chefViewModel:ChefViewModel
+    private lateinit var  chefViewModel:ChefViewModel
 
 
 

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.paul.chef.R
-import com.paul.chef.databinding.FragmentLoginBinding
 import com.paul.chef.databinding.FragmentTermsBinding
 
 class TermsFragment : Fragment() {

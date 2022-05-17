@@ -38,7 +38,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
         get() = _liveMenu
 
 
-    //
+
     fun getChef(chefId: String) {
 
 
@@ -85,7 +85,7 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
 
                     dataList.clear()
                     for (i in menuIdList) {
-                        var menuId = i
+                        val menuId = i
                         db.collection("Menu").document(menuId)
                             .collection("Review")
                             .get()

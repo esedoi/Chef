@@ -79,7 +79,6 @@ class BookSetting : Fragment() {
 
 
         binding.bookSetChefSpaceTime.setOnClickListener {
-            Log.d("booksettingfragment", "onclicklistener")
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalPickerBottomSheet(
                     PickerType.SET_SESSION_TIME.index,
@@ -123,13 +122,17 @@ class BookSetting : Fragment() {
             )
         }
         binding.bookSetChefSpaceAddress.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.SELECT.index))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalAddressListFragment(
+                    AddressListType.SELECT.index
+                )
+            )
         }
 
 
         var capacity = 0
         var sessionCapacity = 0
-        var sessionTime = mutableListOf<String>()
+        val sessionTime = mutableListOf<String>()
         var startTime = "null"
         var endTime = "null"
         var address: Address? = null
@@ -144,7 +147,7 @@ class BookSetting : Fragment() {
         }
         setFragmentResultListener(PickerType.SET_SESSION_TIME.value) { requestKey, bundle ->
 
-           val session =  bundle.getString(PickerType.SET_SESSION_TIME.value)
+            val session = bundle.getString(PickerType.SET_SESSION_TIME.value)
             if (session != null) {
                 sessionTime.add(session)
             }
@@ -159,7 +162,6 @@ class BookSetting : Fragment() {
                 sessionTime.remove(chip.text)
             }
             binding.bookSetChefSpaceTimeLayout.addView(chip)
-
 
 
         }
@@ -177,9 +179,9 @@ class BookSetting : Fragment() {
             binding.bookSetChefSpaceAddress.setText(addressTxt)
         }
 
-        orderSettingViewModel.bookSetting.observe(viewLifecycleOwner){
+        orderSettingViewModel.bookSetting.observe(viewLifecycleOwner) {
             calendarTypeResult = it.calendarDefault
-            if(it.userSpace!=null){
+            if (it.userSpace != null) {
                 capacity = it.userSpace.capacity
                 startTime = it.userSpace.starTime
                 endTime = it.userSpace.endTime
@@ -188,7 +190,7 @@ class BookSetting : Fragment() {
                 binding.bookSetUserSpaceEndTime.setText(it.userSpace.endTime)
             }
 
-            if(it.chefSpace!=null){
+            if (it.chefSpace != null) {
                 sessionCapacity = it.chefSpace.sessionCapacity
                 sessionTime.clear()
                 sessionTime.addAll(it.chefSpace.session)
@@ -197,38 +199,41 @@ class BookSetting : Fragment() {
                 binding.bookSetChefSpaceCapacity.setText(it.chefSpace.sessionCapacity.toString())
             }
 
-            if (it!=null){
+            if (it != null) {
                 binding.bookSetCalenderDefaultEditTxt.setText(
-                    if(it.calendarDefault==CalendarType.AllDayClose.index){
+                    if (it.calendarDefault == CalendarType.AllDayClose.index) {
                         "預設所有日期為不可訂"
-                    }else{
+                    } else {
                         "未來所有日期"
                     }
                 )
-                val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
-                (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                val adapter =
+                    ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
+                (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(
+                    adapter
+                )
 
 
-                when(it.type){
-                    BookSettingType.AcceptAll.index->{
+                when (it.type) {
+                    BookSettingType.AcceptAll.index -> {
                         binding.chefSpaceCardView.isChecked = true
                         binding.userSpaceCardView.isChecked = true
                         binding.chefSpaceHelper.visibility = View.GONE
                         binding.userSpaceHelper.visibility = View.GONE
                     }
-                    BookSettingType.OnlyUserSpace.index->{
+                    BookSettingType.OnlyUserSpace.index -> {
                         binding.chefSpaceCardView.isChecked = false
                         binding.userSpaceCardView.isChecked = true
                         binding.chefSpaceHelper.visibility = View.VISIBLE
                         binding.userSpaceHelper.visibility = View.GONE
                     }
-                    BookSettingType.OnlyChefSpace.index->{
+                    BookSettingType.OnlyChefSpace.index -> {
                         binding.chefSpaceCardView.isChecked = true
                         binding.userSpaceCardView.isChecked = false
                         binding.chefSpaceHelper.visibility = View.GONE
                         binding.userSpaceHelper.visibility = View.VISIBLE
                     }
-                    BookSettingType.RefuseAll.index->{
+                    BookSettingType.RefuseAll.index -> {
                         binding.chefSpaceCardView.isChecked = false
                         binding.userSpaceCardView.isChecked = false
                         binding.chefSpaceHelper.visibility = View.VISIBLE
@@ -264,24 +269,44 @@ class BookSetting : Fragment() {
                         val type = BookSettingType.AcceptAll.index
                         val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
                         val userSpace = UserSpace(capacity, startTime, endTime)
-                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace)
+                        orderSettingViewModel.setting(
+                            type,
+                            calendarTypeResult,
+                            chefSpace,
+                            userSpace
+                        )
                         findNavController().navigateUp()
                     }
                     !chefSpaceCheck && userSpaceCheck -> {
                         val type = BookSettingType.OnlyUserSpace.index
                         val userSpace = UserSpace(capacity, startTime, endTime)
-                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace=null, userSpace)
+                        orderSettingViewModel.setting(
+                            type,
+                            calendarTypeResult,
+                            chefSpace = null,
+                            userSpace
+                        )
                         findNavController().navigateUp()
                     }
                     chefSpaceCheck && !userSpaceCheck -> {
                         val type = BookSettingType.OnlyChefSpace.index
                         val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
-                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace, userSpace=null)
+                        orderSettingViewModel.setting(
+                            type,
+                            calendarTypeResult,
+                            chefSpace,
+                            userSpace = null
+                        )
                         findNavController().navigateUp()
                     }
                     !chefSpaceCheck && !userSpaceCheck -> {
                         val type = BookSettingType.RefuseAll.index
-                        orderSettingViewModel.setting(type, calendarTypeResult, chefSpace=null, userSpace=null)
+                        orderSettingViewModel.setting(
+                            type,
+                            calendarTypeResult,
+                            chefSpace = null,
+                            userSpace = null
+                        )
                         findNavController().navigateUp()
                     }
                 }

@@ -36,7 +36,6 @@ class BookSettingViewModel(application: Application) : AndroidViewModel(applicat
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Chef::class.java)
                     if(data.bookSetting!=null){
-                        Log.d("booksettingviewmodel", "data.booksetting=${data.bookSetting}")
                         _bookSetting.value = data.bookSetting!!
                     }
 

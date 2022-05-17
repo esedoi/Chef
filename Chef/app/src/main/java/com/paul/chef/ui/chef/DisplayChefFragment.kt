@@ -7,17 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.ui.menu.MenuListAdapter
-import com.paul.chef.ui.menu.MenuListViewModel
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
 
@@ -52,8 +49,6 @@ class DisplayChefFragment: Fragment(), Block {
 
 
 
-//        val mode = this.context?.let { UserManger.readData("mode", it) }
-
         val displayChefId = arg.chefId
 
             binding.editProfileBtn.visibility = View.GONE
@@ -73,9 +68,10 @@ class DisplayChefFragment: Fragment(), Block {
             binding.chefName.text = it.profileInfo.name
             binding.chefIntro.text = it.profileInfo.introduce
             if(it.reviewNumber!=null){
-                binding.chefPageReviewDown.text = it.reviewNumber.toString()+" 則評價"
+                binding.chefPageReviewDown.text = getString(R.string.number_of_review,it.reviewNumber)
+
             }else{
-                binding.chefPageReviewDown.text = "0 則評價"
+                binding.chefPageReviewDown.text = getString(R.string.number_of_review,0)
             }
             bindImage(binding.chefPageImgView, it.profileInfo.avatar)
             val outlineProvider = ProfileOutlineProvider()

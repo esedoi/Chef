@@ -7,12 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.MainActivity
 import com.paul.chef.Mode
 import com.paul.chef.UserManger
-import com.paul.chef.data.Chat
 import com.paul.chef.data.Room
-import java.time.LocalDate
 
 
 class ChatListViewModel(application: Application) : AndroidViewModel(application) {

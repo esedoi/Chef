@@ -3,7 +3,6 @@ package com.paul.chef.ui.addressList
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

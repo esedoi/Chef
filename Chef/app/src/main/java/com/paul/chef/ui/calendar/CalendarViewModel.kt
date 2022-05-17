@@ -1,14 +1,12 @@
 package com.paul.chef.ui.calendar
 
 import android.app.Application
-import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.BookSetting
 import com.paul.chef.data.Chef
@@ -45,17 +43,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                     Log.w("notification", "Listen failed.", e)
                     return@addSnapshotListener
                 }
-                Log.d("calendarviewmodel", "接收到order資料")
+
                 for (doc in value!!.documents) {
                     val item = doc.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Order::class.java)
                     val localDate: LocalDate = LocalDate.ofEpochDay(data.date)
-//                    val sdf = SimpleDateFormat("YYYY-MM-dd")
-//                    val day = sdf.format(data.date)
-//                    val localDate: LocalDate = LocalDate.parse(day)
-                    Log.d("calendarviewmodel", "order_data.date=${data.date}")
-                    Log.d("calendarviewmodel", "order_localdate=${localDate}")
                     dateList.add(localDate)
                 }
                 _orderList.value = dateList
@@ -96,7 +89,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                     if (data.bookSetting != null) {
                         _bookSetting.value = data.bookSetting!!
                     }
-                    Log.d("calendarviewmodel", "接收到Chef資料=$data")
                 }
         }
 

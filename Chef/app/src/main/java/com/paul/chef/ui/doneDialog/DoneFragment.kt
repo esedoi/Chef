@@ -1,7 +1,6 @@
 package com.paul.chef.ui.doneDialog
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.MainActivity
 import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.R
 import com.paul.chef.databinding.FragmentDoneBinding
-import com.paul.chef.databinding.FragmentFilterBinding
-import com.paul.chef.ui.book.BookFragmentArgs
 import java.util.*
 import kotlin.concurrent.schedule
-import kotlin.concurrent.timer
+
 
 
 class DoneFragment : DialogFragment() {

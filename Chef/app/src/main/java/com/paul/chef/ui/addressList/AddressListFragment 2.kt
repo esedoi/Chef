@@ -2,16 +2,12 @@ package com.paul.chef.ui.addressList
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paul.chef.AddressList
 import com.paul.chef.MobileNavigationDirections
-import com.paul.chef.PickerType
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
-import com.paul.chef.ui.book.BookFragmentArgs
 
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
@@ -31,7 +25,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     private var _binding: FragmentAddressListBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var addressListAdapter: AddressListAdapter
+    private lateinit var addressListAdapter: AddressListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
     var addressList = mutableListOf<Address>()
 
@@ -48,7 +42,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     ): View {
 
         addressListViewModel =
-            ViewModelProvider(this).get(AddressListViewModel::class.java)
+            ViewModelProvider(this)[AddressListViewModel::class.java]
 
 
         _binding = FragmentAddressListBinding.inflate(inflater, container, false)
@@ -59,7 +53,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         binding.addressListCancel.setOnClickListener {
             dismiss()
         }
-        binding.addressListDismiss.setOnClickListener{
+        binding.addressListDismiss.setOnClickListener {
             dismiss()
         }
 
@@ -75,9 +69,9 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         addressListViewModel.addressList.observe(viewLifecycleOwner) {
             addressList.clear()
             addressList.addAll(it)
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 binding.addressListEmptyTxt.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.addressListEmptyTxt.visibility = View.GONE
             }
             addressListAdapter.submitList(addressList)
@@ -88,9 +82,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         }
 
         setFragmentResultListener("addAddress") { requestKey, bundle ->
-
             val newAddress = bundle.getParcelable<Address>("address")!!
-            Log.d("addresslistfragment", "addAddress=$newAddress")
             addressList.add(newAddress)
             addressListViewModel.updateAddress(addressList)
         }

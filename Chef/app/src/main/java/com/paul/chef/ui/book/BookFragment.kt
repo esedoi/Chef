@@ -32,14 +32,11 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentBookBinding? = null
     private val binding get() = _binding!!
-    var selectDate: Long? = null
+    private var selectDate: Long? = null
     private lateinit var mMap: GoogleMap
-    var picker: LocalDate? = null
     private lateinit var placesClient: PlacesClient
-
     private var chefAddress: Address? = null
     private var userAddress: Address? = null
-
     private val arg: BookFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -48,7 +45,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         val bookViewModel =
-            ViewModelProvider(this).get(BookViewModel::class.java)
+            ViewModelProvider(this)[BookViewModel::class.java]
 
         _binding = FragmentBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -62,7 +59,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             )
         val key = info.metaData[resources.getString(R.string.map_api_key_name)].toString()
         if (!Places.isInitialized()) {
-            Places.initialize(requireActivity(), key);
+            Places.initialize(requireActivity(), key)
         }
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.book_map) as SupportMapFragment
@@ -324,13 +321,13 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             typeId = binding.bookChipGroup.checkedChipId
 
             if (selectDate == null) {
-                Toast.makeText(this.context, "請選擇日期", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.please_select_date), Toast.LENGTH_SHORT).show()
             } else if (typeId == -1) {
-                Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
             } else if (pickPeople == -1) {
-                Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
             } else if (pickTime == "") {
-                Toast.makeText(this.context, "請選擇用餐時間", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.please_select_time), Toast.LENGTH_SHORT).show()
             } else {
 
                 val typeInt = if (typeId == R.id.book_user_space_chip) {
@@ -362,7 +359,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                         selectedDish
                     )
                 } else {
-                    Toast.makeText(this.context, "請選擇地址", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.please_select_address), Toast.LENGTH_SHORT).show()
                 }
             }
         }

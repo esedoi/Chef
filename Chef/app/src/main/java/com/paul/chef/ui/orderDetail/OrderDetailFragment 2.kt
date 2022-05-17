@@ -24,14 +24,10 @@ class OrderDetailFragment : Fragment() {
 
     private var _binding: FragmentOrderDetailBinding? = null
     private val binding get() = _binding!!
-
     private var _itemDisplayBinding: ItemDisplayDishBinding? = null
     private val itemDisplayBinding get() = _itemDisplayBinding!!
-
     private val displayList = mutableListOf<ItemDisplayDishBinding>()
-
     private lateinit var viewModel: OrderDetailViewModel
-
     private val arg: OrderDetailFragmentArgs by navArgs()
 
     override fun onCreateView(

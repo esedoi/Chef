@@ -3,16 +3,12 @@ package com.paul.chef.ui.addAddress
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -25,13 +21,11 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paul.chef.MainActivity
 import com.paul.chef.R
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddAddressBinding
-import com.paul.chef.ui.addressList.AddressListFragmentArgs
-import com.paul.chef.ui.addressList.AddressListViewModel
+
 
 class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
 

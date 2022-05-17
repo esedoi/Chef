@@ -2,7 +2,6 @@ package com.paul.chef.ui.like
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,14 +23,12 @@ class LikeFragment : Fragment(), ItemMenu {
     private var _binding: FragmentLikeBinding? = null
     private val binding get() = _binding!!
 
-//    lateinit var likeViewModel:LikeViewModel
     private val menuListViewModel: MenuListViewModel by activityViewModels()
 
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private var likeList = mutableListOf<String>()
-
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -52,23 +49,19 @@ class LikeFragment : Fragment(), ItemMenu {
         binding.likeRecycler.adapter = menuListAdapter
 
 
-        menuListViewModel.likeIdList.observe(viewLifecycleOwner){
-            Log.d("likefragment","idlist = it=$it")
+        menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
+
             likeList.clear()
             likeList.addAll(it)
             menuListViewModel.getLikeList(it)
         }
 
         menuListViewModel.likeList.observe(viewLifecycleOwner) {
-            Log.d("likefragment","likelist=$it")
 
-
-
-
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 binding.chatUserEmptyImg.visibility = View.VISIBLE
                 binding.chatEmptyTxt.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.chatUserEmptyImg.visibility = View.GONE
                 binding.chatEmptyTxt.visibility = View.GONE
             }
@@ -91,9 +84,9 @@ class LikeFragment : Fragment(), ItemMenu {
     }
 
     override fun like(menuId: String) {
-        if(likeList.contains(menuId)){
+        if (likeList.contains(menuId)) {
             likeList.remove(menuId)
-        }else{
+        } else {
             likeList.add(menuId)
         }
         menuListViewModel.updateLikeList(likeList)

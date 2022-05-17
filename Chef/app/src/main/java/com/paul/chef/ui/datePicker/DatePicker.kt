@@ -58,7 +58,7 @@ class DatePicker : BottomSheetDialogFragment() {
         val root: View = binding.root
 
         val datePickerViewModel =
-            ViewModelProvider(this).get(DatePickerViewModel::class.java)
+            ViewModelProvider(this)[DatePickerViewModel::class.java]
 
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
@@ -184,7 +184,6 @@ class DatePicker : BottomSheetDialogFragment() {
                 if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
                     container.textView.paint.flags =
                         Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                    Log.d("calendar", "畫線")
                 } else {
                     container.textView.paint.flags = 0
                     container.textView.paint.isAntiAlias = true
@@ -197,13 +196,9 @@ class DatePicker : BottomSheetDialogFragment() {
                         if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
                             container.textView.paint.flags =
                                 Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                            Log.d("calendar", "if_____________")
-
                         } else {
                             container.textView.paint.flags = 0
                             container.textView.paint.isAntiAlias = true
-                            Log.d("calendar", "else_____________")
-
                         }
                     }
                 }

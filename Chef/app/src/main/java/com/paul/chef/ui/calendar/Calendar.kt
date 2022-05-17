@@ -3,7 +3,6 @@ package com.paul.chef.ui.calendar
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,7 +38,6 @@ class Calendar : Fragment() {
     private val binding get() = _binding!!
 
     private val selectedDates = mutableSetOf<LocalDate>()
-    private val bookDates = mutableSetOf<LocalDate>()
     var bookSetting: BookSetting? = null
 
     private val today = LocalDate.now()
@@ -61,15 +59,11 @@ class Calendar : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        Log.d("calendarfragment", "today=$today")
-
-
         val calendarViewModel =
-            ViewModelProvider(this).get(CalendarViewModel::class.java)
+            ViewModelProvider(this)[CalendarViewModel::class.java]
 
         calendarViewModel.orderList.observe(viewLifecycleOwner) {
             orderList.addAll(it)
-            Log.d("calendar", "datelist live = $orderList")
             binding.calendarView.notifyCalendarChanged()
         }
 
@@ -92,7 +86,6 @@ class Calendar : Fragment() {
         }
 
 
-
         class DayViewContainer(view: View) : ViewContainer(view) {
             // With ViewBinding
             val textView = CalendarDayLayoutBinding.bind(view).calendarDayText
@@ -100,12 +93,10 @@ class Calendar : Fragment() {
             // Will be set when this container is bound
             lateinit var day: CalendarDay
 
-
             init {
 
                 view.setOnClickListener {
                     // Use the CalendarDay associated with this container.
-                    Log.d("dayviewcontainer", "day is $day")
 
                     if (day.owner == DayOwner.THIS_MONTH && (day.date == today || day.date.isAfter(
                             today
@@ -130,7 +121,6 @@ class Calendar : Fragment() {
 
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
-
             val textView = CalendarMonthHeaderLayoutBinding.bind(view).headerTextView
         }
 
@@ -147,7 +137,6 @@ class Calendar : Fragment() {
                     if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
                         container.textView.paint.flags =
                             Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                        Log.d("calendar", "畫線")
 
                     } else {
                         container.textView.paint.flags = 0
@@ -160,13 +149,10 @@ class Calendar : Fragment() {
                         if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
                             container.textView.paint.flags =
                                 Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                            Log.d("calendar", "if_____________")
 
                         } else {
                             container.textView.paint.flags = 0
                             container.textView.paint.isAntiAlias = true
-                            Log.d("calendar", "else_____________")
-
                         }
                     }
                 }
@@ -192,7 +178,6 @@ class Calendar : Fragment() {
                             container.textView.setBackgroundResource(R.drawable.today_bg)
                         }
                         orderList.contains(day.date) -> {
-                            Log.d("calendar", "dateList=$orderList")
                             container.textView.setTextColor(Color.BLACK)
                             container.textView.setBackgroundResource(R.drawable.booked_day_background)
                         }
@@ -228,8 +213,6 @@ class Calendar : Fragment() {
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
         binding.calendarView.setup(currentMonth, lastMonth, firstDayOfWeek)
         binding.calendarView.scrollToMonth(currentMonth)
-
-
 
 
         return root

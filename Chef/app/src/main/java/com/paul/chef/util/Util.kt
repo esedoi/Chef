@@ -5,6 +5,10 @@ import com.paul.chef.R
 
 object Util {
 
+//    fun getString(resourceId: Int): String {
+//        return ChefApplication.instance.getString(resourceId)
+//    }
+
 
     fun getPrice(price:Int):String{
         val str = String.format("%,d", price)
