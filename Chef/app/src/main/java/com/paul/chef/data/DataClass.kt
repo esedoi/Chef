@@ -1,9 +1,7 @@
 package com.paul.chef.data
 
-import android.net.Uri
+
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.GeoPoint
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import java.time.LocalDate
@@ -48,13 +46,13 @@ data class UserSpace(
 )
 
 data class DateSetting(
-    val week:List<WeekStatus>?=null, //一二三四五六日
-    val date:List<DateStatus>?=null, // 5/16, 6/13
+    val week:List<WeekStatus>?=null,
+    val date:List<DateStatus>?=null,
 )
 
 data class WeekStatus(
     val status:Int,
-    val week:String, //一二三四五六日
+    val week:String,
     val session:List<String>? = null,
     val startTime:String? = null,
     val endTime:String? = null,
@@ -72,15 +70,15 @@ data class DateStatus(
 
 @Parcelize
 data class Order(
-    val id:String, //D2204130685964
+    val id:String,
     val userId:String,
-    val chefId:String, //chefId or kitchenId
+    val chefId:String,
     val userName:String,
     val chefName:String,
     val userAvatar:String,
     val chefAvatar:String,
     val menuName:String,
-    val type:Int, //userspace, chef space
+    val type:Int,
     val address: Address,
     val orderTime:Long,
     val date:Long,
@@ -89,7 +87,7 @@ data class Order(
     val people:Int,
     val menuId:String,
     val selectedDish: List<Dish>,
-    val status:Int, //即將到來,已取消,已完成
+    val status:Int,
     val originalPrice:Int,
     val discount:Int,
     val userPay:Int,
@@ -130,13 +128,12 @@ data class Discount(
 
 @Parcelize
 data class Dish(
-    val type:String, //甜點、開胃菜
-    val option:Int, //固定菜色, 可替換, 加價替換
+    val type:String,
+    val option:Int,
     val name:String? = "",
     val extraPrice:Int? = -1,
     val typeNumber:Int = -1
 ): Parcelable
-
 
 
 @Parcelize
@@ -178,22 +175,22 @@ data class BankInfo(
 
 data class Room(
     val id: String,
-    val attendance: List<String>, //userId,chefId
+    val attendance: List<String>,
     val userName: String,
     val userAvatar: String,
     val chefName: String,
     val chefAvatar: String,
     val lastMsg: String?=null,
-    val dataType: Int?=null,  //0String, 1image,
-    val time: Long?=null, //用來排序
+    val dataType: Int?=null,
+    val time: Long?=null,
 )
 
 
 data class Chat(
     val message: String,
-    val dataType: Int,  //0String, 1image,
-    val senderId: String, //userId,chefId
-    val time: Long, //用來排序
+    val dataType: Int,
+    val senderId: String,
+    val time: Long,
 )
 
 
@@ -204,7 +201,7 @@ data class Transaction(
     val time:Long,
     val chefReceive:Int,
     val orderList:List<String>,
-    val status:Int, //處理中, 已付款
+    val status:Int,
 )
 
 @Parcelize
@@ -212,10 +209,7 @@ data class SelectedDates(
     val selectedDates: List<LocalDate>
 ):Parcelable
 
-@Parcelize
-data class SelectedDate(
-    val selectedDate: LocalDate
-):Parcelable
+
 
 
 

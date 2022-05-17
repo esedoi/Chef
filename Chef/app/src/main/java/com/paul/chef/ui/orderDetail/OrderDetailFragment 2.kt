@@ -11,16 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
-import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.databinding.FragmentOrderDetailBinding
-import com.paul.chef.databinding.FragmentUserProfileBinding
 import com.paul.chef.databinding.ItemDisplayDishBinding
-import com.paul.chef.ui.book.BookFragmentArgs
 import com.paul.chef.ui.menuDetail.bindImage
+import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 
 class OrderDetailFragment : Fragment() {
@@ -33,7 +30,6 @@ class OrderDetailFragment : Fragment() {
 
     private val displayList = mutableListOf<ItemDisplayDishBinding>()
 
-
     private lateinit var viewModel: OrderDetailViewModel
 
     private val arg: OrderDetailFragmentArgs by navArgs()
@@ -42,7 +38,7 @@ class OrderDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(OrderDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this)[OrderDetailViewModel::class.java]
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -51,7 +47,6 @@ class OrderDetailFragment : Fragment() {
 
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
-
 
 
         binding.apply {
@@ -67,8 +62,7 @@ class OrderDetailFragment : Fragment() {
                     }
                     orderDetailName.text = order.userName
                     orderDetailPaymentText.text = "你的收款"
-                    orderDetailTotal.text = "NT$ " + order.chefReceive.toString()
-//                    orderDetailTotal.text = getString(R.string.new_taiwan_dollar, order.chefReceive.toString())
+                    orderDetailTotal.text = getPrice(order.chefReceive)
 
                     if (order.status == OrderStatus.PENDING.index) {
                         orderDetailAcceptBtn.visibility = View.VISIBLE
@@ -96,7 +90,8 @@ class OrderDetailFragment : Fragment() {
                     }
                     orderDetailName.text = order.chefName
                     orderDetailPaymentText.text = "你的付款"
-                    orderDetailTotal.text = "NT$ " + order.userPay.toString()
+                    orderDetailTotal.text = getPrice(order.userPay)
+
                     orderDetailAcceptBtn.visibility = View.GONE
                     orderDetailCancelBtn.text = "取消訂單"
 
@@ -124,7 +119,7 @@ class OrderDetailFragment : Fragment() {
                 OrderStatus.UPCOMING.index -> OrderStatus.UPCOMING.value
                 OrderStatus.COMPLETED.index -> OrderStatus.COMPLETED.value
                 OrderStatus.CANCELLED.index -> OrderStatus.CANCELLED.value
-                OrderStatus.SCORED.index->OrderStatus.SCORED.value
+                OrderStatus.SCORED.index -> OrderStatus.SCORED.value
                 else -> "something went wrong"
             }
             orderDetailAddress.text = order.address.addressTxt
@@ -133,11 +128,9 @@ class OrderDetailFragment : Fragment() {
             orderDetailMenuName.text = order.menuName
             orderDetailNote.text = order.note
             orderDetailPeople.text = order.people.toString() + " 人"
-            orderDetailOrginalPrice.text = "NT$ " + order.originalPrice.toString()
-            orderDetailDiscount.text = "NT$ " + order.discount.toString()
-            orderDetailFee.text = "NT$ " + ChefManger().chefFee.toString()
-
-
+            orderDetailOrginalPrice.text = getPrice(order.originalPrice)
+            orderDetailDiscount.text = getPrice(order.discount)
+            orderDetailFee.text = getPrice(ChefManger().chefFee)
 
             when (order.status) {
                 OrderStatus.PENDING.index, OrderStatus.UPCOMING.index -> {
@@ -198,7 +191,6 @@ class OrderDetailFragment : Fragment() {
             nameText.gravity = Gravity.CENTER
             displayList[defaultType].displayRG.addView(nameText)
             displayList[defaultType].displayRG.gravity = Gravity.CENTER
-
         }
 
         viewModel.getRoomId(order.userId, order.chefId)
@@ -219,11 +211,8 @@ class OrderDetailFragment : Fragment() {
             }
         }
 
-
-
-
         return root
     }
 
-
 }
+

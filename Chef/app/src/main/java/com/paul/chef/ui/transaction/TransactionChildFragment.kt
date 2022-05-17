@@ -126,22 +126,6 @@ class TransactionChildFragment: Fragment() {
 
 
 
-//        transactionViewModel.orderList.observe(viewLifecycleOwner){
-//            Log.d("transactionchildfragment", "it = $it")
-//            transactionUnpaidAdapter.submitList(it)
-//        }
-//
-//        transactionViewModel.transactionList.observe(viewLifecycleOwner){
-//            Log.d("transactionchildfragment", "it = $it")
-//            transactionChildAdapter.submitList(it)
-//        }
-
-
-
-
-
-
-
         return root
     }
 
