@@ -122,8 +122,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menuDetailFragment,
                 R.id.navigation_home,
-                R.id.loginFragment,
-                R.id.filterFragment->{
+                R.id.loginFragment ->{
                     navView.visibility = View.GONE
                     binding.toolbar6.visibility = View.GONE
                 }

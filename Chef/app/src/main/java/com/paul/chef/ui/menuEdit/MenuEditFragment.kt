@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,8 +27,10 @@ import com.paul.chef.data.Dish
 import com.paul.chef.databinding.FragmentMenuEditBinding
 import com.paul.chef.databinding.ItemAddDishBinding
 import com.paul.chef.databinding.ItemDishOptionalBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
 import com.paul.chef.ui.menuDetail.bindImage
+import com.paul.chef.ui.orderDetail.OrderDetailViewModel
 import kotlin.math.atan2
 
 
@@ -77,6 +80,8 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
     var openBoolean: Boolean = false
 
+    private val menuEditViewModel by viewModels<MenuEditViewModel> { getVmFactory() }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -87,9 +92,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
         _binding = FragmentMenuEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val menuEditViewModel =
-            ViewModelProvider(this).get(MenuEditViewModel::class.java)
 
 
         //discount recycler

@@ -15,7 +15,7 @@ import com.paul.chef.data.source.Result
 object ChefFirebaseDataSource : ChefDataSource {
 
 
-    override suspend fun getMenuList(id: String): Result<List<Menu>> =
+    override suspend fun getMenuList(): Result<List<Menu>> =
         suspendCoroutine { continuation ->
 
             FirebaseFirestore.getInstance().collection("Menu")
@@ -42,6 +42,28 @@ object ChefFirebaseDataSource : ChefDataSource {
 
         }
 
+    override fun getLiveMenuList(): MutableLiveData<List<Menu>> {
+        val dataList = mutableListOf<Menu>()
+        val liveData = MutableLiveData<List<Menu>>()
+        FirebaseFirestore.getInstance().collection("Menu")
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                for (doc in value!!.documents) {
+                    val item = doc.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, Menu::class.java)
+                        dataList.add(data)
+                    if (value.documents.indexOf(doc) == value.documents.lastIndex) {
+                        liveData.value = dataList
+                    }
+                }
+            }
+            return liveData
+    }
+
     override suspend fun getUserByEmail(email: String): Result<User?> =
         suspendCoroutine { continuation ->
             FirebaseFirestore.getInstance().collection("User")
@@ -67,6 +89,29 @@ object ChefFirebaseDataSource : ChefDataSource {
                     Log.d("pickerViewModel", "get failed with ", exception)
                 }
         }
+
+    override  fun getLiveUser(): MutableLiveData<User> {
+
+        val userId = UserManger.user?.userId!!
+
+        val liveData = MutableLiveData<User>()
+        FirebaseFirestore.getInstance().collection("User")
+            .document(userId)
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w("notification", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                val item = value?.data
+                val json = Gson().toJson(item)
+                val data = Gson().fromJson(json, User::class.java)
+                Log.d("firebaseDatasource", "liveUser = $data")
+                UserManger.user = data
+                liveData.value = data
+            }
+        return liveData
+
+    }
 
     override suspend fun getChef(id: String): Result<Chef> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection("Chef")
@@ -108,6 +153,31 @@ object ChefFirebaseDataSource : ChefDataSource {
         return liveData
     }
 
+    override suspend fun getChefIdList(settingType: List<Int>): Result<List<String>> = suspendCoroutine { continuation ->
+        val chefList = mutableListOf<String>()
+        FirebaseFirestore.getInstance().collection("Chef")
+            .whereIn("bookSetting.type", settingType)
+            .get()
+            .addOnSuccessListener { value ->
+                if (value != null) {
+                    for (i in value.documents) {
+                        val item = i.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, Chef::class.java)
+                        chefList.add(data.id)
+                        if (value.documents.indexOf(i) == value.documents.size - 1) {
+                            continuation.resume(Result.Success(chefList))
+                        }
+                    }
+                } else {
+                    Log.d("pickerViewModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("pickerViewModel", "get failed with ", exception)
+            }
+    }
+
     override suspend fun blockMenu(blockMenuList: List<String>, userId: String) {
         FirebaseFirestore.getInstance().collection("User").document(userId)
             .update(
@@ -144,7 +214,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             FirebaseFirestore.getInstance().collection("Chef").document(id)
                 .set(temp)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                    Log.d("click", "DocumentSnapshot added with ID: $documentReference")
 
                 }
                 .addOnFailureListener { e ->
@@ -159,7 +229,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                     )
                 )
                 .addOnSuccessListener { documentReference ->
-                    Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                    Log.d("click", "DocumentSnapshot added with ID: $documentReference")
                 }
                 .addOnFailureListener { e ->
                     Log.w("click", "Error adding document", e)
@@ -179,7 +249,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
 
             }
             .addOnFailureListener { e ->
@@ -200,7 +270,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)
@@ -220,7 +290,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)
@@ -255,7 +325,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             .collection("Review").document(reviewId)
             .set(review)
             .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
                 Log.w("click", "Error adding document", e)
@@ -269,7 +339,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         FirebaseFirestore.getInstance().collection("Room").document(id)
             .set(room)
             .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
                 continuation.resume(Result.Success(id))
 
             }
@@ -294,6 +364,70 @@ object ChefFirebaseDataSource : ChefDataSource {
                 } else {
                     Log.d("orderdetailviewmodel", "No such document")
                     continuation.resume(Result.Success(""))
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("orderdetailviewmodel", "get failed with ", exception)
+            }
+    }
+
+    override suspend fun setMenu(
+        menuName: String,
+        menuIntro: String,
+        perPrice: Int,
+        images: List<String>,
+        discountList: List<Discount>,
+        dishList: List<Dish>,
+        tagList: List<String>,
+        openBoolean: Boolean
+    ) {
+        val id = FirebaseFirestore.getInstance().collection("Menu").document().id
+        val chefId = UserManger.chef?.id!!
+        val chefName = UserManger.chef?.profileInfo?.name!!
+        val avatar = UserManger.chef?.profileInfo?.avatar!!
+
+        val menu = Menu(id, chefId, menuName,chefName,avatar, menuIntro, perPrice, images, discountList, dishList, tagList = tagList, open = openBoolean)
+
+        FirebaseFirestore.getInstance().collection("Menu").document(id)
+            .set(menu)
+            .addOnSuccessListener { documentReference ->
+                Log.d("click", "DocumentSnapshot added with ID: $documentReference")
+            }
+            .addOnFailureListener { e ->
+                Log.w("click", "Error adding document", e)
+            }
+    }
+
+    override suspend fun updateLikeList(newList:List<String>) {
+        val userId = UserManger.user?.userId!!
+        FirebaseFirestore.getInstance().collection("User").document(userId)
+            .update(mapOf(
+                "likeList" to newList,
+            ))
+            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
+
+            }
+            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+    }
+
+    override suspend fun getMenuReviewList(menuId: String):Result<List<Review>> = suspendCoroutine { continuation ->
+        val dataList = mutableListOf<Review>()
+        FirebaseFirestore.getInstance().collection("Menu").document(menuId)
+            .collection("Review")
+            .get()
+            .addOnSuccessListener { value ->
+                if (value.documents.isNotEmpty()) {
+                    for (doc in value.documents){
+                        val item = doc.data
+                        val json = Gson().toJson(item)
+                        val data = Gson().fromJson(json, Review::class.java)
+                        dataList.add(data)
+                        if(value.documents.indexOf(doc)==value.documents.lastIndex){
+                            continuation.resume(Result.Success(dataList))
+                        }
+                    }
+                } else {
+                    Log.d("orderdetailviewmodel", "No such document")
                 }
             }
             .addOnFailureListener { exception ->

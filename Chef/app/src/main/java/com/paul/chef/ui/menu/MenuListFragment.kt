@@ -12,6 +12,7 @@ import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,8 @@ import com.paul.chef.*
 import com.paul.chef.data.Address
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentMenuListBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.menuDetail.MenuDetailViewModel
 import java.time.LocalDate
 
 class MenuListFragment : Fragment(), ItemMenu {
@@ -33,7 +36,8 @@ class MenuListFragment : Fragment(), ItemMenu {
 
     private var likeIdList = mutableListOf<String>()
 
-    lateinit var menuListViewModel: MenuListViewModel
+
+    private val menuListViewModel by viewModels<MenuListViewModel> { getVmFactory() }
 
     val menuList = mutableListOf<Menu>()
     val displayMenuList = mutableListOf<Menu>()
@@ -47,9 +51,6 @@ class MenuListFragment : Fragment(), ItemMenu {
 
         _binding = FragmentMenuListBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        menuListViewModel =
-            ViewModelProvider(this).get(MenuListViewModel::class.java)
 
 
         //menuList recycler
@@ -102,6 +103,7 @@ class MenuListFragment : Fragment(), ItemMenu {
             menuListAdapter.submitList(displayMenuList)
             menuListAdapter.notifyDataSetChanged()
         }
+
 
 
         val tagList = listOf<String>("素食", "清真", "魚", "法式", "中式", "日式", "分子料理", "有機", "無麩質")
@@ -174,6 +176,9 @@ class MenuListFragment : Fragment(), ItemMenu {
             }
         }
 
+        menuListViewModel.liveUser.observe(viewLifecycleOwner){
+            menuListViewModel.filterLikeIdList(it)
+        }
         menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
             likeIdList.clear()
             likeIdList.addAll(it)

@@ -1,23 +1,32 @@
 package com.paul.chef.data.source
 
 import androidx.lifecycle.MutableLiveData
-import com.paul.chef.data.Chef
-import com.paul.chef.data.Menu
-import com.paul.chef.data.Review
-import com.paul.chef.data.User
+import com.paul.chef.data.*
 
 class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefRepository {
 
-    override suspend fun getMenuList(menuId:String): Result<List<Menu>> {
-        return firebaseDataSource.getMenuList(menuId)
+    override suspend fun getMenuList(): Result<List<Menu>> {
+        return firebaseDataSource.getMenuList()
+    }
+
+    override fun getLiveMenuList(): MutableLiveData<List<Menu>> {
+        return firebaseDataSource.getLiveMenuList()
     }
 
     override suspend fun getUserByEmail(email: String): Result<User?> {
         return firebaseDataSource.getUserByEmail(email)
     }
 
+    override fun getLiveUser(): MutableLiveData<User> {
+        return firebaseDataSource.getLiveUser()
+    }
+
     override suspend fun getChef(id: String): Result<Chef> {
         return firebaseDataSource.getChef(id)
+    }
+
+    override suspend fun getChefIdList(settingType: List<Int>): Result<List<String>> {
+        return firebaseDataSource.getChefIdList(settingType)
     }
 
     override fun getLiveChef(id: String): MutableLiveData<Chef> {
@@ -77,5 +86,26 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
 
     override suspend fun getRoom(userId: String, chefId: String): Result<String> {
         return firebaseDataSource.getRoom(userId, chefId)
+    }
+
+    override suspend fun setMenu(
+        menuName: String,
+        menuIntro: String,
+        perPrice: Int,
+        images: List<String>,
+        discountList: List<Discount>,
+        dishList: List<Dish>,
+        tagList: List<String>,
+        openBoolean: Boolean
+    ) {
+        return firebaseDataSource.setMenu(menuName, menuIntro, perPrice, images, discountList, dishList, tagList, openBoolean)
+    }
+
+    override suspend fun updateLikeList(newList: List<String>) {
+        return firebaseDataSource.updateLikeList(newList)
+    }
+
+    override suspend fun getMenuReviewList(menuId: String): Result<List<Review>> {
+        return firebaseDataSource.getMenuReviewList(menuId)
     }
 }

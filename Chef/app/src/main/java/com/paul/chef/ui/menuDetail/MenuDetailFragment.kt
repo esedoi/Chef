@@ -16,6 +16,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,6 +27,8 @@ import com.paul.chef.data.Dish
 import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.menuEdit.MenuEditViewModel
 
 class MenuDetailFragment : Fragment(), Block {
 
@@ -43,7 +46,8 @@ class MenuDetailFragment : Fragment(), Block {
 
     private var reviewList = emptyList<Review>()
 
-    lateinit var menuDetailViewModel: MenuDetailViewModel
+
+    private val menuDetailViewModel by viewModels<MenuDetailViewModel> { getVmFactory() }
     lateinit var menu: Menu
 
     var openBoolean: Boolean = false
@@ -69,10 +73,6 @@ class MenuDetailFragment : Fragment(), Block {
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        menuDetailViewModel =
-            ViewModelProvider(this)[MenuDetailViewModel::class.java]
-
-
 
 
         //navigation safe args
@@ -85,11 +85,14 @@ class MenuDetailFragment : Fragment(), Block {
         val selectedDish = mutableListOf<Dish>()
         val likeIdList = mutableListOf<String>()
 
-        menuDetailViewModel.likeIdList.observe(viewLifecycleOwner){
-            likeIdList.clear()
-            likeIdList.addAll(it)
-            binding.menuDetailLikeCheck.isChecked = it.contains(menu.id)
 
+
+        menuDetailViewModel.liveUser.observe(viewLifecycleOwner){
+            if(it.likeList !=null){
+                likeIdList.clear()
+                likeIdList.addAll(it.likeList)
+                binding.menuDetailLikeCheck.isChecked = it.likeList.contains(menu.id)
+            }
         }
 
         binding.menuDetailLikeCheck.setOnClickListener {
@@ -99,7 +102,6 @@ class MenuDetailFragment : Fragment(), Block {
                 likeIdList.add(menu.id)
             }
 
-            Log.d("menudetailfragment","updatelikeidlist")
             menuDetailViewModel.updateLikeList(likeIdList)
         }
 

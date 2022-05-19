@@ -2,9 +2,7 @@ package com.paul.chef.ui.menu
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.BookSettingType
@@ -13,11 +11,13 @@ import com.paul.chef.UserManger
 import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
 import com.paul.chef.data.User
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 
-class MenuListViewModel(application: Application) : AndroidViewModel(application) {
+class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
 
 
-    private val dataList = mutableListOf<Menu>()
     private var _menuList = MutableLiveData<List<Menu>>()
     val menuList: LiveData<List<Menu>>
         get() = _menuList
@@ -31,78 +31,44 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
     val likeList: LiveData<List<Menu>>
         get() = _likeList
 
+
+
+    var liveUser = MutableLiveData<User>()
+
     val chefList = mutableListOf<String>()
-    private val db = FirebaseFirestore.getInstance()
 
     val userId = UserManger.user?.userId!!
 
     init {
+        liveUser = repository.getLiveUser()
+        _menuList = repository.getLiveMenuList()
+    }
 
-        db.collection("User")
-            .document(userId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                val item = value?.data
-                val json = Gson().toJson(item)
-                val data = Gson().fromJson(json, User::class.java)
-                if (data.likeList != null) {
-                    _likeIdList.value = data.likeList!!
-                }
-            }
-
-
-        db.collection("Menu")
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                dataList.clear()
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Menu::class.java)
-                    dataList.add(data)
-                    if (value.documents.indexOf(doc) == value.documents.size - 1) {
-                        Log.d("menulistviewmodel", "init _menu")
-                        _menuList.value = dataList
-                    }
-                }
+    fun filterLikeIdList(user:User){
+            if(user.likeList!=null){
+                _likeIdList.value = user.likeList!!
+            }else{
+                _likeIdList.value = emptyList()
             }
     }
 
-    fun getLikeList(newList: List<String>) {
+    fun getLikeList(newList: List<String>, menuList:List<Menu>) {
+
+
         if (newList.isEmpty()) {
             _likeList.value = emptyList()
         } else {
-            db.collection("Menu")
-                .addSnapshotListener { value, e ->
-                    if (e != null) {
-                        Log.w("notification", "Listen failed.", e)
-                        return@addSnapshotListener
-                    }
-                    dataList.clear()
-                    for (doc in value!!.documents) {
-                        val item = doc.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Menu::class.java)
-                        if (newList.contains(data.id)) {
-                            dataList.add(data)
-                        }
-                        if (value.documents.indexOf(doc) == value.size() - 1) {
-                            _likeList.value = dataList
-                        }
-                    }
-                }
-         }
 
+            val likeMenuList = menuList.filter {
+                newList.contains(it.id)
+            }
+
+            _likeList.value =  likeMenuList
+        }
     }
 
     fun getChefId(bookType: Int) {
-        Log.d("menuListViewmodel", "getChefId")
+
         val settingType = mutableListOf<Int>()
         settingType.add(BookSettingType.AcceptAll.index)
         if (bookType == BookType.UserSpace.index) {
@@ -110,74 +76,34 @@ class MenuListViewModel(application: Application) : AndroidViewModel(application
         } else {
             settingType.add(BookSettingType.OnlyChefSpace.index)
         }
-        db.collection("Chef")
-            .whereIn("bookSetting.type", settingType)
-            .get()
-            .addOnSuccessListener { value ->
-                if (value != null) {
-                    chefList.clear()
-                    for (i in value.documents) {
-                        val item = i.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Chef::class.java)
-                        chefList.add(data.id)
-                        if (value.documents.indexOf(i) == value.documents.size - 1) {
-                            getFilterMenuList(chefList)
-                        }
-                    }
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+        viewModelScope.launch {
+            when (val result = repository.getChefIdList(settingType)) {
+                is Result.Success -> {
+                    getFilterMenuList(result.data)
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
-
+        }
     }
 
     fun getFilterMenuList(chefIdList: List<String>) {
-        db.collection("Menu")
-            .get()
-            .addOnSuccessListener { value ->
-                if (value != null) {
-                    dataList.clear()
-                    for (i in value.documents) {
-                        val item = i.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Menu::class.java)
-                        dataList.add(data)
-                        if (value.documents.indexOf(i) == value.documents.size - 1) {
-                            val filterList = dataList.filter {
-                                chefIdList.contains(it.chefId)
-                            }
-                            Log.d("menulistviewmodel", "fun getFilterMenuList")
-                            _menuList.value = filterList
-                            chefList.clear()
-                        }
+
+        viewModelScope.launch {
+            when (val result = repository.getMenuList()) {
+                is Result.Success -> {
+                    val filterList = result.data.filter {
+                        chefIdList.contains(it.chefId)
                     }
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+                    _menuList.value = filterList
+                    chefList.clear()
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
+        }
     }
 
     fun updateLikeList(newList: List<String>) {
-
-        db.collection("User").document(userId)
-            .update(
-                mapOf(
-                    "likeList" to newList,
-                )
-            )
-            .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
-
-            }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
-
+        viewModelScope.launch {
+            repository.updateLikeList(newList)
+        }
     }
 
 }

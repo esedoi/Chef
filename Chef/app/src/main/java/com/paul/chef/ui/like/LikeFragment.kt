@@ -2,11 +2,13 @@ package com.paul.chef.ui.like
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,7 @@ import com.paul.chef.MenuType
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentLikeBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menu.MenuListViewModel
 
@@ -23,12 +26,15 @@ class LikeFragment : Fragment(), ItemMenu {
     private var _binding: FragmentLikeBinding? = null
     private val binding get() = _binding!!
 
-    private val menuListViewModel: MenuListViewModel by activityViewModels()
+
+    private val menuListViewModel by viewModels<MenuListViewModel> { getVmFactory() }
 
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private var likeList = mutableListOf<String>()
+
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -49,14 +55,29 @@ class LikeFragment : Fragment(), ItemMenu {
         binding.likeRecycler.adapter = menuListAdapter
 
 
-        menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
 
-            likeList.clear()
-            likeList.addAll(it)
-            menuListViewModel.getLikeList(it)
+
+        menuListViewModel.menuList.observe(viewLifecycleOwner){menuList->
+            menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
+                likeList.clear()
+                likeList.addAll(it)
+                menuListViewModel.getLikeList(it, menuList)
+            }
         }
 
+        menuListViewModel.liveUser.observe(viewLifecycleOwner){
+            Log.d("likefragment", "liveUser = $it")
+            menuListViewModel.filterLikeIdList(it)
+        }
+
+//        menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
+//            likeList.clear()
+//            likeList.addAll(it)
+//            menuListViewModel.getLikeList(it, menuList)
+//        }
+
         menuListViewModel.likeList.observe(viewLifecycleOwner) {
+            Log.d("likefragment", "liveList =  = $it")
 
             if (it.isEmpty()) {
                 binding.chatUserEmptyImg.visibility = View.VISIBLE
