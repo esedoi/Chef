@@ -60,9 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="chef 使用者條款"
-
         android:textStyle="bold"
-
         app:layout_constraintBottom_toBottomOf="@+id/checkBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

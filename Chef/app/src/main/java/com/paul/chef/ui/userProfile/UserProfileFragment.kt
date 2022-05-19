@@ -2,15 +2,16 @@ package com.paul.chef.ui.userProfile
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentUserProfileBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
 
 
@@ -19,7 +20,7 @@ class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
 
-    private val mainViewModel: MainViewModel by activityViewModels()
+    private val userProfileViewModel by viewModels<UserProfileViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,11 +29,7 @@ class UserProfileFragment : Fragment() {
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val userProfileViewModel =
-            ViewModelProvider(this).get(UserProfileViewModel::class.java)
-
         val user = UserManger.user
-        Log.d("userprofilefragment", " user= $user")
 
         binding.userProfileIntro.text = user?.profileInfo?.introduce!!
         binding.userProfileNameText.text = user.profileInfo.name
@@ -46,14 +43,11 @@ class UserProfileFragment : Fragment() {
         }
 
         userProfileViewModel.chefId.observe(viewLifecycleOwner) {
-            Log.d("userprofilefragment", "++++++++++++chefid = $it")
             userProfileViewModel.getChef(it)
         }
         userProfileViewModel.getChefDone.observe(viewLifecycleOwner) {
-            if (it) {
                 (activity as MainActivity).turnMode(Mode.CHEF.index)
                 findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
-            }
         }
 
 
@@ -66,7 +60,6 @@ class UserProfileFragment : Fragment() {
         } else {
             binding.userProfileCreateChef.text = "成為廚師"
             binding.userProfileCreateChef.setOnClickListener {
-                Log.d("userprofilemanager", "user=$user")
                 userProfileViewModel.createChef(user)
             }
         }

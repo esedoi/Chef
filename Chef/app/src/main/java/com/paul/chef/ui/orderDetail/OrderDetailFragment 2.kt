@@ -11,12 +11,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentOrderDetailBinding
 import com.paul.chef.databinding.ItemDisplayDishBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
+import com.paul.chef.ui.review.ReviewViewModel
 import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 
@@ -27,14 +30,15 @@ class OrderDetailFragment : Fragment() {
     private var _itemDisplayBinding: ItemDisplayDishBinding? = null
     private val itemDisplayBinding get() = _itemDisplayBinding!!
     private val displayList = mutableListOf<ItemDisplayDishBinding>()
-    private lateinit var viewModel: OrderDetailViewModel
+    private val viewModel by viewModels<OrderDetailViewModel> { getVmFactory() }
+
     private val arg: OrderDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this)[OrderDetailViewModel::class.java]
+
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -192,7 +196,6 @@ class OrderDetailFragment : Fragment() {
         viewModel.getRoomId(order.userId, order.chefId)
 
         viewModel.roomId.observe(viewLifecycleOwner) {
-            Log.d("$$*********************", "roomid = $it")
             if (it != "") {
                 roomId = it
             } else {

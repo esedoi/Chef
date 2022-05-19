@@ -55,7 +55,7 @@
         android:backgroundTint="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/paper_plane"
-        android:tint="@color/md_theme_light_primary"
+        app:tint="@color/md_theme_light_primary"
         app:layout_constraintBottom_toBottomOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="@+id/editText"
         app:layout_constraintTop_toTopOf="@+id/editText" />

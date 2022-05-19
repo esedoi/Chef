@@ -33,7 +33,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="加一道菜"
+                android:text="@string/add_the_dish"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="option text"
+                android:text="@string/temp_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="移除"
+                android:text="@string/remove"
                 app:layout_constraintBottom_toBottomOf="@+id/menu_add_dish_type"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/menu_add_dish_type" />
@@ -85,8 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-
-                android:hint="選擇菜品類型"
+                android:hint="@string/select_dish_type"
                 app:layout_constraintEnd_toStartOf="@+id/remove_type"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,15 +97,6 @@
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!--            <Spinner-->
-            <!--                android:id="@+id/dishTypeSpinner"-->
-            <!--                android:layout_width="200dp"-->
-            <!--                android:layout_height="50dp"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="32dp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

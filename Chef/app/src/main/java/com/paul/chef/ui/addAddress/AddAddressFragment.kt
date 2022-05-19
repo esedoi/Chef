@@ -118,7 +118,7 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
             }
         })
 
-        binding.addAdressSave.setOnClickListener {
+        binding.addAddressSave.setOnClickListener {
             setFragmentResult("addAddress", bundleOf("address" to address))
             dismiss()
         }

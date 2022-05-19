@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -23,15 +24,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.ActivityMainBinding
+import com.paul.chef.ext.getVmFactory
 
 class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var mainViewModel: MainViewModel
+//    lateinit var mainViewModel: MainViewModel
+    private val mainViewModel by viewModels<MainViewModel>{ getVmFactory() }
 
-
-//    val navView: BottomNavigationView? = null
 
 
     private lateinit var auth: FirebaseAuth
@@ -46,8 +47,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        mainViewModel =
-            ViewModelProvider(this).get(MainViewModel::class.java)
+//        mainViewModel =
+//            ViewModelProvider(this).get(MainViewModel::class.java)
+
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

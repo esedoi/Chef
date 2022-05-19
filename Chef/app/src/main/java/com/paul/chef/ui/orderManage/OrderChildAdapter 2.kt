@@ -14,7 +14,7 @@ import com.paul.chef.databinding.ItemOrderChildBinding
 import com.paul.chef.ui.menuDetail.bindImage
 import java.time.LocalDate
 
-class OrderChildAdapter(val goOrderDetail: GoOrderDetail, val mode:Int) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
+class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,7 +39,6 @@ class OrderChildAdapter(val goOrderDetail: GoOrderDetail, val mode:Int) : ListAd
 
 
         fun bind(item: Order, goOrderDetail: GoOrderDetail, mode:Int) {
-            Log.d("oderchildadapter", "mode=$mode")
             val outlineProvider = ProfileOutlineProvider()
             binding.imageView6.outlineProvider =outlineProvider
 
@@ -47,17 +46,14 @@ class OrderChildAdapter(val goOrderDetail: GoOrderDetail, val mode:Int) : ListAd
                 Mode.CHEF.index->{
                     binding.itemOrderName.text = item.userName
                     bindImage(binding.imageView6, item.userAvatar)
-                    Log.d("oderchildadapter", "item.userName=${item.userName}")
                 }
                 Mode.USER.index->{
                     binding.itemOrderName.text = item.chefName
                     bindImage(binding.imageView6, item.chefAvatar)
-                    Log.d("oderchildadapter", "item.chefName=${item.chefName}")
                 }
             }
             binding.itemOrderCardView.setOnClickListener {
                 goOrderDetail.goDetail(item)
-                Log.d("orderchildadapter", "item=$item")
             }
 
 

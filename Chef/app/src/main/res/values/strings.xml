@@ -214,5 +214,31 @@ Opting out may prevent you from receiving messages regarding the Site, the Servi
     <string name="people_number">人數</string>
     <string name="message_from_chef">來自廚師的訊息</string>
     <string name="massage_from_customer">來自客人的訊息</string>
+    <string name="cancel">取消</string>
+    <string name="save">儲存</string>
+    <string name="write_review">撰寫評價</string>
+    <string name="send">送出</string>
+    <string name="temp_text">--</string>
+    <string name="write_review_hint">分享你的親身體驗</string>
+    <string name="write_review_rating_title">幾分</string>
+    <string name="write_review_review_title">評價</string>
+    <string name="all_tag">全部的標籤</string>
+    <string name="add_text_hint">新增標籤</string>
+    <string name="add_address">新增地址</string>
+    <string name="no_address_hint">沒有已儲存的地址，請點選下方按鈕新增</string>
+    <string name="address">地址</string>
+    <string name="edit">編輯</string>
+    <string name="confirm_price">確認價格</string>
+    <string name="enter_book_info_title">輸入訂單資訊</string>
+    <string name="note">備註</string>
+    <string name="pay_contain">費用包含</string>
+    <string name="food_purchase">食材採購</string>
+    <string name="meal_prepare">餐前準備</string>
+    <string name="service_charge">服務費</string>
+    <string name="kitchen_cleaning">廚房清潔</string>
+    <string name="chef_transportation">廚師交通費用</string>
+    <string name="remove">移除</string>
+    <string name="add_the_dish">加一道菜</string>
+    <string name="select_dish_type">選擇菜品類型</string>
 
 </resources>

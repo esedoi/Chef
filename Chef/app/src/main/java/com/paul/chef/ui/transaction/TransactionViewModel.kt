@@ -1,19 +1,14 @@
 package com.paul.chef.ui.transaction
 
-import android.annotation.SuppressLint
-import android.app.Application
+
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.google.gson.Gson
 import com.paul.chef.*
 import com.paul.chef.data.Order
-
 import com.paul.chef.data.Transaction
 import java.util.*
 
@@ -139,7 +134,7 @@ class TransactionViewModel : ViewModel() {
         for (i in unpaidList) {
             idList.add(i.id)
         }
-        Log.d("transactionviewmodel", "idlist=$idList")
+
         if (idList.isNotEmpty() && chefReceive != 0) {
 
             val transaction = Transaction(

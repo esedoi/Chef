@@ -65,15 +65,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <!--            <Spinner-->
-            <!--                android:id="@+id/calendarSpinner"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="116dp"-->
-            <!--                android:visibility="gone"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/textView31"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView31" />-->
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/chefSpaceCardView"
                 android:layout_width="match_parent"
@@ -191,19 +182,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <!--                    <ImageView-->
-                    <!--                        android:id="@+id/book_set_check_chef"-->
-                    <!--                        android:layout_width="32dp"-->
-                    <!--                        android:layout_height="32dp"-->
-                    <!--                        android:layout_marginTop="16dp"-->
-                    <!--                        android:layout_marginEnd="16dp"-->
-                    <!--                        android:background="@drawable/round"-->
-                    <!--                        android:backgroundTint="@color/md_theme_light_primary"-->
-                    <!--                        android:visibility="gone"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
-                    <!--                        app:srcCompat="@drawable/ic_baseline_check_24"-->
-                    <!--                        app:tint="@color/close_background" />-->
 
                     <TextView
                         android:id="@+id/chef_space_helper"
@@ -268,7 +246,6 @@
                 android:visibility="visible"
                 app:cardCornerRadius="15dp"
                 app:cardMaxElevation="7dp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chefSpaceCardView">
@@ -278,19 +255,6 @@
                     android:layout_height="match_parent"
                     android:visibility="visible">
 
-                    <!--                    <ImageView-->
-                    <!--                        android:id="@+id/book_set_check_user"-->
-                    <!--                        android:layout_width="32dp"-->
-                    <!--                        android:layout_height="32dp"-->
-                    <!--                        android:layout_marginTop="16dp"-->
-                    <!--                        android:layout_marginEnd="16dp"-->
-                    <!--                        android:background="@drawable/round"-->
-                    <!--                        android:backgroundTint="@color/md_theme_light_primary"-->
-                    <!--                        android:visibility="gone"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
-                    <!--                        app:srcCompat="@drawable/ic_baseline_check_24"-->
-                    <!--                        app:tint="@color/close_background" />-->
 
                     <TextView
                         android:id="@+id/textView27"
@@ -424,7 +388,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
-                android:text="儲存"
+                android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

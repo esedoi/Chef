@@ -1,21 +1,15 @@
 package com.paul.chef
 
-import android.app.Application
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.paul.chef.data.Chef
-import com.paul.chef.data.Order
-import com.paul.chef.data.ProfileInfo
-import com.paul.chef.data.User
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+
+import kotlinx.coroutines.launch
 
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(private val repository: ChefRepository) : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -33,100 +27,71 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         get() = _isChef
 
 
-    init {
-        if (UserManger.user?.userId != null) {
-
-            db.collection("User")
-                .document(UserManger.user?.userId ?: "")
-                .addSnapshotListener { document, e ->
-                    if (e != null) {
-                        Log.w("notification", "Listen failed.", e)
-                        return@addSnapshotListener
-                    }
-                    if (document != null) {
-                        val json = Gson().toJson(document.data)
-                        val data = Gson().fromJson(json, User::class.java)
-                        UserManger.user = data
-                        Log.d("mainviewmodel", "update user")
-                        if (data.chefId != null) {
-                            getChef(data.chefId)
-                        }
-                    }
-                }
-        }
-    }
+//    init {
+//        if (UserManger.user?.userId != null) {
+//
+//            db.collection("User")
+//                .document(UserManger.user?.userId ?: "")
+//                .addSnapshotListener { document, e ->
+//                    if (e != null) {
+//                        Log.w("notification", "Listen failed.", e)
+//                        return@addSnapshotListener
+//                    }
+//                    if (document != null) {
+//                        val json = Gson().toJson(document.data)
+//                        val data = Gson().fromJson(json, User::class.java)
+//                        UserManger.user = data
+//                        Log.d("mainviewmodel", "update user")
+//                        if (data.chefId != null) {
+//                            getChef(data.chefId)
+//                        }
+//                    }
+//                }
+//        }
+//    }
 
     fun getUser(email: String) {
-        Log.d("mainviewmodel", "fun get user")
-        db.collection("User")
-            .whereEqualTo("profileInfo.email", email)
-            .get()
-            .addOnSuccessListener { value ->
-                if (value != null) {
-                    for (i in value.documents) {
-                        val item = i.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, User::class.java)
-                        UserManger.user = data
-                        if (data.chefId != null) {
-                            getChef(data.chefId)
-                        }
+        viewModelScope.launch {
+            val result = repository.getUserByEmail(email)
+            Log.d("result", "result=$result")
+            when(result){
+                is Result.Success->{
+                    _newUser.value = result.data==null
+                    if(result.data?.chefId !=null){
+                        getChef(result.data.chefId)
                     }
-                    _newUser.value = value.documents.isEmpty()
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+                }
+                else -> {
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
+        }
+
     }
 
 
     private fun getChef(chefId: String) {
-        Log.d("mainviewmodel", "fun getchef")
-        db.collection("Chef")
-            .document(chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                val item = value?.data
-                val json = Gson().toJson(item)
-                val data = Gson().fromJson(json, Chef::class.java)
-                UserManger.chef = data
-            }
+
+        repository.getLiveChef(chefId)
+
+//        viewModelScope.launch {
+//            when(val result = repository.getLiveChef(chefId)){
+//                is Result.Success->{
+//                    UserManger.chef = result.data
+//                }
+//            }
+//        }
     }
 
 
     fun block(userId: String, blockMenuList: List<String>?, blockReviewList: List<String>?) {
 
-        if (blockMenuList != null) {
-            db.collection("User").document(userId)
-                .update(
-                    mapOf(
-                        "blockMenuList" to blockMenuList,
-                    )
-                )
-                .addOnSuccessListener {
-                    Log.d("notification", "DocumentSnapshot successfully updated!")
-                }
-                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
-        }
-
-        if (blockReviewList != null) {
-            db.collection("User").document(userId)
-                .update(
-                    mapOf(
-                        "blockReviewList" to blockReviewList,
-                    )
-                )
-                .addOnSuccessListener {
-                    Log.d("notification", "DocumentSnapshot successfully updated!")
-
-                }
-                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+        viewModelScope.launch {
+            if (blockMenuList != null) {
+                repository.blockMenu(blockMenuList,userId)
+            }
+            if (blockReviewList != null) {
+                repository.blockReview(blockReviewList,userId)
+            }
         }
     }
 }

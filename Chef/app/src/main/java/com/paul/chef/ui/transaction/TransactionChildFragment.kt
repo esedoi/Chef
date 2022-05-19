@@ -8,20 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.databinding.FragmentTransactionChildBinding
-import com.paul.chef.ui.orderManage.OrderChildFragment
 
 class TransactionChildFragment: Fragment() {
 
-    //binding
+
     private var _binding: FragmentTransactionChildBinding? = null
     private val binding get() = _binding!!
-    //viewModel
-//    private lateinit var transactionViewModel: TransactionViewModel
-    val transactionViewModel:TransactionViewModel  by viewModels({requireParentFragment()})
+    private val transactionViewModel:TransactionViewModel  by viewModels({requireParentFragment()})
 
     private lateinit var transactionUnpaidAdapter: TransactionUnpaidAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -55,11 +51,9 @@ class TransactionChildFragment: Fragment() {
         _binding = FragmentTransactionChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //viewModel
-//        transactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
 
         status = requireArguments().getInt("position")
-        Log.d("orderchildfragment", "status=$status")
+
 
         when(status){
             0->{

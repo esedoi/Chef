@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.databinding.BottomSheetReviewBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
+import com.paul.chef.ui.userProfile.UserProfileViewModel
 
 
 class ReviewFragment : DialogFragment() {
@@ -21,7 +24,7 @@ class ReviewFragment : DialogFragment() {
 
     private val arg: ReviewFragmentArgs by navArgs()
 
-    private lateinit var reviewViewModel: ReviewViewModel
+    private val reviewViewModel by viewModels<ReviewViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,6 @@ class ReviewFragment : DialogFragment() {
         _binding = BottomSheetReviewBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
 
         val order = arg.order
         val rating = arg.rating

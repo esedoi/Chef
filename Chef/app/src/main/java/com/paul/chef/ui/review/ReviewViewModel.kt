@@ -1,141 +1,59 @@
 package com.paul.chef.ui.review
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.paul.chef.OrderStatus
-import com.paul.chef.data.Chef
 import com.paul.chef.data.Order
 import com.paul.chef.data.Review
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 import java.util.*
 
-class ReviewViewModel(application: Application) : AndroidViewModel(application) {
-    @SuppressLint("StaticFieldLeak")
-    private val context = getApplication<Application>().applicationContext
+class ReviewViewModel(private val repository: ChefRepository) : ViewModel(){
 
-    private val db = FirebaseFirestore.getInstance()
 
     fun rating(txt: String, rating: Float, order: Order) {
         val orderId = order.id
         val status = OrderStatus.SCORED.index
         val menuId = order.menuId
         val chefId = order.chefId
-        var newChefRating: Float = 0F
-        var newChefRatingNumber = 0
-        var newMenuRating: Float = 0F
-        var newMenuRatingNumber = 0
-
-        db.collection("Order").document(orderId)
-            .update(
-                mapOf(
-                    "status" to status
-                )
-            )
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
+        var newChefRating: Float
+        var newChefRatingNumber: Int
+        var newMenuRating: Float
+        var newMenuRatingNumber: Int
 
 
+        viewModelScope.launch {
+            repository.updateOrderStatus(status, orderId)
 
-        db.collection("Chef")
-            .document(chefId)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d("pickerViewModel", "DocumentSnapshot data: ${document.data}")
-                    val item = document.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                    val chefRatingNumber = data.reviewNumber ?: 0
-                    var chefRating = data.reviewRating ?: 0
+            when(val chef = repository.getChef(chefId)){
+                is Result.Success->{
+                    val chefRatingNumber = chef.data.reviewNumber ?: 0
+                    var chefRating = chef.data.reviewRating ?: 0
                     chefRating = chefRating.toFloat()
                     newChefRatingNumber = chefRatingNumber + 1
                     newChefRating = ((chefRating * chefRatingNumber) + rating) / newChefRatingNumber
-                    Log.d("pickerViewModel", "chefRatingNumber ${chefRatingNumber}")
-                    Log.d("pickerViewModel", "chefRating: ${chefRating}")
-
-                    db.collection("Chef").document(chefId)
-                        .update(
-                            mapOf(
-                                "reviewRating" to newChefRating,
-                                "reviewNumber" to newChefRatingNumber
-                            )
-                        )
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("click", "Error adding document", e)
-                        }
-
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+                    repository.updateChefReview(chefId, newChefRating, newChefRatingNumber)
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
 
-
-        db.collection("Menu")
-            .document(menuId)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d("pickerViewModel", "DocumentSnapshot data: ${document.data}")
-                    val item = document.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                    val menuRatingNumber = data.reviewNumber ?: 0
-                    val menuRating = (data.reviewRating ?: 0).toInt().toFloat()
+            when(val menu = repository.getMenu(menuId)){
+                is Result.Success->{
+                    val menuRatingNumber = menu.data.reviewNumber ?: 0
+                    val menuRating = (menu.data.reviewRating ?: 0).toInt().toFloat()
                     newMenuRatingNumber = menuRatingNumber + 1
-                    Log.d("pickerViewModel", "menuRatingNumber: ${menuRatingNumber}")
-                    Log.d("pickerViewModel", "menuRating : ${menuRating}")
                     newMenuRating = ((menuRating * menuRatingNumber) + rating) / newMenuRatingNumber
-
-                    db.collection("Menu").document(menuId)
-                        .update(
-                            mapOf(
-                                "reviewRating" to newMenuRating,
-                                "reviewNumber" to newMenuRatingNumber
-                            )
-                        )
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("click", "Error adding document", e)
-                        }
-
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+                    repository.updateMenuReview(menuId, newMenuRating, newMenuRatingNumber)
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
 
+            val date = Calendar.getInstance().timeInMillis
+            val review = Review(rating, order.userId, order.userName, order.userAvatar, txt, date)
+            repository.setReview(menuId, review)
 
-        val id = db.collection("Review").document().id
-        val date = Calendar.getInstance().timeInMillis
-        val review = Review(rating, order.userId, order.userName, order.userAvatar, txt, date)
-        db.collection("Menu").document(menuId)
-            .collection("Review").document(id)
-            .set(review)
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
+        }
 
     }
+
 }

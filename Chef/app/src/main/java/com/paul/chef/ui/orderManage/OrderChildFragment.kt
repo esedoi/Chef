@@ -14,18 +14,19 @@ import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
 
-class OrderChildFragment: Fragment(), GoOrderDetail{
+class OrderChildFragment : Fragment(), GoOrderDetail {
 
     //binding
     private var _binding: FragmentOrderChildBinding? = null
     private val binding get() = _binding!!
+
     //viewModel
     private lateinit var orderViewModel: OrderManageViewModel
 
     private lateinit var orderChildAdapter: OrderChildAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private  var status = -1
+    private var status = -1
 
 
     companion object {
@@ -51,41 +52,40 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
         val root: View = binding.root
 
         //viewModel
-         orderViewModel = ViewModelProvider(this)[OrderManageViewModel::class.java]
+        orderViewModel = ViewModelProvider(this)[OrderManageViewModel::class.java]
 
-         status = requireArguments().getInt("position")
-        Log.d("orderchildfragment", "status=$status")
+        status = requireArguments().getInt("position")
 
-        orderViewModel.hasData.observe(viewLifecycleOwner){
+        orderViewModel.hasData.observe(viewLifecycleOwner) {
             orderViewModel.getList(status)
         }
 
-        orderViewModel.orderList.observe(viewLifecycleOwner){
-            Log.d("orderfragment", "it = $it")
+        orderViewModel.orderList.observe(viewLifecycleOwner) {
             val mode = UserManger.readData("mode", (activity as MainActivity))
-            when{
-                it.isEmpty()&&mode==Mode.USER.index->{
+            when {
+                it.isEmpty() && mode == Mode.USER.index -> {
                     binding.chatUserEmptyImg.visibility = View.VISIBLE
                     binding.chatEmptyTxt.visibility = View.VISIBLE
                     binding.chatChefEmptyImg.visibility = View.GONE
                 }
-                it.isEmpty()&&mode==Mode.CHEF.index->{
+                it.isEmpty() && mode == Mode.CHEF.index -> {
                     binding.chatUserEmptyImg.visibility = View.GONE
                     binding.chatEmptyTxt.visibility = View.VISIBLE
                     binding.chatChefEmptyImg.visibility = View.VISIBLE
                 }
-                it.isNotEmpty()&&mode==Mode.USER.index->{
+                it.isNotEmpty() && mode == Mode.USER.index -> {
                     binding.chatUserEmptyImg.visibility = View.GONE
                     binding.chatEmptyTxt.visibility = View.GONE
                     binding.chatChefEmptyImg.visibility = View.GONE
                 }
-                it.isNotEmpty()&&mode==Mode.CHEF.index->{
+                it.isNotEmpty() && mode == Mode.CHEF.index -> {
                     binding.chatUserEmptyImg.visibility = View.GONE
                     binding.chatEmptyTxt.visibility = View.GONE
                     binding.chatChefEmptyImg.visibility = View.GONE
                 }
             }
             orderChildAdapter.submitList(it)
+            orderChildAdapter.notifyDataSetChanged()
         }
 
         val mode = UserManger.readData("mode", (activity as MainActivity))
@@ -101,15 +101,16 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
     }
 
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun goDetail(order: Order) {
-        Log.d("orderchildfragment", "order=$order")
-        findNavController().navigate(MobileNavigationDirections.actionGlobalOrderDetailFragment(order))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalOrderDetailFragment(
+                order
+            )
+        )
     }
 }

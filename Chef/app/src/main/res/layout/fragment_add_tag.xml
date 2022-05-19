@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
-        android:text="全部的標籤"
+        android:text="@string/all_tag"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,14 +47,14 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_tag_edittxt"
+        android:id="@+id/add_tag_edit_txt"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:hint="新增標籤"
+        android:hint="@string/add_text_hint"
         app:boxCornerRadiusBottomEnd="25dp"
         app:boxCornerRadiusBottomStart="25dp"
         app:boxCornerRadiusTopEnd="25dp"
@@ -79,9 +79,9 @@
         android:backgroundTint="@color/md_theme_light_primary"
         android:src="@drawable/ic_baseline_check_24"
         app:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/add_tag_edittxt"
+        app:layout_constraintBottom_toBottomOf="@+id/add_tag_edit_txt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_tag_edittxt" />
+        app:layout_constraintTop_toTopOf="@+id/add_tag_edit_txt" />
 
     <ImageButton
         android:id="@+id/add_tag_add_tag"
@@ -93,9 +93,9 @@
         android:background="@drawable/today_bg"
         android:pointerIcon="arrow"
         android:src="@drawable/ic_baseline_arrow_upward_24"
-        app:layout_constraintBottom_toBottomOf="@+id/add_tag_edittxt"
+        app:layout_constraintBottom_toBottomOf="@+id/add_tag_edit_txt"
         app:layout_constraintEnd_toStartOf="@+id/add_tag_select"
-        app:layout_constraintTop_toTopOf="@+id/add_tag_edittxt" />
+        app:layout_constraintTop_toTopOf="@+id/add_tag_edit_txt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

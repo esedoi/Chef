@@ -1,13 +1,15 @@
 package com.paul.chef
 
 import android.app.Application
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.util.ServiceLocator
 import kotlin.properties.Delegates
 
 class ChefApplication : Application() {
 
-    // Depends on the flavor,
-//    val stylishRepository: StylishRepository
-//        get() = ServiceLocator.provideTasksRepository(this)
+    val repository: ChefRepository
+        get() = ServiceLocator.provideRepository(this)
+
 
     companion object {
         var instance: ChefApplication by Delegates.notNull()

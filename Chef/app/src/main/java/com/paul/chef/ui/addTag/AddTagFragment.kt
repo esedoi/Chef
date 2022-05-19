@@ -56,10 +56,10 @@ class AddTagFragment : DialogFragment() {
         }
         binding.addTagAddTag.setOnClickListener {
 
-            if (binding.addTagEdittxt.editText?.text.toString() != "") {
-                val text = binding.addTagEdittxt.editText?.text.toString()
+            if (binding.addTagEditTxt.editText?.text.toString() != "") {
+                val text = binding.addTagEditTxt.editText?.text.toString()
                 addTag(text)
-                binding.addTagEdittxt.editText?.setText("")
+                binding.addTagEditTxt.editText?.setText("")
             }
         }
 

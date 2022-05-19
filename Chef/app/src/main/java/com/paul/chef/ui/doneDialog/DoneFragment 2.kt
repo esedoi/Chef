@@ -35,7 +35,7 @@ class DoneFragment : DialogFragment() {
 
 
 
-        Timer().schedule(3000){
+        Timer().schedule(2000){
             (activity as MainActivity).runOnUiThread {
                 when(arg.direction){
                     "orderMange"->{
