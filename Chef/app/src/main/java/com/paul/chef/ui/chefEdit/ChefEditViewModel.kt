@@ -1,94 +1,55 @@
 package com.paul.chef.ui.chefEdit
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.paul.chef.UserManger
+
+import androidx.lifecycle.*
 import com.paul.chef.data.*
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 
-class ChefEditViewModel(application: Application) : AndroidViewModel(application){
+class ChefEditViewModel(private val repository: ChefRepository) : ViewModel() {
 
-    @SuppressLint("StaticFieldLeak")
-    private val context = getApplication<Application>().applicationContext
 
     private var _userId = MutableLiveData<String>()
     val userId: LiveData<String>
         get() = _userId
 
-    private var _getUserDone = MutableLiveData<Boolean>()
-    val getUserDone: LiveData<Boolean>
+    private var _getUserDone = MutableLiveData<User>()
+    val getUserDone: LiveData<User>
         get() = _getUserDone
 
 
 
+    fun getUser(userId: String) {
 
-    private val db = FirebaseFirestore.getInstance()
-
-
-    fun getUser(userId:String){
-        db.collection("User")
-            .document(userId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                if (value != null) {
-                        val json = Gson().toJson(value.data)
-                        val data = Gson().fromJson(json, User::class.java)
-                        UserManger.user = data
-                    _getUserDone.value = true
+        viewModelScope.launch {
+           when(val result =  repository.getUser(userId)){
+                is Result.Success->{
+                    _getUserDone.value = result.data!!
                 }
             }
+        }
     }
 
 
+    fun saveChef(profileInfo: ProfileInfo, userId: String, chefId: String) {
 
-        fun saveChef(profileInfo: ProfileInfo, userId:String, chefId:String){
-
-        val info = ProfileInfo(profileInfo.name, profileInfo.email, profileInfo.avatar, profileInfo.introduce)
-
-        db.collection("Chef").document(chefId)
-            .update(mapOf(
-                "profileInfo" to info,
-            ))
-            .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
-                Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
-
-            db.collection("User").document(userId)
-                .update(mapOf(
-                    "profileInfo" to info,
-                ))
-                .addOnSuccessListener { Log.d("notification", "DocumentSnapshot successfully updated!")
-                    Toast.makeText(this.context, "送出成功", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+        viewModelScope.launch {
+            repository.updateProfile(profileInfo, userId, chefId)
+        }
 
     }
 
 
-    fun createUser(profileInfo: ProfileInfo){
+    fun createUser(profileInfo: ProfileInfo) {
 
-        val id = db.collection("User").document().id
-        val temp = User(id, profileInfo)
-        //set firebase資料
-        db.collection("User").document(id)
-            .set(temp)
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                _userId.value = id
+        viewModelScope.launch {
+            when (val result = repository.setUser(profileInfo)) {
+                is Result.Success -> {
+                    _userId.value = result.data!!
+                }
             }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
+        }
 
     }
 

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
 import com.paul.chef.data.Room
 import com.paul.chef.databinding.FragmentChatListBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.chef.ChefViewModel
 
 
 class ChatListFragment : Fragment(), GoChatRoom {
@@ -26,7 +29,7 @@ class ChatListFragment : Fragment(), GoChatRoom {
     private var layoutManager: RecyclerView.LayoutManager? = null
 
 
-    val db = FirebaseFirestore.getInstance()
+    private val chatListViewModel by viewModels<ChatListViewModel> { getVmFactory() }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -36,13 +39,11 @@ class ChatListFragment : Fragment(), GoChatRoom {
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val chatListViewModel =
-            ViewModelProvider(this)[ChatListViewModel::class.java]
 
         val roomList = mutableListOf<Room>()
         var nowMode = -1
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+        val mode = UserManger.readData("mode")
         when (mode) {
             Mode.USER.index -> {
                 binding.topAppBar.title = getString(R.string.message_from_chef)

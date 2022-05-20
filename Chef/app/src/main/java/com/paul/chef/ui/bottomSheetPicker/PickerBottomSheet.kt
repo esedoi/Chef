@@ -7,18 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paul.chef.PickerType
 import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetPickerBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.calendar.CalendarViewModel
 
 
 class PickerBottomSheet : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetPickerBinding? = null
     private val binding get() = _binding!!
+
+    private val pickerViewModel by viewModels<PickerViewModel> { getVmFactory() }
 
     //safe args
     private val arg: PickerBottomSheetArgs by navArgs()
@@ -36,8 +41,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         _binding = BottomSheetPickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val pickerViewModel =
-            ViewModelProvider(this)[PickerViewModel::class.java]
+
 
         val pickerType = arg.pickerType
         val chefId = arg.chefId

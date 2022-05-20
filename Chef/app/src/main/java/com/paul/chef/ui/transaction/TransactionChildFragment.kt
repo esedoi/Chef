@@ -11,13 +11,16 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.databinding.FragmentTransactionChildBinding
+import com.paul.chef.ext.getVmFactory
 
 class TransactionChildFragment: Fragment() {
 
 
     private var _binding: FragmentTransactionChildBinding? = null
     private val binding get() = _binding!!
-    private val transactionViewModel:TransactionViewModel  by viewModels({requireParentFragment()})
+    private val transactionViewModel:TransactionViewModel  by viewModels({requireParentFragment()}){getVmFactory()}
+
+//    private val  transactionViewModel by viewModels<TransactionViewModel> { getVmFactory() }
 
     private lateinit var transactionUnpaidAdapter: TransactionUnpaidAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null

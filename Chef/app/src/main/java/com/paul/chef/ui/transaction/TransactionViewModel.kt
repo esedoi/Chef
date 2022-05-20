@@ -5,14 +5,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.Transaction
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 import java.util.*
 
-class TransactionViewModel : ViewModel() {
+class TransactionViewModel(private val repository: ChefRepository) : ViewModel(){
 
 
     private val db = FirebaseFirestore.getInstance()
@@ -33,30 +37,33 @@ class TransactionViewModel : ViewModel() {
 
     val chefId = UserManger.chef?.id!!
 
+    var liveOrderList = MutableLiveData<List<Order>>()
+
 
     fun getList(position: Int) {
 
-        db.collection("Transaction")
-            .whereEqualTo("chefId", chefId)
-            .get()
-            .addOnSuccessListener { value ->
-                if (value.documents.isNotEmpty()) {
-                    processingList.clear()
-                    receivedList.clear()
-                    for (doc in value.documents) {
-                        val item = doc.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Transaction::class.java)
-                        when (data.status) {
+//        if (position == 0) {
+//            liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
+//        }
+
+
+
+
+        viewModelScope.launch {
+            val result = repository.getTransaction()
+            when(result){
+                is Result.Success->{
+                    for(transaction in result.data){
+                        when(transaction.status){
                             TransactionStatus.PROCESSING.index -> {
-                                processingList.add(data)
+                                processingList.add(transaction)
                             }
                             TransactionStatus.COMPLETED.index -> {
-                                receivedList.add(data)
+                                receivedList.add(transaction)
                             }
                         }
-                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
 
+                        if(result.data.indexOf(transaction)==result.data.lastIndex){
                             when (position) {
                                 1 -> {
                                     Log.d("transaction_view_model", "posiotion1")
@@ -68,15 +75,63 @@ class TransactionViewModel : ViewModel() {
                                 }
                             }
                         }
-                    }
 
-                } else {
-                    //沒資料
+                    }
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("transactionviewmodel", "get failed with ", exception)
-            }
+
+
+
+
+
+
+
+        }
+
+
+
+
+//        db.collection("Transaction")
+//            .whereEqualTo("chefId", chefId)
+//            .get()
+//            .addOnSuccessListener { value ->
+//                if (value.documents.isNotEmpty()) {
+//                    processingList.clear()
+//                    receivedList.clear()
+//                    for (doc in value.documents) {
+//                        val item = doc.data
+//                        val json = Gson().toJson(item)
+//                        val data = Gson().fromJson(json, Transaction::class.java)
+//                        when (data.status) {
+//                            TransactionStatus.PROCESSING.index -> {
+//                                processingList.add(data)
+//                            }
+//                            TransactionStatus.COMPLETED.index -> {
+//                                receivedList.add(data)
+//                            }
+//                        }
+//                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
+//
+//                            when (position) {
+//                                1 -> {
+//                                    Log.d("transaction_view_model", "posiotion1")
+//                                    _transactionList.value = processingList
+//                                }
+//                                2 -> {
+//                                    Log.d("transaction_view_model", "posiotion2")
+//                                    _transactionList.value = receivedList
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                } else {
+//                    //沒資料
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("transactionviewmodel", "get failed with ", exception)
+//            }
 
 
 

@@ -1,22 +1,15 @@
 package com.paul.chef.ui.chef
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.paul.chef.UserManger
+
+import androidx.lifecycle.*
 import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 
-class ChefViewModel(application: Application) : AndroidViewModel(application) {
-
-
-    private val db = FirebaseFirestore.getInstance()
-
+class ChefViewModel(private val repository: ChefRepository) : ViewModel() {
 
     private var _chefInfo = MutableLiveData<Chef>()
     val chefInfo: LiveData<Chef>
@@ -31,94 +24,48 @@ class ChefViewModel(application: Application) : AndroidViewModel(application) {
 
     private val menuIdList = mutableListOf<String>()
 
-
-    private val menuList = mutableListOf<Menu>()
     private var _liveMenu = MutableLiveData<List<Menu>>()
     val liveMenu: LiveData<List<Menu>>
         get() = _liveMenu
 
 
-
     fun getChef(chefId: String) {
 
+        _chefInfo = repository.getLiveChef(chefId)
 
-        Log.d("chefviewmodel", "UserManger.chef${UserManger.chef}")
-
-        db.collection("Chef")
-            .whereEqualTo("id", chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                    _chefInfo.value = data
-                }
-            }
-
-        dataList.clear()
         menuIdList.clear()
-        menuList.clear()
 
-        db.collection("Menu")
-            .whereEqualTo("chefId", chefId)
-            .get()
-            .addOnSuccessListener { value ->
-                if (value.documents.isNotEmpty()) {
-                    dataList.clear()
-                    for (doc in value.documents) {
-                        val item = doc.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Menu::class.java)
-                        menuIdList.add(data.id)
-                        menuList.add(data)
-
-                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
-                            _liveMenu.value = menuList
+        viewModelScope.launch {
+            when (val chefMenuList = repository.getChefMenuList(chefId)) {
+                is Result.Success -> {
+                    _liveMenu.value = chefMenuList.data!!
+                    for (menu in chefMenuList.data) {
+                        menuIdList.add(menu.id)
+                        if (chefMenuList.data.indexOf(menu) == chefMenuList.data.lastIndex) {
+                            getChefReview(menuIdList)
                         }
                     }
-
-
-                    dataList.clear()
-                    for (i in menuIdList) {
-                        val menuId = i
-                        db.collection("Menu").document(menuId)
-                            .collection("Review")
-                            .get()
-                            .addOnSuccessListener { value ->
-                                if (value.documents.isNotEmpty()) {
-                                    for (doc in value.documents) {
-                                        val item = doc.data
-                                        val json = Gson().toJson(item)
-                                        val data = Gson().fromJson(json, Review::class.java)
-                                        dataList.add(data)
-
-                                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
-                                            _reviewList.value = dataList
-                                        }
-                                    }
-
-                                } else {
-                                    Log.d("chefviewmodel", "No such document")
-                                }
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.d("chefviewmodel", "get failed with ", exception)
-                            }
-                    }
-
-                } else {
-                    Log.d("orderdetailviewmodel", "No such document")
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("orderdetailviewmodel", "get failed with ", exception)
-            }
+        }
+    }
 
+    private fun getChefReview(menuIdList: List<String>) {
+        dataList.clear()
+        viewModelScope.launch {
+            for (id in menuIdList) {
+                when (val result = repository.getMenuReviewList(id)) {
+                    is Result.Success -> {
+                        for (review in result.data) {
+                            dataList.add(review)
+                        }
+                        if (menuIdList.indexOf(id) == menuIdList.lastIndex) {
+                            _reviewList.value = dataList
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,8 @@ import com.paul.chef.*
 import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.chefEdit.ChefEditViewModel
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
@@ -31,7 +34,8 @@ class ChefFragment : Fragment(), Block, ItemMenu {
 
     private var reviewList = emptyList<Review>()
 
-    private lateinit var  chefViewModel:ChefViewModel
+
+    private val chefViewModel by viewModels<ChefViewModel> { getVmFactory() }
 
 
 
@@ -47,16 +51,12 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        chefViewModel =
-            ViewModelProvider(this).get(ChefViewModel::class.java)
 
-        val mode = this.context?.let { UserManger.readData("mode", it) }
-
+        val mode = UserManger.readData("mode")
 
 
             val chefId = UserManger.chef?.id!!
             chefViewModel.getChef(chefId)
-
 
 
         chefViewModel.chefInfo.observe(viewLifecycleOwner){

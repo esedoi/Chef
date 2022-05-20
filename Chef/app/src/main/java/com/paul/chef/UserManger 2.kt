@@ -32,9 +32,9 @@ class UserManger  {
         private lateinit var settings: SharedPreferences
 
 
-        fun readData(mode: String, context: Context): Int? {
+        fun readData(mode: String): Int? {
 
-            settings = context.getSharedPreferences(
+            settings = ChefApplication.instance.getSharedPreferences(
                 "DATA",
                 Context.MODE_PRIVATE
             )
@@ -43,9 +43,9 @@ class UserManger  {
 
         }
 
-        fun saveData(mode:Int, context: Context) {
+        fun saveData(mode:Int) {
             tempMode = mode
-            settings = context.getSharedPreferences(
+            settings = ChefApplication.instance.getSharedPreferences(
                 "DATA",
                 Context.MODE_PRIVATE
             )

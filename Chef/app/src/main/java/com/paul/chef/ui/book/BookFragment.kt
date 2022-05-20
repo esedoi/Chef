@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,6 +26,8 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.paul.chef.*
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentBookBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.bookSetting.BookSettingViewModel
 import java.time.LocalDate
 
 
@@ -39,13 +42,14 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     private var userAddress: Address? = null
     private val arg: BookFragmentArgs by navArgs()
 
+    private val bookViewModel by viewModels<BookViewModel> { getVmFactory() }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val bookViewModel =
-            ViewModelProvider(this)[BookViewModel::class.java]
+
 
         _binding = FragmentBookBinding.inflate(inflater, container, false)
         val root: View = binding.root

@@ -1,9 +1,7 @@
 package com.paul.chef.ui.bookSetting
 
 
-import android.graphics.Paint
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +11,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.paul.chef.*
@@ -21,11 +19,14 @@ import com.paul.chef.data.Address
 import com.paul.chef.data.ChefSpace
 import com.paul.chef.data.UserSpace
 import com.paul.chef.databinding.FragmentBookSettingBinding
+import com.paul.chef.ext.getVmFactory
 
 class BookSetting : Fragment() {
 
     private var _binding: FragmentBookSettingBinding? = null
     private val binding get() = _binding!!
+
+    private val bookSettingViewModel by viewModels<BookSettingViewModel> { getVmFactory() }
 
 
     override fun onCreateView(
@@ -36,9 +37,6 @@ class BookSetting : Fragment() {
 
         _binding = FragmentBookSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val orderSettingViewModel =
-            ViewModelProvider(this).get(BookSettingViewModel::class.java)
 
 
         var calendarTypeResult = -1
@@ -179,7 +177,7 @@ class BookSetting : Fragment() {
             binding.bookSetChefSpaceAddress.setText(addressTxt)
         }
 
-        orderSettingViewModel.bookSetting.observe(viewLifecycleOwner) {
+        bookSettingViewModel.bookSetting.observe(viewLifecycleOwner) {
             calendarTypeResult = it.calendarDefault
             if (it.userSpace != null) {
                 capacity = it.userSpace.capacity
@@ -269,7 +267,7 @@ class BookSetting : Fragment() {
                         val type = BookSettingType.AcceptAll.index
                         val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
                         val userSpace = UserSpace(capacity, startTime, endTime)
-                        orderSettingViewModel.setting(
+                        bookSettingViewModel.setting(
                             type,
                             calendarTypeResult,
                             chefSpace,
@@ -280,7 +278,7 @@ class BookSetting : Fragment() {
                     !chefSpaceCheck && userSpaceCheck -> {
                         val type = BookSettingType.OnlyUserSpace.index
                         val userSpace = UserSpace(capacity, startTime, endTime)
-                        orderSettingViewModel.setting(
+                        bookSettingViewModel.setting(
                             type,
                             calendarTypeResult,
                             chefSpace = null,
@@ -291,7 +289,7 @@ class BookSetting : Fragment() {
                     chefSpaceCheck && !userSpaceCheck -> {
                         val type = BookSettingType.OnlyChefSpace.index
                         val chefSpace = ChefSpace(sessionCapacity, sessionTime, address!!)
-                        orderSettingViewModel.setting(
+                        bookSettingViewModel.setting(
                             type,
                             calendarTypeResult,
                             chefSpace,
@@ -301,7 +299,7 @@ class BookSetting : Fragment() {
                     }
                     !chefSpaceCheck && !userSpaceCheck -> {
                         val type = BookSettingType.RefuseAll.index
-                        orderSettingViewModel.setting(
+                        bookSettingViewModel.setting(
                             type,
                             calendarTypeResult,
                             chefSpace = null,

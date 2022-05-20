@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.addressList.AddressListViewModel
 
 class OrderChildFragment : Fragment(), GoOrderDetail {
 
@@ -20,8 +23,8 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
     private var _binding: FragmentOrderChildBinding? = null
     private val binding get() = _binding!!
 
-    //viewModel
-    private lateinit var orderViewModel: OrderManageViewModel
+
+    private val orderViewModel by viewModels<OrderManageViewModel> { getVmFactory() }
 
     private lateinit var orderChildAdapter: OrderChildAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -51,17 +54,21 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
         _binding = FragmentOrderChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //viewModel
-        orderViewModel = ViewModelProvider(this)[OrderManageViewModel::class.java]
 
         status = requireArguments().getInt("position")
 
+        orderViewModel.liveOrderList.observe(viewLifecycleOwner){
+            orderViewModel.sortOrder(it)
+        }
+
         orderViewModel.hasData.observe(viewLifecycleOwner) {
+            Log.d("ordercchildfragment", "hasdata = $it")
             orderViewModel.getList(status)
+
         }
 
         orderViewModel.orderList.observe(viewLifecycleOwner) {
-            val mode = UserManger.readData("mode", (activity as MainActivity))
+            val mode = UserManger.readData("mode")
             when {
                 it.isEmpty() && mode == Mode.USER.index -> {
                     binding.chatUserEmptyImg.visibility = View.VISIBLE
@@ -88,7 +95,7 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
             orderChildAdapter.notifyDataSetChanged()
         }
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+        val mode = UserManger.readData("mode")
 
         //menuList recycler
         orderChildAdapter = mode?.let { OrderChildAdapter(this, it) }!!

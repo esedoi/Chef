@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,6 +19,8 @@ import com.paul.chef.AddressList
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.book.BookViewModel
 
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
@@ -31,7 +34,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
 
     private val arg: AddressListFragmentArgs by navArgs()
 
-    private lateinit var addressListViewModel: AddressListViewModel
+    private val addressListViewModel by viewModels<AddressListViewModel> { getVmFactory() }
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -40,9 +43,6 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        addressListViewModel =
-            ViewModelProvider(this)[AddressListViewModel::class.java]
 
 
         _binding = FragmentAddressListBinding.inflate(inflater, container, false)
@@ -55,6 +55,10 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         }
         binding.addressListDismiss.setOnClickListener {
             dismiss()
+        }
+
+        addressListViewModel.liveUser.observe(viewLifecycleOwner){
+            addressListViewModel.getAddress(it)
         }
 
 
@@ -86,7 +90,6 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
             addressList.add(newAddress)
             addressListViewModel.updateAddress(addressList)
         }
-
 
         return root
     }

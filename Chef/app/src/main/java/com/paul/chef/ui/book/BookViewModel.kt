@@ -3,20 +3,20 @@ package com.paul.chef.ui.book
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
+import kotlinx.coroutines.launch
 import java.util.*
 
-class BookViewModel(application: Application) : AndroidViewModel(application) {
+class BookViewModel(private val repository: ChefRepository) : ViewModel() {
 
-    @SuppressLint("StaticFieldLeak")
-    private val context = getApplication<Application>().applicationContext
+
     private val db = FirebaseFirestore.getInstance()
 
     private var _chefSpaceAddress = MutableLiveData<Address>()
@@ -36,24 +36,16 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         get() = _priceResult
 
     fun getAddress(chefId: String) {
-        db.collection("Chef")
-            .document(chefId)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
 
-                    val item = document.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Chef::class.java)
-                    _chefSpaceAddress.value = data.bookSetting?.chefSpace?.address
-
-                } else {
-                    Log.d("pickerViewModel", "No such document")
+        viewModelScope.launch {
+            val result = repository.getChef(chefId)
+            when (result) {
+                is Result.Success -> {
+                    _chefSpaceAddress.value = result.data.bookSetting?.chefSpace?.address
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("pickerViewModel", "get failed with ", exception)
-            }
+        }
+
     }
 
 
@@ -102,7 +94,6 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         val userId = UserManger.user?.userId!!
         val userName = UserManger.user!!.profileInfo?.name!!
         val chefName = menu.chefName
-        //這裡要改成絕對不會空
         val userPic = UserManger.user!!.profileInfo?.avatar ?: "nullPic"
         val chefPic = menu.chefAvatar
         val menuName = menu.menuName
@@ -122,7 +113,6 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         val discount = originalPrice - total
-
 
         val order = Order(
             orderId,
@@ -149,15 +139,13 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
             chefReceive
         )
 
-        db.collection("Order").document(orderId)
-            .set(order)
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-                _bookDone.value = true
+        viewModelScope.launch {
+            when (val result = repository.setOrder(order)) {
+                is Result.Success -> {
+                    _bookDone.value = result.data!!
+                }
             }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
+        }
     }
 }
 

@@ -21,8 +21,6 @@ class UserProfileViewModel(private val repository: ChefRepository) : ViewModel()
     val getChefDone: LiveData<Boolean>
         get() = _getChefDone
 
-    var liveChef = MutableLiveData<Chef>()
-
 
     fun createChef(user: User) {
         viewModelScope.launch {

@@ -5,59 +5,38 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.paul.chef.Mode
 import com.paul.chef.UserManger
 import com.paul.chef.data.Room
+import com.paul.chef.data.source.ChefRepository
 
 
-class ChatListViewModel(application: Application) : AndroidViewModel(application) {
-    private val db = FirebaseFirestore.getInstance()
-    private val dateList = mutableListOf<Room>()
+class ChatListViewModel(private val repository: ChefRepository) : ViewModel() {
+
     private var _roomList = MutableLiveData<List<Room>>()
     val roomList: LiveData<List<Room>>
         get() = _roomList
-
-
 
     val mode = UserManger.tempMode
 
     init {
 
-        val nowId = when(mode){
-            Mode.USER.index-> {
-             UserManger.user?.userId!!
+        val nowId = when (mode) {
+            Mode.USER.index -> {
+                UserManger.user?.userId!!
             }
-            Mode.CHEF.index-> {
-               UserManger.chef?.id!!
+            Mode.CHEF.index -> {
+                UserManger.chef?.id!!
             }
-            else->{
+            else -> {
                 ""
             }
         }
 
-        db.collection("Room")
-            .whereArrayContains("attendance", nowId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                dateList.clear()
-                if (value != null) {
-                    for (document in value.documents) {
-                        val item = document.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Room::class.java)
-                        if (data.lastMsg != null) {
-                            dateList.add(data)
-                        }
-                        if(value.documents.indexOf(document)==value.documents.size-1){
-                          _roomList.value = dateList
-                        }
-                    }
-                }
-            }
-        }
+        _roomList = repository.getLiveRoomList(nowId)
+
+    }
 }

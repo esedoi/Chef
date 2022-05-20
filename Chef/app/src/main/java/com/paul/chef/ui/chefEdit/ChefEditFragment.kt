@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
 import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.FragmentChefEditBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.datePicker.DatePickerViewModel
 import com.paul.chef.ui.menuDetail.bindImage
 
 class ChefEditFragment : Fragment() {
@@ -22,14 +25,16 @@ class ChefEditFragment : Fragment() {
 
     private val arg: ChefEditFragmentArgs by navArgs()
 
+    private val chefEditViewModel by viewModels<ChefEditViewModel> { getVmFactory() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val chefEditViewModel =
-            ViewModelProvider(this)[ChefEditViewModel::class.java]
+//        val chefEditViewModel =
+//            ViewModelProvider(this)[ChefEditViewModel::class.java]
 
         _binding = FragmentChefEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -54,6 +59,7 @@ class ChefEditFragment : Fragment() {
         chefEditViewModel.userId.observe(viewLifecycleOwner) {
             chefEditViewModel.getUser(it)
         }
+
 
         chefEditViewModel.getUserDone.observe(viewLifecycleOwner) {
             UserManger.tempMode = Mode.USER.index

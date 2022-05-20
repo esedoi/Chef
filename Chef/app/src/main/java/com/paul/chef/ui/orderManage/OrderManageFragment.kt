@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.databinding.FragmentOrderManageBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.addressList.AddressListViewModel
 
 class OrderManageFragment : Fragment() {
 
@@ -19,6 +22,7 @@ class OrderManageFragment : Fragment() {
 
     lateinit var orderAdapter: OrderAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +30,8 @@ class OrderManageFragment : Fragment() {
         _binding = FragmentOrderManageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+
+        val mode = UserManger.readData("mode")
         when(mode){
             Mode.USER.index-> {
                 binding.orderManageTitle.text = "享用美味"

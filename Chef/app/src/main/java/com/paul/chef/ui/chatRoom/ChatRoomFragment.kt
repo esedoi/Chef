@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,8 @@ import com.google.gson.Gson
 import com.paul.chef.*
 import com.paul.chef.data.Chat
 import com.paul.chef.databinding.FragmentChatRoomBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.chef.ChefViewModel
 
 
 class ChatRoomFragment : Fragment() {
@@ -32,6 +35,8 @@ class ChatRoomFragment : Fragment() {
 
     private val chatList = mutableListOf<Chat>()
 
+    private val chatRoomViewModel by viewModels<ChatRoomViewModel> { getVmFactory() }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -44,14 +49,12 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val chatRoomViewModel =
-            ViewModelProvider(this)[ChatRoomViewModel::class.java]
 
         val roomId = arg.roomId
 
         val nowId: String
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+        val mode = UserManger.readData("mode")
         nowId = when (mode) {
             Mode.USER.index -> UserManger.user?.userId!!
             Mode.CHEF.index -> UserManger.chef?.id!!
@@ -62,8 +65,6 @@ class ChatRoomFragment : Fragment() {
         layoutManager = LinearLayoutManager(this.context)
         binding.chatRoomRecycler.layoutManager = layoutManager
         binding.chatRoomRecycler.adapter = chatRoomAdapter
-
-
 
 
         db.collection("Room")

@@ -1,45 +1,31 @@
 package com.paul.chef.ui.calendarSetting
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.paul.chef.UserManger
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.paul.chef.data.DateStatus
+import com.paul.chef.data.source.ChefRepository
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class CalendarSettingViewModel(application: Application) : AndroidViewModel(application) {
+class CalendarSettingViewModel(private val repository: ChefRepository) : ViewModel() {
 
     val date = mutableListOf<DateStatus>()
-
-    private val db = FirebaseFirestore.getInstance()
-
 
     fun settingDate(
         status: Int,
         selectDates: List<LocalDate>,
     ) {
-            for (i in selectDates) {
-                val long = i.toEpochDay()
-                val dateStatus = DateStatus(status, long)
-                date.add(dateStatus)
+        for (i in selectDates) {
+            val long = i.toEpochDay()
+            val dateStatus = DateStatus(status, long)
+            date.add(dateStatus)
+        }
+
+        viewModelScope.launch {
+            for (i in date) {
+                repository.setDateSetting(i.date, i.status)
             }
-        val chefId = UserManger.chef?.id!!
-
-
-        for (i in date) {
-            db.collection("Chef").document(chefId)
-                .collection("dateSetting").document(i.date.toString())
-                .set(
-                    mapOf(
-                        "date" to i.date,
-                        "status" to i.status
-                    )
-                )
-                .addOnSuccessListener {
-                    Log.d("notification", "DocumentSnapshot successfully updated!")
-                }
-                .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
         }
     }
 }

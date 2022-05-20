@@ -11,6 +11,8 @@ import com.paul.chef.OrderStatus
 import com.paul.chef.R
 import com.paul.chef.TransactionStatus
 import com.paul.chef.databinding.FragmentTransactionBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.review.ReviewViewModel
 
 class TransactionFragment : Fragment() {
 
@@ -24,7 +26,8 @@ class TransactionFragment : Fragment() {
     var receivedMoney = 0
     private var idList = mutableListOf<String>()
 
-    private val transactionViewModel: TransactionViewModel by viewModels()
+//    private val transactionViewModel: TransactionViewModel by viewModels()
+    private val  transactionViewModel by viewModels<TransactionViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +36,6 @@ class TransactionFragment : Fragment() {
 
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
 
         //viewPager2
         transactionAdapter = TransactionAdapter(this)
@@ -51,7 +53,6 @@ class TransactionFragment : Fragment() {
                 2 -> {
                     tab.text = TransactionStatus.COMPLETED.value
                 }
-
             }
 
         }.attach()

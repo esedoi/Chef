@@ -46,7 +46,7 @@ class OrderDetailFragment : Fragment() {
         var roomId = ""
 
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+        val mode = UserManger.readData("mode")
 
 
         binding.apply {

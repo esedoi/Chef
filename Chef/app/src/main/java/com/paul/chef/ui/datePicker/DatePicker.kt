@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,6 +26,8 @@ import com.paul.chef.CalendarType
 import com.paul.chef.R
 import com.paul.chef.data.DateStatus
 import com.paul.chef.databinding.*
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.menu.MenuListViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -44,6 +47,8 @@ class DatePicker : BottomSheetDialogFragment() {
     var calendarDefault: Int = -1
     var dateList = mutableListOf<DateStatus>()
 
+    private val datePickerViewModel by viewModels<DatePickerViewModel> { getVmFactory() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
@@ -57,8 +62,8 @@ class DatePicker : BottomSheetDialogFragment() {
         _binding = BottomSheetDatepickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val datePickerViewModel =
-            ViewModelProvider(this)[DatePickerViewModel::class.java]
+//        val datePickerViewModel =
+//            ViewModelProvider(this)[DatePickerViewModel::class.java]
 
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
@@ -69,6 +74,9 @@ class DatePicker : BottomSheetDialogFragment() {
         }
 
 
+        datePickerViewModel.liveChef.observe(viewLifecycleOwner){
+            datePickerViewModel.getBookSetting(it)
+        }
         datePickerViewModel.bookSetting.observe(viewLifecycleOwner) {
             calendarDefault = it.calendarDefault
             type = it.type

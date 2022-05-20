@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             } else {
 
 
-                when (val mode = UserManger.readData("mode", this)) {
+                when (val mode = UserManger.readData("mode")) {
                     Mode.CHEF.index -> {
                         if (UserManger.user?.chefId != null) {
                             turnMode(mode)
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun turnMode(mode: Int) {
-        UserManger.saveData(mode, this)
+        UserManger.saveData(mode)
         if (mode == Mode.USER.index) {
             binding.navView.menu.clear()
             binding.navView.inflateMenu(R.menu.bottom_nav_menu)
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity() {
     fun signOut() {
         googleSignInClient.signOut()
         Firebase.auth.signOut()
-        UserManger.saveData(Mode.LOGOUT.index, this)
+        UserManger.saveData(Mode.LOGOUT.index)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

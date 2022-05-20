@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -27,6 +28,8 @@ import com.paul.chef.data.SelectedDates
 import com.paul.chef.databinding.CalendarDayLayoutBinding
 import com.paul.chef.databinding.CalendarMonthHeaderLayoutBinding
 import com.paul.chef.databinding.FragmentCalendarBinding
+import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ui.calendarSetting.CalendarSettingViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -46,6 +49,8 @@ class Calendar : Fragment() {
     var calendarDefault: Int = -1
     var dateList = mutableListOf<DateStatus>()
 
+    private val calendarViewModel by viewModels<CalendarViewModel> { getVmFactory() }
+
 
     val orderList = mutableListOf<LocalDate>()
 
@@ -59,8 +64,14 @@ class Calendar : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val calendarViewModel =
-            ViewModelProvider(this)[CalendarViewModel::class.java]
+
+        calendarViewModel.liveOrderList.observe(viewLifecycleOwner){
+            calendarViewModel.getOrderDateList(it)
+        }
+
+        calendarViewModel.liveChef.observe(viewLifecycleOwner){
+            calendarViewModel.getBookSetting(it)
+        }
 
         calendarViewModel.orderList.observe(viewLifecycleOwner) {
             orderList.addAll(it)
