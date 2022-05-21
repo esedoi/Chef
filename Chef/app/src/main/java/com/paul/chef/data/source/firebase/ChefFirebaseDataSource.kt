@@ -732,7 +732,17 @@ object ChefFirebaseDataSource : ChefDataSource {
             }
     }
 
-    override suspend fun setTransaction() {
-        TODO("Not yet implemented")
+    override suspend fun setTransaction(transaction: Transaction) {
+        FirebaseFirestore.getInstance().collection("Transaction").document(transaction.id)
+            .set(transaction)
+            .addOnSuccessListener { documentReference ->
+                Log.d(
+                    "transactionviewmodel",
+                    "DocumentSnapshot added with ID: ${documentReference}"
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.w("transactionviewmodel", "Error adding document", e)
+            }
     }
 }

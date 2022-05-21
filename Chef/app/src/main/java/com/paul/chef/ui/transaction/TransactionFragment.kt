@@ -37,6 +37,7 @@ class TransactionFragment : Fragment() {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         //viewPager2
         transactionAdapter = TransactionAdapter(this)
         binding.transactionViewpager2.adapter = transactionAdapter

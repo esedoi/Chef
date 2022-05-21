@@ -170,5 +170,9 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
         return firebaseDataSource.getTransaction()
     }
 
+    override suspend fun setTransaction(transaction: Transaction) {
+        return firebaseDataSource.setTransaction(transaction)
+    }
+
 
 }

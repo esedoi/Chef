@@ -64,7 +64,9 @@ class TransactionChildFragment: Fragment() {
                 layoutManager = LinearLayoutManager(this.context)
                 binding.transactionRecycler.layoutManager = layoutManager
                 binding.transactionRecycler.adapter = transactionUnpaidAdapter
-                transactionViewModel.getList(status)
+                transactionViewModel.liveOrderList.observe(viewLifecycleOwner){
+                    transactionViewModel.getUnpaidList(it)
+                }
                 transactionViewModel.orderList.observe(viewLifecycleOwner){
                     Log.d("transaction_child_fragment", "orderList_observe, it = $it")
                     if(it.isEmpty()){

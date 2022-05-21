@@ -80,5 +80,7 @@ interface ChefRepository {
 
     suspend fun getTransaction():Result<List<Transaction>>
 
+    suspend fun setTransaction(transaction: Transaction)
+
 
 }

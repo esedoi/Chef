@@ -1,13 +1,12 @@
 package com.paul.chef.ui.transaction
 
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.Transaction
@@ -39,152 +38,80 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
 
     var liveOrderList = MutableLiveData<List<Order>>()
 
+    init{
+        liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
+    }
+
 
     fun getList(position: Int) {
-
-//        if (position == 0) {
-//            liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
-//        }
-
-
-
-
+        processingList.clear()
+        receivedList.clear()
         viewModelScope.launch {
-            val result = repository.getTransaction()
-            when(result){
+            when(val result = repository.getTransaction()){
                 is Result.Success->{
                     for(transaction in result.data){
-                        when(transaction.status){
-                            TransactionStatus.PROCESSING.index -> {
-                                processingList.add(transaction)
-                            }
-                            TransactionStatus.COMPLETED.index -> {
-                                receivedList.add(transaction)
-                            }
-                        }
+                        sortTransactionList(transaction)
 
                         if(result.data.indexOf(transaction)==result.data.lastIndex){
-                            when (position) {
-                                1 -> {
-                                    Log.d("transaction_view_model", "posiotion1")
-                                    _transactionList.value = processingList
-                                }
-                                2 -> {
-                                    Log.d("transaction_view_model", "posiotion2")
-                                    _transactionList.value = receivedList
-                                }
-                            }
-                        }
+                            toLiveData(position)
 
+                        }
                     }
                 }
             }
-
-
-
-
-
-
-
         }
+    }
 
+    private fun toLiveData(position: Int) {
+        when (position) {
+            1 -> {
 
+                _transactionList.value = processingList
+            }
+            2 -> {
 
+                _transactionList.value = receivedList
+            }
+        }
+    }
 
-//        db.collection("Transaction")
-//            .whereEqualTo("chefId", chefId)
-//            .get()
-//            .addOnSuccessListener { value ->
-//                if (value.documents.isNotEmpty()) {
-//                    processingList.clear()
-//                    receivedList.clear()
-//                    for (doc in value.documents) {
-//                        val item = doc.data
-//                        val json = Gson().toJson(item)
-//                        val data = Gson().fromJson(json, Transaction::class.java)
-//                        when (data.status) {
-//                            TransactionStatus.PROCESSING.index -> {
-//                                processingList.add(data)
-//                            }
-//                            TransactionStatus.COMPLETED.index -> {
-//                                receivedList.add(data)
-//                            }
-//                        }
-//                        if (value.documents.indexOf(doc) == value.documents.size - 1) {
-//
-//                            when (position) {
-//                                1 -> {
-//                                    Log.d("transaction_view_model", "posiotion1")
-//                                    _transactionList.value = processingList
-//                                }
-//                                2 -> {
-//                                    Log.d("transaction_view_model", "posiotion2")
-//                                    _transactionList.value = receivedList
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                } else {
-//                    //沒資料
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d("transactionviewmodel", "get failed with ", exception)
-//            }
+    private fun sortTransactionList(transaction: Transaction) {
+        when(transaction.status){
+            TransactionStatus.PROCESSING.index -> {
+                processingList.add(transaction)
+            }
+            TransactionStatus.COMPLETED.index -> {
+                receivedList.add(transaction)
+            }
+        }
+    }
 
-
-
-        db.collection("Order")
-            .whereEqualTo("chefId", chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                unpaidList.clear()
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Order::class.java)
-                    when (data.status) {
-                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index -> {
-                            unpaidList.add(data)
-                        }
-                    }
-
-                    if (value.documents.indexOf(doc) == value!!.documents.size - 1) {
-                        if (position == 0) {
-                            _orderList.value = unpaidList
-                        }
-                    }
+    fun getUnpaidList(orderList:List<Order>){
+        unpaidList.clear()
+        for (order in orderList){
+            when(order.status){
+                OrderStatus.COMPLETED.index, OrderStatus.SCORED.index -> {
+                    unpaidList.add(order)
                 }
             }
+
+            if(orderList.indexOf(order)==orderList.lastIndex){
+                _orderList.value = unpaidList
+            }
+        }
     }
 
     fun changeStatus(orderId: String, status: Int) {
-        //set firebase資料
-        db.collection("Order").document(orderId)
-            .update(
-                mapOf(
-                    "status" to status,
-                )
-            )
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
-
+        viewModelScope.launch {
+            repository.updateOrderStatus(status, orderId)
+        }
     }
 
 
     fun applyMoney(chefReceive: Int) {
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
-        var idList = mutableListOf<String>()
-
+        val idList = mutableListOf<String>()
 
         for (i in unpaidList) {
             idList.add(i.id)
@@ -200,21 +127,12 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
                 idList,
                 TransactionStatus.PROCESSING.index
             )
-            Log.d("transactionviewmodel", "transaction=$transaction")
 
-            db.collection("Transaction").document(id)
-                .set(transaction)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(
-                        "transactionviewmodel",
-                        "DocumentSnapshot added with ID: ${documentReference}"
-                    )
-                }
-                .addOnFailureListener { e ->
-                    Log.w("transactionviewmodel", "Error adding document", e)
-                }
+            viewModelScope.launch {
+                repository.setTransaction(transaction)
+            }
+
         }
-
     }
 
 }

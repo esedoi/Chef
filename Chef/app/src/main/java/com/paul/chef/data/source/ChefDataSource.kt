@@ -89,6 +89,6 @@ interface ChefDataSource {
 
     suspend fun getTransaction():Result<List<Transaction>>
 
-    suspend fun setTransaction()
+    suspend fun setTransaction(transaction: Transaction)
 
 }
