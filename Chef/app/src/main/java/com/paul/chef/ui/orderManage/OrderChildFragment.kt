@@ -1,5 +1,6 @@
 package com.paul.chef.ui.orderManage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,10 +20,8 @@ import com.paul.chef.ui.addressList.AddressListViewModel
 
 class OrderChildFragment : Fragment(), GoOrderDetail {
 
-    //binding
     private var _binding: FragmentOrderChildBinding? = null
     private val binding get() = _binding!!
-
 
     private val orderViewModel by viewModels<OrderManageViewModel> { getVmFactory() }
 
@@ -45,6 +44,7 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,47 +57,22 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
 
         status = requireArguments().getInt("position")
 
-        orderViewModel.liveOrderList.observe(viewLifecycleOwner){
+        orderViewModel.liveOrderList.observe(viewLifecycleOwner) {
             orderViewModel.sortOrder(it)
         }
 
         orderViewModel.hasData.observe(viewLifecycleOwner) {
-            Log.d("ordercchildfragment", "hasdata = $it")
             orderViewModel.getList(status)
-
         }
 
         orderViewModel.orderList.observe(viewLifecycleOwner) {
-            val mode = UserManger.readData("mode")
-            when {
-                it.isEmpty() && mode == Mode.USER.index -> {
-                    binding.chatUserEmptyImg.visibility = View.VISIBLE
-                    binding.chatEmptyTxt.visibility = View.VISIBLE
-                    binding.chatChefEmptyImg.visibility = View.GONE
-                }
-                it.isEmpty() && mode == Mode.CHEF.index -> {
-                    binding.chatUserEmptyImg.visibility = View.GONE
-                    binding.chatEmptyTxt.visibility = View.VISIBLE
-                    binding.chatChefEmptyImg.visibility = View.VISIBLE
-                }
-                it.isNotEmpty() && mode == Mode.USER.index -> {
-                    binding.chatUserEmptyImg.visibility = View.GONE
-                    binding.chatEmptyTxt.visibility = View.GONE
-                    binding.chatChefEmptyImg.visibility = View.GONE
-                }
-                it.isNotEmpty() && mode == Mode.CHEF.index -> {
-                    binding.chatUserEmptyImg.visibility = View.GONE
-                    binding.chatEmptyTxt.visibility = View.GONE
-                    binding.chatChefEmptyImg.visibility = View.GONE
-                }
-            }
+            setWhetherEmpty(it)
             orderChildAdapter.submitList(it)
             orderChildAdapter.notifyDataSetChanged()
         }
 
         val mode = UserManger.readData("mode")
 
-        //menuList recycler
         orderChildAdapter = mode?.let { OrderChildAdapter(this, it) }!!
         layoutManager = LinearLayoutManager(this.context)
         binding.orderRecycler.layoutManager = layoutManager
@@ -105,6 +80,33 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
 
 
         return root
+    }
+
+    private fun setWhetherEmpty(it: List<Order>) {
+        val mode = UserManger.readData("mode")
+        when {
+            it.isEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptyImg.visibility = View.VISIBLE
+                binding.chatEmptyTxt.visibility = View.VISIBLE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+            it.isEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.VISIBLE
+                binding.chatChefEmptyImg.visibility = View.VISIBLE
+            }
+            it.isNotEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.GONE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+            it.isNotEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.GONE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+        }
+
     }
 
 

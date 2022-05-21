@@ -1,12 +1,10 @@
 package com.paul.chef.ui.userProfile
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.paul.chef.*
@@ -52,13 +50,13 @@ class UserProfileFragment : Fragment() {
 
 
         if (user.chefId != null) {
-            binding.userProfileCreateChef.text = "切換廚師模式"
+            binding.userProfileCreateChef.text = getString(R.string.turn_chef_mode)
             binding.userProfileCreateChef.setOnClickListener {
                 (activity as MainActivity).turnMode(Mode.CHEF.index)
                 findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
             }
         } else {
-            binding.userProfileCreateChef.text = "成為廚師"
+            binding.userProfileCreateChef.text = getString(R.string.become_chef)
             binding.userProfileCreateChef.setOnClickListener {
                 userProfileViewModel.createChef(user)
             }

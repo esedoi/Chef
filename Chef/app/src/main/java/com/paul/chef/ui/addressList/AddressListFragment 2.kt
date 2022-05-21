@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +19,6 @@ import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.book.BookViewModel
 
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
@@ -57,7 +55,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
             dismiss()
         }
 
-        addressListViewModel.liveUser.observe(viewLifecycleOwner){
+        addressListViewModel.liveUser.observe(viewLifecycleOwner) {
             addressListViewModel.getAddress(it)
         }
 
@@ -73,11 +71,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         addressListViewModel.addressList.observe(viewLifecycleOwner) {
             addressList.clear()
             addressList.addAll(it)
-            if (it.isEmpty()) {
-                binding.addressListEmptyTxt.visibility = View.VISIBLE
-            } else {
-                binding.addressListEmptyTxt.visibility = View.GONE
-            }
+            changeTextVisibility(it)
             addressListAdapter.submitList(addressList)
             addressListAdapter.notifyDataSetChanged()
         }
@@ -85,13 +79,21 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
             addressListAdapter.notifyDataSetChanged()
         }
 
-        setFragmentResultListener("addAddress") { requestKey, bundle ->
+        setFragmentResultListener("addAddress") { _, bundle ->
             val newAddress = bundle.getParcelable<Address>("address")!!
             addressList.add(newAddress)
             addressListViewModel.updateAddress(addressList)
         }
 
         return root
+    }
+
+    private fun changeTextVisibility(addressList: List<Address>) {
+        if (addressList.isEmpty()) {
+            binding.addressListEmptyTxt.visibility = View.VISIBLE
+        } else {
+            binding.addressListEmptyTxt.visibility = View.GONE
+        }
     }
 
 

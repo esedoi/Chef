@@ -38,10 +38,6 @@ class CalendarSetting : Fragment() {
         _binding = FragmentCalendarSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val calendarSettingViewModel =
-//            ViewModelProvider(this)[CalendarSettingViewModel::class.java]
-
-
         val selectedDates = arg.selectedDates.selectedDates
 
         if (selectedDates.size == 1) {

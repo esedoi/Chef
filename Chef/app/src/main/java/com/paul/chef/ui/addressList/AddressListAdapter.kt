@@ -13,7 +13,7 @@ import com.paul.chef.databinding.ItemAddressListBinding
 import com.paul.chef.databinding.ItemAddressListDeleteBinding
 
 
-class AddressListAdapter(private val addressList: AddressList, private val listType:Int) : ListAdapter<Address, RecyclerView.ViewHolder>(FriendListCallback()) {
+class AddressListAdapter(private val addressList: AddressList, private val listType:Int) : ListAdapter<Address, RecyclerView.ViewHolder>(AddressListCallback()) {
 
 
 
@@ -93,7 +93,7 @@ class AddressListAdapter(private val addressList: AddressList, private val listT
 
 }
 
-class FriendListCallback : DiffUtil.ItemCallback<Address>() {
+class AddressListCallback : DiffUtil.ItemCallback<Address>() {
     override fun areItemsTheSame(oldItem: Address, newItem: Address): Boolean {
         return oldItem == newItem
     }

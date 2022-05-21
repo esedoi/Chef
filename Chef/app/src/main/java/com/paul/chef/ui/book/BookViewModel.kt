@@ -1,11 +1,8 @@
 package com.paul.chef.ui.book
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
+
 import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.ChefManger
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
@@ -35,11 +32,10 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
     val priceResult: LiveData<Map<String, Int>>
         get() = _priceResult
 
-    fun getAddress(chefId: String) {
 
+    fun getAddress(chefId: String) {
         viewModelScope.launch {
-            val result = repository.getChef(chefId)
-            when (result) {
+            when (val result = repository.getChef(chefId)) {
                 is Result.Success -> {
                     _chefSpaceAddress.value = result.data.bookSetting?.chefSpace?.address
                 }

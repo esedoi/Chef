@@ -62,9 +62,6 @@ class DatePicker : BottomSheetDialogFragment() {
         _binding = BottomSheetDatepickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val datePickerViewModel =
-//            ViewModelProvider(this)[DatePickerViewModel::class.java]
-
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
 
@@ -72,7 +69,6 @@ class DatePicker : BottomSheetDialogFragment() {
             val chefId = arg.chefId
             datePickerViewModel.getChefData(chefId!!)
         }
-
 
         datePickerViewModel.liveChef.observe(viewLifecycleOwner){
             datePickerViewModel.getBookSetting(it)
@@ -105,7 +101,6 @@ class DatePicker : BottomSheetDialogFragment() {
 
 
             init {
-
 
                 for (i in dateList) {
                     val localDate: LocalDate = LocalDate.ofEpochDay(i.date)
@@ -178,7 +173,6 @@ class DatePicker : BottomSheetDialogFragment() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = CalendarMonthHeaderLayoutBinding.bind(view).headerTextView
         }
-
 
         binding.datePickerCalendarView.dayBinder = object : DayBinder<DayViewContainer> {
             // Called only when a new container is needed.

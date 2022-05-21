@@ -13,6 +13,8 @@
     <string name="title_chef_profile">個人</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
     <string name="new_taiwan_dollar">NT$%1$s</string>
+    <string name="support_by">由 %1$s 提供</string>
+    <string name="menu_created_by">%1$s 建立的菜單</string>
     <string name="people">%1$d 位</string>
     <string name="transaction_number">%1$d 筆</string>
     <string name="calendar_set_selected_dates_txt">已選定 %1$d 個日期</string>
@@ -240,5 +242,32 @@ Opting out may prevent you from receiving messages regarding the Site, the Servi
     <string name="remove">移除</string>
     <string name="add_the_dish">加一道菜</string>
     <string name="select_dish_type">選擇菜品類型</string>
+    <string name="turn_chef_mode">切換廚師模式</string>
+    <string name="become_chef">成為廚師</string>
+    <string name="enjoy_food">享用美味</string>
+    <string name="receive_order">接收訂單</string>
+    <string name="cancel_order">取消訂單</string>
+    <string name="your_payment">你的付款</string>
+    <string name="refuse_order">拒絕此訂單</string>
+    <string name="your_receivement">你的收款</string>
+    <string name="book">預訂</string>
+    <string name="not_open">不開放</string>
+    <string name="please_select_dish">請選擇菜品</string>
+    <string name="can_not_book_your_own_menu">無法預訂自己的菜單</string>
+    <string name="confirm">確認</string>
+    <string name="block_this_menu">封鎖此菜單？</string>
+    <string name="or">or</string>
+    <string name="and">and</string>
+    <string name="close_all_day">預設所有日期為不可訂</string>
+    <string name="open_all_day">未來所有日期</string>
+    <string name="turn_to_customer_mode">切換成客人模式</string>
+    <string name="field_not_completet">欄位未填寫完成</string>
+    <string name="toast_please_upload_photo">請上傳菜單照片</string>
+    <string name="please_add_dish">請新增菜色</string>
+    <string name="please_complete_dish_name">菜品名稱未完成</string>
+    <string name="fixed_type_intro_txt">顧客將享用以下所有菜品</string>
+    <string name="optional_type_intro_txt">顧客將在下方選擇一道菜</string>
+    <string name="please_enter_discount">請填寫折扣</string>
+
 
 </resources>

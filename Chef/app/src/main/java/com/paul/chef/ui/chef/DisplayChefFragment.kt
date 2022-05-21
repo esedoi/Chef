@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.*
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
@@ -29,10 +31,9 @@ class DisplayChefFragment: Fragment(), Block {
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-
     private var reviewList = emptyList<Review>()
 
-    private val chefViewModel: ChefViewModel by activityViewModels()
+    private val chefViewModel by viewModels<ChefViewModel> { getVmFactory() }
 
     private val arg: DisplayChefFragmentArgs by navArgs()
 

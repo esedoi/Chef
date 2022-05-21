@@ -76,10 +76,7 @@ class ImageUploadFragment : DialogFragment() {
          progressDialog.setCancelable(false)
         progressDialog.show()
 
-//        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm", Locale.getDefault())
-//        val now = Date()
-//        val userId = UserManger.user?.userId!!
-//        val fileName = userId+"_"+formatter.format(now)
+
 
         val rnds:Long = (0..999).random().toLong()
         val time = Calendar.getInstance().timeInMillis
@@ -88,9 +85,6 @@ class ImageUploadFragment : DialogFragment() {
         val uploadTask = storageReference.putFile(ImageUri )
             .addOnSuccessListener {
 
-//                binding.imageView.setImageURI(null)
-//                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT)
-//                if(progressDialog.isShowing) progressDialog.dismiss()
                 Log.d("uploadfragment", "upload success,  and then get url")
                 
         }
@@ -113,7 +107,7 @@ class ImageUploadFragment : DialogFragment() {
                 Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT)
                 if(progressDialog.isShowing) progressDialog.dismiss()
                 val downloadUri = task.result
-                Log.d("imguploadfragment", "downloadUri}=${downloadUri}")
+
                 setFragmentResult("requestImg", bundleOf("downloadUri" to downloadUri.toString()))
                 findNavController().navigateUp()
             } else {

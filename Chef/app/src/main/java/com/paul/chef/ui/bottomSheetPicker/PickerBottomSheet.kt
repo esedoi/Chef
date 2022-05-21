@@ -41,33 +41,17 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         _binding = BottomSheetPickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
         val pickerType = arg.pickerType
         val chefId = arg.chefId
 
         if (chefId != null) {
             pickerViewModel.getBookSetting(chefId)
         }
-        var time: String
-        val zero = "00"
-        val thirty = "30"
-        var min = true
-        val timeList = mutableListOf<String>()
+
         var pickSessionList = emptyList<String>()
         var pickTimeList = emptyList<String>()
 
-        for (h in 0..23) {
-            for (m in 1..2) {
-                time = if (min) {
-                    "$h:$zero"
-                } else {
-                    "$h:$thirty"
-                }
-                timeList.add(time)
-                min = !min
-            }
-        }
+        val timeList:List<String> = createTimeList()
 
         pickerViewModel.bookSetting.observe(viewLifecycleOwner) {
             when (pickerType) {
@@ -193,6 +177,26 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         }
 
         return root
+    }
+
+    private fun createTimeList():List<String> {
+        var time: String
+        val zero = "00"
+        val thirty = "30"
+        var min = true
+        val timeList = mutableListOf<String>()
+        for (h in 0..23) {
+            for (m in 1..2) {
+                time = if (min) {
+                    "$h:$zero"
+                } else {
+                    "$h:$thirty"
+                }
+                timeList.add(time)
+                min = !min
+            }
+        }
+        return timeList
     }
 
 }

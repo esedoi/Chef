@@ -1,6 +1,6 @@
 package com.paul.chef.ui.orderManage
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.GoOrderDetail
 import com.paul.chef.Mode
 import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.R
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.ItemOrderChildBinding
 import com.paul.chef.ui.menuDetail.bindImage
@@ -24,10 +25,7 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-
         if (holder is OrderHolder) {
-
-
             holder.bind(item,goOrderDetail, mode)
         }
 
@@ -60,7 +58,7 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
             val localDate: LocalDate = LocalDate.ofEpochDay(item.date)
             binding.orderDate.text = localDate.toString()
             binding.orderTime.text = item.time
-            binding.orderPeople.text = item.people.toString()+" 位"
+            binding.orderPeople.text = binding.root.context.getString(R.string.people, item.people)
             binding.orderMenu.text = item.menuName
         }
 

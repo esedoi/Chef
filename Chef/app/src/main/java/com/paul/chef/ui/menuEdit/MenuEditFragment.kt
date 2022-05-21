@@ -143,7 +143,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                 val typeList = editMenu.dishes.filter {
                     it.typeNumber == i
                 }
-                Log.d("menueditfragment", "$typeList")
                 addDish(container, typeList[0].option, typeList)
             }
 
@@ -156,10 +155,10 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         binding.addDiscountBtn.setOnClickListener {
             when {
                 binding.menuEditDiscountPeople.editText?.text.toString() == "" -> {
-                    Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
                 }
                 binding.menuEditDiscountPercentOff.editText?.text.toString() == "" -> {
-                    Toast.makeText(this.context, "請填寫折扣", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.please_enter_discount), Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     people = binding.menuEditDiscountPeople.editText?.text.toString().toInt()
@@ -192,7 +191,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
         setFragmentResultListener("tagList") { requestKey, bundle ->
             val newList = bundle.getStringArrayList("tagList")
-            Log.d("menuEditfragment", "tagList = $tagList")
             if (newList != null) {
                 tagList.clear()
                 tagList.addAll(newList)
@@ -220,7 +218,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             Log.d("menuEditfragment", "allDishBindingList.size = ${allDishBindingList.size}")
 
             if (binding.menuEditName.editText?.text.toString() == "" || binding.menuEditIntro.editText?.text.toString() == "" || binding.menuEditPerprice.editText?.text.toString() == "") {
-                Toast.makeText(this.context, "欄位未完成", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.field_not_completet), Toast.LENGTH_SHORT).show()
             } else {
 
                 menuName = binding.menuEditName.editText?.text.toString()
@@ -256,11 +254,11 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
 
                 if (!isNameFilled) {
-                    Toast.makeText(this.context, "菜品名稱未完成", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.please_complete_dish_name), Toast.LENGTH_SHORT).show()
                 } else if (imgList.isEmpty()) {
-                    Toast.makeText(this.context, "請上傳菜單照片", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.toast_please_upload_photo), Toast.LENGTH_SHORT).show()
                 } else if (dishList.isNullOrEmpty()) {
-                    Toast.makeText(this.context, "請新增菜色", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, getString(R.string.please_add_dish), Toast.LENGTH_SHORT).show()
                 } else {
                     Log.d("menuEditfragment", "ok,build!!，，dishList = ${dishList}")
                     menuEditViewModel.createMenu(
@@ -316,9 +314,9 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         bindingList.add(dishTypeView)
 
         if (option == AddDishType.FIXED.index) {
-            dishTypeView.introText.text = "顧客將享用以下所有菜品"
+            dishTypeView.introText.text = getString(R.string.fixed_type_intro_txt)
         } else {
-            dishTypeView.introText.text = "顧客將在下方選擇一道菜"
+            dishTypeView.introText.text = getString(R.string.optional_type_intro_txt)
         }
 
         for (t in bindingList) {
@@ -428,9 +426,9 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         bindingList.add(dishTypeView)
 
         if (option == AddDishType.FIXED.index) {
-            dishTypeView.introText.text = "顧客將享用以下所有菜品"
+            dishTypeView.introText.text = getString(R.string.fixed_type_intro_txt)
         } else {
-            dishTypeView.introText.text = "顧客將在下方選擇一道菜"
+            dishTypeView.introText.text = getString(R.string.optional_type_intro_txt)
         }
 
     }

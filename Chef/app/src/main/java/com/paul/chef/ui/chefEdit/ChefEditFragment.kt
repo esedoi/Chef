@@ -33,8 +33,6 @@ class ChefEditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        val chefEditViewModel =
-//            ViewModelProvider(this)[ChefEditViewModel::class.java]
 
         _binding = FragmentChefEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -49,17 +47,13 @@ class ChefEditFragment : Fragment() {
             binding.profileEditIntro.editText?.setText(profileInfo.introduce)
         }
 
-
-
         bindImage(binding.profileEditImg, avatar)
         val outlineProvider = ProfileOutlineProvider()
         binding.profileEditImg.outlineProvider = outlineProvider
 
-
         chefEditViewModel.userId.observe(viewLifecycleOwner) {
             chefEditViewModel.getUser(it)
         }
-
 
         chefEditViewModel.getUserDone.observe(viewLifecycleOwner) {
             UserManger.tempMode = Mode.USER.index
@@ -72,8 +66,6 @@ class ChefEditFragment : Fragment() {
             bindImage(binding.profileEditImg, avatar)
         }
 
-
-
         binding.profileEditAvatarBtn.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalImageUploadFragment(
@@ -82,7 +74,6 @@ class ChefEditFragment : Fragment() {
             )
         }
 
-
         binding.profileEditConfirmBtn.setOnClickListener {
 
             val name = binding.profileEditNameLayout.editText?.text.toString()
@@ -90,7 +81,7 @@ class ChefEditFragment : Fragment() {
 
 
             if (name == "" || intro == "") {
-                Toast.makeText(this.context, "欄位未填寫完成", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, getString(R.string.field_not_completet), Toast.LENGTH_SHORT).show()
             } else {
                 val newProfile = ProfileInfo(name, profileInfo.email, avatar, intro)
                 when (editType) {

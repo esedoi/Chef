@@ -3,11 +3,9 @@ package com.paul.chef.ui.menuDetail
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +25,8 @@ import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.menuEdit.MenuEditViewModel
+import com.paul.chef.util.Util.getPrice
+
 
 class MenuDetailFragment : Fragment(), Block {
 
@@ -46,20 +44,15 @@ class MenuDetailFragment : Fragment(), Block {
 
     private var reviewList = emptyList<Review>()
 
+    private val displayList = mutableListOf<ItemDisplayDishBinding>()
 
     private val menuDetailViewModel by viewModels<MenuDetailViewModel> { getVmFactory() }
+
     lateinit var menu: Menu
 
     var openBoolean: Boolean = false
 
-    //safe args
     private val arg: MenuDetailFragmentArgs by navArgs()
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("menudetailfragment", "onattach")
-    }
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -69,26 +62,17 @@ class MenuDetailFragment : Fragment(), Block {
         savedInstanceState: Bundle?
     ): View {
 
-
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
 
         //navigation safe args
         menu = arg.menu
         val dishList = menu.dishes
-        var defaultType = -1
-        val or = "or"
-        val and = "and"
-        val displayList = mutableListOf<ItemDisplayDishBinding>()
-        val selectedDish = mutableListOf<Dish>()
         val likeIdList = mutableListOf<String>()
 
 
-
-        menuDetailViewModel.liveUser.observe(viewLifecycleOwner){
-            if(it.likeList !=null){
+        menuDetailViewModel.liveUser.observe(viewLifecycleOwner) {
+            if (it.likeList != null) {
                 likeIdList.clear()
                 likeIdList.addAll(it.likeList)
                 binding.menuDetailLikeCheck.isChecked = it.likeList.contains(menu.id)
@@ -106,10 +90,10 @@ class MenuDetailFragment : Fragment(), Block {
         }
 
         binding.menuDetailGoChefTxtBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalDisplayChefFragment(menu.chefId))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalDisplayChefFragment(menu.chefId)
+            )
         }
-
-
 
         menuDetailViewModel.getReview(menu.id)
         val outlineProvider = ProfileOutlineProvider()
@@ -120,11 +104,11 @@ class MenuDetailFragment : Fragment(), Block {
             findNavController().navigateUp()
         }
 
-        binding.detailChefName.text = menu.chefName + " 建立的菜單"
+        binding.detailChefName.text = getString(R.string.menu_created_by, menu.chefName)
         if (menu.reviewRating != null) {
             binding.menuDetailRatingNum.visibility = View.VISIBLE
             binding.ratingBar4.visibility = View.VISIBLE
-            binding.menuDetailRatingNum.text = menu.reviewNumber.toString() + " 則評價"
+            binding.menuDetailRatingNum.text = getString(R.string.number_of_review, menu.reviewNumber)
             binding.ratingBar4.rating = menu.reviewRating!!
             val str: String = String.format("%.1f", menu.reviewRating)
             binding.menuDetailRatingTxt.text = str
@@ -138,7 +122,7 @@ class MenuDetailFragment : Fragment(), Block {
             binding.menuDetailReviewTitle.visibility = View.GONE
             binding.menuDetailMoreReviewBtn.visibility = View.GONE
         }
-        binding.menuDetailReviewTitle.text = menu.reviewNumber.toString() + "  則評價"
+        binding.menuDetailReviewTitle.text = getString(R.string.number_of_review, menu.reviewNumber)
 
 
         //imagesRecyclerView
@@ -156,7 +140,6 @@ class MenuDetailFragment : Fragment(), Block {
 
         menuDetailViewModel.reviewList.observe(viewLifecycleOwner) { review ->
 
-
             reviewList = if (UserManger.user?.blockReviewList != null) {
                 review.filter {
                     !UserManger.user?.blockReviewList!!.contains(it.userId)
@@ -173,18 +156,60 @@ class MenuDetailFragment : Fragment(), Block {
 
         binding.menuDetailBlockMenuBtn.setOnClickListener {
 
-            val alertDialog=AlertDialog.Builder(this.context)
-            alertDialog.setTitle("封鎖此菜單？")
-                .setMessage("${menu.menuName}")
-                .setPositiveButton("確認"){_,_->
+            val alertDialog = AlertDialog.Builder(this.context)
+            alertDialog.setTitle(getString(R.string.block_this_menu))
+                .setMessage(menu.menuName)
+                .setPositiveButton(getString(R.string.confirm)) { _, _ ->
                     blockMenu(menu.id)
                 }
-                .setNegativeButton("取消"){dialog,_->
-                  dialog.dismiss()
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.dismiss()
                 }
                 .show()
         }
 
+        displayDish(dishList, container)
+
+        binding.menuDetailPerPrice.text = getPrice(menu.perPrice)
+        binding.detailName.text = menu.menuName
+        binding.detailMenuIntro.text = menu.intro
+        binding.menuDetailMoreReviewBtn.setOnClickListener {
+
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalReviewPage(
+                    reviewList.toTypedArray()
+                )
+            )
+        }
+
+        menuDetailViewModel.checkOpen(menu.chefId)
+
+        var bookSettingType = -1
+        menuDetailViewModel.bookSettingType.observe(viewLifecycleOwner) {
+            bookSettingType = it ?: -1
+            setChoiceBtn(bookSettingType)
+        }
+
+
+        binding.choice.setOnClickListener {
+
+                if (checkWhetherSelfMenu(menu.chefId) && checkRadioSelected(dishList, displayList)) {
+                    val selectedDish: List<Dish> = getSelectedDish(dishList, displayList)
+                    val list = selectedDish.toTypedArray()
+                    findNavController().navigate(
+                        MobileNavigationDirections.actionGlobalBookFragment(menu, list, bookSettingType)
+                    )
+                }
+        }
+
+
+        return root
+    }
+
+    private fun displayDish(dishList: List<Dish>, container: ViewGroup?) {
+        var defaultType = -1
+        val or = getString(R.string.or)
+        val and = getString(R.string.and)
 
         for (i in dishList) {
             _itemDisplayBinding =
@@ -233,7 +258,6 @@ class MenuDetailFragment : Fragment(), Block {
                 }
                 //+radiobutton  +price
 
-//                val radioText = "${i.name}    <font color = \"#03A9F4\">(${i.extraPrice})</font>"
                 val radioText = if (i.extraPrice != 0) {
                     "${i.name}    <I><font color = \"#03DAC5\">(+NT$ ${i.extraPrice})</font></I>"
                 } else {
@@ -249,96 +273,79 @@ class MenuDetailFragment : Fragment(), Block {
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
             }
         }
+    }
 
-
-        binding.menuDetailPerPrice.text = "NT$" + menu.perPrice.toString()
-
-        binding.detailName.text = menu.menuName
-        binding.detailMenuIntro.text = menu.intro
-        binding.menuDetailMoreReviewBtn.setOnClickListener {
-
-            findNavController().navigate(
-                MobileNavigationDirections.actionGlobalReviewPage(
-                    reviewList.toTypedArray()
-                )
-            )
+    private fun checkWhetherSelfMenu(chefId: String): Boolean {
+        return if (menu.chefId != UserManger.user?.chefId ?: "") {
+            true
+        }else{
+            Toast.makeText(this.context, getString(R.string.can_not_book_your_own_menu), Toast.LENGTH_SHORT).show()
+            false
         }
+    }
 
-        menuDetailViewModel.checkOpen(menu.chefId)
-//        menuDetailViewModel.openBoolean.observe(viewLifecycleOwner){
-//            if(!it){
-//                binding.choice.isEnabled = false
-//                binding.choice.text = "不開放"
-//            }else{
-//                binding.choice.isEnabled = true
-//                binding.choice.text = "預訂"
-//            }
-//        }
-        var bookSettingType = -1
-        menuDetailViewModel.bookSettingType.observe(viewLifecycleOwner){
-            bookSettingType = it ?: -1
-            if(bookSettingType!=-1&&bookSettingType!=BookSettingType.RefuseAll.index){
-                binding.choice.isEnabled = true
-                binding.choice.text = "預訂"
-            }else{
-                binding.choice.isEnabled = false
-                binding.choice.text = "不開放"
-            }
-        }
+    private fun checkRadioSelected(
+        dishList: List<Dish>,
+        displayList: MutableList<ItemDisplayDishBinding>
+    ): Boolean {
+        var isRadioSelected = true
+        var typeInt = -1
 
-
-        binding.choice.setOnClickListener {
-
-            if (menu.chefId != UserManger.user?.chefId ?: "") {
-                var isRadioSelected = true
-                var typeInt = -1
-
-                for (i in dishList) {
-                    if (i.option == 0) {
-                        selectedDish.add(i)
+        for (i in dishList) {
+            if (i.option == 0) {
+                typeInt = i.typeNumber
+            } else {
+                if (typeInt != i.typeNumber) {
+                    val selectedId =
+                        displayList[i.typeNumber].displayRG.checkedRadioButtonId
+                    if (selectedId != -1) {
                         typeInt = i.typeNumber
                     } else {
-                        if (typeInt != i.typeNumber) {
-                            val selectedId =
-                                displayList[i.typeNumber].displayRG.checkedRadioButtonId
-                            if (selectedId != -1) {
-                                val radioButton = root.findViewById<RadioButton>(selectedId)
-                                val radioDish: Dish = radioButton.tag as Dish
-                                selectedDish.add(radioDish)
-                                typeInt = i.typeNumber
-                            } else {
-                                isRadioSelected = false
-                            }
-                        }
+                        Toast.makeText(this.context, getString(R.string.please_select_dish), Toast.LENGTH_SHORT).show()
+                        isRadioSelected = false
                     }
                 }
-
-                if (isRadioSelected) {
-
-                    Log.d("menudetailfragment", "selectedDish=${selectedDish}")
-                    val list = selectedDish.toTypedArray()
-                    findNavController().navigate(
-                        MobileNavigationDirections.actionGlobalBookFragment(
-                            menu,
-                            list,
-                            bookSettingType
-                        )
-                    )
-                } else {
-                    Toast.makeText(this.context, "請選擇菜品", Toast.LENGTH_SHORT).show()
-                    selectedDish.clear()
-                }
-            } else {
-                Toast.makeText(this.context, "無法預訂自己的菜單", Toast.LENGTH_SHORT).show()
             }
+        }
+        return isRadioSelected
+    }
 
+    private fun getSelectedDish(
+        dishList: List<Dish>,
+        displayList: MutableList<ItemDisplayDishBinding>
+    ): List<Dish> {
+
+        var typeInt = -1
+        val selectedDish = mutableListOf<Dish>()
+        for (i in dishList) {
+            if (i.option == 0) {
+                selectedDish.add(i)
+                typeInt = i.typeNumber
+            } else {
+                if (typeInt != i.typeNumber) {
+                    val selectedId =
+                        displayList[i.typeNumber].displayRG.checkedRadioButtonId
+                    if (selectedId != -1) {
+                        val radioButton = binding.root.findViewById<RadioButton>(selectedId)
+                        val radioDish: Dish = radioButton.tag as Dish
+                        selectedDish.add(radioDish)
+                        typeInt = i.typeNumber
+                    }
+                }
+            }
+        }
+        return selectedDish
+    }
+
+    private fun setChoiceBtn(bookSettingType: Int) {
+        if (bookSettingType != -1 && bookSettingType != BookSettingType.RefuseAll.index) {
+            binding.choice.isEnabled = true
+            binding.choice.text = getString(R.string.book)
+        } else {
+            binding.choice.isEnabled = false
+            binding.choice.text = getString(R.string.not_open)
         }
 
-
-
-
-
-        return root
     }
 
     override fun onDestroyView() {

@@ -37,18 +37,15 @@ class ChatRoomFragment : Fragment() {
 
     private val chatRoomViewModel by viewModels<ChatRoomViewModel> { getVmFactory() }
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        (activity as MainActivity).hideNaveView()
 
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
 
         val roomId = arg.roomId
 
@@ -92,23 +89,15 @@ class ChatRoomFragment : Fragment() {
 
 
         binding.chatRoomSendBtn.setOnClickListener {
-            if (nowId != "") {
-                val msg = binding.editText.editText?.text.toString()
-                if (msg != "") {
+            val msg = binding.editText.editText?.text.toString()
+            if (nowId != ""&& msg != "") {
                     chatRoomViewModel.sendMsg(roomId, msg, nowId)
                     binding.editText.editText?.setText("")
                     binding.chatRoomRecycler.scrollToPosition(chatList.size - 1) //move focus on last message
-                }
             }
         }
 
         return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-//        _binding = null
-        (activity as MainActivity).showNaveView()
     }
 
 }

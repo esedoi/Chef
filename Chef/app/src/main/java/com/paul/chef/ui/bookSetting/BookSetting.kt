@@ -2,7 +2,6 @@ package com.paul.chef.ui.bookSetting
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,8 +37,7 @@ class BookSetting : Fragment() {
         _binding = FragmentBookSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        var calendarTypeResult = -1
+        var calendarTypeResult: Int
         val calendarTypeList =
             arrayOf("未來所有日期", "預設所有日期為不可訂")
 
@@ -51,26 +49,12 @@ class BookSetting : Fragment() {
         binding.apply {
             userSpaceCardView.setOnClickListener {
                 userSpaceCardView.isChecked = !userSpaceCardView.isChecked
-                when (userSpaceCardView.isChecked) {
-                    true -> {
-                        userSpaceHelper.visibility = View.GONE
-                    }
-                    false -> {
-                        userSpaceHelper.visibility = View.VISIBLE
-                    }
-                }
+                userHelperTextVisibility(userSpaceCardView.isChecked)
 
             }
             chefSpaceCardView.setOnClickListener {
                 chefSpaceCardView.isChecked = !chefSpaceCardView.isChecked
-                when (chefSpaceCardView.isChecked) {
-                    true -> {
-                        chefSpaceHelper.visibility = View.GONE
-                    }
-                    false -> {
-                        chefSpaceHelper.visibility = View.VISIBLE
-                    }
-                }
+                chefHelperTextVisibility(chefSpaceCardView.isChecked)
             }
         }
 
@@ -135,15 +119,15 @@ class BookSetting : Fragment() {
         var endTime = "null"
         var address: Address? = null
 
-        setFragmentResultListener(PickerType.SET_CAPACITY.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.SET_CAPACITY.value) { _, bundle ->
             capacity = bundle.getInt(PickerType.SET_CAPACITY.value)
             binding.bookSetUserSpaceCapacity.setText(capacity.toString())
         }
-        setFragmentResultListener(PickerType.SET_SESSION_CAPACITY.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.SET_SESSION_CAPACITY.value) { _, bundle ->
             sessionCapacity = bundle.getInt(PickerType.SET_SESSION_CAPACITY.value)
             binding.bookSetChefSpaceCapacity.setText(sessionCapacity.toString())
         }
-        setFragmentResultListener(PickerType.SET_SESSION_TIME.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.SET_SESSION_TIME.value) { _, bundle ->
 
             val session = bundle.getString(PickerType.SET_SESSION_TIME.value)
             if (session != null) {
@@ -156,23 +140,22 @@ class BookSetting : Fragment() {
             chip.isCloseIconVisible = true
             chip.setOnCloseIconClickListener { view ->
                 binding.bookSetChefSpaceTimeLayout.removeView(view)
-                Log.d("booksetting fragment", "chip.text=${chip.text}")
                 sessionTime.remove(chip.text)
             }
             binding.bookSetChefSpaceTimeLayout.addView(chip)
 
 
         }
-        setFragmentResultListener(PickerType.SET_START_TIME.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.SET_START_TIME.value) { _, bundle ->
             startTime = bundle.getString(PickerType.SET_START_TIME.value).toString()
             binding.bookSetUserSpaceStartTime.setText(startTime)
         }
-        setFragmentResultListener(PickerType.SET_END_TIME.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.SET_END_TIME.value) { _, bundle ->
             endTime = bundle.getString(PickerType.SET_END_TIME.value).toString()
             binding.bookSetUserSpaceEndTime.setText(endTime)
         }
-        setFragmentResultListener("selectAddress") { requestKey, bundle ->
-            address = bundle.getParcelable<Address>("address")!!
+        setFragmentResultListener("selectAddress") { _, bundle ->
+            address = bundle.getParcelable("address")!!
             val addressTxt = address?.addressTxt ?: ""
             binding.bookSetChefSpaceAddress.setText(addressTxt)
         }
@@ -193,16 +176,16 @@ class BookSetting : Fragment() {
                 sessionTime.clear()
                 sessionTime.addAll(it.chefSpace.session)
                 address = it.chefSpace.address
-                binding.bookSetChefSpaceAddress.setText(it.chefSpace.address.addressTxt.toString())
+                binding.bookSetChefSpaceAddress.setText(it.chefSpace.address.addressTxt)
                 binding.bookSetChefSpaceCapacity.setText(it.chefSpace.sessionCapacity.toString())
             }
 
             if (it != null) {
                 binding.bookSetCalenderDefaultEditTxt.setText(
                     if (it.calendarDefault == CalendarType.AllDayClose.index) {
-                        "預設所有日期為不可訂"
+                        getString(R.string.close_all_day)
                     } else {
-                        "未來所有日期"
+                        getString(R.string.open_all_day)
                     }
                 )
                 val adapter =
@@ -211,33 +194,8 @@ class BookSetting : Fragment() {
                     adapter
                 )
 
+                changeTypeStatus(it.type)
 
-                when (it.type) {
-                    BookSettingType.AcceptAll.index -> {
-                        binding.chefSpaceCardView.isChecked = true
-                        binding.userSpaceCardView.isChecked = true
-                        binding.chefSpaceHelper.visibility = View.GONE
-                        binding.userSpaceHelper.visibility = View.GONE
-                    }
-                    BookSettingType.OnlyUserSpace.index -> {
-                        binding.chefSpaceCardView.isChecked = false
-                        binding.userSpaceCardView.isChecked = true
-                        binding.chefSpaceHelper.visibility = View.VISIBLE
-                        binding.userSpaceHelper.visibility = View.GONE
-                    }
-                    BookSettingType.OnlyChefSpace.index -> {
-                        binding.chefSpaceCardView.isChecked = true
-                        binding.userSpaceCardView.isChecked = false
-                        binding.chefSpaceHelper.visibility = View.GONE
-                        binding.userSpaceHelper.visibility = View.VISIBLE
-                    }
-                    BookSettingType.RefuseAll.index -> {
-                        binding.chefSpaceCardView.isChecked = false
-                        binding.userSpaceCardView.isChecked = false
-                        binding.chefSpaceHelper.visibility = View.VISIBLE
-                        binding.userSpaceHelper.visibility = View.VISIBLE
-                    }
-                }
             }
         }
 
@@ -314,6 +272,58 @@ class BookSetting : Fragment() {
 
 
         return root
+    }
+
+    private fun chefHelperTextVisibility(checked: Boolean) {
+        when (checked) {
+            true -> {
+                binding.chefSpaceHelper.visibility = View.GONE
+            }
+            false -> {
+                binding.chefSpaceHelper.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun userHelperTextVisibility(checked: Boolean) {
+        when (checked) {
+            true -> {
+                binding.userSpaceHelper.visibility = View.GONE
+            }
+            false -> {
+                binding.userSpaceHelper.visibility = View.VISIBLE
+            }
+        }
+
+    }
+
+    private fun changeTypeStatus(type: Int) {
+        when (type) {
+            BookSettingType.AcceptAll.index -> {
+                binding.chefSpaceCardView.isChecked = true
+                binding.userSpaceCardView.isChecked = true
+                binding.chefSpaceHelper.visibility = View.GONE
+                binding.userSpaceHelper.visibility = View.GONE
+            }
+            BookSettingType.OnlyUserSpace.index -> {
+                binding.chefSpaceCardView.isChecked = false
+                binding.userSpaceCardView.isChecked = true
+                binding.chefSpaceHelper.visibility = View.VISIBLE
+                binding.userSpaceHelper.visibility = View.GONE
+            }
+            BookSettingType.OnlyChefSpace.index -> {
+                binding.chefSpaceCardView.isChecked = true
+                binding.userSpaceCardView.isChecked = false
+                binding.chefSpaceHelper.visibility = View.GONE
+                binding.userSpaceHelper.visibility = View.VISIBLE
+            }
+            BookSettingType.RefuseAll.index -> {
+                binding.chefSpaceCardView.isChecked = false
+                binding.userSpaceCardView.isChecked = false
+                binding.chefSpaceHelper.visibility = View.VISIBLE
+                binding.userSpaceHelper.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onDestroyView() {

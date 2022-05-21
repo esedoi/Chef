@@ -7,16 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.*
 import com.paul.chef.data.Room
 import com.paul.chef.databinding.FragmentChatListBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.chef.ChefViewModel
 
 
 class ChatListFragment : Fragment(), GoChatRoom {
@@ -28,7 +25,6 @@ class ChatListFragment : Fragment(), GoChatRoom {
     private lateinit var chatListAdapter: ChatListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-
     private val chatListViewModel by viewModels<ChatListViewModel> { getVmFactory() }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -39,11 +35,30 @@ class ChatListFragment : Fragment(), GoChatRoom {
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val mode = UserManger.readData("mode")?:-1
 
-        val roomList = mutableListOf<Room>()
-        var nowMode = -1
+        setAppBarTitle(mode)
 
-        val mode = UserManger.readData("mode")
+        chatListAdapter = ChatListAdapter(this, mode)
+        layoutManager = LinearLayoutManager(this.context)
+        binding.chatListRecycler.layoutManager = layoutManager
+        binding.chatListRecycler.adapter = chatListAdapter
+
+
+        chatListViewModel.roomList.observe(viewLifecycleOwner) {
+            val roomList = it.sortedBy { sort ->
+                sort.time
+            }
+            emptyHandle(roomList, mode)
+            chatListAdapter.submitList(roomList)
+            chatListAdapter.notifyDataSetChanged()
+        }
+
+
+        return root
+    }
+
+    private fun setAppBarTitle(mode: Int) {
         when (mode) {
             Mode.USER.index -> {
                 binding.topAppBar.title = getString(R.string.message_from_chef)
@@ -52,52 +67,32 @@ class ChatListFragment : Fragment(), GoChatRoom {
                 binding.topAppBar.title = getString(R.string.massage_from_customer)
             }
         }
+    }
 
-        if (mode != null) {
-            nowMode = mode
+    private fun emptyHandle(roomList: List<Room>, mode: Int?) {
+        when {
+            roomList.isEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptySticker.visibility = View.VISIBLE
+                binding.chatEmptyText.visibility = View.VISIBLE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
+            roomList.isEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.VISIBLE
+                binding.chatChefEmptySticker.visibility = View.VISIBLE
+            }
+            roomList.isNotEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.GONE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
+            roomList.isNotEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.GONE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
         }
 
-        chatListAdapter = ChatListAdapter(this, nowMode)
-        layoutManager = LinearLayoutManager(this.context)
-        binding.chatListRecycler.layoutManager = layoutManager
-        binding.chatListRecycler.adapter = chatListAdapter
-
-        chatListViewModel.roomList.observe(viewLifecycleOwner) {
-            it.sortedBy { sort ->
-                sort.time
-            }
-            roomList.clear()
-            roomList.addAll(it)
-
-
-            when {
-                roomList.isEmpty() && mode == Mode.USER.index -> {
-                    binding.chatUserEmptySticker.visibility = View.VISIBLE
-                    binding.chatEmptyText.visibility = View.VISIBLE
-                    binding.chatChefEmptySticker.visibility = View.GONE
-                }
-                roomList.isEmpty() && mode == Mode.CHEF.index -> {
-                    binding.chatUserEmptySticker.visibility = View.GONE
-                    binding.chatEmptyText.visibility = View.VISIBLE
-                    binding.chatChefEmptySticker.visibility = View.VISIBLE
-                }
-                roomList.isNotEmpty() && mode == Mode.USER.index -> {
-                    binding.chatUserEmptySticker.visibility = View.GONE
-                    binding.chatEmptyText.visibility = View.GONE
-                    binding.chatChefEmptySticker.visibility = View.GONE
-                }
-                roomList.isNotEmpty() && mode == Mode.CHEF.index -> {
-                    binding.chatUserEmptySticker.visibility = View.GONE
-                    binding.chatEmptyText.visibility = View.GONE
-                    binding.chatChefEmptySticker.visibility = View.GONE
-                }
-            }
-            chatListAdapter.submitList(roomList)
-            chatListAdapter.notifyDataSetChanged()
-        }
-
-
-        return root
     }
 
     override fun onDestroyView() {

@@ -4,7 +4,6 @@ package com.paul.chef.ui.book
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -27,7 +25,6 @@ import com.paul.chef.*
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.bookSetting.BookSettingViewModel
 import java.time.LocalDate
 
 
@@ -78,8 +75,8 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         bookViewModel.getAddress(menu.chefId)
         bookViewModel.chefSpaceAddress.observe(viewLifecycleOwner) {
             chefAddress = it
-            when(arg.type){
-                BookSettingType.OnlyChefSpace.index->{
+            when (arg.type) {
+                BookSettingType.OnlyChefSpace.index -> {
                     binding.bookChefSpaceChip.isChecked = true
                     binding.bookChefSpaceChip.isEnabled = true
                     binding.bookUserSpaceChip.isChecked = false
@@ -98,7 +95,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                         binding.bookAddress.text = chefAddress?.addressTxt
                     }
                 }
-                BookSettingType.OnlyUserSpace.index->{
+                BookSettingType.OnlyUserSpace.index -> {
                     binding.bookChefSpaceChip.isChecked = false
                     binding.bookChefSpaceChip.isEnabled = false
                     binding.bookUserSpaceChip.isChecked = true
@@ -108,10 +105,9 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-
         //price result
         bookViewModel.priceResult.observe(viewLifecycleOwner) {
-            Log.d("bookfragment", "isdiscount=${it["isDiscount"]}")
+
             if (it["isDiscount"] == 1) {
                 binding.apply {
                     orginalPerPrice.visibility = View.VISIBLE
@@ -159,10 +155,9 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
-        setFragmentResultListener("requestKey") { requestKey, bundle ->
+        setFragmentResultListener("requestKey") { _, bundle ->
             val result = bundle.getLong("bundleKey")
             selectDate = result
-            Log.d("bookfragment", "result=$result")
             val localDate: LocalDate = LocalDate.ofEpochDay(selectDate!!)
             binding.bookDateSelect.setText(localDate.toString())
         }
@@ -170,33 +165,15 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
         var typeId: Int
 
-
-
-
-
         binding.bookPeopleSelect.setOnClickListener {
 
             typeId = binding.bookChipGroup.checkedChipId
 
-            if (typeId == -1) {
-                Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
-            } else {
-
-                val typeInt = if (typeId == R.id.book_user_space_chip) {
-                    BookType.UserSpace.index
-                } else {
-                    BookType.ChefSpace.index
-                }
-
-                val safeArg = if (typeInt == BookType.UserSpace.index) {
-                    PickerType.PICK_CAPACITY.index
-                } else {
-                    PickerType.PICK_SESSION_CAPACITY.index
-                }
+            if (whetherTypeSelected(typeId)) {
+                val typeInt: Int = getTypeInt(typeId)
+                val safeArg:Int = getPeopleSafeArg(typeInt)
                 findNavController().navigate(
-                    MobileNavigationDirections.actionGlobalPickerBottomSheet(
-                        safeArg, menu.chefId
-                    )
+                    MobileNavigationDirections.actionGlobalPickerBottomSheet(safeArg, menu.chefId)
                 )
             }
         }
@@ -204,25 +181,11 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         binding.bookTimeSelect.setOnClickListener {
             typeId = binding.bookChipGroup.checkedChipId
 
-            if (typeId == -1) {
-                Toast.makeText(this.context, "請選擇用餐空間", Toast.LENGTH_SHORT).show()
-            } else {
-                val typeInt = if (typeId == R.id.book_user_space_chip) {
-                    BookType.UserSpace.index
-                } else {
-                    BookType.ChefSpace.index
-                }
-
-                val safeArg = if (typeInt == BookType.UserSpace.index) {
-                    PickerType.PICK_TIME.index
-                } else {
-                    PickerType.PICK_SESSION_TIME.index
-                }
-
+            if (whetherTypeSelected(typeId)) {
+                val typeInt = getTypeInt(typeId)
+                val safeArg:Int = getTimeSafeArg(typeInt)
                 findNavController().navigate(
-                    MobileNavigationDirections.actionGlobalPickerBottomSheet(
-                        safeArg, menu.chefId
-                    )
+                    MobileNavigationDirections.actionGlobalPickerBottomSheet(safeArg, menu.chefId)
                 )
             }
         }
@@ -278,30 +241,30 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-        setFragmentResultListener(PickerType.PICK_TIME.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.PICK_TIME.value) { _, bundle ->
             pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
             binding.bookTimeSelect.setText(pickTime)
         }
-        setFragmentResultListener(PickerType.PICK_SESSION_TIME.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.PICK_SESSION_TIME.value) { _, bundle ->
             pickTime = bundle.getString(PickerType.PICK_SESSION_TIME.value).toString()
             binding.bookTimeSelect.setText(pickTime)
         }
-        setFragmentResultListener(PickerType.PICK_CAPACITY.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.PICK_CAPACITY.value) { _, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_CAPACITY.value)
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
-        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { _, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
-        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { requestKey, bundle ->
+        setFragmentResultListener(PickerType.PICK_SESSION_CAPACITY.value) { _, bundle ->
             pickPeople = bundle.getInt(PickerType.PICK_SESSION_CAPACITY.value)
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
-        setFragmentResultListener("selectAddress") { requestKey, bundle ->
+        setFragmentResultListener("selectAddress") { _, bundle ->
             val newAddress = bundle.getParcelable<Address>("address")!!
             val addressTxt = newAddress.addressTxt
             val latLng = LatLng(newAddress.latitude, newAddress.longitude)
@@ -318,53 +281,25 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-
-
-
         binding.pay.setOnClickListener {
             typeId = binding.bookChipGroup.checkedChipId
+            val typeInt = getTypeInt(typeId)
+            val address: Address? = getAddress(typeInt)
+            val errorHandleResult: Boolean =
+                checkErrorHandleResult(selectDate, typeId, pickPeople, pickTime, address)
 
-            if (selectDate == null) {
-                Toast.makeText(this.context, getString(R.string.please_select_date), Toast.LENGTH_SHORT).show()
-            } else if (typeId == -1) {
-                Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
-            } else if (pickPeople == -1) {
-                Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
-            } else if (pickTime == "") {
-                Toast.makeText(this.context, getString(R.string.please_select_time), Toast.LENGTH_SHORT).show()
-            } else {
-
-                val typeInt = if (typeId == R.id.book_user_space_chip) {
-                    BookType.UserSpace.index
-                } else {
-                    BookType.ChefSpace.index
-                }
-                Log.d("bookfragment", "typeId = $typeId")
-                Log.d("bookfragment", "typeInt = $typeInt")
-
-                val address: Address? = if (typeInt == BookType.ChefSpace.index) {
-                    chefAddress
-                } else {
-                    userAddress
-                }
-
-
+            if (errorHandleResult) {
                 val note = binding.bookNoteLayout.editText?.text.toString()
-
-                if (address != null) {
-                    bookViewModel.book(
-                        menu,
-                        typeInt,
-                        address,
-                        selectDate!!,
-                        pickTime,
-                        note,
-                        pickPeople,
-                        selectedDish
-                    )
-                } else {
-                    Toast.makeText(this.context, getString(R.string.please_select_address), Toast.LENGTH_SHORT).show()
-                }
+                bookViewModel.book(
+                    menu,
+                    typeInt,
+                    address!!,
+                    selectDate!!,
+                    pickTime,
+                    note,
+                    pickPeople,
+                    selectedDish
+                )
             }
         }
 
@@ -376,6 +311,83 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
         return root
     }
+
+    private fun getPeopleSafeArg(typeInt: Int): Int {
+        return  if (typeInt == BookType.UserSpace.index) {
+            PickerType.PICK_CAPACITY.index
+        } else {
+            PickerType.PICK_SESSION_CAPACITY.index
+        }
+    }
+
+    private fun getTimeSafeArg(typeInt: Int): Int {
+        return if (typeInt == BookType.UserSpace.index) {
+            PickerType.PICK_TIME.index
+        } else {
+            PickerType.PICK_SESSION_TIME.index
+        }
+
+    }
+
+    private fun whetherTypeSelected(typeId: Int): Boolean {
+        return if (typeId == -1) {
+            Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun checkErrorHandleResult(
+        selectDate: Long?,
+        typeId: Int,
+        pickPeople: Int,
+        pickTime: String,
+        address: Address?
+    ): Boolean {
+        return when {
+            selectDate == null -> {
+                Toast.makeText(this.context, getString(R.string.please_select_date), Toast.LENGTH_SHORT).show()
+                false
+            }
+            typeId == -1 -> {
+                Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
+                false
+            }
+            pickPeople == -1 -> {
+                Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
+                false
+            }
+            pickTime == "" -> {
+                Toast.makeText(this.context, getString(R.string.please_select_time), Toast.LENGTH_SHORT).show()
+                false
+            }
+            address == null -> { Toast.makeText(this.context, getString(R.string.please_select_address), Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
+
+    private fun getAddress(typeInt: Int): Address? {
+        return if (typeInt == BookType.ChefSpace.index) {
+            chefAddress
+        } else {
+            userAddress
+        }
+
+    }
+
+    private fun getTypeInt(typeId: Int): Int {
+        return if (typeId == R.id.book_user_space_chip) {
+            BookType.UserSpace.index
+        } else {
+            BookType.ChefSpace.index
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

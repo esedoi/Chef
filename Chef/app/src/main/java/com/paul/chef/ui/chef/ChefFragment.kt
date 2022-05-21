@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,6 @@ import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.FragmentChefPageBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.chefEdit.ChefEditViewModel
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 import com.paul.chef.ui.menuDetail.bindImage
@@ -34,9 +32,7 @@ class ChefFragment : Fragment(), Block, ItemMenu {
 
     private var reviewList = emptyList<Review>()
 
-
     private val chefViewModel by viewModels<ChefViewModel> { getVmFactory() }
-
 
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -46,84 +42,67 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         savedInstanceState: Bundle?
     ): View {
 
-
-
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val chefId = UserManger.chef?.id!!
+        chefViewModel.getChef(chefId)
 
-        val mode = UserManger.readData("mode")
-
-
-            val chefId = UserManger.chef?.id!!
-            chefViewModel.getChef(chefId)
-
-
-        chefViewModel.chefInfo.observe(viewLifecycleOwner){
-
+        chefViewModel.chefInfo.observe(viewLifecycleOwner) {
             binding.chefName.text = it.profileInfo.name
             binding.chefIntro.text = it.profileInfo.introduce
-            if(it.reviewNumber!=null){
-                binding.chefPageReviewDown.text = it.reviewNumber.toString()+" 則評價"
-            }else{
-                binding.chefPageReviewDown.text = "0 則評價"
-            }
-            bindImage(binding.chefPageImgView, it.profileInfo.avatar)
+            setReviewNumber(it.reviewNumber)
             val outlineProvider = ProfileOutlineProvider()
             binding.chefPageImgView.outlineProvider = outlineProvider
-            bindImage( binding.chefPageImgView, it.profileInfo.avatar)
+            bindImage(binding.chefPageImgView, it.profileInfo.avatar)
         }
 
-
         //menuList recycler
-        menuListAdapter = MenuListAdapter(this, null,type=MenuType.SIMPLE.index)
+        menuListAdapter = MenuListAdapter(this, null, type = MenuType.SIMPLE.index)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.chefPageMenuRecycler.layoutManager = layoutManager
         binding.chefPageMenuRecycler.adapter = menuListAdapter
 
-        chefViewModel.liveMenu.observe(viewLifecycleOwner){
+
+        chefViewModel.liveMenu.observe(viewLifecycleOwner) {
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }
-
 
         reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
         binding.chefPageReviewRecycler.layoutManager = reviewLayoutManager
         binding.chefPageReviewRecycler.adapter = reviewAdapter
-        chefViewModel.reviewList.observe(viewLifecycleOwner){
+        chefViewModel.reviewList.observe(viewLifecycleOwner) {
 
-            reviewList = if (UserManger.user?.blockReviewList != null) {
-                it.filter {
-                    !UserManger.user?.blockReviewList!!.contains(it.userId)
-                }
-            } else {
-                it
-            }
+            reviewList = filterBlockReview(it)
 
-
-            val filterList = reviewList.filterIndexed { index, review ->
-                index<2
+            val filterList = reviewList.filterIndexed { index, _ ->
+                index < 2
             }
             reviewAdapter.submitList(filterList)
             reviewAdapter.notifyDataSetChanged()
         }
 
-
-
         binding.chefPageReviewMore.setOnClickListener {
-            if(reviewList.isNotEmpty()){
+            if (reviewList.isNotEmpty()) {
                 val arrayList = reviewList.toTypedArray()
-                findNavController().navigate(MobileNavigationDirections.actionGlobalReviewPage(arrayList))
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalReviewPage(arrayList)
+                )
             }
         }
 
         binding.createMenu.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuEditFragment(null))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalMenuEditFragment(null)
+            )
         }
 
         binding.editProfileBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user?.profileInfo!!))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user?.profileInfo!!)
+            )
         }
 
         binding.bookSettingBtn.setOnClickListener {
@@ -131,7 +110,9 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         }
 
         binding.chefPageAddressListBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.NORMAL.index))
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.NORMAL.index)
+            )
         }
 
         binding.chefPageLogout.setOnClickListener {
@@ -139,23 +120,32 @@ class ChefFragment : Fragment(), Block, ItemMenu {
             findNavController().navigate(MobileNavigationDirections.actionGlobalLoginFragment())
         }
 
-        if(mode ==Mode.USER.index){
-            binding.turnToUser.text = "切換成廚師模式"
-            binding.turnToUser.setOnClickListener {
-                (activity as MainActivity).turnMode(Mode.CHEF.index)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-            }
-        }else{
-            binding.turnToUser.text = "切換成客人模式"
-            binding.turnToUser.setOnClickListener {
-                (activity as MainActivity).turnMode(Mode.USER.index)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
-            }
+        binding.turnToUser.text = getString(R.string.turn_to_customer_mode)
+        binding.turnToUser.setOnClickListener {
+            (activity as MainActivity).turnMode(Mode.USER.index)
+            findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
 
 
-
         return root
+    }
+
+    private fun filterBlockReview(reviewList: List<Review>): List<Review> {
+        return if (UserManger.user?.blockReviewList != null) {
+            reviewList.filter {
+                !UserManger.user?.blockReviewList!!.contains(it.userId)
+            }
+        } else {
+            reviewList
+        }
+    }
+
+    private fun setReviewNumber(reviewNumber: Int?) {
+        if (reviewNumber != null) {
+            binding.chefPageReviewDown.text = getString(R.string.number_of_review, reviewNumber)
+        } else {
+            binding.chefPageReviewDown.text = getString(R.string.number_of_review, 0)
+        }
     }
 
     override fun onDestroyView() {
@@ -171,7 +161,7 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         blockReviewList.add(blockUserId)
         (activity as MainActivity).block(UserManger.user?.userId!!, null, blockReviewList)
         UserManger.user?.blockReviewList = blockReviewList
-//        chefViewModel.getReview(menu.id)
+
     }
 
     override fun blockMenu(menuId: String) {

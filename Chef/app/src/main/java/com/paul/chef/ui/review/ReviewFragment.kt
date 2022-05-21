@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetReviewBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
@@ -38,14 +39,14 @@ class ReviewFragment : DialogFragment() {
         _binding = BottomSheetReviewBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         val order = arg.order
         val rating = arg.rating
 
         binding.apply {
             reviewMenuName.text = order.menuName
             reviewRatingbar.rating = rating.toFloat()
-            reviewMenuChef.text = "由 " + order.chefName + " 提供"
+            reviewMenuChef.text = getString(R.string.support_by, order.chefName)
+
             reviewDate.text = order.date.toString()
             val outlineProvider = ProfileOutlineProvider()
             reviewChefAvatar.outlineProvider = outlineProvider
@@ -62,7 +63,6 @@ class ReviewFragment : DialogFragment() {
                 dismiss()
             }
         }
-
         return root
     }
 

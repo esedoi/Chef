@@ -1,10 +1,8 @@
 package com.paul.chef.ui.orderDetail
 
 import android.graphics.Typeface
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,11 +13,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
+import com.paul.chef.data.Dish
+import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderDetailBinding
 import com.paul.chef.databinding.ItemDisplayDishBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
-import com.paul.chef.ui.review.ReviewViewModel
 import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 
@@ -41,13 +40,9 @@ class OrderDetailFragment : Fragment() {
 
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         val order = arg.order
         var roomId = ""
-
-
         val mode = UserManger.readData("mode")
-
 
         binding.apply {
             val outlineProvider = ProfileOutlineProvider()
@@ -55,111 +50,151 @@ class OrderDetailFragment : Fragment() {
             when (mode) {
                 Mode.CHEF.index -> {
                     bindImage(imageView3, order.userAvatar)
-                    orderDetailType.text = when (order.type) {
-                        BookType.ChefSpace.index -> BookType.ChefSpace.chefTxt
-                        BookType.UserSpace.index -> BookType.UserSpace.chefTxt
-                        else -> "something went wrong"
-                    }
+                    orderDetailType.text = getChefDetailTypeText(order.type)
                     orderDetailName.text = order.userName
-                    orderDetailPaymentText.text = "你的收款"
+                    orderDetailPaymentText.text = getString(R.string.your_receivement)
                     orderDetailTotal.text = getPrice(order.chefReceive)
+                    setAcceptBtn(order)
 
-                    if (order.status == OrderStatus.PENDING.index) {
-                        orderDetailAcceptBtn.visibility = View.VISIBLE
-                    } else {
-                        orderDetailAcceptBtn.visibility = View.GONE
-                    }
-
-                    orderDetailAcceptBtn.setOnClickListener {
-                        viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
-                        findNavController().navigateUp()
-
-                    }
                     orderDetailCancelBtn.text = when (order.status) {
-                        OrderStatus.PENDING.index -> "拒絕此訂單"
-                        else -> "取消訂單"
+                        OrderStatus.PENDING.index -> getString(R.string.refuse_order)
+                        else -> getString(R.string.cancel_order)
                     }
 
                 }
                 Mode.USER.index -> {
                     bindImage(imageView3, order.chefAvatar)
-                    orderDetailType.text = when (order.type) {
-                        BookType.ChefSpace.index -> BookType.ChefSpace.userTxt
-                        BookType.UserSpace.index -> BookType.UserSpace.userTxt
-                        else -> "something went wrong"
-                    }
+                    orderDetailType.text = getUserDetailTypeText(order.type)
                     orderDetailName.text = order.chefName
-                    orderDetailPaymentText.text = "你的付款"
+                    orderDetailPaymentText.text = getString(R.string.your_payment)
                     orderDetailTotal.text = getPrice(order.userPay)
-
                     orderDetailAcceptBtn.visibility = View.GONE
-                    orderDetailCancelBtn.text = "取消訂單"
-
-                    if (order.status == OrderStatus.COMPLETED.index) {
-                        orderDetailRatingBar.visibility = View.VISIBLE
-                        orderDetailReviewTxt.visibility = View.VISIBLE
-                        orderDetailRatingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
-                            findNavController().navigate(
-                                MobileNavigationDirections.actionGlobalReviewFragment(
-                                    fl.toInt(),
-                                    order
-                                )
-                            )
-                        }
-                    } else {
-                        orderDetailRatingBar.visibility = View.GONE
-                        orderDetailReviewTxt.visibility = View.GONE
-                    }
-
+                    orderDetailCancelBtn.text = getString(R.string.cancel_order)
+                    setRatingBar(order)
                 }
             }
-
-            orderDetailStatus.text = when (order.status) {
-                OrderStatus.PENDING.index -> OrderStatus.PENDING.value
-                OrderStatus.UPCOMING.index -> OrderStatus.UPCOMING.value
-                OrderStatus.COMPLETED.index -> OrderStatus.COMPLETED.value
-                OrderStatus.CANCELLED.index -> OrderStatus.CANCELLED.value
-                OrderStatus.SCORED.index -> OrderStatus.SCORED.value
-                else -> "something went wrong"
-            }
+            orderDetailStatus.text = getStatusText(order.status)
             orderDetailAddress.text = order.address.addressTxt
             orderDetailDate.text = LocalDate.ofEpochDay(order.date).toString()
             orderDetailTime.text = order.time
             orderDetailMenuName.text = order.menuName
             orderDetailNote.text = order.note
-            orderDetailPeople.text = order.people.toString() + " 人"
+            orderDetailPeople.text = getString(R.string.people, order.people)
             orderDetailOrginalPrice.text = getPrice(order.originalPrice)
             orderDetailDiscount.text = getPrice(order.discount)
             orderDetailFee.text = getPrice(ChefManger().chefFee)
 
-            when (order.status) {
-                OrderStatus.PENDING.index, OrderStatus.UPCOMING.index -> {
-                    orderDetailCancelBtn.isEnabled = true
-                    orderDetailCancelBtn.setOnClickListener {
-                        viewModel.changeStatus(order.id, OrderStatus.CANCELLED.index)
-                        findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
-                    }
-                }
-                else -> {
-                    orderDetailCancelBtn.isEnabled = false
-                }
-            }
-
             orderDetailSendBtn.setOnClickListener {
                 if (roomId != "") {
                     findNavController().navigate(
-                        MobileNavigationDirections.actionGlobalChatRoomFragment(
-                            roomId
-                        )
+                        MobileNavigationDirections.actionGlobalChatRoomFragment(roomId)
                     )
                 }
             }
         }
 
+        setCancelBtn(order)
+
+        showDishList(order.selectedDish, container)
+
+        viewModel.getRoomId(order.userId, order.chefId)
+
+        viewModel.roomId.observe(viewLifecycleOwner) {
+            if (it != "") {
+                roomId = it
+            } else {
+                viewModel.createRoom(
+                    order.userId,
+                    order.chefId,
+                    order.userName,
+                    order.chefName,
+                    order.userAvatar,
+                    order.chefAvatar
+                )
+            }
+        }
+
+        return root
+    }
+
+    private fun setAcceptBtn(order: Order) {
+        if (order.status == OrderStatus.PENDING.index) {
+            binding.orderDetailAcceptBtn.visibility = View.VISIBLE
+        } else {
+            binding.orderDetailAcceptBtn.visibility = View.GONE
+        }
+        binding.orderDetailAcceptBtn.setOnClickListener {
+            viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun getChefDetailTypeText(type: Int): CharSequence {
+        return when (type) {
+            BookType.ChefSpace.index -> BookType.ChefSpace.chefTxt
+            BookType.UserSpace.index -> BookType.UserSpace.chefTxt
+            else -> "something went wrong"
+        }
+
+    }
+
+    private fun getUserDetailTypeText(type: Int): CharSequence {
+        return when (type) {
+            BookType.ChefSpace.index -> BookType.ChefSpace.userTxt
+            BookType.UserSpace.index -> BookType.UserSpace.userTxt
+            else -> "something went wrong"
+        }
+    }
+
+    private fun setRatingBar(order: Order) {
+        if (order.status == OrderStatus.COMPLETED.index) {
+            binding.orderDetailRatingBar.visibility = View.VISIBLE
+            binding.orderDetailReviewTxt.visibility = View.VISIBLE
+            binding.orderDetailRatingBar.setOnRatingBarChangeListener { _, fl, _ ->
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalReviewFragment(
+                        fl.toInt(),
+                        order
+                    )
+                )
+            }
+        } else {
+            binding.orderDetailRatingBar.visibility = View.GONE
+            binding.orderDetailReviewTxt.visibility = View.GONE
+        }
+    }
+
+    private fun getStatusText(status: Int): CharSequence {
+        return when (status) {
+            OrderStatus.PENDING.index -> OrderStatus.PENDING.value
+            OrderStatus.UPCOMING.index -> OrderStatus.UPCOMING.value
+            OrderStatus.COMPLETED.index -> OrderStatus.COMPLETED.value
+            OrderStatus.CANCELLED.index -> OrderStatus.CANCELLED.value
+            OrderStatus.SCORED.index -> OrderStatus.SCORED.value
+            else -> "something went wrong"
+        }
+    }
+
+    private fun setCancelBtn(order: Order) {
+        when (order.status) {
+            OrderStatus.PENDING.index, OrderStatus.UPCOMING.index -> {
+                binding.orderDetailCancelBtn.isEnabled = true
+                binding.orderDetailCancelBtn.setOnClickListener {
+                    viewModel.changeStatus(order.id, OrderStatus.CANCELLED.index)
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                }
+            }
+            else -> {
+                binding.orderDetailCancelBtn.isEnabled = false
+            }
+        }
+
+    }
+
+    private fun showDishList(selectedDish: List<Dish>, container: ViewGroup?) {
         var defaultType = -1
         val and = "and"
-
-        for (i in order.selectedDish) {
+        for (i in selectedDish) {
 
             _itemDisplayBinding =
                 ItemDisplayDishBinding.inflate(LayoutInflater.from(context), container, false)
@@ -193,24 +228,6 @@ class OrderDetailFragment : Fragment() {
             displayList[defaultType].displayRG.gravity = Gravity.CENTER
         }
 
-        viewModel.getRoomId(order.userId, order.chefId)
-
-        viewModel.roomId.observe(viewLifecycleOwner) {
-            if (it != "") {
-                roomId = it
-            } else {
-                viewModel.createRoom(
-                    order.userId,
-                    order.chefId,
-                    order.userName,
-                    order.chefName,
-                    order.userAvatar,
-                    order.chefAvatar
-                )
-            }
-        }
-
-        return root
     }
 
 }

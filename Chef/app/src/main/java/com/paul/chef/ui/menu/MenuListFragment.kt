@@ -2,29 +2,23 @@ package com.paul.chef.ui.menu
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.paul.chef.*
-import com.paul.chef.data.Address
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentMenuListBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.menuDetail.MenuDetailViewModel
-import java.time.LocalDate
 
 class MenuListFragment : Fragment(), ItemMenu {
 
@@ -36,11 +30,10 @@ class MenuListFragment : Fragment(), ItemMenu {
 
     private var likeIdList = mutableListOf<String>()
 
-
     private val menuListViewModel by viewModels<MenuListViewModel> { getVmFactory() }
 
     val menuList = mutableListOf<Menu>()
-    val displayMenuList = mutableListOf<Menu>()
+    private val displayMenuList = mutableListOf<Menu>()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -65,22 +58,10 @@ class MenuListFragment : Fragment(), ItemMenu {
         (binding.menuListFilterLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
 
-
         binding.menuListFilter.addTextChangedListener {
-            Log.d("menulistfragment", "text = ${it.toString()}")
 
-            val filterType = when (it.toString()) {
-                BookType.ChefSpace.userTxt -> {
-                    BookType.ChefSpace.index
-                }
-                BookType.UserSpace.userTxt -> {
-                    BookType.UserSpace.index
-                }
-                else -> {
-                    -1
-                }
-            }
-            if(filterType!=-1){
+            val filterType:Int = getFilterType(it.toString())
+            if (filterType != -1) {
                 menuListViewModel.getChefId(filterType)
             }
         }
@@ -88,14 +69,8 @@ class MenuListFragment : Fragment(), ItemMenu {
 
         //default menuList
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
-            Log.d("menulistfragment", "observe it.size=${it.size}")
-            val newMenuList = if (UserManger.user?.blockMenuList != null) {
-                it.filter { itemMenu ->
-                    !UserManger.user?.blockMenuList!!.contains(itemMenu.id)
-                }
-            } else {
-                it
-            }
+
+            val newMenuList:List<Menu> = filterBlockMenuList(it)
             menuList.clear()
             menuList.addAll(newMenuList)
             displayMenuList.clear()
@@ -105,8 +80,7 @@ class MenuListFragment : Fragment(), ItemMenu {
         }
 
 
-
-        val tagList = listOf<String>("素食", "清真", "魚", "法式", "中式", "日式", "分子料理", "有機", "無麩質")
+        val tagList = listOf("素食", "清真", "魚", "法式", "中式", "日式", "分子料理", "有機", "無麩質")
         tagList.forEach {
             val chip = layoutInflater.inflate(
                 R.layout.item_menu_list_chip,
@@ -115,12 +89,8 @@ class MenuListFragment : Fragment(), ItemMenu {
             ) as Chip
             chip.text = it
             chip.id = tagList.indexOf(it)
-            chip.setOnCheckedChangeListener { compoundButton, b ->
-                Log.d("menulistfragment", "compoundButton= $compoundButton")
-                Log.d("menulistfragment", "b= $b")
-            }
 
-            chip.setOnCheckedChangeListener { compoundButton, b ->
+            chip.setOnCheckedChangeListener { _, _ ->
 
                 displayMenuList.clear()
                 displayMenuList.addAll(menuList)
@@ -130,23 +100,8 @@ class MenuListFragment : Fragment(), ItemMenu {
                     menuListAdapter.submitList(displayMenuList)
                     menuListAdapter.notifyDataSetChanged()
                 } else {
-                    Log.d("menulistfragment", "chipidList=$chipIdList")
-                    val chipTxtList = mutableListOf<String>()
-                    chipIdList.forEach { id ->
-                        val text = binding.menuListChipGroup.findViewById<Chip>(id).text
-                        chipTxtList.add(text.toString())
-                    }
-
-                    val newMenuList = mutableListOf<Menu>()
-
-                    if (displayMenuList.isNotEmpty()) {
-                        for (menu in displayMenuList) {
-                            if (menu.tagList?.containsAll(chipTxtList) == true) {
-                                newMenuList.add(menu)
-                            }
-                        }
-                    }
-                    Log.d("menulistfragment", "newMenuList.size=${newMenuList.size}")
+                    val chipTxtList: List<String> = createChipTxtList(chipIdList)
+                    val newMenuList: List<Menu> = sortNewMenuList(chipTxtList, displayMenuList)
                     displayMenuList.clear()
                     displayMenuList.addAll(newMenuList)
                     menuListAdapter.submitList(displayMenuList)
@@ -160,23 +115,15 @@ class MenuListFragment : Fragment(), ItemMenu {
             findNavController().navigate(MobileNavigationDirections.actionGlobalAddTagFragment())
         }
 
-        setFragmentResultListener("tagList") { requestKey, bundle ->
+        setFragmentResultListener("tagList") { _, bundle ->
             val newList = bundle.getStringArrayList("filterTagList")
-            Log.d("menulistfragment", "tagList = $newList")
 
             if (newList != null) {
-                for (tag in newList) {
-                    if(tagList.contains(tag)){
-                        val chip = binding.menuListChipGroup.findViewById<Chip>(tagList.indexOf(tag))
-                        if (chip.text == tag) {
-                            chip.isChecked = true
-                        }
-                    }
-                }
+                modifyChipCheck(newList, tagList)
             }
         }
 
-        menuListViewModel.liveUser.observe(viewLifecycleOwner){
+        menuListViewModel.liveUser.observe(viewLifecycleOwner) {
             menuListViewModel.filterLikeIdList(it)
         }
         menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
@@ -186,6 +133,66 @@ class MenuListFragment : Fragment(), ItemMenu {
 
 
         return root
+    }
+
+    private fun getFilterType(menuListFilter: String): Int {
+        return when (menuListFilter) {
+            BookType.ChefSpace.userTxt -> {
+                BookType.ChefSpace.index
+            }
+            BookType.UserSpace.userTxt -> {
+                 BookType.UserSpace.index
+            }
+            else -> {
+                -1
+            }
+        }
+    }
+
+    private fun filterBlockMenuList(menuList: List<Menu>): List<Menu> {
+        return if (UserManger.user?.blockMenuList != null) {
+            menuList.filter { itemMenu ->
+                !UserManger.user?.blockMenuList!!.contains(itemMenu.id)
+            }
+        } else {
+            menuList
+        }
+    }
+
+    private fun sortNewMenuList(
+        chipTxtList: List<String>,
+        displayMenuList: MutableList<Menu>
+    ): List<Menu> {
+        val newMenuList = mutableListOf<Menu>()
+        if (displayMenuList.isNotEmpty()) {
+            for (menu in displayMenuList) {
+                if (menu.tagList?.containsAll(chipTxtList) == true) {
+                    newMenuList.add(menu)
+                }
+            }
+        }
+        return newMenuList
+    }
+
+
+    private fun createChipTxtList(chipIdList: List<Int>): List<String> {
+        val chipTxtList = mutableListOf<String>()
+        chipIdList.forEach { id ->
+            val text = binding.menuListChipGroup.findViewById<Chip>(id).text
+            chipTxtList.add(text.toString())
+        }
+        return chipTxtList
+    }
+
+    private fun modifyChipCheck(newList: ArrayList<String>, tagList: List<String>) {
+        for (tag in newList) {
+            if (tagList.contains(tag)) {
+                val chip = binding.menuListChipGroup.findViewById<Chip>(tagList.indexOf(tag))
+                if (chip.text == tag) {
+                    chip.isChecked = true
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

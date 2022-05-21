@@ -26,16 +26,12 @@ class LikeFragment : Fragment(), ItemMenu {
     private var _binding: FragmentLikeBinding? = null
     private val binding get() = _binding!!
 
-
     private val menuListViewModel by viewModels<MenuListViewModel> { getVmFactory() }
 
     private lateinit var menuListAdapter: MenuListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private var likeList = mutableListOf<String>()
-
-
-
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -55,8 +51,6 @@ class LikeFragment : Fragment(), ItemMenu {
         binding.likeRecycler.adapter = menuListAdapter
 
 
-
-
         menuListViewModel.menuList.observe(viewLifecycleOwner){menuList->
             menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
                 likeList.clear()
@@ -66,26 +60,13 @@ class LikeFragment : Fragment(), ItemMenu {
         }
 
         menuListViewModel.liveUser.observe(viewLifecycleOwner){
-            Log.d("likefragment", "liveUser = $it")
             menuListViewModel.filterLikeIdList(it)
         }
 
-//        menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
-//            likeList.clear()
-//            likeList.addAll(it)
-//            menuListViewModel.getLikeList(it, menuList)
-//        }
 
         menuListViewModel.likeList.observe(viewLifecycleOwner) {
-            Log.d("likefragment", "liveList =  = $it")
 
-            if (it.isEmpty()) {
-                binding.chatUserEmptyImg.visibility = View.VISIBLE
-                binding.chatEmptyTxt.visibility = View.VISIBLE
-            } else {
-                binding.chatUserEmptyImg.visibility = View.GONE
-                binding.chatEmptyTxt.visibility = View.GONE
-            }
+            emptyHandle(it)
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }
@@ -93,6 +74,16 @@ class LikeFragment : Fragment(), ItemMenu {
 
         return root
 
+    }
+
+    private fun emptyHandle(likeList: List<Menu>) {
+        if (likeList.isEmpty()) {
+            binding.chatUserEmptyImg.visibility = View.VISIBLE
+            binding.chatEmptyTxt.visibility = View.VISIBLE
+        } else {
+            binding.chatUserEmptyImg.visibility = View.GONE
+            binding.chatEmptyTxt.visibility = View.GONE
+        }
     }
 
     override fun onDestroyView() {

@@ -1,20 +1,15 @@
 package com.paul.chef.ui.orderManage
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.source.ChefRepository
 
 class OrderManageViewModel(private val repository: ChefRepository) : ViewModel() {
 
-
-    private val db = FirebaseFirestore.getInstance()
 
     private val upComingList = mutableListOf<Order>()
     private val pendingList = mutableListOf<Order>()
@@ -37,8 +32,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
 
     init {
 
-        val mode = UserManger.readData("mode")
-        when (mode) {
+        when (UserManger.readData("mode")) {
             Mode.USER.index -> {
                 val userId = UserManger.user?.userId!!
                 field = "userId"
@@ -50,19 +44,14 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
                 value = chefId
             }
         }
-
-        Log.d("field", "field=$field")
-        Log.d("field", "value=$value")
-        Log.d("field", "field=$mode")
-
-
-
         liveOrderList = repository.getLiveOrder(field, value)
-
     }
 
     fun sortOrder(orderList: List<Order>) {
-        Log.d("ordermangeViewmodel", "orderList$orderList")
+        pendingList.clear()
+        upComingList.clear()
+        completedList.clear()
+        cancelledList.clear()
 
         for (order in orderList) {
 
@@ -80,19 +69,13 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
                     cancelledList.add(order)
                 }
             }
-//            if (orderList.indexOf(order) == orderList.lastIndex) {
-//                _hasData.value = true
-//            }
+            if (orderList.indexOf(order) == orderList.lastIndex) {
+                _hasData.value = true
+            }
         }
-        _hasData.value = true
-
     }
 
     fun getList(status: Int) {
-        Log.d("ordermangeViewmodel", "pendingList$pendingList")
-        Log.d("ordermangeViewmodel", "upComingList$upComingList")
-        Log.d("ordermangeViewmodel", "completedList$completedList")
-        Log.d("ordermangeViewmodel", "cancelledList$cancelledList")
 
         when (status) {
             OrderStatus.PENDING.index -> {
@@ -108,10 +91,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
                 _orderList.value = cancelledList
             }
         }
-//        pendingList.clear()
-//        upComingList.clear()
-//        completedList.clear()
-//        cancelledList.clear()
+
     }
 
 }

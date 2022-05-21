@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.paul.chef.*
-import com.paul.chef.data.Discount
 import com.paul.chef.data.Menu
-import com.paul.chef.databinding.ItemAddedDiscountBinding
 import com.paul.chef.databinding.ItemMenuDetailImagesBinding
 import com.paul.chef.databinding.ItemMenuEditImgBinding
 
-class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private val itemMenu:ItemMenu?, val menu:Menu?) : ListAdapter<String, RecyclerView.ViewHolder>(FriendListCallback()) {
+class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private val itemMenu:ItemMenu?, val menu:Menu?) : ListAdapter<String, RecyclerView.ViewHolder>(ImageListCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -91,7 +89,7 @@ class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private v
 
 }
 
-class FriendListCallback : DiffUtil.ItemCallback<String>() {
+class ImageListCallback : DiffUtil.ItemCallback<String>() {
     override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
         return oldItem == newItem
     }

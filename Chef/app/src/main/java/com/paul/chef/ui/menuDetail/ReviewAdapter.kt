@@ -1,13 +1,12 @@
 package com.paul.chef.ui.menuDetail
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.paul.chef.Block
 import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.R
@@ -84,12 +83,4 @@ class ReviewListCallback : DiffUtil.ItemCallback<Review>() {
 
 
 }
-//
-//fun bindImage(imgView: ImageView, imgUrl: String?) {
-//    imgUrl?.let {
-//        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-//        Glide.with(imgView.context)
-//            .load(imgUri)
-//            .into(imgView)
-//    }
-//}
+

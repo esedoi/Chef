@@ -65,7 +65,7 @@ class MenuListAdapter(
             val linearSnapHelper = LinearSnapHelper().apply {
                 attachToRecyclerView(binding.itemMenuImgRecycler)
             }
-            binding.itemMenuImgRecycler.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+            binding.itemMenuImgRecycler.setOnScrollChangeListener { _, _, _, _, _ ->
                 val snapView = linearSnapHelper.findSnapView(binding.itemMenuImgRecycler.layoutManager)
                 if (snapView != null) {
                     val position = binding.itemMenuImgRecycler.layoutManager?.getPosition(snapView)

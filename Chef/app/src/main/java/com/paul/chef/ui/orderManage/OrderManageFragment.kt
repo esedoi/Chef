@@ -31,14 +31,13 @@ class OrderManageFragment : Fragment() {
         val root: View = binding.root
 
 
-        val mode = UserManger.readData("mode")
-        when(mode){
+        when(UserManger.readData("mode")){
             Mode.USER.index-> {
-                binding.orderManageTitle.text = "享用美味"
+                binding.orderManageTitle.text = getString(R.string.enjoy_food)
             }
             Mode.CHEF.index-> {
 
-                binding.orderManageTitle.text = "接收訂單"
+                binding.orderManageTitle.text = getString(R.string.receive_order)
             }
         }
 

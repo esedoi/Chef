@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.R
 import com.paul.chef.data.Transaction
 import com.paul.chef.databinding.ItemTransactionChildBinding
+import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 import java.util.*
 
@@ -27,9 +28,7 @@ class TransactionChildAdapter() :
         if (holder is OrderHolder) {
             holder.bind(item)
         }
-
     }
-
 
     class OrderHolder(private var binding: ItemTransactionChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -40,9 +39,7 @@ class TransactionChildAdapter() :
                 binding.root.context.getString(R.string.transaction_number, item.orderList.size)
             val sdf = SimpleDateFormat("yyyy MM-dd")
             binding.transacDate.text = sdf.format(Date(item.time))
-            val str = String.format("%,d", item.chefReceive)
-            binding.transacChefReceive.text =
-                binding.root.context.getString(R.string.new_taiwan_dollar, str)
+            binding.transacChefReceive.text = getPrice(item.chefReceive)
         }
 
         companion object {
