@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.navArgs
 import com.paul.chef.UserManger
+import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
@@ -28,7 +30,9 @@ class MenuDetailViewModel(private val repository: ChefRepository) : ViewModel() 
     val userId = UserManger.user?.userId!!
 
 
+
     init {
+
         liveUser = repository.getLiveUser()
 
     }

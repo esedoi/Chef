@@ -194,6 +194,7 @@ class OrderDetailFragment : Fragment() {
     private fun showDishList(selectedDish: List<Dish>, container: ViewGroup?) {
         var defaultType = -1
         val and = "and"
+        displayList.clear()
         for (i in selectedDish) {
 
             _itemDisplayBinding =

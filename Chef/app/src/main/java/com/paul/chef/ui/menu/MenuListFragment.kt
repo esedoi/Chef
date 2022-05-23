@@ -66,7 +66,6 @@ class MenuListFragment : Fragment(), ItemMenu {
             }
         }
 
-
         //default menuList
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
 
@@ -80,7 +79,8 @@ class MenuListFragment : Fragment(), ItemMenu {
         }
 
 
-        val tagList = listOf("素食", "清真", "魚", "法式", "中式", "日式", "分子料理", "有機", "無麩質")
+
+        val tagList = resources.getStringArray(R.array.menu_tag_list).toList()
         tagList.forEach {
             val chip = layoutInflater.inflate(
                 R.layout.item_menu_list_chip,

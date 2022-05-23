@@ -30,9 +30,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-//    lateinit var mainViewModel: MainViewModel
-    private val mainViewModel by viewModels<MainViewModel>{ getVmFactory() }
 
+    private val mainViewModel by viewModels<MainViewModel>{ getVmFactory() }
 
 
     private lateinit var auth: FirebaseAuth
@@ -43,13 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("mainactivity", "oncreate")
-
-
-
-//        mainViewModel =
-//            ViewModelProvider(this).get(MainViewModel::class.java)
-
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -76,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         mainViewModel.newUser.observe(this) {
-            Log.d("mainactivity", "newuser=$it")
+
             if (it) {
                 navController.navigate(
                     MobileNavigationDirections.actionGlobalChefEditFragment(
@@ -178,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val currentUser = auth.currentUser
-        Log.d("mainactivity", "currentuser = $currentUser")
+
         updateUI(currentUser)
 
     }
@@ -187,7 +179,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
 
         if (user != null) {
-            Log.d("mainactivity", "useravatar=${user.photoUrl}")
+
             val email = user.email
             val name = user.displayName
             val avatar = user.photoUrl.toString()
@@ -212,14 +204,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun hideNaveView() {
-        binding.navView.visibility = View.GONE
-    }
-
-    fun showNaveView() {
-        binding.navView.visibility = View.VISIBLE
-    }
 
     fun signIn() {
 
@@ -283,7 +267,6 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.block(userId, null, blockReviewList)
         }
     }
-
 
 
 

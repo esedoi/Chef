@@ -28,7 +28,6 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
         if (holder is OrderHolder) {
             holder.bind(item,goOrderDetail, mode)
         }
-
     }
 
 
@@ -53,7 +52,6 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
             binding.itemOrderCardView.setOnClickListener {
                 goOrderDetail.goDetail(item)
             }
-
 
             val localDate: LocalDate = LocalDate.ofEpochDay(item.date)
             binding.orderDate.text = localDate.toString()

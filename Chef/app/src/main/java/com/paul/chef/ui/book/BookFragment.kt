@@ -23,12 +23,13 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.paul.chef.*
 import com.paul.chef.data.Address
+import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.ext.getVmFactory
 import java.time.LocalDate
 
 
-class BookFragment : Fragment(), OnMapReadyCallback {
+class BookFragment : Fragment(), OnMapReadyCallback{
 
     private var _binding: FragmentBookBinding? = null
     private val binding get() = _binding!!
@@ -38,6 +39,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     private var chefAddress: Address? = null
     private var userAddress: Address? = null
     private val arg: BookFragmentArgs by navArgs()
+    lateinit var menu:Menu
 
     private val bookViewModel by viewModels<BookViewModel> { getVmFactory() }
 
@@ -69,7 +71,7 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
 
         //navigation safe args
-        val menu = arg.menu
+         menu = arg.menu
 
         val selectedDish = arg.selectedDish.toList()
         bookViewModel.getAddress(menu.chefId)
@@ -401,5 +403,6 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(default))
 
     }
+
 }
 

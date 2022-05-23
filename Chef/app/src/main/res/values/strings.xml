@@ -268,6 +268,36 @@ Opting out may prevent you from receiving messages regarding the Site, the Servi
     <string name="fixed_type_intro_txt">顧客將享用以下所有菜品</string>
     <string name="optional_type_intro_txt">顧客將在下方選擇一道菜</string>
     <string name="please_enter_discount">請填寫折扣</string>
+    <string-array name="menu_tag_list">
+        <item>素食</item>
+        <item>清真</item>
+        <item>魚</item>
+        <item>法式</item>
+        <item>中式</item>
+        <item>日式</item>
+        <item>分子料理</item>
+        <item>有機</item>
+        <item>無麩質</item>
+    </string-array>
+    <string-array name="tag_list">
+        <item>素食</item>
+        <item>清真</item>
+        <item>魚</item>
+        <item>法式</item>
+        <item>中式</item>
+        <item>日式</item>
+        <item>分子料理</item>
+        <item>有機</item>
+        <item>無麩質</item>
+        <item>蛋奶素</item>
+        <item>泰式</item>
+        <item>傳統</item>
+        <item>美式</item>
+        <item>創意料理</item>
+        <item>義大利</item>
+        <item>道地風味</item>
+    </string-array>
+
 
 
 </resources>

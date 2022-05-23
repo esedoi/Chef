@@ -54,7 +54,6 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
         _binding = FragmentOrderChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         status = requireArguments().getInt("position")
 
         orderViewModel.liveOrderList.observe(viewLifecycleOwner) {
@@ -106,7 +105,6 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
                 binding.chatChefEmptyImg.visibility = View.GONE
             }
         }
-
     }
 
 

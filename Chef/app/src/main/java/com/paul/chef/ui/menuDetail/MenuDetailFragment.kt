@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide.init
 import com.paul.chef.*
 import com.paul.chef.data.Dish
 import com.paul.chef.data.Menu
@@ -62,11 +64,14 @@ class MenuDetailFragment : Fragment(), Block {
         savedInstanceState: Bundle?
     ): View {
 
+
+
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         //navigation safe args
         menu = arg.menu
+
         val dishList = menu.dishes
         val likeIdList = mutableListOf<String>()
 
@@ -147,7 +152,7 @@ class MenuDetailFragment : Fragment(), Block {
             } else {
                 review
             }
-            val filterList = reviewList.filterIndexed { index, review ->
+            val filterList = reviewList.filterIndexed { index, _ ->
                 index < 2
             }
             reviewAdapter.submitList(filterList)
@@ -168,7 +173,10 @@ class MenuDetailFragment : Fragment(), Block {
                 .show()
         }
 
+
         displayDish(dishList, container)
+
+
 
         binding.menuDetailPerPrice.text = getPrice(menu.perPrice)
         binding.detailName.text = menu.menuName
@@ -210,12 +218,16 @@ class MenuDetailFragment : Fragment(), Block {
         var defaultType = -1
         val or = getString(R.string.or)
         val and = getString(R.string.and)
+        displayList.clear()
+
 
         for (i in dishList) {
             _itemDisplayBinding =
                 ItemDisplayDishBinding.inflate(LayoutInflater.from(context), container, false)
 
+
             if (i.option == 0) {
+
                 if (i.typeNumber != defaultType) {
                     //setType
                     itemDisplayBinding.displayTitle.text = i.type
@@ -239,6 +251,7 @@ class MenuDetailFragment : Fragment(), Block {
                 nameText.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
                 displayList[defaultType].displayRG.addView(nameText)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
+
 
             } else {
                 if (i.typeNumber != defaultType) {
@@ -269,8 +282,10 @@ class MenuDetailFragment : Fragment(), Block {
                 nameRadioBtn.id = View.generateViewId()
                 nameRadioBtn.tag = i
                 nameRadioBtn.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
+
                 displayList[defaultType].displayRG.addView(nameRadioBtn)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
+
             }
         }
     }
@@ -301,12 +316,16 @@ class MenuDetailFragment : Fragment(), Block {
                     if (selectedId != -1) {
                         typeInt = i.typeNumber
                     } else {
-                        Toast.makeText(this.context, getString(R.string.please_select_dish), Toast.LENGTH_SHORT).show()
                         isRadioSelected = false
                     }
                 }
             }
         }
+
+        if( !isRadioSelected){
+            Toast.makeText(this.context, getString(R.string.please_select_dish), Toast.LENGTH_SHORT).show()
+        }
+
         return isRadioSelected
     }
 
@@ -349,8 +368,11 @@ class MenuDetailFragment : Fragment(), Block {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+
         _binding = null
+        _itemDisplayBinding = null
+
+        super.onDestroyView()
     }
 
 

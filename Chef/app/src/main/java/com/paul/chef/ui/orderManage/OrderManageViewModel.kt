@@ -1,12 +1,19 @@
 package com.paul.chef.ui.orderManage
 
 
+import android.icu.util.LocaleData
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.source.ChefRepository
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.*
+import kotlin.time.Duration.Companion.days
 
 class OrderManageViewModel(private val repository: ChefRepository) : ViewModel() {
 
@@ -48,32 +55,66 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     }
 
     fun sortOrder(orderList: List<Order>) {
-        pendingList.clear()
-        upComingList.clear()
-        completedList.clear()
-        cancelledList.clear()
 
-        for (order in orderList) {
+        if (checkCompleteOrder(orderList)) {
+            pendingList.clear()
+            upComingList.clear()
+            completedList.clear()
+            cancelledList.clear()
 
-            when (order.status) {
-                OrderStatus.PENDING.index -> {
-                    pendingList.add(order)
+            for (order in orderList) {
+
+                when (order.status) {
+                    OrderStatus.PENDING.index -> {
+                        pendingList.add(order)
+                    }
+                    OrderStatus.UPCOMING.index -> {
+                        upComingList.add(order)
+                    }
+                    OrderStatus.COMPLETED.index, OrderStatus.SCORED.index, OrderStatus.APPLIED.index -> {
+                        completedList.add(order)
+                    }
+                    OrderStatus.CANCELLED.index -> {
+                        cancelledList.add(order)
+                    }
                 }
-                OrderStatus.UPCOMING.index -> {
-                    upComingList.add(order)
+                if (orderList.indexOf(order) == orderList.lastIndex) {
+                    _hasData.value = true
                 }
-                OrderStatus.COMPLETED.index, OrderStatus.SCORED.index, OrderStatus.APPLIED.index -> {
-                    completedList.add(order)
-                }
-                OrderStatus.CANCELLED.index -> {
-                    cancelledList.add(order)
-                }
-            }
-            if (orderList.indexOf(order) == orderList.lastIndex) {
-                _hasData.value = true
             }
         }
     }
+
+    private fun checkCompleteOrder(orderList: List<Order>): Boolean {
+
+        var result = true
+
+        for (order in orderList) {
+
+            when{
+                order.status == OrderStatus.UPCOMING.index && order.date < LocalDate.now().toEpochDay()->{
+                    result = false
+                    changeOrderStatus(OrderStatus.COMPLETED.index, order)
+                }
+                order.status == OrderStatus.PENDING.index && order.date < LocalDate.now().toEpochDay()->{
+                    result = false
+                    changeOrderStatus(OrderStatus.CANCELLED.index, order)
+                }
+                else->{
+                    result = true
+                }
+            }
+
+        }
+            return result
+    }
+
+    private fun changeOrderStatus(status: Int, order: Order) {
+        viewModelScope.launch {
+            repository.updateOrderStatus(status, order.id)
+        }
+    }
+
 
     fun getList(status: Int) {
 
@@ -91,7 +132,5 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
                 _orderList.value = cancelledList
             }
         }
-
     }
-
 }

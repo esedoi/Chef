@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.chip.Chip
+import com.paul.chef.R
 import com.paul.chef.databinding.FragmentAddTagBinding
 
 class AddTagFragment : DialogFragment() {
@@ -31,25 +32,7 @@ class AddTagFragment : DialogFragment() {
         val root: View = binding.root
 
 
-        val tagList = listOf(
-            "素食",
-            "清真",
-            "魚",
-            "法式",
-            "中式",
-            "日式",
-            "分子料理",
-            "有機",
-            "無麩質",
-            "蛋奶素",
-            "泰式",
-            "傳統",
-            "小吃",
-            "美式",
-            "創意料理",
-            "義大利",
-            "道地風味"
-        )
+        val tagList = resources.getStringArray(R.array.tag_list).toList()
 
         for (i in tagList) {
             addTag(i)
