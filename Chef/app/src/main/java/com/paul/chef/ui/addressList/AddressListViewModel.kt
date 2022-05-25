@@ -38,7 +38,5 @@ class AddressListViewModel(private val repository: ChefRepository) : ViewModel()
         }
     }
 
-    fun deleteAddress(item: Address) {
-        Log.d("addressListViewModel", "item=$item")
-    }
+
 }

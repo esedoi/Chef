@@ -19,6 +19,7 @@ import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
 import com.paul.chef.ext.getVmFactory
+import timber.log.Timber
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
 
@@ -37,7 +38,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAddressListBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -94,7 +95,11 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     }
 
     override fun delete(item: Address) {
-        addressListViewModel.deleteAddress(item)
+
+        val filterList = addressList.filter {
+            it !=item
+        }
+        addressListViewModel.updateAddress(filterList)
     }
 
     override fun onDestroyView() {

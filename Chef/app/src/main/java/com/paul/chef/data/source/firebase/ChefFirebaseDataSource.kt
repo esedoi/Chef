@@ -1,6 +1,5 @@
 package com.paul.chef.data.source.firebase
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -33,11 +32,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                             }
                         }
                     } else {
-                        Log.d("firebaseDataSource", "No such document")
+                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -47,7 +46,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         FirebaseFirestore.getInstance().collection("Menu")
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
+                    Timber.w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
                 for (doc in value!!.documents) {
@@ -71,12 +70,11 @@ object ChefFirebaseDataSource : ChefDataSource {
             FirebaseFirestore.getInstance().collection("User").document(id)
                 .set(user)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("firebaseDataSource",
-                        "DocumentSnapshot added with ID: $documentReference")
+                    Timber.d("DocumentSnapshot added with ID: $documentReference")
                     continuation.resume(Result.Success(id))
                 }
                 .addOnFailureListener { e ->
-                    Log.w("firebaseDataSource", "Error adding document", e)
+                    Timber.w(e, "Error adding document")
                 }
         }
 
@@ -101,7 +99,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -117,11 +115,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                     UserManger.user = data
                     continuation.resume(Result.Success(data))
                 } else {
-                    Log.d("firebaseDataSource", "No such document")
+                    Timber.d("No such document")
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("firebaseDataSource", "get failed with ", exception)
+                Timber.d(exception, "get failed with ")
             }
     }
 
@@ -133,13 +131,12 @@ object ChefFirebaseDataSource : ChefDataSource {
             .document(userId)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
+                    Timber.w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
                 val item = value?.data
                 val json = Gson().toJson(item)
                 val data = Gson().fromJson(json, User::class.java)
-                Log.d("firebaseDatasource", "liveUser = $data")
                 UserManger.user = data
                 liveData.value = data
             }
@@ -158,11 +155,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                     UserManger.chef = data
                     continuation.resume(Result.Success(data))
                 } else {
-                    Log.d("firebaseDataSource", "No such document")
+                    Timber.d("No such document")
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("firebaseDataSource", "get failed with ", exception)
+                Timber.d(exception, "get failed with ")
             }
     }
 
@@ -172,7 +169,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             .document(id)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
+                    Timber.w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
                 val item = value?.data
@@ -202,11 +199,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                             }
                         }
                     } else {
-                        Log.d("firebaseDataSource", "No such document")
+                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -218,9 +215,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun blockReview(blockReviewList: List<String>, userId: String) {
@@ -231,9 +228,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun createChef(user: User): Result<String> = suspendCoroutine { continuation ->
@@ -246,11 +243,10 @@ object ChefFirebaseDataSource : ChefDataSource {
             FirebaseFirestore.getInstance().collection("Chef").document(id)
                 .set(temp)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("firebaseDataSource",
-                        "DocumentSnapshot added with ID: $documentReference")
+                    Timber.d("DocumentSnapshot added with ID: $documentReference")
                 }
                 .addOnFailureListener { e ->
-                    Log.w("firebaseDataSource", "Error adding document", e)
+                    Timber.w(e, "Error adding document")
                 }
 
             FirebaseFirestore.getInstance().collection("User").document(userId)
@@ -260,11 +256,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                     )
                 )
                 .addOnSuccessListener { documentReference ->
-                    Log.d("firebaseDataSource",
-                        "DocumentSnapshot added with ID: $documentReference")
+                    Timber.d("DocumentSnapshot added with ID: $documentReference")
                 }
                 .addOnFailureListener { e ->
-                    Log.w("firebaseDataSource", "Error adding document", e)
+                    Timber.w(e, "Error adding document")
                 }
         }
         continuation.resume(Result.Success(id))
@@ -285,9 +280,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
 
         FirebaseFirestore.getInstance().collection("User").document(userId)
             .update(
@@ -296,9 +291,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun updateAddress(addressList: List<Address>) {
@@ -311,13 +306,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d(
-                    "notification",
-                    "DocumentSnapshot successfully updated!"
-                )
+                Timber.d("DocumentSnapshot successfully updated!")
             }
             .addOnFailureListener { exception ->
-                Log.d("firebaseDataSource", "get failed with ", exception)
+                Timber.d(exception, "get failed with ")
             }
     }
 
@@ -326,12 +318,11 @@ object ChefFirebaseDataSource : ChefDataSource {
             FirebaseFirestore.getInstance().collection("Order").document(order.id)
                 .set(order)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("firebaseDataSource",
-                        "DocumentSnapshot added with ID: $documentReference")
+                    Timber.d("DocumentSnapshot added with ID: $documentReference")
                     continuation.resume(Result.Success(true))
                 }
                 .addOnFailureListener { e ->
-                    Log.w("firebaseDataSource", "Error adding document", e)
+                    Timber.w(e, "Error adding document")
                 }
         }
 
@@ -343,10 +334,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.tag("firebaseDataSource").w(e, "Error adding document")
             }
     }
 
@@ -363,10 +354,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 
@@ -383,10 +374,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 
@@ -407,10 +398,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d(
-                    "notification",
-                    "DocumentSnapshot successfully updated!"
-                )
+                Timber.d("DocumentSnapshot successfully updated!")
             }
             .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
@@ -421,17 +409,16 @@ object ChefFirebaseDataSource : ChefDataSource {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    Log.d("pickerViewModel", "DocumentSnapshot data: ${document.data}")
                     val item = document.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Menu::class.java)
                     continuation.resume(Result.Success(data))
                 } else {
-                    Log.d("firebaseDataSource", "No such document")
+                    Timber.d("No such document")
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("firebaseDataSource", "get failed with ", exception)
+                Timber.d(exception, "get failed with ")
             }
     }
 
@@ -441,10 +428,10 @@ object ChefFirebaseDataSource : ChefDataSource {
             .collection("Review").document(reviewId)
             .set(review)
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 
@@ -462,7 +449,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         FirebaseFirestore.getInstance().collection("Room").document(id)
             .set(room)
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
                 continuation.resume(Result.Success(id))
             }
             .addOnFailureListener { e ->
@@ -561,9 +548,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun setChat(roomId: String, msg: String, nowId: String, time: Long) {
@@ -573,10 +560,10 @@ object ChefFirebaseDataSource : ChefDataSource {
             .collection("Chat").document(id)
             .set(chat)
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 
@@ -613,10 +600,10 @@ object ChefFirebaseDataSource : ChefDataSource {
         FirebaseFirestore.getInstance().collection("Menu").document(id)
             .set(menu)
             .addOnSuccessListener { documentReference ->
-                Log.d("firebaseDataSource", "DocumentSnapshot added with ID: $documentReference")
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 
@@ -629,9 +616,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun getMenuReviewList(menuId: String): Result<List<Review>> =
@@ -652,11 +639,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                             }
                         }
                     } else {
-                        Log.d("firebaseDataSource", "No such document")
+                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -667,7 +654,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             .document(chefId).collection("dateSetting")
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
+                    Timber.w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
                 if (value != null) {
@@ -696,9 +683,9 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener {
-                Log.d("notification", "DocumentSnapshot successfully updated!")
+                Timber.d("DocumentSnapshot successfully updated!")
             }
-            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
+            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
     }
 
     override suspend fun getChefMenuList(chefId: String): Result<List<Menu>> =
@@ -719,11 +706,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                             }
                         }
                     } else {
-                        Log.d("firebaseDataSource", "No such document")
+                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -734,7 +721,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             .whereEqualTo(field, value)
             .addSnapshotListener { value, e ->
                 if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
+                    Timber.w(e, "Listen failed.")
                     return@addSnapshotListener
                 }
                 for (doc in value!!.documents) {
@@ -769,11 +756,11 @@ object ChefFirebaseDataSource : ChefDataSource {
                             }
                         }
                     } else {
-                        Log.d("firebaseDataSource", "No such document")
+                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("firebaseDataSource", "get failed with ", exception)
+                    Timber.d(exception, "get failed with ")
                 }
         }
 
@@ -781,13 +768,10 @@ object ChefFirebaseDataSource : ChefDataSource {
         FirebaseFirestore.getInstance().collection("Transaction").document(transaction.id)
             .set(transaction)
             .addOnSuccessListener { documentReference ->
-                Log.d(
-                    "firebaseDataSource",
-                    "DocumentSnapshot added with ID: $documentReference"
-                )
+                Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->
-                Log.w("firebaseDataSource", "Error adding document", e)
+                Timber.w(e, "Error adding document")
             }
     }
 }

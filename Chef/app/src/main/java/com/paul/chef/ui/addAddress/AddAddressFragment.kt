@@ -2,7 +2,6 @@ package com.paul.chef.ui.addAddress
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.paul.chef.MainActivity
 import com.paul.chef.R
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddAddressBinding
+import timber.log.Timber
 
 class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
 
@@ -92,8 +92,6 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 mMap.clear()
-                // TODO: Get info about the selected place.
-                Log.d("TAG", "Place: ${place.name}, ${place.addressComponents}, ${place.latLng}")
 
                 mark = place.latLng!!
                 mMap.addMarker(
@@ -108,8 +106,8 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
             }
 
             override fun onError(status: Status) {
-                // TODO: Handle the error.
-                Log.i("TAG", "An error occurred: $status")
+
+                Timber.d("An error occurred: $status")
             }
         })
 
