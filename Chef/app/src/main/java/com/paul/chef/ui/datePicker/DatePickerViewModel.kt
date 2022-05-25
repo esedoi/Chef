@@ -1,16 +1,12 @@
 package com.paul.chef.ui.datePicker
 
-
 import androidx.lifecycle.*
 import com.paul.chef.data.BookSetting
 import com.paul.chef.data.Chef
 import com.paul.chef.data.DateStatus
 import com.paul.chef.data.source.ChefRepository
 
-
 class DatePickerViewModel(private val repository: ChefRepository) : ViewModel() {
-
-
 
     private var _dateSetting = MutableLiveData<List<DateStatus>>()
     val dateSetting: LiveData<List<DateStatus>>
@@ -22,17 +18,13 @@ class DatePickerViewModel(private val repository: ChefRepository) : ViewModel() 
 
     var liveChef = MutableLiveData<Chef>()
 
-
     fun getChefData(chefId: String) {
-
         _dateSetting = repository.getLiveChefDateSetting(chefId)
 
         liveChef = repository.getLiveChef(chefId)
-
     }
 
-    fun getBookSetting(chef:Chef){
+    fun getBookSetting(chef: Chef) {
         _bookSetting.value = chef.bookSetting!!
     }
-
 }

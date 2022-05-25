@@ -1,12 +1,10 @@
 package com.paul.chef.ui.menuDetail
 
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide.init
 import com.paul.chef.*
 import com.paul.chef.data.Dish
 import com.paul.chef.data.Menu
@@ -28,7 +25,6 @@ import com.paul.chef.data.Review
 import com.paul.chef.databinding.*
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.util.Util.getPrice
-
 
 class MenuDetailFragment : Fragment(), Block {
 
@@ -56,25 +52,20 @@ class MenuDetailFragment : Fragment(), Block {
 
     private val arg: MenuDetailFragmentArgs by navArgs()
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
-
         _binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //navigation safe args
+        // navigation safe args
         menu = arg.menu
 
         val dishList = menu.dishes
         val likeIdList = mutableListOf<String>()
-
 
         menuDetailViewModel.liveUser.observe(viewLifecycleOwner) {
             if (it.likeList != null) {
@@ -113,7 +104,10 @@ class MenuDetailFragment : Fragment(), Block {
         if (menu.reviewRating != null) {
             binding.menuDetailRatingNum.visibility = View.VISIBLE
             binding.ratingBar4.visibility = View.VISIBLE
-            binding.menuDetailRatingNum.text = getString(R.string.number_of_review, menu.reviewNumber)
+            binding.menuDetailRatingNum.text = getString(
+                R.string.number_of_review,
+                menu.reviewNumber
+            )
             binding.ratingBar4.rating = menu.reviewRating!!
             val str: String = String.format("%.1f", menu.reviewRating)
             binding.menuDetailRatingTxt.text = str
@@ -129,14 +123,12 @@ class MenuDetailFragment : Fragment(), Block {
         }
         binding.menuDetailReviewTitle.text = getString(R.string.number_of_review, menu.reviewNumber)
 
-
-        //imagesRecyclerView
+        // imagesRecyclerView
         imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null, null, menu)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.imagesRecycler.layoutManager = layoutManager
         binding.imagesRecycler.adapter = imageAdapter
         imageAdapter.submitList(menu.images)
-
 
         reviewAdapter = ReviewAdapter(this)
         reviewLayoutManager = LinearLayoutManager(this.context)
@@ -160,7 +152,6 @@ class MenuDetailFragment : Fragment(), Block {
         }
 
         binding.menuDetailBlockMenuBtn.setOnClickListener {
-
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setTitle(getString(R.string.block_this_menu))
                 .setMessage(menu.menuName)
@@ -173,16 +164,12 @@ class MenuDetailFragment : Fragment(), Block {
                 .show()
         }
 
-
         displayDish(dishList, container)
-
-
 
         binding.menuDetailPerPrice.text = getPrice(menu.perPrice)
         binding.detailName.text = menu.menuName
         binding.detailMenuIntro.text = menu.intro
         binding.menuDetailMoreReviewBtn.setOnClickListener {
-
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalReviewPage(
                     reviewList.toTypedArray()
@@ -198,18 +185,15 @@ class MenuDetailFragment : Fragment(), Block {
             setChoiceBtn(bookSettingType)
         }
 
-
         binding.choice.setOnClickListener {
-
-                if (checkWhetherSelfMenu(menu.chefId) && checkRadioSelected(dishList, displayList)) {
-                    val selectedDish: List<Dish> = getSelectedDish(dishList, displayList)
-                    val list = selectedDish.toTypedArray()
-                    findNavController().navigate(
-                        MobileNavigationDirections.actionGlobalBookFragment(menu, list, bookSettingType)
-                    )
-                }
+            if (checkWhetherSelfMenu(menu.chefId) && checkRadioSelected(dishList, displayList)) {
+                val selectedDish: List<Dish> = getSelectedDish(dishList, displayList)
+                val list = selectedDish.toTypedArray()
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalBookFragment(menu, list, bookSettingType)
+                )
+            }
         }
-
 
         return root
     }
@@ -220,28 +204,25 @@ class MenuDetailFragment : Fragment(), Block {
         val and = getString(R.string.and)
         displayList.clear()
 
-
         for (i in dishList) {
             _itemDisplayBinding =
                 ItemDisplayDishBinding.inflate(LayoutInflater.from(context), container, false)
 
-
             if (i.option == 0) {
-
                 if (i.typeNumber != defaultType) {
-                    //setType
+                    // setType
                     itemDisplayBinding.displayTitle.text = i.type
                     defaultType = i.typeNumber
                     binding.displayDishLinear.addView(itemDisplayBinding.root)
                     displayList.add(itemDisplayBinding)
                 } else {
-                    //+and
+                    // +and
                     val andText = TextView(this.context)
                     andText.text = and
                     andText.gravity = Gravity.CENTER
                     andText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
                     andText.setTextColor(resources.getColor(R.color.teal_200))
-                    andText.setTypeface(null, Typeface.BOLD_ITALIC);
+                    andText.setTypeface(null, Typeface.BOLD_ITALIC)
                     displayList[defaultType].displayRG.addView(andText)
                 }
                 // +textview
@@ -251,17 +232,14 @@ class MenuDetailFragment : Fragment(), Block {
                 nameText.setTextAppearance(android.R.style.TextAppearance_Material_Medium)
                 displayList[defaultType].displayRG.addView(nameText)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
-
-
             } else {
                 if (i.typeNumber != defaultType) {
                     itemDisplayBinding.displayTitle.text = i.type
                     defaultType = i.typeNumber
                     binding.displayDishLinear.addView(itemDisplayBinding.root)
                     displayList.add(itemDisplayBinding)
-
                 } else {
-                    //+or
+                    // +or
                     val orText = TextView(this.context)
                     orText.text = or
                     orText.setTextAppearance(android.R.style.TextAppearance_Material_Body2)
@@ -269,7 +247,7 @@ class MenuDetailFragment : Fragment(), Block {
                     orText.setTypeface(null, Typeface.BOLD_ITALIC)
                     displayList[defaultType].displayRG.addView(orText)
                 }
-                //+radiobutton  +price
+                // +radiobutton  +price
 
                 val radioText = if (i.extraPrice != 0) {
                     "${i.name}    <I><font color = \"#03DAC5\">(+NT$ ${i.extraPrice})</font></I>"
@@ -285,16 +263,19 @@ class MenuDetailFragment : Fragment(), Block {
 
                 displayList[defaultType].displayRG.addView(nameRadioBtn)
                 displayList[defaultType].displayRG.gravity = Gravity.CENTER
-
             }
         }
     }
 
     private fun checkWhetherSelfMenu(chefId: String): Boolean {
-        return if (menu.chefId != UserManger.user?.chefId ?: "") {
+        return if (chefId != UserManger.user?.chefId ?: "") {
             true
-        }else{
-            Toast.makeText(this.context, getString(R.string.can_not_book_your_own_menu), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(
+                this.context,
+                getString(R.string.can_not_book_your_own_menu),
+                Toast.LENGTH_SHORT
+            ).show()
             false
         }
     }
@@ -322,7 +303,7 @@ class MenuDetailFragment : Fragment(), Block {
             }
         }
 
-        if( !isRadioSelected){
+        if (!isRadioSelected) {
             Toast.makeText(this.context, getString(R.string.please_select_dish), Toast.LENGTH_SHORT).show()
         }
 
@@ -333,7 +314,6 @@ class MenuDetailFragment : Fragment(), Block {
         dishList: List<Dish>,
         displayList: MutableList<ItemDisplayDishBinding>
     ): List<Dish> {
-
         var typeInt = -1
         val selectedDish = mutableListOf<Dish>()
         for (i in dishList) {
@@ -364,42 +344,34 @@ class MenuDetailFragment : Fragment(), Block {
             binding.choice.isEnabled = false
             binding.choice.text = getString(R.string.not_open)
         }
-
     }
 
     override fun onDestroyView() {
-
         _binding = null
         _itemDisplayBinding = null
 
         super.onDestroyView()
     }
 
-
-    override fun blockReview(blockUserId: String) {
-
+    override fun blockReview(userId: String) {
         val blockReviewList = mutableListOf<String>()
         if (UserManger.user?.blockReviewList != null) {
             blockReviewList.addAll(UserManger.user?.blockMenuList!!)
         }
-        blockReviewList.add(blockUserId)
+        blockReviewList.add(userId)
         (activity as MainActivity).block(UserManger.user?.userId!!, null, blockReviewList)
         UserManger.user?.blockReviewList = blockReviewList
         menuDetailViewModel.getReview(menu.id)
-
     }
 
-    override fun blockMenu(blockMenuId: String) {
-
+    override fun blockMenu(menuId: String) {
         val blockMenuList = mutableListOf<String>()
         if (UserManger.user?.blockMenuList != null) {
             blockMenuList.addAll(UserManger.user?.blockMenuList!!)
         }
-        blockMenuList.add(blockMenuId)
+        blockMenuList.add(menuId)
         (activity as MainActivity).block(UserManger.user?.userId!!, blockMenuList, null)
         UserManger.user?.blockMenuList = blockMenuList
         findNavController().navigateUp()
-
     }
-
 }

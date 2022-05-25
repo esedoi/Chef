@@ -1,6 +1,5 @@
 package com.paul.chef.ui.chef
 
-
 import androidx.lifecycle.*
 import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
@@ -21,16 +20,13 @@ class ChefViewModel(private val repository: ChefRepository) : ViewModel() {
     val reviewList: LiveData<List<Review>>
         get() = _reviewList
 
-
     private val menuIdList = mutableListOf<String>()
 
     private var _liveMenu = MutableLiveData<List<Menu>>()
     val liveMenu: LiveData<List<Menu>>
         get() = _liveMenu
 
-
     fun getChef(chefId: String) {
-
         _chefInfo = repository.getLiveChef(chefId)
 
         menuIdList.clear()
@@ -46,6 +42,9 @@ class ChefViewModel(private val repository: ChefRepository) : ViewModel() {
                         }
                     }
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
@@ -63,9 +62,11 @@ class ChefViewModel(private val repository: ChefRepository) : ViewModel() {
                             _reviewList.value = dataList
                         }
                     }
+                    is Result.Error -> TODO()
+                    is Result.Fail -> TODO()
+                    Result.Loading -> TODO()
                 }
             }
         }
     }
-
 }

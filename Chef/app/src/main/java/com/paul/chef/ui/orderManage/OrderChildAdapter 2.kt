@@ -1,6 +1,5 @@
 package com.paul.chef.ui.orderManage
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,8 +14,10 @@ import com.paul.chef.databinding.ItemOrderChildBinding
 import com.paul.chef.ui.menuDetail.bindImage
 import java.time.LocalDate
 
-class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
-
+class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode: Int) :
+    ListAdapter<Order, RecyclerView.ViewHolder>(
+        OrderCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return OrderHolder.from(parent)
@@ -26,25 +27,23 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
         val item = getItem(position)
 
         if (holder is OrderHolder) {
-            holder.bind(item,goOrderDetail, mode)
+            holder.bind(item, goOrderDetail, mode)
         }
     }
-
 
     class OrderHolder(private var binding: ItemOrderChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
-        fun bind(item: Order, goOrderDetail: GoOrderDetail, mode:Int) {
+        fun bind(item: Order, goOrderDetail: GoOrderDetail, mode: Int) {
             val outlineProvider = ProfileOutlineProvider()
-            binding.imageView6.outlineProvider =outlineProvider
+            binding.imageView6.outlineProvider = outlineProvider
 
-            when(mode){
-                Mode.CHEF.index->{
+            when (mode) {
+                Mode.CHEF.index -> {
                     binding.itemOrderName.text = item.userName
                     bindImage(binding.imageView6, item.userAvatar)
                 }
-                Mode.USER.index->{
+                Mode.USER.index -> {
                     binding.itemOrderName.text = item.chefName
                     bindImage(binding.imageView6, item.chefAvatar)
                 }
@@ -63,12 +62,15 @@ class OrderChildAdapter(private val goOrderDetail: GoOrderDetail, val mode:Int) 
         companion object {
             fun from(parent: ViewGroup): OrderHolder {
                 val order =
-                    ItemOrderChildBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemOrderChildBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return OrderHolder(order)
             }
         }
     }
-
 }
 
 class OrderCallback : DiffUtil.ItemCallback<Order>() {
@@ -79,6 +81,4 @@ class OrderCallback : DiffUtil.ItemCallback<Order>() {
     override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

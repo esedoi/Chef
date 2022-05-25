@@ -15,19 +15,15 @@ class ChatRoomAdapter(val nowId: String) :
     private val LEFT = 0
     private val RIGHT = 1
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
         return when (viewType) {
             0 -> LeftHolder.from(parent)
             else -> RightHolder.from(parent)
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-
 
         when (holder) {
             is LeftHolder -> {
@@ -37,22 +33,17 @@ class ChatRoomAdapter(val nowId: String) :
                 holder.bind(item)
             }
         }
-
     }
 
     override fun getItemViewType(position: Int): Int {
-
         return when (getItem(position).senderId) {
             nowId -> RIGHT
             else -> LEFT
         }
-
     }
-
 
     class LeftHolder(private var binding: ItemLeftChatBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
 
         fun bind(item: Chat) {
             binding.message.text = item.message
@@ -70,7 +61,6 @@ class ChatRoomAdapter(val nowId: String) :
     class RightHolder(private var binding: ItemRightChatBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(item: Chat) {
             binding.message.text = item.message
         }
@@ -83,7 +73,6 @@ class ChatRoomAdapter(val nowId: String) :
             }
         }
     }
-
 }
 
 class ChatRoomCallback : DiffUtil.ItemCallback<Chat>() {
@@ -94,6 +83,4 @@ class ChatRoomCallback : DiffUtil.ItemCallback<Chat>() {
     override fun areContentsTheSame(oldItem: Chat, newItem: Chat): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

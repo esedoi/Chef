@@ -1,34 +1,28 @@
 package com.paul.chef.ui.menu
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.paul.chef.ImgRecyclerType
-import com.paul.chef.ItemMenu
-import com.paul.chef.MenuType
-import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.*
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.ItemMenuListBinding
 import com.paul.chef.databinding.ItemMenuSimpleBinding
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
 import com.paul.chef.ui.menuDetail.bindImage
+import com.paul.chef.util.Util.getPerPrice
 
 class MenuListAdapter(
     private val itemMenu: ItemMenu?,
     private val menuViewModel: MenuListViewModel?,
-    val type: Int
+    val type: Int,
 ) : ListAdapter<Menu, RecyclerView.ViewHolder>(MenuCallback()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        return FullHolder.from(parent)
         return when (type) {
             MenuType.FULL.index -> FullHolder.from(parent)
             else -> SimpleHolder.from(parent)
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -37,15 +31,12 @@ class MenuListAdapter(
         when (holder) {
             is FullHolder -> {
                 holder.bind(item, itemMenu, menuViewModel)
-
             }
             is SimpleHolder -> {
                 holder.bind(item, itemMenu)
             }
         }
-
     }
-
 
     class FullHolder(private var binding: ItemMenuListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -53,26 +44,25 @@ class MenuListAdapter(
         private lateinit var imageAdapter: DetailImagesAdapter
         private var layoutManager: RecyclerView.LayoutManager? = null
 
-
         fun bind(item: Menu, itemMenu: ItemMenu?, menuViewModel: MenuListViewModel?) {
-
             val context = itemView.context
             imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE.index, null, itemMenu!!, item)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.itemMenuImgRecycler.layoutManager = layoutManager
             binding.itemMenuImgRecycler.adapter = imageAdapter
-            binding.itemMenuImgRecycler.onFlingListener = null;
+            binding.itemMenuImgRecycler.onFlingListener = null
             val linearSnapHelper = LinearSnapHelper().apply {
                 attachToRecyclerView(binding.itemMenuImgRecycler)
             }
             binding.itemMenuImgRecycler.setOnScrollChangeListener { _, _, _, _, _ ->
-                val snapView = linearSnapHelper.findSnapView(binding.itemMenuImgRecycler.layoutManager)
+                val snapView = linearSnapHelper.findSnapView(
+                    binding.itemMenuImgRecycler.layoutManager
+                )
                 if (snapView != null) {
                     val position = binding.itemMenuImgRecycler.layoutManager?.getPosition(snapView)
-                   binding.itemMenuPositionTxt.text = "${position?.plus(1)}/${item.images.size}"
+                    binding.itemMenuPositionTxt.text = "${position?.plus(1)}/${item.images.size}"
                 }
             }
-
 
             itemView.setOnClickListener {
                 itemMenu.goDetail(item)
@@ -96,14 +86,14 @@ class MenuListAdapter(
                 binding.ratingBar2.rating = item.reviewRating
                 val str: String = String.format("%.1f", item.reviewRating)
                 binding.itemMenuRating.text = str
-                binding.itemMenuRatingNum.text = item.reviewNumber.toString() + " 則評價"
+                binding.itemMenuRatingNum.text =
+                    binding.root.context.getString(R.string.number_of_review, item.reviewNumber)
             } else {
                 binding.itemMenuRating.visibility = View.GONE
                 binding.ratingBar2.visibility = View.GONE
                 binding.itemMenuRatingNum.visibility = View.GONE
             }
-            binding.itemMenuPerPrice.text = "NT$" + item.perPrice.toString() + "/人"
-
+            binding.itemMenuPerPrice.text = getPerPrice(item.perPrice)
         }
 
         companion object {
@@ -115,19 +105,16 @@ class MenuListAdapter(
         }
     }
 
-
     class SimpleHolder(private var binding: ItemMenuSimpleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Menu, itemMenu:ItemMenu?) {
+        fun bind(item: Menu, itemMenu: ItemMenu?) {
             itemView.setOnClickListener {
                 itemMenu?.goDetail(item)
             }
 
-
             binding.itemMenuSimpleTitle.text = item.menuName
             bindImage(binding.itemMenuSimpleImg, item.images[0])
-
         }
 
         companion object {
@@ -142,8 +129,6 @@ class MenuListAdapter(
             }
         }
     }
-
-
 }
 
 class MenuCallback : DiffUtil.ItemCallback<Menu>() {
@@ -154,5 +139,4 @@ class MenuCallback : DiffUtil.ItemCallback<Menu>() {
     override fun areContentsTheSame(oldItem: Menu, newItem: Menu): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
 }

@@ -8,14 +8,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.*
 import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.FragmentChefEditBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.datePicker.DatePickerViewModel
 import com.paul.chef.ui.menuDetail.bindImage
 
 class ChefEditFragment : Fragment() {
@@ -27,13 +25,11 @@ class ChefEditFragment : Fragment() {
 
     private val chefEditViewModel by viewModels<ChefEditViewModel> { getVmFactory() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentChefEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -60,7 +56,7 @@ class ChefEditFragment : Fragment() {
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
 
-        setFragmentResultListener("requestImg") { requestKey, bundle ->
+        setFragmentResultListener("requestImg") { _, bundle ->
             val result = bundle.getString("downloadUri")
             avatar = result
             bindImage(binding.profileEditImg, avatar)
@@ -75,18 +71,19 @@ class ChefEditFragment : Fragment() {
         }
 
         binding.profileEditConfirmBtn.setOnClickListener {
-
             val name = binding.profileEditNameLayout.editText?.text.toString()
             val intro = binding.profileEditIntro.editText?.text.toString()
 
-
             if (name == "" || intro == "") {
-                Toast.makeText(this.context, getString(R.string.field_not_completet), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.field_not_completet),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 val newProfile = ProfileInfo(name, profileInfo.email, avatar, intro)
                 when (editType) {
                     EditPageType.CREATE_USER.index -> {
-
                         chefEditViewModel.createUser(newProfile)
                     }
                     EditPageType.EDIT_PROFILE.index -> {
@@ -97,8 +94,6 @@ class ChefEditFragment : Fragment() {
                 }
             }
         }
-
-
 
         return root
     }

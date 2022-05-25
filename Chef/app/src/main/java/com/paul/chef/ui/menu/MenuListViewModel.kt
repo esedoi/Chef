@@ -1,14 +1,8 @@
 package com.paul.chef.ui.menu
 
-import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.BookSettingType
 import com.paul.chef.BookType
-import com.paul.chef.UserManger
-import com.paul.chef.data.Chef
 import com.paul.chef.data.Menu
 import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
@@ -17,11 +11,9 @@ import kotlinx.coroutines.launch
 
 class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
 
-
     private var _menuList = MutableLiveData<List<Menu>>()
     val menuList: LiveData<List<Menu>>
         get() = _menuList
-
 
     private var _likeIdList = MutableLiveData<List<String>>()
     val likeIdList: LiveData<List<String>>
@@ -31,44 +23,36 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
     val likeList: LiveData<List<Menu>>
         get() = _likeList
 
-
-
     var liveUser = MutableLiveData<User>()
 
     val chefList = mutableListOf<String>()
-
-    val userId = UserManger.user?.userId!!
 
     init {
         liveUser = repository.getLiveUser()
         _menuList = repository.getLiveMenuList()
     }
 
-    fun filterLikeIdList(user:User){
-            if(user.likeList!=null){
-                _likeIdList.value = user.likeList!!
-            }else{
-                _likeIdList.value = emptyList()
-            }
+    fun filterLikeIdList(user: User) {
+        if (user.likeList != null) {
+            _likeIdList.value = user.likeList!!
+        } else {
+            _likeIdList.value = emptyList()
+        }
     }
 
-    fun getLikeList(newList: List<String>, menuList:List<Menu>) {
-
-
+    fun getLikeList(newList: List<String>, menuList: List<Menu>) {
         if (newList.isEmpty()) {
             _likeList.value = emptyList()
         } else {
-
             val likeMenuList = menuList.filter {
                 newList.contains(it.id)
             }
 
-            _likeList.value =  likeMenuList
+            _likeList.value = likeMenuList
         }
     }
 
     fun getChefId(bookType: Int) {
-
         val settingType = mutableListOf<Int>()
         settingType.add(BookSettingType.AcceptAll.index)
         if (bookType == BookType.UserSpace.index) {
@@ -81,12 +65,14 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
                 is Result.Success -> {
                     getFilterMenuList(result.data)
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
 
     fun getFilterMenuList(chefIdList: List<String>) {
-
         viewModelScope.launch {
             when (val result = repository.getMenuList()) {
                 is Result.Success -> {
@@ -96,6 +82,9 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
                     _menuList.value = filterList
                     chefList.clear()
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
@@ -105,5 +94,4 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
             repository.updateLikeList(newList)
         }
     }
-
 }

@@ -16,10 +16,11 @@ import com.paul.chef.ext.getVmFactory
 
 class TransactionChildFragment : Fragment() {
 
-
     private var _binding: FragmentTransactionChildBinding? = null
     private val binding get() = _binding!!
-    private val transactionViewModel: TransactionViewModel by viewModels({ requireParentFragment() }) { getVmFactory() }
+    private val transactionViewModel: TransactionViewModel by viewModels(
+        { requireParentFragment() }
+    ) { getVmFactory() }
 
     private lateinit var transactionUnpaidAdapter: TransactionUnpaidAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -40,19 +41,17 @@ class TransactionChildFragment : Fragment() {
         }
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
 
-    ): View? {
-
+        ): View {
         _binding = FragmentTransactionChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         status = requireArguments().getInt("position")
-
 
         when (status) {
             0 -> {
@@ -95,7 +94,6 @@ class TransactionChildFragment : Fragment() {
             }
         }
 
-
         return root
     }
 
@@ -107,7 +105,6 @@ class TransactionChildFragment : Fragment() {
             binding.chatChefEmptyImg.visibility = View.GONE
             binding.chatEmptyTxt.visibility = View.GONE
         }
-
     }
 
     private fun orderListEmptyHandle(it: List<Order>) {
@@ -120,11 +117,8 @@ class TransactionChildFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.paul.chef.factory
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.paul.chef.MainViewModel
@@ -27,74 +26,73 @@ import com.paul.chef.ui.userProfile.UserProfileViewModel
 
 class ViewModelFactory constructor(
     private val repository: ChefRepository
-):ViewModelProvider.NewInstanceFactory()  {
+) : ViewModelProvider.NewInstanceFactory() {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T  =
-        with(modelClass){
-            when{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+        with(modelClass) {
+            when {
                 isAssignableFrom(MainViewModel::class.java) ->
                     MainViewModel(repository)
 
-                isAssignableFrom(UserProfileViewModel::class.java)->
+                isAssignableFrom(UserProfileViewModel::class.java) ->
                     UserProfileViewModel(repository)
 
-                isAssignableFrom(ReviewViewModel::class.java)->
+                isAssignableFrom(ReviewViewModel::class.java) ->
                     ReviewViewModel(repository)
 
-                isAssignableFrom(OrderDetailViewModel::class.java)->
+                isAssignableFrom(OrderDetailViewModel::class.java) ->
                     OrderDetailViewModel(repository)
 
-                isAssignableFrom(MenuEditViewModel::class.java)->
+                isAssignableFrom(MenuEditViewModel::class.java) ->
                     MenuEditViewModel(repository)
 
-                isAssignableFrom(MenuDetailViewModel::class.java)->
+                isAssignableFrom(MenuDetailViewModel::class.java) ->
                     MenuDetailViewModel(repository)
 
-                isAssignableFrom(MenuListViewModel::class.java)->
+                isAssignableFrom(MenuListViewModel::class.java) ->
                     MenuListViewModel(repository)
 
-                isAssignableFrom(DatePickerViewModel::class.java)->
+                isAssignableFrom(DatePickerViewModel::class.java) ->
                     DatePickerViewModel(repository)
 
-                isAssignableFrom(ChefEditViewModel::class.java)->
+                isAssignableFrom(ChefEditViewModel::class.java) ->
                     ChefEditViewModel(repository)
 
-                isAssignableFrom(ChefViewModel::class.java)->
+                isAssignableFrom(ChefViewModel::class.java) ->
                     ChefViewModel(repository)
 
-                isAssignableFrom(ChatRoomViewModel::class.java)->
+                isAssignableFrom(ChatRoomViewModel::class.java) ->
                     ChatRoomViewModel(repository)
 
-                isAssignableFrom(ChatListViewModel::class.java)->
+                isAssignableFrom(ChatListViewModel::class.java) ->
                     ChatListViewModel(repository)
 
-                isAssignableFrom(CalendarSettingViewModel::class.java)->
+                isAssignableFrom(CalendarSettingViewModel::class.java) ->
                     CalendarSettingViewModel(repository)
 
-                isAssignableFrom(CalendarViewModel::class.java)->
+                isAssignableFrom(CalendarViewModel::class.java) ->
                     CalendarViewModel(repository)
 
-                isAssignableFrom(PickerViewModel::class.java)->
+                isAssignableFrom(PickerViewModel::class.java) ->
                     PickerViewModel(repository)
 
-                isAssignableFrom(BookSettingViewModel::class.java)->
+                isAssignableFrom(BookSettingViewModel::class.java) ->
                     BookSettingViewModel(repository)
 
-                isAssignableFrom(BookViewModel::class.java)->
+                isAssignableFrom(BookViewModel::class.java) ->
                     BookViewModel(repository)
 
-                isAssignableFrom(AddressListViewModel::class.java)->
+                isAssignableFrom(AddressListViewModel::class.java) ->
                     AddressListViewModel(repository)
 
-                isAssignableFrom(OrderManageViewModel::class.java)->
+                isAssignableFrom(OrderManageViewModel::class.java) ->
                     OrderManageViewModel(repository)
 
-                isAssignableFrom(TransactionViewModel::class.java)->
+                isAssignableFrom(TransactionViewModel::class.java) ->
                     TransactionViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
-
-        }  as T
-    }
+        } as T
+}

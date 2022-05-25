@@ -1,22 +1,18 @@
 package com.paul.chef.ui.bottomSheetPicker
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paul.chef.PickerType
 import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetPickerBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.calendar.CalendarViewModel
-
 
 class PickerBottomSheet : BottomSheetDialogFragment() {
 
@@ -25,7 +21,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
 
     private val pickerViewModel by viewModels<PickerViewModel> { getVmFactory() }
 
-    //safe args
+    // safe args
     private val arg: PickerBottomSheetArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +32,8 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = BottomSheetPickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -51,11 +47,10 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         var pickSessionList = emptyList<String>()
         var pickTimeList = emptyList<String>()
 
-        val timeList:List<String> = createTimeList()
+        val timeList: List<String> = createTimeList()
 
         pickerViewModel.bookSetting.observe(viewLifecycleOwner) {
             when (pickerType) {
-
                 PickerType.PICK_SESSION_CAPACITY.index -> {
                     binding.numberPicker.minValue = 1
                     binding.numberPicker.maxValue = it.chefSpace?.sessionCapacity ?: 0
@@ -79,7 +74,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                     val startTimeIndex = timeList.indexOf(it.userSpace?.starTime)
                     val endTimeIndex = timeList.indexOf(it.userSpace?.endTime)
                     binding.pickerTitle.text = getString(R.string.time)
-                    pickTimeList = timeList.filterIndexed { index, s ->
+                    pickTimeList = timeList.filterIndexed { index, _ ->
                         index in startTimeIndex..endTimeIndex
                     }
                     binding.numberPicker.minValue = 0
@@ -87,13 +82,10 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                     val arrayList = pickTimeList.toTypedArray()
                     binding.numberPicker.displayedValues = arrayList
                 }
-
             }
-
         }
 
         when (pickerType) {
-
             PickerType.SET_SESSION_TIME.index, PickerType.SET_START_TIME.index, PickerType.SET_END_TIME.index -> {
                 binding.numberPicker.minValue = 0
                 binding.numberPicker.maxValue = timeList.size - 1
@@ -107,7 +99,6 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                 binding.numberPicker.maxValue = 30
                 binding.pickerTitle.text = getString(R.string.people_number)
             }
-
         }
         binding.pickerCancel.setOnClickListener {
             dismiss()
@@ -135,13 +126,11 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                     key = PickerType.SET_START_TIME.value
                     time = timeList[value]
                     setFragmentResult(key, bundleOf(key to time))
-
                 }
                 PickerType.SET_END_TIME.index -> {
                     key = PickerType.SET_END_TIME.value
                     time = timeList[value]
                     setFragmentResult(key, bundleOf(key to time))
-
                 }
                 PickerType.SET_CAPACITY.index -> {
                     key = PickerType.SET_CAPACITY.value
@@ -156,13 +145,11 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
                     key = PickerType.PICK_TIME.value
                     time = pickTimeList[value]
                     setFragmentResult(key, bundleOf(key to time))
-
                 }
                 PickerType.PICK_SESSION_TIME.index -> {
                     key = PickerType.PICK_SESSION_TIME.value
                     time = pickSessionList[value]
                     setFragmentResult(key, bundleOf(key to time))
-
                 }
                 PickerType.PICK_CAPACITY.index -> {
                     key = PickerType.PICK_CAPACITY.value
@@ -179,7 +166,7 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         return root
     }
 
-    private fun createTimeList():List<String> {
+    private fun createTimeList(): List<String> {
         var time: String
         val zero = "00"
         val thirty = "30"
@@ -198,5 +185,4 @@ class PickerBottomSheet : BottomSheetDialogFragment() {
         }
         return timeList
     }
-
 }

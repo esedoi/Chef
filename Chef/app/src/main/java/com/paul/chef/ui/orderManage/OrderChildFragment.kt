@@ -2,13 +2,11 @@ package com.paul.chef.ui.orderManage
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +14,6 @@ import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.addressList.AddressListViewModel
 
 class OrderChildFragment : Fragment(), GoOrderDetail {
 
@@ -30,7 +27,6 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
 
     private var status = -1
 
-
     companion object {
 
         fun newInstance(position: Int): OrderChildFragment {
@@ -43,14 +39,13 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
         }
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
 
-    ): View? {
-
+        ): View {
         _binding = FragmentOrderChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -72,11 +67,10 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
 
         val mode = UserManger.readData("mode")
 
-        orderChildAdapter = mode?.let { OrderChildAdapter(this, it) }!!
+        orderChildAdapter = OrderChildAdapter(this, mode)
         layoutManager = LinearLayoutManager(this.context)
         binding.orderRecycler.layoutManager = layoutManager
         binding.orderRecycler.adapter = orderChildAdapter
-
 
         return root
     }
@@ -106,7 +100,6 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

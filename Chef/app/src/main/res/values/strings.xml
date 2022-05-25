@@ -13,6 +13,7 @@
     <string name="title_chef_profile">個人</string>
     <string name="map_api_key_name">com.google.android.geo.API_KEY</string>
     <string name="new_taiwan_dollar">NT$%1$s</string>
+    <string name="new_taiwan_dollar_per_price">NT$%1$s /人</string>
     <string name="support_by">由 %1$s 提供</string>
     <string name="menu_created_by">%1$s 建立的菜單</string>
     <string name="people">%1$d 位</string>
@@ -268,6 +269,17 @@ Opting out may prevent you from receiving messages regarding the Site, the Servi
     <string name="fixed_type_intro_txt">顧客將享用以下所有菜品</string>
     <string name="optional_type_intro_txt">顧客將在下方選擇一道菜</string>
     <string name="please_enter_discount">請填寫折扣</string>
+    <string name="please_set_capacity_session">請設定人數與場次</string>
+    <string name="please_set_capacity_time">請設定人數與時間</string>
+    <string name="please_set_calendar_default">請選擇可預訂期間</string>
+    <string name="tool_bar_book_fragment">確認訂單</string>
+    <string name="tool_bar_menu_edit_fragment">完成菜單</string>
+    <string name="tool_bar_calendar_set">可訂狀態</string>
+    <string name="tool_bar_book_set">預訂設定</string>
+    <string name="tool_bar_order_detail_fragment">訂單資訊</string>
+    <string name="tool_bar_display_chef_fragment">廚師資訊</string>
+    <string name="tool_bar_terms_fragment">Terms of Use</string>
+    <string name="tool_bar_chat_room">聊天室</string>
     <string-array name="menu_tag_list">
         <item>素食</item>
         <item>清真</item>

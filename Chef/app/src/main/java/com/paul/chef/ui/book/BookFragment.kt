@@ -1,6 +1,5 @@
 package com.paul.chef.ui.book
 
-
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.os.Bundle
@@ -28,8 +27,7 @@ import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.ext.getVmFactory
 import java.time.LocalDate
 
-
-class BookFragment : Fragment(), OnMapReadyCallback{
+class BookFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentBookBinding? = null
     private val binding get() = _binding!!
@@ -39,22 +37,19 @@ class BookFragment : Fragment(), OnMapReadyCallback{
     private var chefAddress: Address? = null
     private var userAddress: Address? = null
     private val arg: BookFragmentArgs by navArgs()
-    lateinit var menu:Menu
+    lateinit var menu: Menu
 
     private val bookViewModel by viewModels<BookViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-
-
         _binding = FragmentBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        //map
+        // map
         val info = (activity as MainActivity).applicationContext.packageManager
             .getApplicationInfo(
                 (activity as MainActivity).packageName,
@@ -69,9 +64,8 @@ class BookFragment : Fragment(), OnMapReadyCallback{
         mapFragment.getMapAsync(this)
         placesClient = Places.createClient(requireActivity())
 
-
-        //navigation safe args
-         menu = arg.menu
+        // navigation safe args
+        menu = arg.menu
 
         val selectedDish = arg.selectedDish.toList()
         bookViewModel.getAddress(menu.chefId)
@@ -106,10 +100,8 @@ class BookFragment : Fragment(), OnMapReadyCallback{
             }
         }
 
-
-        //price result
+        // price result
         bookViewModel.priceResult.observe(viewLifecycleOwner) {
-
             if (it["isDiscount"] == 1) {
                 binding.apply {
                     orginalPerPrice.visibility = View.VISIBLE
@@ -150,7 +142,6 @@ class BookFragment : Fragment(), OnMapReadyCallback{
             }
         }
 
-
         binding.bookDateSelect.setOnClickListener {
             findNavController().navigate(
                 MobileNavigationDirections.actionGlobalDatePicker3(menu.chefId)
@@ -164,16 +155,14 @@ class BookFragment : Fragment(), OnMapReadyCallback{
             binding.bookDateSelect.setText(localDate.toString())
         }
 
-
         var typeId: Int
 
         binding.bookPeopleSelect.setOnClickListener {
-
             typeId = binding.bookChipGroup.checkedChipId
 
             if (whetherTypeSelected(typeId)) {
                 val typeInt: Int = getTypeInt(typeId)
-                val safeArg:Int = getPeopleSafeArg(typeInt)
+                val safeArg: Int = getPeopleSafeArg(typeInt)
                 findNavController().navigate(
                     MobileNavigationDirections.actionGlobalPickerBottomSheet(safeArg, menu.chefId)
                 )
@@ -185,17 +174,15 @@ class BookFragment : Fragment(), OnMapReadyCallback{
 
             if (whetherTypeSelected(typeId)) {
                 val typeInt = getTypeInt(typeId)
-                val safeArg:Int = getTimeSafeArg(typeInt)
+                val safeArg: Int = getTimeSafeArg(typeInt)
                 findNavController().navigate(
                     MobileNavigationDirections.actionGlobalPickerBottomSheet(safeArg, menu.chefId)
                 )
             }
         }
 
-
         var pickPeople = -1
         var pickTime = ""
-
 
         binding.bookChipGroup.setOnCheckedChangeListener { group, checkedId ->
             typeId = group.checkedChipId
@@ -205,7 +192,6 @@ class BookFragment : Fragment(), OnMapReadyCallback{
             binding.bookPeopleSelect.text?.clear()
             binding.bookDateSelect.text?.clear()
             binding.bookAddress.text = "--"
-
 
             when (checkedId) {
                 R.id.book_user_space_chip -> {
@@ -241,7 +227,6 @@ class BookFragment : Fragment(), OnMapReadyCallback{
                 )
             )
         }
-
 
         setFragmentResultListener(PickerType.PICK_TIME.value) { _, bundle ->
             pickTime = bundle.getString(PickerType.PICK_TIME.value).toString()
@@ -282,7 +267,6 @@ class BookFragment : Fragment(), OnMapReadyCallback{
             binding.bookAddress.text = addressTxt
         }
 
-
         binding.pay.setOnClickListener {
             typeId = binding.bookChipGroup.checkedChipId
             val typeInt = getTypeInt(typeId)
@@ -307,7 +291,9 @@ class BookFragment : Fragment(), OnMapReadyCallback{
 
         bookViewModel.bookDone.observe(viewLifecycleOwner) {
             if (it) {
-                findNavController().navigate(MobileNavigationDirections.actionGlobalDoneFragment("orderMange"))
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalDoneFragment("orderMange")
+                )
             }
         }
 
@@ -315,7 +301,7 @@ class BookFragment : Fragment(), OnMapReadyCallback{
     }
 
     private fun getPeopleSafeArg(typeInt: Int): Int {
-        return  if (typeInt == BookType.UserSpace.index) {
+        return if (typeInt == BookType.UserSpace.index) {
             PickerType.PICK_CAPACITY.index
         } else {
             PickerType.PICK_SESSION_CAPACITY.index
@@ -328,12 +314,15 @@ class BookFragment : Fragment(), OnMapReadyCallback{
         } else {
             PickerType.PICK_SESSION_TIME.index
         }
-
     }
 
     private fun whetherTypeSelected(typeId: Int): Boolean {
         return if (typeId == -1) {
-            Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this.context,
+                getString(R.string.please_select_space),
+                Toast.LENGTH_SHORT
+            ).show()
             false
         } else {
             true
@@ -345,26 +334,47 @@ class BookFragment : Fragment(), OnMapReadyCallback{
         typeId: Int,
         pickPeople: Int,
         pickTime: String,
-        address: Address?
+        address: Address?,
     ): Boolean {
         return when {
             selectDate == null -> {
-                Toast.makeText(this.context, getString(R.string.please_select_date), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_select_date),
+                    Toast.LENGTH_SHORT
+                ).show()
                 false
             }
             typeId == -1 -> {
-                Toast.makeText(this.context, getString(R.string.please_select_space), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_select_space),
+                    Toast.LENGTH_SHORT
+                ).show()
                 false
             }
             pickPeople == -1 -> {
-                Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_select_people),
+                    Toast.LENGTH_SHORT
+                ).show()
                 false
             }
             pickTime == "" -> {
-                Toast.makeText(this.context, getString(R.string.please_select_time), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_select_time),
+                    Toast.LENGTH_SHORT
+                ).show()
                 false
             }
-            address == null -> { Toast.makeText(this.context, getString(R.string.please_select_address), Toast.LENGTH_SHORT).show()
+            address == null -> {
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_select_address),
+                    Toast.LENGTH_SHORT
+                ).show()
                 false
             }
             else -> {
@@ -379,7 +389,6 @@ class BookFragment : Fragment(), OnMapReadyCallback{
         } else {
             userAddress
         }
-
     }
 
     private fun getTypeInt(typeId: Int): Int {
@@ -390,19 +399,14 @@ class BookFragment : Fragment(), OnMapReadyCallback{
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
         mMap = googleMap
         val default = LatLng(25.0, 121.0)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(default))
-
     }
-
 }
-

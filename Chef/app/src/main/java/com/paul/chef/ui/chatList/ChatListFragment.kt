@@ -2,10 +2,10 @@ package com.paul.chef.ui.chatList
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +15,7 @@ import com.paul.chef.data.Room
 import com.paul.chef.databinding.FragmentChatListBinding
 import com.paul.chef.ext.getVmFactory
 
-
 class ChatListFragment : Fragment(), GoChatRoom {
-
 
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
@@ -29,13 +27,14 @@ class ChatListFragment : Fragment(), GoChatRoom {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val mode = UserManger.readData("mode")?:-1
+        val mode = UserManger.readData("mode") ?: -1
 
         setAppBarTitle(mode)
 
@@ -43,7 +42,6 @@ class ChatListFragment : Fragment(), GoChatRoom {
         layoutManager = LinearLayoutManager(this.context)
         binding.chatListRecycler.layoutManager = layoutManager
         binding.chatListRecycler.adapter = chatListAdapter
-
 
         chatListViewModel.roomList.observe(viewLifecycleOwner) {
             val roomList = it.sortedBy { sort ->
@@ -53,7 +51,6 @@ class ChatListFragment : Fragment(), GoChatRoom {
             chatListAdapter.submitList(roomList)
             chatListAdapter.notifyDataSetChanged()
         }
-
 
         return root
     }
@@ -92,7 +89,6 @@ class ChatListFragment : Fragment(), GoChatRoom {
                 binding.chatChefEmptySticker.visibility = View.GONE
             }
         }
-
     }
 
     override fun onDestroyView() {
@@ -101,7 +97,8 @@ class ChatListFragment : Fragment(), GoChatRoom {
     }
 
     override fun goChatRoom(roomId: String) {
-        findNavController().navigate(MobileNavigationDirections.actionGlobalChatRoomFragment(roomId))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalChatRoomFragment(roomId)
+        )
     }
-
 }

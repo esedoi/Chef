@@ -13,7 +13,6 @@ class PickerViewModel(private val repository: ChefRepository) : ViewModel() {
         get() = _bookSetting
 
     fun getBookSetting(chefId: String) {
-
         viewModelScope.launch {
             when (val result = repository.getChef(chefId)) {
                 is Result.Success -> {
@@ -21,6 +20,9 @@ class PickerViewModel(private val repository: ChefRepository) : ViewModel() {
                         _bookSetting.value = result.data.bookSetting!!
                     }
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }

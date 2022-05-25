@@ -12,7 +12,7 @@ import com.paul.chef.*
 import com.paul.chef.databinding.FragmentReviewPageBinding
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 
-class ReviewPage: Fragment(), Block {
+class ReviewPage : Fragment(), Block {
 
     private var _binding: FragmentReviewPageBinding? = null
     private val binding get() = _binding!!
@@ -22,14 +22,11 @@ class ReviewPage: Fragment(), Block {
 
     private val arg: ReviewPageArgs by navArgs()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         _binding = FragmentReviewPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -41,16 +38,12 @@ class ReviewPage: Fragment(), Block {
         val reviewList = arg.review.toList()
         reviewAdapter.submitList(reviewList)
 
-
         return root
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
     }
 
     override fun blockReview(userId: String) {

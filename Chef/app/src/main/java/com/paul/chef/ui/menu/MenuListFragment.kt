@@ -41,12 +41,10 @@ class MenuListFragment : Fragment(), ItemMenu {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentMenuListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        //menuList recycler
+        // menuList recycler
         menuListAdapter = MenuListAdapter(this, menuListViewModel, MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
         binding.menuListRecycler.layoutManager = layoutManager
@@ -57,19 +55,16 @@ class MenuListFragment : Fragment(), ItemMenu {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, items)
         (binding.menuListFilterLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-
         binding.menuListFilter.addTextChangedListener {
-
-            val filterType:Int = getFilterType(it.toString())
+            val filterType: Int = getFilterType(it.toString())
             if (filterType != -1) {
                 menuListViewModel.getChefId(filterType)
             }
         }
 
-        //default menuList
+        // default menuList
         menuListViewModel.menuList.observe(viewLifecycleOwner) {
-
-            val newMenuList:List<Menu> = filterBlockMenuList(it)
+            val newMenuList: List<Menu> = filterBlockMenuList(it)
             menuList.clear()
             menuList.addAll(newMenuList)
             displayMenuList.clear()
@@ -77,8 +72,6 @@ class MenuListFragment : Fragment(), ItemMenu {
             menuListAdapter.submitList(displayMenuList)
             menuListAdapter.notifyDataSetChanged()
         }
-
-
 
         val tagList = resources.getStringArray(R.array.menu_tag_list).toList()
         tagList.forEach {
@@ -131,7 +124,6 @@ class MenuListFragment : Fragment(), ItemMenu {
             likeIdList.addAll(it)
         }
 
-
         return root
     }
 
@@ -141,7 +133,7 @@ class MenuListFragment : Fragment(), ItemMenu {
                 BookType.ChefSpace.index
             }
             BookType.UserSpace.userTxt -> {
-                 BookType.UserSpace.index
+                BookType.UserSpace.index
             }
             else -> {
                 -1
@@ -174,7 +166,6 @@ class MenuListFragment : Fragment(), ItemMenu {
         return newMenuList
     }
 
-
     private fun createChipTxtList(chipIdList: List<Int>): List<String> {
         val chipTxtList = mutableListOf<String>()
         chipIdList.forEach { id ->
@@ -201,7 +192,9 @@ class MenuListFragment : Fragment(), ItemMenu {
     }
 
     override fun goDetail(menu: Menu) {
-        findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalMenuDetailFragment(menu)
+        )
     }
 
     override fun like(menuId: String) {

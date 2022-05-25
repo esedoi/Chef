@@ -1,6 +1,5 @@
 package com.paul.chef.ui.addTag
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,20 +16,18 @@ class AddTagFragment : DialogFragment() {
     private var _binding: FragmentAddTagBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentAddTagBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
 
         val tagList = resources.getStringArray(R.array.tag_list).toList()
 
@@ -38,7 +35,6 @@ class AddTagFragment : DialogFragment() {
             addTag(i)
         }
         binding.addTagAddTag.setOnClickListener {
-
             if (binding.addTagEditTxt.editText?.text.toString() != "") {
                 val text = binding.addTagEditTxt.editText?.text.toString()
                 addTag(text)
@@ -73,5 +69,4 @@ class AddTagFragment : DialogFragment() {
         chip.isCheckedIconVisible = true
         binding.bookChipGroup.addView(chip)
     }
-
 }

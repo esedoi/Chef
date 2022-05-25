@@ -1,13 +1,9 @@
 package com.paul.chef.ui.menuDetail
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.navArgs
-import com.paul.chef.UserManger
-import com.paul.chef.data.Menu
 import com.paul.chef.data.Review
 import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
@@ -15,7 +11,6 @@ import com.paul.chef.data.source.Result
 import kotlinx.coroutines.launch
 
 class MenuDetailViewModel(private val repository: ChefRepository) : ViewModel() {
-
 
     var liveUser = MutableLiveData<User>()
 
@@ -27,14 +22,10 @@ class MenuDetailViewModel(private val repository: ChefRepository) : ViewModel() 
     val bookSettingType: LiveData<Int?>
         get() = _bookSettingType
 
-    val userId = UserManger.user?.userId!!
-
-
 
     init {
 
         liveUser = repository.getLiveUser()
-
     }
 
     fun checkOpen(chefId: String) {
@@ -47,28 +38,29 @@ class MenuDetailViewModel(private val repository: ChefRepository) : ViewModel() 
                         result.data.bookSetting.type
                     }
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
 
-
     fun getReview(menuId: String) {
-
         viewModelScope.launch {
             when (val result = repository.getMenuReviewList(menuId)) {
                 is Result.Success -> {
                     _reviewList.value = result.data!!
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
 
     fun updateLikeList(newList: List<String>) {
-
         viewModelScope.launch {
             repository.updateLikeList(newList)
         }
-
     }
-
 }

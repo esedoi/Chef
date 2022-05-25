@@ -9,8 +9,10 @@ import com.paul.chef.AddDiscount
 import com.paul.chef.data.Discount
 import com.paul.chef.databinding.ItemAddedDiscountBinding
 
-class DiscountAdapter(val addDiscount:AddDiscount) : ListAdapter<Discount, RecyclerView.ViewHolder>(DiscountCallback()) {
-
+class DiscountAdapter(val addDiscount: AddDiscount) :
+    ListAdapter<Discount, RecyclerView.ViewHolder>(
+        DiscountCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ArticlesHolder.from(parent)
@@ -22,13 +24,10 @@ class DiscountAdapter(val addDiscount:AddDiscount) : ListAdapter<Discount, Recyc
         if (holder is ArticlesHolder) {
             holder.bind(item, addDiscount, position)
         }
-
     }
-
 
     class ArticlesHolder(private var binding: ItemAddedDiscountBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
 
         fun bind(item: Discount, addDiscount: AddDiscount, position: Int) {
             binding.peopleNumber.text = item.people.toString()
@@ -36,18 +35,20 @@ class DiscountAdapter(val addDiscount:AddDiscount) : ListAdapter<Discount, Recyc
             binding.remove.setOnClickListener {
                 addDiscount.remove(position, item.percentOff)
             }
-
         }
 
         companion object {
             fun from(parent: ViewGroup): ArticlesHolder {
                 val friend =
-                    ItemAddedDiscountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemAddedDiscountBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return ArticlesHolder(friend)
             }
         }
     }
-
 }
 
 class DiscountCallback : DiffUtil.ItemCallback<Discount>() {
@@ -58,6 +59,4 @@ class DiscountCallback : DiffUtil.ItemCallback<Discount>() {
     override fun areContentsTheSame(oldItem: Discount, newItem: Discount): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

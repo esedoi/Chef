@@ -6,35 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.DateStatus
 import com.paul.chef.R
 import com.paul.chef.databinding.FragmentCalendarSettingBinding
 import com.paul.chef.ext.getVmFactory
-import com.paul.chef.ui.chatList.ChatListViewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 class CalendarSetting : Fragment() {
 
     private var _binding: FragmentCalendarSettingBinding? = null
     private val binding get() = _binding!!
 
-
     private val arg: CalendarSettingArgs by navArgs()
 
     private val calendarSettingViewModel by viewModels<CalendarSettingViewModel> { getVmFactory() }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentCalendarSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -42,17 +36,14 @@ class CalendarSetting : Fragment() {
 
         if (selectedDates.size == 1) {
             val dateTimeFormatter =
-                DateTimeFormatter.ofPattern("yyyy MMMM dd, EEEE", Locale.TAIWAN);
+                DateTimeFormatter.ofPattern("yyyy MMMM dd, EEEE", Locale.TAIWAN)
             binding.calendarSetSelectDateTxt.text = selectedDates[0].format(dateTimeFormatter)
-
         } else {
             binding.calendarSetSelectDateTxt.text =
                 getString(R.string.calendar_set_selected_dates_txt, selectedDates.size)
         }
 
-
         binding.dateSave.setOnClickListener {
-
             val radio = binding.calendarRadioGroup.checkedRadioButtonId
 
             val status = if (radio == binding.calendarSetOpenRadio.id) {

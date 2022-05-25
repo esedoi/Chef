@@ -16,7 +16,7 @@ class TermsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTermsBinding.inflate(inflater, container, false)
         binding.termsText.text = getString(R.string.user_terms)
 

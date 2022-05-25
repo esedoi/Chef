@@ -1,10 +1,10 @@
 package com.paul.chef.ui.transaction
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.paul.chef.OrderStatus
@@ -25,18 +25,17 @@ class TransactionFragment : Fragment() {
     var receivedMoney = 0
     private var idList = mutableListOf<String>()
 
-    private val  transactionViewModel by viewModels<TransactionViewModel> { getVmFactory() }
+    private val transactionViewModel by viewModels<TransactionViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        //viewPager2
+        // viewPager2
         transactionAdapter = TransactionAdapter(this)
         binding.transactionViewpager2.adapter = transactionAdapter
 
@@ -53,7 +52,6 @@ class TransactionFragment : Fragment() {
                     tab.text = TransactionStatus.COMPLETED.value
                 }
             }
-
         }.attach()
 
         transactionViewModel.orderList.observe(viewLifecycleOwner) {
@@ -66,7 +64,6 @@ class TransactionFragment : Fragment() {
         }
 
         transactionViewModel.transactionList.observe(viewLifecycleOwner) {
-
             receivedMoney = 0
             processingMoney = 0
             for (i in transactionViewModel.processingList) {
@@ -80,10 +77,7 @@ class TransactionFragment : Fragment() {
             binding.transactionProcessingTxt.text = getPrice(processingMoney)
         }
 
-
-
         binding.transactionApplyBtn.setOnClickListener {
-
             transactionViewModel.applyMoney(pendingMoney)
             for (i in idList) {
                 transactionViewModel.changeStatus(i, OrderStatus.APPLIED.index)
@@ -98,5 +92,4 @@ class TransactionFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

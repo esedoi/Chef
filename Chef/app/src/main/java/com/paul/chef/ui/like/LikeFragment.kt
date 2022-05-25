@@ -2,12 +2,10 @@ package com.paul.chef.ui.like
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,23 +33,20 @@ class LikeFragment : Fragment(), ItemMenu {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentLikeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        //menuList recycler
+        // menuList recycler
         menuListAdapter = MenuListAdapter(this, menuListViewModel, MenuType.FULL.index)
         layoutManager = LinearLayoutManager(this.context)
         binding.likeRecycler.layoutManager = layoutManager
         binding.likeRecycler.adapter = menuListAdapter
 
-
-        menuListViewModel.menuList.observe(viewLifecycleOwner){menuList->
+        menuListViewModel.menuList.observe(viewLifecycleOwner) { menuList ->
             menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
                 likeList.clear()
                 likeList.addAll(it)
@@ -59,21 +54,17 @@ class LikeFragment : Fragment(), ItemMenu {
             }
         }
 
-        menuListViewModel.liveUser.observe(viewLifecycleOwner){
+        menuListViewModel.liveUser.observe(viewLifecycleOwner) {
             menuListViewModel.filterLikeIdList(it)
         }
 
-
         menuListViewModel.likeList.observe(viewLifecycleOwner) {
-
             emptyHandle(it)
             menuListAdapter.submitList(it)
             menuListAdapter.notifyDataSetChanged()
         }
 
-
         return root
-
     }
 
     private fun emptyHandle(likeList: List<Menu>) {
@@ -92,7 +83,9 @@ class LikeFragment : Fragment(), ItemMenu {
     }
 
     override fun goDetail(menu: Menu) {
-        findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalMenuDetailFragment(menu)
+        )
     }
 
     override fun like(menuId: String) {
@@ -103,5 +96,4 @@ class LikeFragment : Fragment(), ItemMenu {
         }
         menuListViewModel.updateLikeList(likeList)
     }
-
 }

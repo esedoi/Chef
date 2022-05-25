@@ -13,8 +13,6 @@ import com.paul.chef.databinding.FragmentDoneBinding
 import java.util.*
 import kotlin.concurrent.schedule
 
-
-
 class DoneFragment : DialogFragment() {
 
     private var _binding: FragmentDoneBinding? = null
@@ -27,31 +25,30 @@ class DoneFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDoneBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
-        Timer().schedule(2000){
+        Timer().schedule(2000) {
             (activity as MainActivity).runOnUiThread {
-                when(arg.direction){
-                    "orderMange"->{
-                        findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                when (arg.direction) {
+                    "orderMange" -> {
+                        findNavController().navigate(
+                            MobileNavigationDirections.actionGlobalOrderManageFragment()
+                        )
                     }
-                    "chefPage"->{
-                        findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
+                    "chefPage" -> {
+                        findNavController().navigate(
+                            MobileNavigationDirections.actionGlobalChefFragment()
+                        )
                     }
                 }
             }
         }
 
-
-
-
         return root
     }
-
 }

@@ -3,7 +3,7 @@ package com.paul.chef.data.source
 import androidx.lifecycle.MutableLiveData
 import com.paul.chef.data.*
 
-class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefRepository {
+class DefaultChefRepository(private val firebaseDataSource: ChefDataSource) : ChefRepository {
 
     override suspend fun getMenuList(): Result<List<Menu>> {
         return firebaseDataSource.getMenuList()
@@ -46,7 +46,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
     }
 
     override suspend fun blockReview(bloclkReviewList: List<String>, userId: String) {
-        return firebaseDataSource.blockReview(bloclkReviewList,userId)
+        return firebaseDataSource.blockReview(bloclkReviewList, userId)
     }
 
     override suspend fun createChef(user: User): Result<String> {
@@ -72,7 +72,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
     override suspend fun updateChefReview(
         chefId: String,
         newChefRating: Float,
-        newChefRatingNumber: Int
+        newChefRatingNumber: Int,
     ) {
         return firebaseDataSource.updateChefReview(chefId, newChefRating, newChefRatingNumber)
     }
@@ -80,7 +80,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
     override suspend fun updateMenuReview(
         menuId: String,
         newMenuRating: Float,
-        newMenuRatingNumber: Int
+        newMenuRatingNumber: Int,
     ) {
         return firebaseDataSource.updateMenuReview(menuId, newMenuRating, newMenuRatingNumber)
     }
@@ -89,7 +89,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
         type: Int,
         calendarDefault: Int,
         chefSpace: ChefSpace?,
-        userSpace: UserSpace?
+        userSpace: UserSpace?,
     ) {
         return firebaseDataSource.updateBookSetting(type, calendarDefault, chefSpace, userSpace)
     }
@@ -108,7 +108,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
         useName: String,
         chefName: String,
         userAvatar: String,
-        chefAvatar: String
+        chefAvatar: String,
     ): Result<String> {
         return firebaseDataSource.setRoom(userId, chefId, useName, chefName, userAvatar, chefAvatar)
     }
@@ -119,6 +119,10 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
 
     override fun getLiveRoomList(nowId: String): MutableLiveData<List<Room>> {
         return firebaseDataSource.getLiveRoomList(nowId)
+    }
+
+    override fun getLiveChat(roomId: String): MutableLiveData<List<Chat>> {
+        return firebaseDataSource.getLiveChat(roomId)
     }
 
     override suspend fun updateRoom(roomId: String, msg: String, nowId: String, time: Long) {
@@ -137,9 +141,18 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
         discountList: List<Discount>,
         dishList: List<Dish>,
         tagList: List<String>,
-        openBoolean: Boolean
+        openBoolean: Boolean,
     ) {
-        return firebaseDataSource.setMenu(menuName, menuIntro, perPrice, images, discountList, dishList, tagList, openBoolean)
+        return firebaseDataSource.setMenu(
+            menuName,
+            menuIntro,
+            perPrice,
+            images,
+            discountList,
+            dishList,
+            tagList,
+            openBoolean
+        )
     }
 
     override suspend fun updateLikeList(newList: List<String>) {
@@ -162,7 +175,7 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
         return firebaseDataSource.getChefMenuList(chefId)
     }
 
-    override fun getLiveOrder(field:String, value:String): MutableLiveData<List<Order>> {
+    override fun getLiveOrder(field: String, value: String): MutableLiveData<List<Order>> {
         return firebaseDataSource.getLiveOrder(field, value)
     }
 
@@ -173,6 +186,4 @@ class DefaultChefRepository(private val firebaseDataSource:ChefDataSource):ChefR
     override suspend fun setTransaction(transaction: Transaction) {
         return firebaseDataSource.setTransaction(transaction)
     }
-
-
 }

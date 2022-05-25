@@ -1,6 +1,5 @@
 package com.paul.chef.ui.orderDetail
 
-
 import androidx.lifecycle.*
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
@@ -13,16 +12,15 @@ class OrderDetailViewModel(private val repository: ChefRepository) : ViewModel()
         get() = _roomId
 
     fun getRoomId(userId: String, chefId: String) {
-
         viewModelScope.launch {
             when (val result = repository.getRoom(userId, chefId)) {
-                is Result.Success -> {
-                    _roomId.value = result.data!!
-                }
+                is Result.Success -> _roomId.value = result.data!!
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
-
 
     fun createRoom(
         userId: String,
@@ -39,15 +37,16 @@ class OrderDetailViewModel(private val repository: ChefRepository) : ViewModel()
                 is Result.Success -> {
                     _roomId.value = result.data!!
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
-
 
     fun changeStatus(orderId: String, status: Int) {
         viewModelScope.launch {
             repository.updateOrderStatus(status, orderId)
         }
     }
-
 }

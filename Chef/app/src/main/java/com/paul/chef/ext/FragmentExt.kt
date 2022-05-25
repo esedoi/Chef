@@ -15,4 +15,3 @@ fun Fragment.getVmFactory(user: User?): UserViewModelFactory {
     val repository = (requireContext().applicationContext as ChefApplication).repository
     return UserViewModelFactory(repository, user)
 }
-

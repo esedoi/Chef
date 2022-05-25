@@ -17,7 +17,6 @@ import java.util.*
 class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: Int) :
     ListAdapter<Room, RecyclerView.ViewHolder>(ChatListCallback()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return RoomHolder.from(parent)
     }
@@ -30,10 +29,8 @@ class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: I
         }
     }
 
-
     class RoomHolder(private var binding: ItemChatListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
 
         fun bind(item: Room, nowMode: Int, goChatRoom: GoChatRoom) {
             itemView.setOnClickListener {
@@ -47,7 +44,6 @@ class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: I
             if (item.time != null) {
                 binding.time.text = sdf.format(Date(item.time.toLong()))
             }
-
 
             binding.chatContent.text = item.lastMsg.toString()
             if (nowMode == Mode.CHEF.index) {
@@ -67,7 +63,6 @@ class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: I
             }
         }
     }
-
 }
 
 class ChatListCallback : DiffUtil.ItemCallback<Room>() {
@@ -78,6 +73,4 @@ class ChatListCallback : DiffUtil.ItemCallback<Room>() {
     override fun areContentsTheSame(oldItem: Room, newItem: Room): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

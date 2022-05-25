@@ -20,7 +20,6 @@ import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
 import com.paul.chef.ext.getVmFactory
 
-
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
 
     private var _binding: FragmentAddressListBinding? = null
@@ -34,15 +33,12 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
 
     private val addressListViewModel by viewModels<AddressListViewModel> { getVmFactory() }
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         _binding = FragmentAddressListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -59,13 +55,14 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
             addressListViewModel.getAddress(it)
         }
 
-
         addressListAdapter = AddressListAdapter(this, listType)
         layoutManager = LinearLayoutManager(this.context)
         binding.addressListRecycler.layoutManager = layoutManager
         binding.addressListRecycler.adapter = addressListAdapter
         binding.addressListAddBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.actionGlobalAddAddressFragment())
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalAddAddressFragment()
+            )
         }
 
         addressListViewModel.addressList.observe(viewLifecycleOwner) {
@@ -96,16 +93,13 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
         }
     }
 
-
     override fun delete(item: Address) {
         addressListViewModel.deleteAddress(item)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

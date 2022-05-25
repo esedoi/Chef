@@ -13,16 +13,20 @@ import com.paul.chef.data.Menu
 import com.paul.chef.databinding.ItemMenuDetailImagesBinding
 import com.paul.chef.databinding.ItemMenuEditImgBinding
 
-class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private val itemMenu:ItemMenu?, val menu:Menu?) : ListAdapter<String, RecyclerView.ViewHolder>(ImageListCallback()) {
-
+class DetailImagesAdapter(
+    val type: Int,
+    val menuEditImg: MenuEditImg?,
+    private val itemMenu: ItemMenu?,
+    val menu: Menu?
+) : ListAdapter<String, RecyclerView.ViewHolder>(ImageListCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        return ImageHolder.from(parent)
-        return when(type){
-            ImgRecyclerType.IMAGE.index->{
+        return when (type) {
+            ImgRecyclerType.IMAGE.index -> {
                 ImageHolder.from(parent)
             }
-            else->{
+            else -> {
                 ImageEditHolder.from(parent)
             }
         }
@@ -34,24 +38,22 @@ class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private v
 //        if (holder is ImageHolder) {
 //            holder.bind(item)
 //        }
-        when(holder){
-            is ImageHolder->{
+        when (holder) {
+            is ImageHolder -> {
                 holder.bind(item, itemMenu, menu)
             }
-            is ImageEditHolder->{
+            is ImageEditHolder -> {
                 holder.bind(item, menuEditImg, position)
             }
         }
     }
 
-
     class ImageHolder(private var binding: ItemMenuDetailImagesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(item: String, itemMenu: ItemMenu?, menu: Menu?) {
             bindImage(binding.detailImage, item)
-            if(itemMenu!=null&&menu!=null){
+            if (itemMenu != null && menu != null) {
                 itemView.setOnClickListener {
                     itemMenu.goDetail(menu)
                 }
@@ -61,7 +63,11 @@ class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private v
         companion object {
             fun from(parent: ViewGroup): ImageHolder {
                 val image =
-                    ItemMenuDetailImagesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemMenuDetailImagesBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return ImageHolder(image)
             }
         }
@@ -69,7 +75,6 @@ class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private v
 
     class ImageEditHolder(private var binding: ItemMenuEditImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
 
         fun bind(item: String, menuEditImg: MenuEditImg?, position: Int) {
             bindImage(binding.itemMenuEditImgView, item)
@@ -81,12 +86,15 @@ class DetailImagesAdapter(val type:Int, val menuEditImg: MenuEditImg?, private v
         companion object {
             fun from(parent: ViewGroup): ImageEditHolder {
                 val image =
-                    ItemMenuEditImgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemMenuEditImgBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return ImageEditHolder(image)
             }
         }
     }
-
 }
 
 class ImageListCallback : DiffUtil.ItemCallback<String>() {
@@ -97,8 +105,6 @@ class ImageListCallback : DiffUtil.ItemCallback<String>() {
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }
 
 fun bindImage(imgView: ImageView, imgUrl: String?) {

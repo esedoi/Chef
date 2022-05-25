@@ -1,6 +1,5 @@
 package com.paul.chef.ui.transaction
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,9 +11,7 @@ import com.paul.chef.databinding.ItemTransactionUnpaidBinding
 import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 
-
 class TransactionUnpaidAdapter : ListAdapter<Order, RecyclerView.ViewHolder>(OrderCallback()) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return OrderHolder.from(parent)
@@ -28,17 +25,14 @@ class TransactionUnpaidAdapter : ListAdapter<Order, RecyclerView.ViewHolder>(Ord
         }
     }
 
-
     class OrderHolder(private var binding: ItemTransactionUnpaidBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Order) {
-
             binding.unpaidChefReceive.text = getPrice(item.chefReceive)
             binding.unpaidDate.text = LocalDate.ofEpochDay(item.date).toString()
             binding.unpaidName.text = item.userName
             binding.unpaidPeople.text = binding.root.context.getString(R.string.people, item.people)
-
         }
 
         companion object {
@@ -53,7 +47,6 @@ class TransactionUnpaidAdapter : ListAdapter<Order, RecyclerView.ViewHolder>(Ord
             }
         }
     }
-
 }
 
 class OrderCallback : DiffUtil.ItemCallback<Order>() {
@@ -64,6 +57,4 @@ class OrderCallback : DiffUtil.ItemCallback<Order>() {
     override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

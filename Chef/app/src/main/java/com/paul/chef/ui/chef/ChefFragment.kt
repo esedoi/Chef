@@ -34,14 +34,12 @@ class ChefFragment : Fragment(), Block, ItemMenu {
 
     private val chefViewModel by viewModels<ChefViewModel> { getVmFactory() }
 
-
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -57,12 +55,11 @@ class ChefFragment : Fragment(), Block, ItemMenu {
             bindImage(binding.chefPageImgView, it.profileInfo.avatar)
         }
 
-        //menuList recycler
+        // menuList recycler
         menuListAdapter = MenuListAdapter(this, null, type = MenuType.SIMPLE.index)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.chefPageMenuRecycler.layoutManager = layoutManager
         binding.chefPageMenuRecycler.adapter = menuListAdapter
-
 
         chefViewModel.liveMenu.observe(viewLifecycleOwner) {
             menuListAdapter.submitList(it)
@@ -74,7 +71,6 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         binding.chefPageReviewRecycler.layoutManager = reviewLayoutManager
         binding.chefPageReviewRecycler.adapter = reviewAdapter
         chefViewModel.reviewList.observe(viewLifecycleOwner) {
-
             reviewList = filterBlockReview(it)
 
             val filterList = reviewList.filterIndexed { index, _ ->
@@ -101,7 +97,10 @@ class ChefFragment : Fragment(), Block, ItemMenu {
 
         binding.editProfileBtn.setOnClickListener {
             findNavController().navigate(
-                MobileNavigationDirections.actionGlobalChefEditFragment(EditPageType.EDIT_PROFILE.index, UserManger.user?.profileInfo!!)
+                MobileNavigationDirections.actionGlobalChefEditFragment(
+                    EditPageType.EDIT_PROFILE.index,
+                    UserManger.user?.profileInfo!!
+                )
             )
         }
 
@@ -111,7 +110,9 @@ class ChefFragment : Fragment(), Block, ItemMenu {
 
         binding.chefPageAddressListBtn.setOnClickListener {
             findNavController().navigate(
-                MobileNavigationDirections.actionGlobalAddressListFragment(AddressListType.NORMAL.index)
+                MobileNavigationDirections.actionGlobalAddressListFragment(
+                    AddressListType.NORMAL.index
+                )
             )
         }
 
@@ -125,7 +126,6 @@ class ChefFragment : Fragment(), Block, ItemMenu {
             (activity as MainActivity).turnMode(Mode.USER.index)
             findNavController().navigate(MobileNavigationDirections.actionGlobalMenuFragment())
         }
-
 
         return root
     }
@@ -153,15 +153,14 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         _binding = null
     }
 
-    override fun blockReview(blockUserId: String) {
+    override fun blockReview(userId: String) {
         val blockReviewList = mutableListOf<String>()
         if (UserManger.user?.blockReviewList != null) {
             blockReviewList.addAll(UserManger.user?.blockMenuList!!)
         }
-        blockReviewList.add(blockUserId)
+        blockReviewList.add(userId)
         (activity as MainActivity).block(UserManger.user?.userId!!, null, blockReviewList)
         UserManger.user?.blockReviewList = blockReviewList
-
     }
 
     override fun blockMenu(menuId: String) {
@@ -169,7 +168,9 @@ class ChefFragment : Fragment(), Block, ItemMenu {
     }
 
     override fun goDetail(menu: Menu) {
-        findNavController().navigate(MobileNavigationDirections.actionGlobalMenuDetailFragment(menu))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalMenuDetailFragment(menu)
+        )
     }
 
     override fun like(menuId: String) {

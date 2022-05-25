@@ -1,6 +1,5 @@
 package com.paul.chef.ui.book
 
-
 import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.ChefManger
@@ -8,11 +7,10 @@ import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
-import kotlinx.coroutines.launch
 import java.util.*
+import kotlinx.coroutines.launch
 
 class BookViewModel(private val repository: ChefRepository) : ViewModel() {
-
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -27,11 +25,9 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
     var userPay = -1
     var chefReceive = -1
 
-
     private var _priceResult = MutableLiveData<Map<String, Int>>()
     val priceResult: LiveData<Map<String, Int>>
         get() = _priceResult
-
 
     fun getAddress(chefId: String) {
         viewModelScope.launch {
@@ -39,11 +35,12 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
                 is Result.Success -> {
                     _chefSpaceAddress.value = result.data.bookSetting?.chefSpace?.address
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
-
     }
-
 
     fun orderPrice(menu: Menu, people: Int) {
         val originalPrice = menu.perPrice * people
@@ -71,9 +68,7 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
             "isDiscount" to isDiscount
 
         )
-
     }
-
 
     fun book(
         menu: Menu,
@@ -85,7 +80,6 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
         people: Int,
         selectedDish: List<Dish>
     ) {
-
         val orderId = db.collection("Order").document().id
         val userId = UserManger.user?.userId!!
         val userName = UserManger.user!!.profileInfo?.name!!
@@ -95,7 +89,6 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
         val menuName = menu.menuName
         val chefId = menu.chefId
         val orderTime = Calendar.getInstance().timeInMillis
-        val date = datePicker
         val menuId = menu.id
         val status = 0
         val originalPrice = menu.perPrice * people
@@ -122,7 +115,7 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
             type,
             address,
             orderTime,
-            date,
+            datePicker,
             time,
             note,
             people,
@@ -140,9 +133,10 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
                 is Result.Success -> {
                     _bookDone.value = result.data!!
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
 }
-
-

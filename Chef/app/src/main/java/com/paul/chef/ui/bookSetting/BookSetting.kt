@@ -1,6 +1,5 @@
 package com.paul.chef.ui.bookSetting
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,38 +26,31 @@ class BookSetting : Fragment() {
 
     private val bookSettingViewModel by viewModels<BookSettingViewModel> { getVmFactory() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentBookSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         var calendarTypeResult: Int
         val calendarTypeList =
-            arrayOf("未來所有日期", "預設所有日期為不可訂")
+            arrayOf(getString(R.string.close_all_day), getString(R.string.open_all_day))
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, calendarTypeList)
         (binding.bookSetCalenderDefault.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-
-
 
         binding.apply {
             userSpaceCardView.setOnClickListener {
                 userSpaceCardView.isChecked = !userSpaceCardView.isChecked
                 userHelperTextVisibility(userSpaceCardView.isChecked)
-
             }
             chefSpaceCardView.setOnClickListener {
                 chefSpaceCardView.isChecked = !chefSpaceCardView.isChecked
                 chefHelperTextVisibility(chefSpaceCardView.isChecked)
             }
         }
-
-
 
         binding.bookSetChefSpaceTime.setOnClickListener {
             findNavController().navigate(
@@ -77,7 +69,6 @@ class BookSetting : Fragment() {
                 )
             )
         }
-
 
         binding.bookSetUserSpaceStartTime.setOnClickListener {
             findNavController().navigate(
@@ -111,7 +102,6 @@ class BookSetting : Fragment() {
             )
         }
 
-
         var capacity = 0
         var sessionCapacity = 0
         val sessionTime = mutableListOf<String>()
@@ -143,8 +133,6 @@ class BookSetting : Fragment() {
                 sessionTime.remove(chip.text)
             }
             binding.bookSetChefSpaceTimeLayout.addView(chip)
-
-
         }
         setFragmentResultListener(PickerType.SET_START_TIME.value) { _, bundle ->
             startTime = bundle.getString(PickerType.SET_START_TIME.value).toString()
@@ -195,26 +183,34 @@ class BookSetting : Fragment() {
                 )
 
                 changeTypeStatus(it.type)
-
             }
         }
 
-
         binding.save.setOnClickListener {
-
             val chefSpaceCheck = binding.chefSpaceCardView.isChecked
             val userSpaceCheck = binding.userSpaceCardView.isChecked
             val calendarTxt = binding.bookSetCalenderDefault.editText?.text.toString()
 
             if (chefSpaceCheck && (sessionCapacity == 0 || sessionTime.size == 0 || address == null)) {
-                Toast.makeText(this.context, "請設定人數與場次", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_set_capacity_session),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else if (userSpaceCheck && (capacity == 0 || startTime == "null" || endTime == "null")) {
-                Toast.makeText(this.context, "請設定人數與時間", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_set_capacity_time),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else if (calendarTxt == "") {
-                Toast.makeText(this.context, "請選擇可預訂期間", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.please_set_calendar_default),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-
-                calendarTypeResult = if (calendarTxt == "未來所有日期") {
+                calendarTypeResult = if (calendarTxt == getString(R.string.open_all_day)) {
                     CalendarType.AllDayOpen.index
                 } else {
                     CalendarType.AllDayClose.index
@@ -269,8 +265,6 @@ class BookSetting : Fragment() {
             }
         }
 
-
-
         return root
     }
 
@@ -294,7 +288,6 @@ class BookSetting : Fragment() {
                 binding.userSpaceHelper.visibility = View.VISIBLE
             }
         }
-
     }
 
     private fun changeTypeStatus(type: Int) {
@@ -330,5 +323,4 @@ class BookSetting : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

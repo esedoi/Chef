@@ -1,8 +1,5 @@
 package com.paul.chef.ui.orderManage
 
-
-import android.icu.util.LocaleData
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,13 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.source.ChefRepository
-import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.*
-import kotlin.time.Duration.Companion.days
+import kotlinx.coroutines.launch
 
 class OrderManageViewModel(private val repository: ChefRepository) : ViewModel() {
-
 
     private val upComingList = mutableListOf<Order>()
     private val pendingList = mutableListOf<Order>()
@@ -36,7 +30,6 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
 
     var liveOrderList = MutableLiveData<List<Order>>()
 
-
     init {
 
         when (UserManger.readData("mode")) {
@@ -55,7 +48,6 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     }
 
     fun sortOrder(orderList: List<Order>) {
-
         if (checkCompleteOrder(orderList)) {
             pendingList.clear()
             upComingList.clear()
@@ -63,7 +55,6 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
             cancelledList.clear()
 
             for (order in orderList) {
-
                 when (order.status) {
                     OrderStatus.PENDING.index -> {
                         pendingList.add(order)
@@ -86,27 +77,26 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     }
 
     private fun checkCompleteOrder(orderList: List<Order>): Boolean {
-
         var result = true
 
         for (order in orderList) {
-
-            when{
-                order.status == OrderStatus.UPCOMING.index && order.date < LocalDate.now().toEpochDay()->{
+            when {
+                order.status == OrderStatus.UPCOMING.index && order.date < LocalDate.now()
+                    .toEpochDay() -> {
                     result = false
                     changeOrderStatus(OrderStatus.COMPLETED.index, order)
                 }
-                order.status == OrderStatus.PENDING.index && order.date < LocalDate.now().toEpochDay()->{
+                order.status == OrderStatus.PENDING.index && order.date < LocalDate.now()
+                    .toEpochDay() -> {
                     result = false
                     changeOrderStatus(OrderStatus.CANCELLED.index, order)
                 }
-                else->{
+                else -> {
                     result = true
                 }
             }
-
         }
-            return result
+        return result
     }
 
     private fun changeOrderStatus(status: Int, order: Order) {
@@ -115,9 +105,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
         }
     }
 
-
     fun getList(status: Int) {
-
         when (status) {
             OrderStatus.PENDING.index -> {
                 _orderList.value = pendingList

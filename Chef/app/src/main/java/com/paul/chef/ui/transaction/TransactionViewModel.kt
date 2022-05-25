@@ -1,7 +1,5 @@
 package com.paul.chef.ui.transaction
 
-
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,18 +10,16 @@ import com.paul.chef.data.Order
 import com.paul.chef.data.Transaction
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
-import kotlinx.coroutines.launch
 import java.util.*
+import kotlinx.coroutines.launch
 
-class TransactionViewModel(private val repository: ChefRepository) : ViewModel(){
-
+class TransactionViewModel(private val repository: ChefRepository) : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
     private val unpaidList = mutableListOf<Order>()
     val processingList = mutableListOf<Transaction>()
     val receivedList = mutableListOf<Transaction>()
-
 
     private var _orderList = MutableLiveData<List<Order>>()
     val orderList: LiveData<List<Order>>
@@ -33,31 +29,31 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
     val transactionList: LiveData<List<Transaction>>
         get() = _transactionList
 
-
     val chefId = UserManger.chef?.id!!
 
     var liveOrderList = MutableLiveData<List<Order>>()
 
-    init{
+    init {
         liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
     }
-
 
     fun getList(position: Int) {
         processingList.clear()
         receivedList.clear()
         viewModelScope.launch {
-            when(val result = repository.getTransaction()){
-                is Result.Success->{
-                    for(transaction in result.data){
+            when (val result = repository.getTransaction()) {
+                is Result.Success -> {
+                    for (transaction in result.data) {
                         sortTransactionList(transaction)
 
-                        if(result.data.indexOf(transaction)==result.data.lastIndex){
+                        if (result.data.indexOf(transaction) == result.data.lastIndex) {
                             toLiveData(position)
-
                         }
                     }
                 }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
             }
         }
     }
@@ -65,18 +61,16 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
     private fun toLiveData(position: Int) {
         when (position) {
             1 -> {
-
                 _transactionList.value = processingList
             }
             2 -> {
-
                 _transactionList.value = receivedList
             }
         }
     }
 
     private fun sortTransactionList(transaction: Transaction) {
-        when(transaction.status){
+        when (transaction.status) {
             TransactionStatus.PROCESSING.index -> {
                 processingList.add(transaction)
             }
@@ -86,16 +80,16 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
         }
     }
 
-    fun getUnpaidList(orderList:List<Order>){
+    fun getUnpaidList(orderList: List<Order>) {
         unpaidList.clear()
-        for (order in orderList){
-            when(order.status){
+        for (order in orderList) {
+            when (order.status) {
                 OrderStatus.COMPLETED.index, OrderStatus.SCORED.index -> {
                     unpaidList.add(order)
                 }
             }
 
-            if(orderList.indexOf(order)==orderList.lastIndex){
+            if (orderList.indexOf(order) == orderList.lastIndex) {
                 _orderList.value = unpaidList
             }
         }
@@ -107,7 +101,6 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
         }
     }
 
-
     fun applyMoney(chefReceive: Int) {
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
@@ -118,7 +111,6 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
         }
 
         if (idList.isNotEmpty() && chefReceive != 0) {
-
             val transaction = Transaction(
                 id,
                 chefId,
@@ -131,8 +123,6 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
             viewModelScope.launch {
                 repository.setTransaction(transaction)
             }
-
         }
     }
-
 }

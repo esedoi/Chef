@@ -1,6 +1,5 @@
 package com.paul.chef.ui.review
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +14,6 @@ import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetReviewBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
-import com.paul.chef.ui.userProfile.UserProfileViewModel
-
 
 class ReviewFragment : DialogFragment() {
 
@@ -33,9 +30,10 @@ class ReviewFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = BottomSheetReviewBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -57,7 +55,9 @@ class ReviewFragment : DialogFragment() {
 
                 reviewViewModel.rating(reviewTxt, newRating, order)
                 reviewDescription.editText?.setText("")
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalOrderManageFragment()
+                )
             }
             reviewClose.setOnClickListener {
                 dismiss()
@@ -70,6 +70,4 @@ class ReviewFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

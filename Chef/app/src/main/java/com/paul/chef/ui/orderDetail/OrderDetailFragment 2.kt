@@ -4,11 +4,11 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Html
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -34,10 +34,10 @@ class OrderDetailFragment : Fragment() {
     private val arg: OrderDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val order = arg.order
@@ -60,7 +60,6 @@ class OrderDetailFragment : Fragment() {
                         OrderStatus.PENDING.index -> getString(R.string.refuse_order)
                         else -> getString(R.string.cancel_order)
                     }
-
                 }
                 Mode.USER.index -> {
                     bindImage(imageView3, order.chefAvatar)
@@ -135,7 +134,6 @@ class OrderDetailFragment : Fragment() {
             BookType.UserSpace.index -> BookType.UserSpace.chefTxt
             else -> "something went wrong"
         }
-
     }
 
     private fun getUserDetailTypeText(type: Int): CharSequence {
@@ -181,14 +179,15 @@ class OrderDetailFragment : Fragment() {
                 binding.orderDetailCancelBtn.isEnabled = true
                 binding.orderDetailCancelBtn.setOnClickListener {
                     viewModel.changeStatus(order.id, OrderStatus.CANCELLED.index)
-                    findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                    findNavController().navigate(
+                        MobileNavigationDirections.actionGlobalOrderManageFragment()
+                    )
                 }
             }
             else -> {
                 binding.orderDetailCancelBtn.isEnabled = false
             }
         }
-
     }
 
     private fun showDishList(selectedDish: List<Dish>, container: ViewGroup?) {
@@ -196,17 +195,16 @@ class OrderDetailFragment : Fragment() {
         val and = "and"
         displayList.clear()
         for (i in selectedDish) {
-
             _itemDisplayBinding =
                 ItemDisplayDishBinding.inflate(LayoutInflater.from(context), container, false)
             if (i.typeNumber != defaultType) {
-                //setType
+                // setType
                 itemDisplayBinding.displayTitle.text = i.type
                 defaultType = i.typeNumber
                 binding.orderDetailLinear.addView(itemDisplayBinding.root)
                 displayList.add(itemDisplayBinding)
             } else {
-                //+and
+                // +and
                 val andText = TextView(this.context)
                 andText.text = and
                 andText.gravity = Gravity.CENTER
@@ -228,8 +226,5 @@ class OrderDetailFragment : Fragment() {
             displayList[defaultType].displayRG.addView(nameText)
             displayList[defaultType].displayRG.gravity = Gravity.CENTER
         }
-
     }
-
 }
-

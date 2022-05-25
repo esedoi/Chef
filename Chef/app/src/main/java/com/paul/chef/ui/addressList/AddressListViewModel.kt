@@ -1,6 +1,5 @@
 package com.paul.chef.ui.addressList
 
-
 import android.util.Log
 import androidx.lifecycle.*
 import com.paul.chef.UserManger
@@ -9,9 +8,7 @@ import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
 import kotlinx.coroutines.launch
 
-
 class AddressListViewModel(private val repository: ChefRepository) : ViewModel() {
-
 
     private var _addressList = MutableLiveData<List<Address>>()
     val addressList: LiveData<List<Address>>
@@ -20,7 +17,6 @@ class AddressListViewModel(private val repository: ChefRepository) : ViewModel()
     private var _lastSelection = MutableLiveData<Int>()
     val lastSelection: LiveData<Int>
         get() = _lastSelection
-
 
     val userId = UserManger.user?.userId
 
@@ -41,7 +37,6 @@ class AddressListViewModel(private val repository: ChefRepository) : ViewModel()
             repository.updateAddress(addressList)
         }
     }
-
 
     fun deleteAddress(item: Address) {
         Log.d("addressListViewModel", "item=$item")

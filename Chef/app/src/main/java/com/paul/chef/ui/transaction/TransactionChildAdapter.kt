@@ -1,6 +1,6 @@
 package com.paul.chef.ui.transaction
 
-
+import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,12 +11,10 @@ import com.paul.chef.R
 import com.paul.chef.data.Transaction
 import com.paul.chef.databinding.ItemTransactionChildBinding
 import com.paul.chef.util.Util.getPrice
-import java.time.LocalDate
 import java.util.*
 
-class TransactionChildAdapter() :
+class TransactionChildAdapter :
     ListAdapter<Transaction, RecyclerView.ViewHolder>(TransactionCallback()) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return OrderHolder.from(parent)
@@ -33,7 +31,7 @@ class TransactionChildAdapter() :
     class OrderHolder(private var binding: ItemTransactionChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
+        @SuppressLint("SimpleDateFormat")
         fun bind(item: Transaction) {
             binding.transacOrder.text =
                 binding.root.context.getString(R.string.transaction_number, item.orderList.size)
@@ -54,7 +52,6 @@ class TransactionChildAdapter() :
             }
         }
     }
-
 }
 
 class TransactionCallback : DiffUtil.ItemCallback<Transaction>() {
@@ -65,6 +62,4 @@ class TransactionCallback : DiffUtil.ItemCallback<Transaction>() {
     override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }

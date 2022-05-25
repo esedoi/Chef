@@ -1,17 +1,16 @@
 package com.paul.chef.ui.userProfile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.paul.chef.*
 import com.paul.chef.databinding.FragmentUserProfileBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
-
 
 class UserProfileFragment : Fragment() {
 
@@ -21,9 +20,10 @@ class UserProfileFragment : Fragment() {
     private val userProfileViewModel by viewModels<UserProfileViewModel> { getVmFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -44,16 +44,17 @@ class UserProfileFragment : Fragment() {
             userProfileViewModel.getChef(it)
         }
         userProfileViewModel.getChefDone.observe(viewLifecycleOwner) {
-                (activity as MainActivity).turnMode(Mode.CHEF.index)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
+            (activity as MainActivity).turnMode(Mode.CHEF.index)
+            findNavController().navigate(MobileNavigationDirections.actionGlobalChefFragment())
         }
-
 
         if (user.chefId != null) {
             binding.userProfileCreateChef.text = getString(R.string.turn_chef_mode)
             binding.userProfileCreateChef.setOnClickListener {
                 (activity as MainActivity).turnMode(Mode.CHEF.index)
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalOrderManageFragment()
+                )
             }
         } else {
             binding.userProfileCreateChef.text = getString(R.string.become_chef)
@@ -62,7 +63,6 @@ class UserProfileFragment : Fragment() {
             }
         }
 
-
         return root
     }
 
@@ -70,5 +70,4 @@ class UserProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

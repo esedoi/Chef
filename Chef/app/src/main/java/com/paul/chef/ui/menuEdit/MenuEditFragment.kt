@@ -1,6 +1,5 @@
 package com.paul.chef.ui.menuEdit
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +25,6 @@ import com.paul.chef.databinding.ItemAddDishBinding
 import com.paul.chef.databinding.ItemDishOptionalBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
-
 
 class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
@@ -55,7 +53,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     private var imgList = mutableListOf<String>()
     var tagList = mutableListOf<String>()
 
-
     private var bindingItemCountList = mutableListOf<Int>()
     private var bindingItemCount = 0
 
@@ -63,30 +60,26 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
     private val menuEditViewModel by viewModels<MenuEditViewModel> { getVmFactory() }
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentMenuEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-        //discount recycler
+        // discount recycler
         discountAdapter = DiscountAdapter(this)
         layoutManager = LinearLayoutManager(this.context)
         binding.discountRecycler.layoutManager = layoutManager
         binding.discountRecycler.adapter = discountAdapter
 
-        //imagesRecyclerView
+        // imagesRecyclerView
         imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this, null, null)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.menuEditImgRecycler.layoutManager = layoutManager
         binding.menuEditImgRecycler.adapter = imageAdapter
-
 
         binding.menuEditAddImg.setOnClickListener {
             findNavController().navigate(
@@ -102,14 +95,12 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             }
         }
 
-
         val items =
             listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
         val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, items)
         (binding.menuEditDiscountPeople.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-
-        //menuEdit
+        // menuEdit
 //        val editMenu = arg.menu
 //        if (editMenu != null) {
 //            binding.menuEditName.editText?.setText(editMenu.menuName)
@@ -127,14 +118,21 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 //            }
 //        }
 
-
         binding.addDiscountBtn.setOnClickListener {
             when {
                 binding.menuEditDiscountPeople.editText?.text.toString() == "" -> {
-                    Toast.makeText(this.context, getString(R.string.please_select_people), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this.context,
+                        getString(R.string.please_select_people),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 binding.menuEditDiscountPercentOff.editText?.text.toString() == "" -> {
-                    Toast.makeText(this.context, getString(R.string.please_enter_discount), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this.context,
+                        getString(R.string.please_enter_discount),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 else -> {
                     val people = binding.menuEditDiscountPeople.editText?.text.toString().toInt()
@@ -148,9 +146,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                     binding.menuEditDiscountPeople.editText?.text?.clear()
                 }
             }
-
         }
-
 
         binding.fixedBtn.setOnClickListener {
             addDish(container, AddDishType.FIXED.index, null)
@@ -186,32 +182,32 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             openBoolean = it
         }
 
-
-        //create Menu
+        // create Menu
         binding.build.setOnClickListener {
-            Log.d("menuEditfragment", "bindingItemCountList = $bindingItemCountList")
-            Log.d("menuEditfragment", "pendingList.size = ${pendingList.size}")
-            Log.d("menuEditfragment", "allDishBindingList.size = ${allDishBindingList.size}")
+            Log.d("menuEditFragment", "bindingItemCountList = $bindingItemCountList")
+            Log.d("menuEditFragment", "pendingList.size = ${pendingList.size}")
+            Log.d("menuEditFragment", "allDishBindingList.size = ${allDishBindingList.size}")
 
-            val dishList:List<Dish> = getFinalDishList()
+            val dishList: List<Dish> = getFinalDishList()
 
-            if (errorHandle(dishList)){
+            if (errorHandle(dishList)) {
+                val menuName = binding.menuEditName.editText?.text.toString()
+                val menuIntro = binding.menuEditIntro.editText?.text.toString()
+                val perPrice = binding.menuEditPerprice.editText?.text.toString().toInt()
 
-                    val menuName = binding.menuEditName.editText?.text.toString()
-                    val menuIntro = binding.menuEditIntro.editText?.text.toString()
-                    val perPrice = binding.menuEditPerprice.editText?.text.toString().toInt()
-
-                    menuEditViewModel.createMenu(
-                        menuName,
-                        menuIntro,
-                        perPrice,
-                        imgList,
-                        discountList,
-                        dishList,
-                        tagList,
-                        openBoolean
-                    )
-                    findNavController().navigate(MobileNavigationDirections.actionGlobalDoneFragment("chefPage"))
+                menuEditViewModel.createMenu(
+                    menuName,
+                    menuIntro,
+                    perPrice,
+                    imgList,
+                    discountList,
+                    dishList,
+                    tagList,
+                    openBoolean
+                )
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalDoneFragment("chefPage")
+                )
             }
         }
 
@@ -238,19 +234,35 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         return dishList
     }
 
-    private fun errorHandle(dishList:List<Dish>): Boolean {
-
-        return if (binding.menuEditName.editText?.text.toString() == "" || binding.menuEditIntro.editText?.text.toString() == "" || binding.menuEditPerprice.editText?.text.toString() == "") {
-            Toast.makeText(this.context, getString(R.string.field_not_completet), Toast.LENGTH_SHORT).show()
+    private fun errorHandle(dishList: List<Dish>): Boolean {
+        return if (
+            binding.menuEditName.editText?.text.toString() == "" ||
+            binding.menuEditIntro.editText?.text.toString() == "" ||
+            binding.menuEditPerprice.editText?.text.toString() == ""
+        ) {
+            Toast.makeText(
+                this.context,
+                getString(R.string.field_not_completet),
+                Toast.LENGTH_SHORT
+            ).show()
             false
         } else if (!checkIsNameFilled(allDishBindingList)) {
-            Toast.makeText(this.context, getString(R.string.please_complete_dish_name), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this.context,
+                getString(R.string.please_complete_dish_name),
+                Toast.LENGTH_SHORT
+            ).show()
             false
         } else if (imgList.isEmpty()) {
-            Toast.makeText(this.context, getString(R.string.toast_please_upload_photo), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this.context,
+                getString(R.string.toast_please_upload_photo),
+                Toast.LENGTH_SHORT
+            ).show()
             false
         } else if (dishList.isNullOrEmpty()) {
-            Toast.makeText(this.context, getString(R.string.please_add_dish), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, getString(R.string.please_add_dish), Toast.LENGTH_SHORT)
+                .show()
             false
         } else {
             true
@@ -258,7 +270,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     }
 
     private fun checkIsNameFilled(allDishBindingList: MutableList<ItemDishOptionalBinding>): Boolean {
-
         var isNameFilled = true
 
         for (i in allDishBindingList) {
@@ -287,9 +298,7 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         discountAdapter.notifyDataSetChanged()
     }
 
-
     private fun addDish(container: ViewGroup?, option: Int, displayTypeList: List<Dish>?) {
-
         _dishTypeView =
             ItemAddDishBinding.inflate(LayoutInflater.from(context), container, false)
         bindingList.add(dishTypeView)
@@ -301,7 +310,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             var typeIndex: Int
 
             itemBindingList.removeType.setOnClickListener {
-
                 typeIndex = bindingList.indexOf(itemBindingList)
                 binding.dishTypeLinear.removeView(bindingList[typeIndex].root)
                 bindingList.removeAt(typeIndex)
@@ -314,7 +322,6 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             }
 
             itemBindingList.addDish.setOnClickListener {
-
                 typeIndex = bindingList.indexOf(itemBindingList)
                 _dishView =
                     ItemDishOptionalBinding.inflate(LayoutInflater.from(context), container, false)
@@ -330,15 +337,15 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                     allDishBindingList.add(itemDishBindingList)
 
                     itemDishBindingList.dishRemove.setOnClickListener {
-
                         val dishIndex = dishBindingList.indexOf(itemDishBindingList)
                         typeIndex = bindingList.indexOf(itemBindingList)
-                        bindingList[typeIndex].dishLinear.removeView(dishBindingList[dishIndex].root)
+                        bindingList[typeIndex].dishLinear.removeView(
+                            dishBindingList[dishIndex].root
+                        )
                         dishBindingList.removeAt(dishIndex)
                         allDishBindingList.remove(itemDishBindingList)
                         pendingList.remove(pendingDish)
                         bindingItemCountList[typeIndex]--
-
                     }
                 }
                 bindingList[typeIndex].dishLinear.addView(dishView.root)
@@ -404,8 +411,4 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         allDishBindingList.removeAt(beforeDishNum)
         removeList(beforeDishNum, numberInType - 1, pendingList, allDishBindingList)
     }
-
 }
-
-
-

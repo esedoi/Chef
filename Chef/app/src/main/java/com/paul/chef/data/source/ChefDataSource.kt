@@ -7,21 +7,21 @@ interface ChefDataSource {
 
     suspend fun getMenuList(): Result<List<Menu>>
 
-    fun getLiveMenuList():MutableLiveData<List<Menu>>
+    fun getLiveMenuList(): MutableLiveData<List<Menu>>
 
-    suspend fun setUser(profileInfo: ProfileInfo):Result<String>
+    suspend fun setUser(profileInfo: ProfileInfo): Result<String>
 
     suspend fun getUserByEmail(email: String): Result<User?>
 
     suspend fun getUser(userId: String): Result<User>
 
-    fun getLiveUser():MutableLiveData<User>
+    fun getLiveUser(): MutableLiveData<User>
 
     suspend fun getChef(id: String): Result<Chef>
 
     fun getLiveChef(id: String): MutableLiveData<Chef>
 
-    suspend fun getChefIdList(settingType:List<Int>):Result<List<String>>
+    suspend fun getChefIdList(settingType: List<Int>): Result<List<String>>
 
     suspend fun blockMenu(blockMenuList: List<String>, userId: String)
 
@@ -33,7 +33,7 @@ interface ChefDataSource {
 
     suspend fun updateAddress(addressList: List<Address>)
 
-    suspend fun setOrder(order:Order):Result<Boolean>
+    suspend fun setOrder(order: Order): Result<Boolean>
 
     suspend fun updateOrderStatus(status: Int, orderId: String)
 
@@ -41,7 +41,12 @@ interface ChefDataSource {
 
     suspend fun updateMenuReview(menuId: String, newMenuRating: Float, newMenuRatingNumber: Int)
 
-    suspend fun updateBookSetting(type:Int, calendarDefault:Int, chefSpace:ChefSpace?, userSpace:UserSpace?)
+    suspend fun updateBookSetting(
+        type: Int,
+        calendarDefault: Int,
+        chefSpace: ChefSpace?,
+        userSpace: UserSpace?,
+    )
 
     suspend fun getMenu(id: String): Result<Menu>
 
@@ -53,16 +58,18 @@ interface ChefDataSource {
         useName: String,
         chefName: String,
         userAvatar: String,
-        chefAvatar: String
+        chefAvatar: String,
     ): Result<String>
 
     suspend fun getRoom(userId: String, chefId: String): Result<String>
 
-    fun getLiveRoomList(nowId: String):MutableLiveData<List<Room>>
+    fun getLiveRoomList(nowId: String): MutableLiveData<List<Room>>
 
-    suspend fun updateRoom(roomId:String, msg:String, nowId:String, time:Long)
+    fun getLiveChat(roomId:String):MutableLiveData<List<Chat>>
 
-    suspend fun setChat(roomId:String, msg:String, nowId:String, time:Long)
+    suspend fun updateRoom(roomId: String, msg: String, nowId: String, time: Long)
+
+    suspend fun setChat(roomId: String, msg: String, nowId: String, time: Long)
 
     suspend fun setMenu(
         menuName: String,
@@ -72,23 +79,22 @@ interface ChefDataSource {
         discountList: List<Discount>,
         dishList: List<Dish>,
         tagList: List<String>,
-        openBoolean: Boolean
+        openBoolean: Boolean,
     )
 
-    suspend fun updateLikeList(newList:List<String>)
+    suspend fun updateLikeList(newList: List<String>)
 
-    suspend fun getMenuReviewList(menuId:String):Result<List<Review>>
+    suspend fun getMenuReviewList(menuId: String): Result<List<Review>>
 
-    fun getLiveChefDateSetting(chefId: String):MutableLiveData<List<DateStatus>>
+    fun getLiveChefDateSetting(chefId: String): MutableLiveData<List<DateStatus>>
 
-    suspend fun setDateSetting(date:Long,status:Int)
+    suspend fun setDateSetting(date: Long, status: Int)
 
-    suspend fun getChefMenuList(chefId:String):Result<List<Menu>>
+    suspend fun getChefMenuList(chefId: String): Result<List<Menu>>
 
-    fun getLiveOrder(field:String, value:String):MutableLiveData<List<Order>>
+    fun getLiveOrder(field: String, value: String): MutableLiveData<List<Order>>
 
-    suspend fun getTransaction():Result<List<Transaction>>
+    suspend fun getTransaction(): Result<List<Transaction>>
 
     suspend fun setTransaction(transaction: Transaction)
-
 }
