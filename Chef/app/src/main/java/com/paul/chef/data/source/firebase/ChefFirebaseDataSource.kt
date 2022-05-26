@@ -8,6 +8,34 @@ import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import com.paul.chef.data.source.ChefDataSource
 import com.paul.chef.data.source.Result
+import com.paul.chef.util.ConstValue.ADDRESS
+import com.paul.chef.util.ConstValue.ATTENDANCE
+import com.paul.chef.util.ConstValue.BLOCK_MENU_LIST
+import com.paul.chef.util.ConstValue.BLOCK_REVIEW_LIST
+import com.paul.chef.util.ConstValue.BOOK_SETTING_CALENDAR_DEFAULT
+import com.paul.chef.util.ConstValue.BOOK_SETTING_CHEF_SPACE
+import com.paul.chef.util.ConstValue.BOOK_SETTING_TYPE
+import com.paul.chef.util.ConstValue.BOOK_SETTING_USER_SPACE
+import com.paul.chef.util.ConstValue.CHAT
+import com.paul.chef.util.ConstValue.CHEF
+import com.paul.chef.util.ConstValue.CHEF_ID
+import com.paul.chef.util.ConstValue.DATE
+import com.paul.chef.util.ConstValue.DATE_SETTING
+import com.paul.chef.util.ConstValue.LAST_DATA_TYPE
+import com.paul.chef.util.ConstValue.LAST_MSG
+import com.paul.chef.util.ConstValue.LIKE_LIST
+import com.paul.chef.util.ConstValue.MENU
+import com.paul.chef.util.ConstValue.ORDER
+import com.paul.chef.util.ConstValue.PROFILE_INFO
+import com.paul.chef.util.ConstValue.PROFILE_INFO_EMAIL
+import com.paul.chef.util.ConstValue.REVIEW
+import com.paul.chef.util.ConstValue.REVIEW_NUMBER
+import com.paul.chef.util.ConstValue.REVIEW_RATING
+import com.paul.chef.util.ConstValue.ROOM
+import com.paul.chef.util.ConstValue.STATUS
+import com.paul.chef.util.ConstValue.TIME
+import com.paul.chef.util.ConstValue.TRANSACTION
+import com.paul.chef.util.ConstValue.USER
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -17,7 +45,7 @@ object ChefFirebaseDataSource : ChefDataSource {
     override suspend fun getMenuList(): Result<List<Menu>> =
         suspendCoroutine { continuation ->
 
-            FirebaseFirestore.getInstance().collection("Menu")
+            FirebaseFirestore.getInstance().collection(MENU)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value != null) {
@@ -31,8 +59,6 @@ object ChefFirebaseDataSource : ChefDataSource {
                                 continuation.resume(Result.Success(dataList))
                             }
                         }
-                    } else {
-                        Timber.d("No such document")
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -43,7 +69,7 @@ object ChefFirebaseDataSource : ChefDataSource {
     override fun getLiveMenuList(): MutableLiveData<List<Menu>> {
         val dataList = mutableListOf<Menu>()
         val liveData = MutableLiveData<List<Menu>>()
-        FirebaseFirestore.getInstance().collection("Menu")
+        FirebaseFirestore.getInstance().collection(MENU)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Timber.w(e, "Listen failed.")
@@ -64,10 +90,10 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun setUser(profileInfo: ProfileInfo): Result<String> =
         suspendCoroutine { continuation ->
-            val id = FirebaseFirestore.getInstance().collection("User").document().id
+            val id = FirebaseFirestore.getInstance().collection(USER).document().id
             val user = User(id, profileInfo)
 
-            FirebaseFirestore.getInstance().collection("User").document(id)
+            FirebaseFirestore.getInstance().collection(USER).document(id)
                 .set(user)
                 .addOnSuccessListener { documentReference ->
                     Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -80,8 +106,8 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun getUserByEmail(email: String): Result<User?> =
         suspendCoroutine { continuation ->
-            FirebaseFirestore.getInstance().collection("User")
-                .whereEqualTo("profileInfo.email", email)
+            FirebaseFirestore.getInstance().collection(USER)
+                .whereEqualTo(PROFILE_INFO_EMAIL, email)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value.documents.isNotEmpty()) {
@@ -104,7 +130,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         }
 
     override suspend fun getUser(userId: String): Result<User> = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance().collection("User")
+        FirebaseFirestore.getInstance().collection(USER)
             .document(userId)
             .get()
             .addOnSuccessListener { document ->
@@ -127,7 +153,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         val userId = UserManger.user?.userId!!
 
         val liveData = MutableLiveData<User>()
-        FirebaseFirestore.getInstance().collection("User")
+        FirebaseFirestore.getInstance().collection(USER)
             .document(userId)
             .addSnapshotListener { value, e ->
                 if (e != null) {
@@ -144,7 +170,7 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun getChef(id: String): Result<Chef> = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance().collection("Chef")
+        FirebaseFirestore.getInstance().collection(CHEF)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
@@ -165,7 +191,7 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override fun getLiveChef(id: String): MutableLiveData<Chef> {
         val liveData = MutableLiveData<Chef>()
-        FirebaseFirestore.getInstance().collection("Chef")
+        FirebaseFirestore.getInstance().collection(CHEF)
             .document(id)
             .addSnapshotListener { value, e ->
                 if (e != null) {
@@ -184,8 +210,8 @@ object ChefFirebaseDataSource : ChefDataSource {
     override suspend fun getChefIdList(settingType: List<Int>): Result<List<String>> =
         suspendCoroutine { continuation ->
             val chefList = mutableListOf<String>()
-            FirebaseFirestore.getInstance().collection("Chef")
-                .whereIn("bookSetting.type", settingType)
+            FirebaseFirestore.getInstance().collection(CHEF)
+                .whereIn(BOOK_SETTING_TYPE, settingType)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value != null) {
@@ -208,10 +234,10 @@ object ChefFirebaseDataSource : ChefDataSource {
         }
 
     override suspend fun blockMenu(blockMenuList: List<String>, userId: String) {
-        FirebaseFirestore.getInstance().collection("User").document(userId)
+        FirebaseFirestore.getInstance().collection(USER).document(userId)
             .update(
                 mapOf(
-                    "blockMenuList" to blockMenuList,
+                    BLOCK_MENU_LIST to blockMenuList,
                 )
             )
             .addOnSuccessListener {
@@ -221,10 +247,10 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun blockReview(blockReviewList: List<String>, userId: String) {
-        FirebaseFirestore.getInstance().collection("User").document(userId)
+        FirebaseFirestore.getInstance().collection(USER).document(userId)
             .update(
                 mapOf(
-                    "blockReviewList" to blockReviewList,
+                    BLOCK_REVIEW_LIST to blockReviewList,
                 )
             )
             .addOnSuccessListener {
@@ -234,13 +260,13 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun createChef(user: User): Result<String> = suspendCoroutine { continuation ->
-        val id = FirebaseFirestore.getInstance().collection("Chef").document().id
+        val id = FirebaseFirestore.getInstance().collection(CHEF).document().id
         val profileInfo = user.profileInfo
         val userId = UserManger.user?.userId
         if (profileInfo != null && userId != null) {
             val temp = Chef(id, profileInfo)
 
-            FirebaseFirestore.getInstance().collection("Chef").document(id)
+            FirebaseFirestore.getInstance().collection(CHEF).document(id)
                 .set(temp)
                 .addOnSuccessListener { documentReference ->
                     Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -252,7 +278,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             FirebaseFirestore.getInstance().collection("User").document(userId)
                 .update(
                     mapOf(
-                        "chefId" to id
+                        CHEF_ID to id
                     )
                 )
                 .addOnSuccessListener { documentReference ->
@@ -273,10 +299,10 @@ object ChefFirebaseDataSource : ChefDataSource {
             profileInfo.introduce
         )
 
-        FirebaseFirestore.getInstance().collection("Chef").document(chefId)
+        FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
             .update(
                 mapOf(
-                    "profileInfo" to info,
+                    PROFILE_INFO to info,
                 )
             )
             .addOnSuccessListener {
@@ -284,10 +310,10 @@ object ChefFirebaseDataSource : ChefDataSource {
             }
             .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
 
-        FirebaseFirestore.getInstance().collection("User").document(userId)
+        FirebaseFirestore.getInstance().collection(USER).document(userId)
             .update(
                 mapOf(
-                    "profileInfo" to info,
+                    PROFILE_INFO to info,
                 )
             )
             .addOnSuccessListener {
@@ -298,11 +324,11 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun updateAddress(addressList: List<Address>) {
         val userId = UserManger.user?.userId!!
-        FirebaseFirestore.getInstance().collection("User")
+        FirebaseFirestore.getInstance().collection(USER)
             .document(userId)
             .update(
                 mapOf(
-                    "address" to addressList,
+                    ADDRESS to addressList,
                 )
             )
             .addOnSuccessListener {
@@ -315,7 +341,7 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun setOrder(order: Order): Result<Boolean> =
         suspendCoroutine { continuation ->
-            FirebaseFirestore.getInstance().collection("Order").document(order.id)
+            FirebaseFirestore.getInstance().collection(ORDER).document(order.id)
                 .set(order)
                 .addOnSuccessListener { documentReference ->
                     Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -327,10 +353,10 @@ object ChefFirebaseDataSource : ChefDataSource {
         }
 
     override suspend fun updateOrderStatus(status: Int, orderId: String) {
-        FirebaseFirestore.getInstance().collection("Order").document(orderId)
+        FirebaseFirestore.getInstance().collection(ORDER).document(orderId)
             .update(
                 mapOf(
-                    "status" to status
+                    STATUS to status
                 )
             )
             .addOnSuccessListener { documentReference ->
@@ -346,11 +372,11 @@ object ChefFirebaseDataSource : ChefDataSource {
         newChefRating: Float,
         newChefRatingNumber: Int,
     ) {
-        FirebaseFirestore.getInstance().collection("Chef").document(chefId)
+        FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
             .update(
                 mapOf(
-                    "reviewRating" to newChefRating,
-                    "reviewNumber" to newChefRatingNumber
+                    REVIEW_RATING to newChefRating,
+                    REVIEW_NUMBER to newChefRatingNumber
                 )
             )
             .addOnSuccessListener { documentReference ->
@@ -366,11 +392,11 @@ object ChefFirebaseDataSource : ChefDataSource {
         newMenuRating: Float,
         newMenuRatingNumber: Int,
     ) {
-        FirebaseFirestore.getInstance().collection("Menu").document(menuId)
+        FirebaseFirestore.getInstance().collection(MENU).document(menuId)
             .update(
                 mapOf(
-                    "reviewRating" to newMenuRating,
-                    "reviewNumber" to newMenuRatingNumber
+                    REVIEW_RATING to newMenuRating,
+                    REVIEW_NUMBER to newMenuRatingNumber
                 )
             )
             .addOnSuccessListener { documentReference ->
@@ -388,13 +414,13 @@ object ChefFirebaseDataSource : ChefDataSource {
         userSpace: UserSpace?,
     ) {
         val chefId = UserManger.user?.chefId!!
-        FirebaseFirestore.getInstance().collection("Chef").document(chefId)
+        FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
             .update(
                 mapOf(
-                    "bookSetting.type" to type,
-                    "bookSetting.calendarDefault" to calendarDefault,
-                    "bookSetting.userSpace" to userSpace,
-                    "bookSetting.chefSpace" to chefSpace
+                    BOOK_SETTING_TYPE to type,
+                    BOOK_SETTING_CALENDAR_DEFAULT to calendarDefault,
+                    BOOK_SETTING_USER_SPACE to userSpace,
+                    BOOK_SETTING_CHEF_SPACE to chefSpace
                 )
             )
             .addOnSuccessListener {
@@ -404,7 +430,7 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun getMenu(id: String): Result<Menu> = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance().collection("Menu")
+        FirebaseFirestore.getInstance().collection(MENU)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
@@ -423,9 +449,9 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun setReview(menuId: String, review: Review) {
-        val reviewId = FirebaseFirestore.getInstance().collection("Review").document().id
-        FirebaseFirestore.getInstance().collection("Menu").document(menuId)
-            .collection("Review").document(reviewId)
+        val reviewId = FirebaseFirestore.getInstance().collection(REVIEW).document().id
+        FirebaseFirestore.getInstance().collection(MENU).document(menuId)
+            .collection(REVIEW).document(reviewId)
             .set(review)
             .addOnSuccessListener { documentReference ->
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -443,10 +469,10 @@ object ChefFirebaseDataSource : ChefDataSource {
         userAvatar: String,
         chefAvatar: String,
     ): Result<String> = suspendCoroutine { continuation ->
-        val id = FirebaseFirestore.getInstance().collection("Room").document().id
+        val id = FirebaseFirestore.getInstance().collection(ROOM).document().id
         val attendees = listOf(userId, chefId)
         val room = Room(id, attendees, useName, userAvatar, chefName, chefAvatar)
-        FirebaseFirestore.getInstance().collection("Room").document(id)
+        FirebaseFirestore.getInstance().collection(ROOM).document(id)
             .set(room)
             .addOnSuccessListener { documentReference ->
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -460,8 +486,8 @@ object ChefFirebaseDataSource : ChefDataSource {
     override suspend fun getRoom(userId: String, chefId: String): Result<String> =
         suspendCoroutine { continuation ->
             val attendanceList = listOf(userId, chefId)
-            FirebaseFirestore.getInstance().collection("Room")
-                .whereEqualTo("attendance", attendanceList)
+            FirebaseFirestore.getInstance().collection(ROOM)
+                .whereEqualTo(ATTENDANCE, attendanceList)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value.documents.isNotEmpty()) {
@@ -485,8 +511,8 @@ object ChefFirebaseDataSource : ChefDataSource {
         val dataList = mutableListOf<Room>()
         val liveData = MutableLiveData<List<Room>>()
 
-        FirebaseFirestore.getInstance().collection("Room")
-            .whereArrayContains("attendance", nowId)
+        FirebaseFirestore.getInstance().collection(ROOM)
+            .whereArrayContains(ATTENDANCE, nowId)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Timber.tag("notification").w(e, "Listen failed.")
@@ -513,9 +539,9 @@ object ChefFirebaseDataSource : ChefDataSource {
     override fun getLiveChat(roomId: String): MutableLiveData<List<Chat>> {
         val chatList = mutableListOf<Chat>()
         val liveData = MutableLiveData<List<Chat>>()
-        FirebaseFirestore.getInstance().collection("Room")
+        FirebaseFirestore.getInstance().collection(ROOM)
             .document(roomId)
-            .collection("Chat")
+            .collection(CHAT)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Timber.tag("notification").w(e, "Listen failed.")
@@ -528,23 +554,23 @@ object ChefFirebaseDataSource : ChefDataSource {
                         val json = Gson().toJson(item)
                         val data = Gson().fromJson(json, Chat::class.java)
                         chatList.add(data)
-                        if(value.documents.indexOf(document)==value.documents.lastIndex){
+                        if (value.documents.indexOf(document) == value.documents.lastIndex) {
                             chatList.sortBy { it.time }
                             liveData.value = chatList
                         }
                     }
                 }
             }
-        return  liveData
+        return liveData
     }
 
     override suspend fun updateRoom(roomId: String, msg: String, nowId: String, time: Long) {
-        FirebaseFirestore.getInstance().collection("Room").document(roomId)
+        FirebaseFirestore.getInstance().collection(ROOM).document(roomId)
             .update(
                 mapOf(
-                    "lastMsg" to msg,
-                    "lastDataType" to MsgType.String.index,
-                    "time" to time
+                    LAST_MSG to msg,
+                    LAST_DATA_TYPE to MsgType.String.index,
+                    TIME to time
                 )
             )
             .addOnSuccessListener {
@@ -554,10 +580,10 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override suspend fun setChat(roomId: String, msg: String, nowId: String, time: Long) {
-        val id = FirebaseFirestore.getInstance().collection("Chat").document().id
+        val id = FirebaseFirestore.getInstance().collection(CHAT).document().id
         val chat = Chat(msg, MsgType.String.index, nowId, time)
-        FirebaseFirestore.getInstance().collection("Room").document(roomId)
-            .collection("Chat").document(id)
+        FirebaseFirestore.getInstance().collection(ROOM).document(roomId)
+            .collection(CHAT).document(id)
             .set(chat)
             .addOnSuccessListener { documentReference ->
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -577,7 +603,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         tagList: List<String>,
         openBoolean: Boolean,
     ) {
-        val id = FirebaseFirestore.getInstance().collection("Menu").document().id
+        val id = FirebaseFirestore.getInstance().collection(MENU).document().id
         val chefId = UserManger.chef?.id!!
         val chefName = UserManger.chef?.profileInfo?.name!!
         val avatar = UserManger.chef?.profileInfo?.avatar!!
@@ -597,7 +623,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             open = openBoolean
         )
 
-        FirebaseFirestore.getInstance().collection("Menu").document(id)
+        FirebaseFirestore.getInstance().collection(MENU).document(id)
             .set(menu)
             .addOnSuccessListener { documentReference ->
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
@@ -609,10 +635,10 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun updateLikeList(newList: List<String>) {
         val userId = UserManger.user?.userId!!
-        FirebaseFirestore.getInstance().collection("User").document(userId)
+        FirebaseFirestore.getInstance().collection(USER).document(userId)
             .update(
                 mapOf(
-                    "likeList" to newList,
+                    LIKE_LIST to newList,
                 )
             )
             .addOnSuccessListener {
@@ -624,8 +650,8 @@ object ChefFirebaseDataSource : ChefDataSource {
     override suspend fun getMenuReviewList(menuId: String): Result<List<Review>> =
         suspendCoroutine { continuation ->
             val dataList = mutableListOf<Review>()
-            FirebaseFirestore.getInstance().collection("Menu").document(menuId)
-                .collection("Review")
+            FirebaseFirestore.getInstance().collection(MENU).document(menuId)
+                .collection(REVIEW)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value.documents.isNotEmpty()) {
@@ -650,8 +676,8 @@ object ChefFirebaseDataSource : ChefDataSource {
     override fun getLiveChefDateSetting(chefId: String): MutableLiveData<List<DateStatus>> {
         val dateStatus = mutableListOf<DateStatus>()
         val liveData = MutableLiveData<List<DateStatus>>()
-        FirebaseFirestore.getInstance().collection("Chef")
-            .document(chefId).collection("dateSetting")
+        FirebaseFirestore.getInstance().collection(CHEF)
+            .document(chefId).collection(DATE_SETTING)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Timber.w(e, "Listen failed.")
@@ -674,12 +700,12 @@ object ChefFirebaseDataSource : ChefDataSource {
 
     override suspend fun setDateSetting(date: Long, status: Int) {
         val chefId = UserManger.chef?.id!!
-        FirebaseFirestore.getInstance().collection("Chef").document(chefId)
-            .collection("dateSetting").document(date.toString())
+        FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
+            .collection(DATE_SETTING).document(date.toString())
             .set(
                 mapOf(
-                    "date" to date,
-                    "status" to status
+                    DATE to date,
+                    STATUS to status
                 )
             )
             .addOnSuccessListener {
@@ -691,8 +717,8 @@ object ChefFirebaseDataSource : ChefDataSource {
     override suspend fun getChefMenuList(chefId: String): Result<List<Menu>> =
         suspendCoroutine { continuation ->
             val menuList = mutableListOf<Menu>()
-            FirebaseFirestore.getInstance().collection("Menu")
-                .whereEqualTo("chefId", chefId)
+            FirebaseFirestore.getInstance().collection(MENU)
+                .whereEqualTo(CHEF_ID, chefId)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value.documents.isNotEmpty()) {
@@ -717,7 +743,7 @@ object ChefFirebaseDataSource : ChefDataSource {
     override fun getLiveOrder(field: String, value: String): MutableLiveData<List<Order>> {
         val orderList = mutableListOf<Order>()
         val liveData = MutableLiveData<List<Order>>()
-        FirebaseFirestore.getInstance().collection("Order")
+        FirebaseFirestore.getInstance().collection(ORDER)
             .whereEqualTo(field, value)
             .addSnapshotListener { value, e ->
                 if (e != null) {
@@ -741,8 +767,8 @@ object ChefFirebaseDataSource : ChefDataSource {
         suspendCoroutine { continuation ->
             val chefId = UserManger.user?.chefId!!
             val dataList = mutableListOf<Transaction>()
-            FirebaseFirestore.getInstance().collection("Transaction")
-                .whereEqualTo("chefId", chefId)
+            FirebaseFirestore.getInstance().collection(TRANSACTION)
+                .whereEqualTo(CHEF_ID, chefId)
                 .get()
                 .addOnSuccessListener { value ->
                     if (value.documents.isNotEmpty()) {
@@ -765,7 +791,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         }
 
     override suspend fun setTransaction(transaction: Transaction) {
-        FirebaseFirestore.getInstance().collection("Transaction").document(transaction.id)
+        FirebaseFirestore.getInstance().collection(TRANSACTION).document(transaction.id)
             .set(transaction)
             .addOnSuccessListener { documentReference ->
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
