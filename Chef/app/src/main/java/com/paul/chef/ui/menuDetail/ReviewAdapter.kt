@@ -1,21 +1,20 @@
 package com.paul.chef.ui.menuDetail
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.paul.chef.Block
 import com.paul.chef.ProfileOutlineProvider
 import com.paul.chef.R
 import com.paul.chef.data.Review
 import com.paul.chef.databinding.ItemReviewBinding
 
-class ReviewAdapter(val block: Block): ListAdapter<Review, RecyclerView.ViewHolder>(ReviewListCallback()) {
-
+class ReviewAdapter(val block: Block) : ListAdapter<Review, RecyclerView.ViewHolder>(
+    ReviewListCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ReviewHolder.from(parent)
@@ -27,17 +26,14 @@ class ReviewAdapter(val block: Block): ListAdapter<Review, RecyclerView.ViewHold
         if (holder is ReviewHolder) {
             holder.bind(item, block)
         }
-
     }
-
 
     class ReviewHolder(private var binding: ItemReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
-        fun bind(item: Review, block:Block) {
+        fun bind(item: Review, block: Block) {
             val outlineProvider = ProfileOutlineProvider()
-            binding.itemReviewAvatar.outlineProvider =outlineProvider
+            binding.itemReviewAvatar.outlineProvider = outlineProvider
             bindImage(binding.itemReviewAvatar, item.userAvatar)
             binding.itemReviewContent.text = item.content
             binding.itemReviewUserName.text = item.userName
@@ -45,13 +41,13 @@ class ReviewAdapter(val block: Block): ListAdapter<Review, RecyclerView.ViewHold
             binding.ratingBar3.rating = item.rating
             binding.itemReviewMore.setOnClickListener {
                 val popupMenu = PopupMenu(binding.root.context, it)
-                popupMenu.setOnMenuItemClickListener { menuItem->
-                    when(menuItem.itemId){
-                         R.id.menu_block->{
-                           block.blockReview(item.userId)
-                             true
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.menu_block -> {
+                            block.blockReview(item.userId)
+                            true
                         }
-                        else->{
+                        else -> {
                             false
                         }
                     }
@@ -59,7 +55,6 @@ class ReviewAdapter(val block: Block): ListAdapter<Review, RecyclerView.ViewHold
                 popupMenu.inflate(R.menu.menu_block)
                 popupMenu.show()
             }
-
         }
 
         companion object {
@@ -70,7 +65,6 @@ class ReviewAdapter(val block: Block): ListAdapter<Review, RecyclerView.ViewHold
             }
         }
     }
-
 }
 
 class ReviewListCallback : DiffUtil.ItemCallback<Review>() {
@@ -81,15 +75,4 @@ class ReviewListCallback : DiffUtil.ItemCallback<Review>() {
     override fun areContentsTheSame(oldItem: Review, newItem: Review): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
-
 }
-//
-//fun bindImage(imgView: ImageView, imgUrl: String?) {
-//    imgUrl?.let {
-//        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-//        Glide.with(imgView.context)
-//            .load(imgUri)
-//            .into(imgView)
-//    }
-//}

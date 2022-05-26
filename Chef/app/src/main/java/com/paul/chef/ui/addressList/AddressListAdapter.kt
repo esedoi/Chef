@@ -12,47 +12,42 @@ import com.paul.chef.data.Address
 import com.paul.chef.databinding.ItemAddressListBinding
 import com.paul.chef.databinding.ItemAddressListDeleteBinding
 
-
-class AddressListAdapter(private val addressList: AddressList, private val listType:Int) : ListAdapter<Address, RecyclerView.ViewHolder>(FriendListCallback()) {
-
-
+class AddressListAdapter(private val addressList: AddressList, private val listType: Int) :
+    ListAdapter<Address, RecyclerView.ViewHolder>(
+        AddressListCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(listType){
-            AddressListType.NORMAL.index ->{
+        return when (listType) {
+            AddressListType.NORMAL.index -> {
                 AddressHolder.from(parent)
             }
-            else->{
+            else -> {
                 AddressSelectHolder.from(parent)
             }
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-        when(holder){
-            is AddressSelectHolder->{
+        when (holder) {
+            is AddressSelectHolder -> {
                 holder.bind(item, position, addressList)
             }
-            is AddressHolder->{
+            is AddressHolder -> {
                 holder.bind(item, position, addressList)
             }
         }
-
     }
-
-
 
     class AddressSelectHolder(private var binding: ItemAddressListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Address, position: Int, addressList: AddressList) {
-
             binding.radioButton.text = item.addressTxt
-            binding.radioButton.isChecked =  UserManger.lastSelectedPosition == position
-            binding.radioButton.setOnClickListener{
+            binding.radioButton.isChecked = UserManger.lastSelectedPosition == position
+            binding.radioButton.setOnClickListener {
                 addressList.select(item)
                 UserManger.lastSelectedPosition = position
             }
@@ -61,7 +56,11 @@ class AddressListAdapter(private val addressList: AddressList, private val listT
         companion object {
             fun from(parent: ViewGroup): AddressSelectHolder {
                 val menu =
-                    ItemAddressListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemAddressListBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return AddressSelectHolder(menu)
             }
         }
@@ -71,29 +70,27 @@ class AddressListAdapter(private val addressList: AddressList, private val listT
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Address, position: Int, addressList: AddressList) {
-
             binding.itemAddressDTxt.text = item.addressTxt
             binding.itemAddressDDeleBtn.setOnClickListener {
-               addressList.delete(item)
-           }
-
+                addressList.delete(item)
+            }
         }
 
         companion object {
             fun from(parent: ViewGroup): AddressHolder {
                 val menu =
-                    ItemAddressListDeleteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemAddressListDeleteBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return AddressHolder(menu)
             }
         }
     }
-
-
-
-
 }
 
-class FriendListCallback : DiffUtil.ItemCallback<Address>() {
+class AddressListCallback : DiffUtil.ItemCallback<Address>() {
     override fun areItemsTheSame(oldItem: Address, newItem: Address): Boolean {
         return oldItem == newItem
     }
@@ -101,5 +98,4 @@ class FriendListCallback : DiffUtil.ItemCallback<Address>() {
     override fun areContentsTheSame(oldItem: Address, newItem: Address): Boolean {
         return areItemsTheSame(oldItem, newItem)
     }
-
 }

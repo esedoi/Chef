@@ -19,7 +19,6 @@ class LikeViewModel : ViewModel() {
 //    val menuList: LiveData<List<ChefMenu>>
 //        get() = _menuList
 
-
 //    init {
 //
 //        db.collection("User")
@@ -77,5 +76,4 @@ class LikeViewModel : ViewModel() {
 //            .addOnFailureListener { e -> Log.w("notification", "Error updating document", e) }
 //
 //    }
-
 }

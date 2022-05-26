@@ -1,12 +1,9 @@
 package com.paul.chef.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.paul.chef.UserManger
 import com.paul.chef.data.User
 
 class HomeViewModel : ViewModel() {
@@ -16,9 +13,9 @@ class HomeViewModel : ViewModel() {
         get() = _userData
 
     private val db = FirebaseFirestore.getInstance()
-    val userName=""
+    val userName = ""
     val userIntro = ""
-    val userAvatar= ""
+    val userAvatar = ""
 
 //    fun login(){
 //        val userId = UserManger.user?.userId!!

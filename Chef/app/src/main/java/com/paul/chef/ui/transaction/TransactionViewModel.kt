@@ -1,31 +1,25 @@
 package com.paul.chef.ui.transaction
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-
-import com.google.gson.Gson
 import com.paul.chef.*
 import com.paul.chef.data.Order
-
 import com.paul.chef.data.Transaction
+import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.data.source.Result
 import java.util.*
+import kotlinx.coroutines.launch
 
-class TransactionViewModel:ViewModel(){
-
+class TransactionViewModel(private val repository: ChefRepository) : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
     private val unpaidList = mutableListOf<Order>()
-     val processingList = mutableListOf<Transaction>()
-     val receivedList = mutableListOf<Transaction>()
-
+    val processingList = mutableListOf<Transaction>()
+    val receivedList = mutableListOf<Transaction>()
 
     private var _orderList = MutableLiveData<List<Order>>()
     val orderList: LiveData<List<Order>>
@@ -35,123 +29,100 @@ class TransactionViewModel:ViewModel(){
     val transactionList: LiveData<List<Transaction>>
         get() = _transactionList
 
-
     val chefId = UserManger.chef?.id!!
 
+    var liveOrderList = MutableLiveData<List<Order>>()
 
-
-
-    fun getList(position:Int){
-
-        db.collection("Transaction")
-            .whereEqualTo( "chefId" , chefId)
-            .get()
-            .addOnSuccessListener { value ->
-                if (value.documents.isNotEmpty()) {
-                    processingList.clear()
-                    receivedList.clear()
-                    for (item in value.documents){
-                        val item = item.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Transaction::class.java)
-                        when(data.status){
-                            TransactionStatus.PROCESSING.index->{
-                                processingList.add(data)
-                            }
-                            TransactionStatus.COMPLETED.index->{
-                                receivedList.add(data)
-                            }
-                        }
-                    }
-
-                    when(position){
-                        1->{
-                            Log.d("transaction_view_model", "posiotion1")
-                            _transactionList.value = processingList
-                        }
-                        2->{
-                            Log.d("transaction_view_model", "posiotion2")
-                            _transactionList.value = receivedList
-                        }
-                    }
-
-                } else {
-                  //沒資料
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("transactionviewmodel", "get failed with ", exception)
-            }
-
-
-
-        db.collection("Order")
-            .whereEqualTo( "chefId" , chefId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                unpaidList.clear()
-                for (doc in value!!.documents) {
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Order::class.java)
-                    when(data.status){
-                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index->{
-                            unpaidList.add(data)
-                        }
-                    }
-                }
-                if(position==0){
-                    _orderList.value = unpaidList
-                }
-            }
-
+    init {
+        liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
     }
 
-    fun changeStatus(orderId:String, status:Int){
-        //set firebase資料
-        db.collection("Order").document(orderId)
-            .update(mapOf(
-                "status" to status,
-            ))
-            .addOnSuccessListener { documentReference ->
-                Log.d("click", "DocumentSnapshot added with ID: ${documentReference}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("click", "Error adding document", e)
-            }
+    fun getList(position: Int) {
+        processingList.clear()
+        receivedList.clear()
+        viewModelScope.launch {
+            when (val result = repository.getTransaction()) {
+                is Result.Success -> {
+                    for (transaction in result.data) {
+                        sortTransactionList(transaction)
 
+                        if (result.data.indexOf(transaction) == result.data.lastIndex) {
+                            toLiveData(position)
+                        }
+                    }
+                }
+                is Result.Error -> TODO()
+                is Result.Fail -> TODO()
+                Result.Loading -> TODO()
+            }
+        }
     }
 
+    private fun toLiveData(position: Int) {
+        when (position) {
+            1 -> {
+                _transactionList.value = processingList
+            }
+            2 -> {
+                _transactionList.value = receivedList
+            }
+        }
+    }
 
+    private fun sortTransactionList(transaction: Transaction) {
+        when (transaction.status) {
+            TransactionStatus.PROCESSING.index -> {
+                processingList.add(transaction)
+            }
+            TransactionStatus.COMPLETED.index -> {
+                receivedList.add(transaction)
+            }
+        }
+    }
 
-    fun applyMoney(chefReceive:Int){
+    fun getUnpaidList(orderList: List<Order>) {
+        unpaidList.clear()
+        for (order in orderList) {
+            when (order.status) {
+                OrderStatus.COMPLETED.index, OrderStatus.SCORED.index -> {
+                    unpaidList.add(order)
+                }
+            }
+
+            if (orderList.indexOf(order) == orderList.lastIndex) {
+                _orderList.value = unpaidList
+            }
+        }
+    }
+
+    fun changeStatus(orderId: String, status: Int) {
+        viewModelScope.launch {
+            repository.updateOrderStatus(status, orderId)
+        }
+    }
+
+    fun applyMoney(chefReceive: Int) {
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
-        var idList = mutableListOf<String>()
+        val idList = mutableListOf<String>()
 
-
-        for(i in unpaidList){
+        for (i in unpaidList) {
             idList.add(i.id)
         }
-        Log.d("transactionviewmodel", "idlist=$idList")
-        if(idList.isNotEmpty()&&chefReceive!=0){
 
-            val transaction = Transaction(id,chefId,time,chefReceive,idList, TransactionStatus.PROCESSING.index)
-            Log.d("transactionviewmodel", "transaction=$transaction")
+        if (idList.isNotEmpty() && chefReceive != 0) {
+            val transaction = Transaction(
+                id,
+                chefId,
+                time,
+                chefReceive,
+                idList,
+                TransactionStatus.PROCESSING.index
+            )
 
-            db.collection("Transaction").document(id)
-                .set(transaction)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("transactionviewmodel", "DocumentSnapshot added with ID: ${documentReference}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w("transactionviewmodel", "Error adding document", e)
-                }
+            viewModelScope.launch {
+                repository.setTransaction(transaction)
+            }
         }
-
     }
-
 }

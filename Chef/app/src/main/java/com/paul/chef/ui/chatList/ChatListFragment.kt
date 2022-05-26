@@ -2,97 +2,93 @@ package com.paul.chef.ui.chatList
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
 import com.paul.chef.*
-import com.paul.chef.data.Chat
 import com.paul.chef.data.Room
 import com.paul.chef.databinding.FragmentChatListBinding
-import com.paul.chef.ui.chef.ChefViewModel
+import com.paul.chef.ext.getVmFactory
 
-class ChatListFragment : Fragment(),GoChatRoom {
-
+class ChatListFragment : Fragment(), GoChatRoom {
 
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var chatListAdapter: ChatListAdapter
+    private lateinit var chatListAdapter: ChatListAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private lateinit var viewModel: ChatListViewModel
-
-    val db = FirebaseFirestore.getInstance()
+    private val chatListViewModel by viewModels<ChatListViewModel> { getVmFactory() }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val chatListViewModel =
-            ViewModelProvider(this).get(ChatListViewModel::class.java)
+        val mode = UserManger.readData("mode") ?: -1
 
-        val roomList = mutableListOf<Room>()
-        var nowId = ""
-        var nowMode =-1
+        setAppBarTitle(mode)
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
-        nowId = when(mode){
-            Mode.USER.index-> UserManger.user?.userId!!
-            Mode.CHEF.index-> UserManger.chef?.id!!
-            else->""
-        }
-        if(mode!=null){
-            nowMode = mode
-        }
-
-        chatListAdapter = ChatListAdapter(this,nowMode)
+        chatListAdapter = ChatListAdapter(this, mode)
         layoutManager = LinearLayoutManager(this.context)
         binding.chatListRecycler.layoutManager = layoutManager
         binding.chatListRecycler.adapter = chatListAdapter
 
-        db.collection("Room")
-            .whereArrayContains("attendance", nowId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                roomList.clear()
-                if (value != null) {
-                    for(document in value.documents){
-                        val item = document.data
-                        val json = Gson().toJson(item)
-                        val data = Gson().fromJson(json, Room::class.java)
-                        if(data.lastMsg!=null){
-                            roomList.add(data)
-                        }
-                    }
-
-
-                    roomList.sortBy { it.time }
-                    chatListAdapter.submitList(roomList)
-                    chatListAdapter.notifyDataSetChanged()
-
-                }
+        chatListViewModel.roomList.observe(viewLifecycleOwner) {
+            val roomList = it.sortedBy { sort ->
+                sort.time
             }
-
-
-
-
+            emptyHandle(roomList, mode)
+            chatListAdapter.submitList(roomList)
+            chatListAdapter.notifyDataSetChanged()
+        }
 
         return root
+    }
+
+    private fun setAppBarTitle(mode: Int) {
+        when (mode) {
+            Mode.USER.index -> {
+                binding.topAppBar.title = getString(R.string.message_from_chef)
+            }
+            Mode.CHEF.index -> {
+                binding.topAppBar.title = getString(R.string.massage_from_customer)
+            }
+        }
+    }
+
+    private fun emptyHandle(roomList: List<Room>, mode: Int?) {
+        when {
+            roomList.isEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptySticker.visibility = View.VISIBLE
+                binding.chatEmptyText.visibility = View.VISIBLE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
+            roomList.isEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.VISIBLE
+                binding.chatChefEmptySticker.visibility = View.VISIBLE
+            }
+            roomList.isNotEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.GONE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
+            roomList.isNotEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptySticker.visibility = View.GONE
+                binding.chatEmptyText.visibility = View.GONE
+                binding.chatChefEmptySticker.visibility = View.GONE
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -101,7 +97,8 @@ class ChatListFragment : Fragment(),GoChatRoom {
     }
 
     override fun goChatRoom(roomId: String) {
-        findNavController().navigate(MobileNavigationDirections.actionGlobalChatRoomFragment(roomId))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalChatRoomFragment(roomId)
+        )
     }
-
 }

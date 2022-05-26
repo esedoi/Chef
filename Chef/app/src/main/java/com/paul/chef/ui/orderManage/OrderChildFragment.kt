@@ -1,32 +1,31 @@
 package com.paul.chef.ui.orderManage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
+import com.paul.chef.ext.getVmFactory
 
-class OrderChildFragment: Fragment(), GoOrderDetail{
+class OrderChildFragment : Fragment(), GoOrderDetail {
 
-    //binding
     private var _binding: FragmentOrderChildBinding? = null
     private val binding get() = _binding!!
-    //viewModel
-    private lateinit var orderViewModel: OrderManageViewModel
+
+    private val orderViewModel by viewModels<OrderManageViewModel> { getVmFactory() }
 
     private lateinit var orderChildAdapter: OrderChildAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    private  var status = -1
-
+    private var status = -1
 
     companion object {
 
@@ -40,45 +39,67 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
         }
     }
 
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
 
-    ): View? {
-
+        ): View {
         _binding = FragmentOrderChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //viewModel
-         orderViewModel = ViewModelProvider(this)[OrderManageViewModel::class.java]
+        status = requireArguments().getInt("position")
 
-         status = requireArguments().getInt("position")
-        Log.d("orderchildfragment", "status=$status")
-
-        orderViewModel.hasData.observe(viewLifecycleOwner){
-                    orderViewModel.getList(status)
+        orderViewModel.liveOrderList.observe(viewLifecycleOwner) {
+            orderViewModel.sortOrder(it)
         }
 
-        orderViewModel.orderList.observe(viewLifecycleOwner){
-            Log.d("orderfragment", "it = $it")
+        orderViewModel.hasData.observe(viewLifecycleOwner) {
+            orderViewModel.getList(status)
+        }
+
+        orderViewModel.orderList.observe(viewLifecycleOwner) {
+            setWhetherEmpty(it)
             orderChildAdapter.submitList(it)
+            orderChildAdapter.notifyDataSetChanged()
         }
 
-        val mode = UserManger.readData("mode", (activity as MainActivity))
+        val mode = UserManger.readData("mode")
 
-        //menuList recycler
-        orderChildAdapter = mode?.let { OrderChildAdapter(this, it) }!!
+        orderChildAdapter = OrderChildAdapter(this, mode)
         layoutManager = LinearLayoutManager(this.context)
         binding.orderRecycler.layoutManager = layoutManager
         binding.orderRecycler.adapter = orderChildAdapter
 
-
         return root
     }
 
-
-
+    private fun setWhetherEmpty(it: List<Order>) {
+        val mode = UserManger.readData("mode")
+        when {
+            it.isEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptyImg.visibility = View.VISIBLE
+                binding.chatEmptyTxt.visibility = View.VISIBLE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+            it.isEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.VISIBLE
+                binding.chatChefEmptyImg.visibility = View.VISIBLE
+            }
+            it.isNotEmpty() && mode == Mode.USER.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.GONE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+            it.isNotEmpty() && mode == Mode.CHEF.index -> {
+                binding.chatUserEmptyImg.visibility = View.GONE
+                binding.chatEmptyTxt.visibility = View.GONE
+                binding.chatChefEmptyImg.visibility = View.GONE
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -86,7 +107,10 @@ class OrderChildFragment: Fragment(), GoOrderDetail{
     }
 
     override fun goDetail(order: Order) {
-        Log.d("orderchildfragment", "order=$order")
-        findNavController().navigate(MobileNavigationDirections.actionGlobalOrderDetailFragment(order))
+        findNavController().navigate(
+            MobileNavigationDirections.actionGlobalOrderDetailFragment(
+                order
+            )
+        )
     }
 }

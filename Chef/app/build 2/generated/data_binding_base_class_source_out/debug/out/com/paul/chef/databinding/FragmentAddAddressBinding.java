@@ -75,7 +75,7 @@ public final class FragmentAddAddressBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.add_adress_save;
+      id = R.id.add_address_save;
       Button addAdressSave = ViewBindings.findChildViewById(rootView, id);
       if (addAdressSave == null) {
         break missingId;

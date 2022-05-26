@@ -1,23 +1,16 @@
 package com.paul.chef.ui.orderManage
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.paul.chef.*
 import com.paul.chef.data.Order
+import com.paul.chef.data.source.ChefRepository
+import java.time.LocalDate
+import kotlinx.coroutines.launch
 
-class OrderManageViewModel(application: Application) : AndroidViewModel(application){
-    @SuppressLint("StaticFieldLeak")
-    private val context = getApplication<Application>().applicationContext
-
-
-    private val db = FirebaseFirestore.getInstance()
-
+class OrderManageViewModel(private val repository: ChefRepository) : ViewModel() {
 
     private val upComingList = mutableListOf<Order>()
     private val pendingList = mutableListOf<Order>()
@@ -32,79 +25,90 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
     val hasData: LiveData<Boolean>
         get() = _hasData
 
-
-
-
     var field = ""
     var value = ""
 
+    var liveOrderList = MutableLiveData<List<Order>>()
 
+    init {
 
-    init{
-        val mode =UserManger.readData("mode", context)
-
-        when(mode){
-            Mode.USER.index->{
+        when (UserManger.readData("mode")) {
+            Mode.USER.index -> {
                 val userId = UserManger.user?.userId!!
                 field = "userId"
                 value = userId
             }
-            Mode.CHEF.index->{
-                val chefId = UserManger.chef?.id!!
+            Mode.CHEF.index -> {
+                val chefId = UserManger.user?.chefId!!
                 field = "chefId"
                 value = chefId
             }
         }
-
-        Log.d("field", "field=$field")
-
-        db.collection("Order")
-            .whereEqualTo( field , value)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("notification", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                pendingList.clear()
-                upComingList.clear()
-                completedList.clear()
-                cancelledList.clear()
-                for (doc in value!!.documents) {
-                    Log.d("ordermangeviewmodel", "doc=$doc")
-                    val item = doc.data
-                    val json = Gson().toJson(item)
-                    val data = Gson().fromJson(json, Order::class.java)
-                    Log.d("ordermangeviewmodel", "接收到order資料${data}")
-
-                    when(data.status){
-                        OrderStatus.PENDING.index->{
-                            pendingList.add(data)
-                        }
-                        OrderStatus.UPCOMING.index->{
-                            upComingList.add(data)
-                        }
-                        OrderStatus.COMPLETED.index, OrderStatus.SCORED.index, OrderStatus.APPLIED.index->{
-                            completedList.add(data)
-                        }
-                        OrderStatus.CANCELLED.index->{
-                            cancelledList.add(data)
-                        }
-                    }
-                }
-                _hasData.value = true
-            }
+        liveOrderList = repository.getLiveOrder(field, value)
     }
 
-    fun getList(status:Int){
-        Log.d("orderviewmodel", "status=$status")
-        Log.d("orderviewmodel", "OrderStatus.PENDING.index=${OrderStatus.PENDING.index}")
+    fun sortOrder(orderList: List<Order>) {
+        if (checkCompleteOrder(orderList)) {
+            pendingList.clear()
+            upComingList.clear()
+            completedList.clear()
+            cancelledList.clear()
 
-        when(status) {
-            OrderStatus.PENDING.index -> {
-                if(pendingList.size>=1) {
-                    Log.d("orderviewmodel", "pendingList=$pendingList")
-                    _orderList.value = pendingList
+            for (order in orderList) {
+                when (order.status) {
+                    OrderStatus.PENDING.index -> {
+                        pendingList.add(order)
+                    }
+                    OrderStatus.UPCOMING.index -> {
+                        upComingList.add(order)
+                    }
+                    OrderStatus.COMPLETED.index, OrderStatus.SCORED.index, OrderStatus.APPLIED.index -> {
+                        completedList.add(order)
+                    }
+                    OrderStatus.CANCELLED.index -> {
+                        cancelledList.add(order)
+                    }
                 }
+                if (orderList.indexOf(order) == orderList.lastIndex) {
+                    _hasData.value = true
+                }
+            }
+        }
+    }
+
+    private fun checkCompleteOrder(orderList: List<Order>): Boolean {
+        var result = true
+
+        for (order in orderList) {
+            when {
+                order.status == OrderStatus.UPCOMING.index && order.date < LocalDate.now()
+                    .toEpochDay() -> {
+                    result = false
+                    changeOrderStatus(OrderStatus.COMPLETED.index, order)
+                }
+                order.status == OrderStatus.PENDING.index && order.date < LocalDate.now()
+                    .toEpochDay() -> {
+                    result = false
+                    changeOrderStatus(OrderStatus.CANCELLED.index, order)
+                }
+                else -> {
+                    result = true
+                }
+            }
+        }
+        return result
+    }
+
+    private fun changeOrderStatus(status: Int, order: Order) {
+        viewModelScope.launch {
+            repository.updateOrderStatus(status, order.id)
+        }
+    }
+
+    fun getList(status: Int) {
+        when (status) {
+            OrderStatus.PENDING.index -> {
+                _orderList.value = pendingList
             }
             OrderStatus.UPCOMING.index -> {
                 _orderList.value = upComingList
@@ -117,5 +121,4 @@ class OrderManageViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
     }
-
 }

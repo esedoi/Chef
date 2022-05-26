@@ -71,7 +71,7 @@ public final class FragmentOrderManageBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView24;
+      id = R.id.order_manage_title;
       TextView textView24 = ViewBindings.findChildViewById(rootView, id);
       if (textView24 == null) {
         break missingId;

@@ -1,22 +1,17 @@
 package com.paul.chef.ui.datePicker
 
-
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -27,15 +22,11 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.paul.chef.BookSettingType
 import com.paul.chef.CalendarType
 import com.paul.chef.R
-import com.paul.chef.data.BookSetting
 import com.paul.chef.data.DateStatus
-import com.paul.chef.data.SelectedDate
 import com.paul.chef.databinding.*
-import com.paul.chef.ui.book.BookFragmentArgs
-import com.paul.chef.ui.calendarSetting.CalendarSettingViewModel
+import com.paul.chef.ext.getVmFactory
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.temporal.ChronoField
 import java.time.temporal.WeekFields
 import java.util.*
 
@@ -53,6 +44,8 @@ class DatePicker : BottomSheetDialogFragment() {
     var calendarDefault: Int = -1
     var dateList = mutableListOf<DateStatus>()
 
+    private val datePickerViewModel by viewModels<DatePickerViewModel> { getVmFactory() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
@@ -62,19 +55,21 @@ class DatePicker : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = BottomSheetDatepickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val datePickerViewModel =
-            ViewModelProvider(this).get(DatePickerViewModel::class.java)
-
         val validDate = mutableListOf<LocalDate>()
         val inValidDate = mutableListOf<LocalDate>()
-        val chefId = arg.chefId
-        datePickerViewModel.getChefData(chefId)
 
+        if (arg.chefId != null) {
+            val chefId = arg.chefId
+            datePickerViewModel.getChefData(chefId!!)
+        }
 
+        datePickerViewModel.liveChef.observe(viewLifecycleOwner) {
+            datePickerViewModel.getBookSetting(it)
+        }
         datePickerViewModel.bookSetting.observe(viewLifecycleOwner) {
             calendarDefault = it.calendarDefault
             type = it.type
@@ -93,7 +88,6 @@ class DatePicker : BottomSheetDialogFragment() {
             dismiss()
         }
 
-
         class DayViewContainer(view: View) : ViewContainer(view) {
             // With ViewBinding
             val textView = CalendarDayLayoutBinding.bind(view).calendarDayText
@@ -101,27 +95,24 @@ class DatePicker : BottomSheetDialogFragment() {
             // Will be set when this container is bound
             lateinit var day: CalendarDay
 
-
             init {
-
-
                 for (i in dateList) {
                     val localDate: LocalDate = LocalDate.ofEpochDay(i.date)
                     if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
-                        //不能按
+                        // 不能按
                         inValidDate.add(localDate)
                     } else {
-                        //可以按
+                        // 可以按
                         validDate.add(localDate)
                     }
                 }
 
                 if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
-                    //不能按
+                    // 不能按
                     view.setOnClickListener {
                         if (validDate.contains(day.date)) {
-                            if (day.owner == DayOwner.THIS_MONTH
-                                && (day.date == today || day.date.isAfter(today))
+                            if (day.owner == DayOwner.THIS_MONTH &&
+                                (day.date == today || day.date.isAfter(today))
 
                             ) {
                                 val currentSelection = selectedDate
@@ -142,13 +133,12 @@ class DatePicker : BottomSheetDialogFragment() {
                             }
                         }
                     }
-
                 } else {
-                    //可以按
+                    // 可以按
                     view.setOnClickListener {
                         if (!inValidDate.contains(day.date)) {
-                            if (day.owner == DayOwner.THIS_MONTH
-                                && (day.date == today || day.date.isAfter(today))
+                            if (day.owner == DayOwner.THIS_MONTH &&
+                                (day.date == today || day.date.isAfter(today))
                             ) {
                                 val currentSelection = selectedDate
                                 if (currentSelection == day.date) {
@@ -172,11 +162,9 @@ class DatePicker : BottomSheetDialogFragment() {
             }
         }
 
-
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = CalendarMonthHeaderLayoutBinding.bind(view).headerTextView
         }
-
 
         binding.datePickerCalendarView.dayBinder = object : DayBinder<DayViewContainer> {
             // Called only when a new container is needed.
@@ -190,7 +178,6 @@ class DatePicker : BottomSheetDialogFragment() {
                 if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
                     container.textView.paint.flags =
                         Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                    Log.d("calendar", "畫線")
                 } else {
                     container.textView.paint.flags = 0
                     container.textView.paint.isAntiAlias = true
@@ -203,29 +190,28 @@ class DatePicker : BottomSheetDialogFragment() {
                         if (i.status == com.paul.chef.DateStatus.CLOSE.index) {
                             container.textView.paint.flags =
                                 Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                            Log.d("calendar", "if_____________")
-
                         } else {
                             container.textView.paint.flags = 0
                             container.textView.paint.isAntiAlias = true
-                            Log.d("calendar", "else_____________")
-
                         }
                     }
                 }
-
 
                 if (day.owner == DayOwner.THIS_MONTH) {
                     container.textView.visibility = View.VISIBLE
 
                     when {
                         day.date.isBefore(today) -> {
-                            container.textView.setTextColor(resources.getColor(R.color.example_4_grey_past))
+                            container.textView.setTextColor(
+                                resources.getColor(R.color.example_4_grey_past)
+                            )
                         }
 
                         selectedDate == day.date -> {
                             container.textView.setTextColor(Color.WHITE)
-                            container.textView.setBackgroundResource(R.drawable.selection_background)
+                            container.textView.setBackgroundResource(
+                                R.drawable.selection_background
+                            )
                         }
                         today == day.date -> {
                             container.textView.setTextColor(Color.BLACK)
@@ -239,7 +225,6 @@ class DatePicker : BottomSheetDialogFragment() {
                 } else {
                     container.textView.visibility = View.INVISIBLE
                 }
-
             }
         }
 
@@ -250,12 +235,11 @@ class DatePicker : BottomSheetDialogFragment() {
             @SuppressLint("SetTextI18n")
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 container.textView.text = "${
-                    month.yearMonth.month.name.lowercase(Locale.getDefault())
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                month.yearMonth.month.name.lowercase(Locale.getDefault())
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 } ${month.year}"
             }
         }
-
 
         val currentMonth = YearMonth.now()
         val firstMonth = currentMonth.minusMonths(10)
@@ -264,13 +248,15 @@ class DatePicker : BottomSheetDialogFragment() {
         binding.datePickerCalendarView.setup(currentMonth, lastMonth, firstDayOfWeek)
         binding.datePickerCalendarView.scrollToMonth(currentMonth)
 
-
         binding.dateSelected.setOnClickListener {
-
             val result = selectedDate?.toEpochDay()
             Log.d("datePicker", "result=$result")
 
-            setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            if (arg.chefId != null) {
+                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            } else {
+                setFragmentResult("filterDate", bundleOf("date" to result))
+            }
             dismiss()
             selectedDate = null
         }

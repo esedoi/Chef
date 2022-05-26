@@ -19,8 +19,8 @@ android {
         applicationId "com.paul.chef"
         minSdk 30
         targetSdk 32
-        versionCode 4
-        versionName "1.3.0"
+        versionCode 6
+        versionName "1.5.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +46,8 @@ android {
 
     ktlint {
         android.set(true)
+        verbose.set(true)
+        enableExperimentalRules.set(true)
         outputColorName.set("RED")
     }
 }
@@ -86,11 +88,12 @@ dependencies {
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
 
     implementation "com.github.bumptech.glide:glide:4.13.1"
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.1'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.1'
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     implementation 'com.airbnb.android:lottie:5.1.1'
-    
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
 }

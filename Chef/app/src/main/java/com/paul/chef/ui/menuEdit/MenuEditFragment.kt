@@ -1,20 +1,17 @@
 package com.paul.chef.ui.menuEdit
 
-
 import android.annotation.SuppressLint
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,10 +23,8 @@ import com.paul.chef.data.Dish
 import com.paul.chef.databinding.FragmentMenuEditBinding
 import com.paul.chef.databinding.ItemAddDishBinding
 import com.paul.chef.databinding.ItemDishOptionalBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
-import com.paul.chef.ui.menuDetail.bindImage
-import kotlin.math.atan2
-
 
 class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
@@ -42,41 +37,28 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     private var _dishView: ItemDishOptionalBinding? = null
     private val dishView get() = _dishView!!
 
-
     var bindingList = mutableListOf<ItemAddDishBinding>()
-    var allDishBindingList = mutableListOf<ItemDishOptionalBinding>()
+    private var allDishBindingList = mutableListOf<ItemDishOptionalBinding>()
     var pendingList = mutableListOf<Dish>()
-
-    var menuName = ""
-    var menuIntro = ""
-    var perPrice = -1
-    var typeNumber = -1
-
 
     private lateinit var discountAdapter: DiscountAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private lateinit var imageAdapter: DetailImagesAdapter
 
-
     var discountList = mutableListOf<Discount>()
-    var people: Int = 0
-
-    var dishType: String = ""
-
-    var dishList = mutableListOf<Dish>()
 
     private val arg: MenuEditFragmentArgs by navArgs()
 
-    var imgList = mutableListOf<String>()
+    private var imgList = mutableListOf<String>()
     var tagList = mutableListOf<String>()
 
+    private var bindingItemCountList = mutableListOf<Int>()
+    private var bindingItemCount = 0
 
-    var bindingItemCountList = mutableListOf<Int>()
-    var bindingItemCount = 0
+    var openBoolean: Boolean = false
 
-   var openBoolean: Boolean = false
-
+    private val menuEditViewModel by viewModels<MenuEditViewModel> { getVmFactory() }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -84,37 +66,28 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentMenuEditBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val menuEditViewModel =
-            ViewModelProvider(this).get(MenuEditViewModel::class.java)
-
-
-        //discount recycler
+        // discount recycler
         discountAdapter = DiscountAdapter(this)
         layoutManager = LinearLayoutManager(this.context)
         binding.discountRecycler.layoutManager = layoutManager
         binding.discountRecycler.adapter = discountAdapter
 
-        //imagesRecyclerView
-        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this)
+        // imagesRecyclerView
+        imageAdapter = DetailImagesAdapter(ImgRecyclerType.IMAGE_EDIT.index, this, null, null)
         layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.menuEditImgRecycler.layoutManager = layoutManager
         binding.menuEditImgRecycler.adapter = imageAdapter
 
-
         binding.menuEditAddImg.setOnClickListener {
             findNavController().navigate(
-                MobileNavigationDirections.actionGlobalImageUploadFragment(
-                    ImgType.MENU.index
-                )
+                MobileNavigationDirections.actionGlobalImageUploadFragment(ImgType.MENU.index)
             )
         }
-        setFragmentResultListener("requestImg") { requestKey, bundle ->
+        setFragmentResultListener("requestImg") { _, bundle ->
             val result = bundle.getString("downloadUri")
-            Log.d("chefeditfragment", "result=$result")
             if (result != null) {
                 imgList.add(result)
                 imageAdapter.submitList(imgList)
@@ -122,41 +95,47 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             }
         }
 
-
         val items =
             listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
-
         val adapter = ArrayAdapter(requireContext(), R.layout.list_people_item, items)
         (binding.menuEditDiscountPeople.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        val editMenu = arg.menu
-        if (editMenu != null) {
-            binding.menuEditName.editText?.setText(editMenu.menuName)
-            binding.menuEditPerprice.editText?.setText(editMenu.perPrice)
-            binding.menuEditIntro.editText?.setText(editMenu.intro)
-            discountAdapter.submitList(editMenu.discount)
-            imageAdapter.submitList(editMenu.images)
-
-
-
-
-            for(i in 0..editMenu.dishes.last().typeNumber){
-                val typeList = editMenu.dishes.filter {
-                    it.typeNumber==i
-                }
-                Log.d("menueditfragment", "$typeList")
-                addDish(container,typeList[0].option, typeList )
-            }
-
-        } else {
-
-        }
-
+        // menuEdit
+//        val editMenu = arg.menu
+//        if (editMenu != null) {
+//            binding.menuEditName.editText?.setText(editMenu.menuName)
+//            binding.menuEditPerprice.editText?.setText(editMenu.perPrice)
+//            binding.menuEditIntro.editText?.setText(editMenu.intro)
+//            discountAdapter.submitList(editMenu.discount)
+//            imageAdapter.submitList(editMenu.images)
+//
+//            for (i in 0..editMenu.dishes.last().typeNumber) {
+//
+//                val typeList = editMenu.dishes.filter {
+//                    it.typeNumber == i
+//                }
+//                addDish(container, typeList[0].option, typeList)
+//            }
+//        }
 
         binding.addDiscountBtn.setOnClickListener {
-            if (binding.menuEditDiscountPeople.editText?.text.toString() != "") {
-                people = binding.menuEditDiscountPeople.editText?.text.toString().toInt()
-                if (binding.menuEditDiscountPercentOff.editText?.text.toString() != "") {
+            when {
+                binding.menuEditDiscountPeople.editText?.text.toString() == "" -> {
+                    Toast.makeText(
+                        this.context,
+                        getString(R.string.please_select_people),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                binding.menuEditDiscountPercentOff.editText?.text.toString() == "" -> {
+                    Toast.makeText(
+                        this.context,
+                        getString(R.string.please_enter_discount),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    val people = binding.menuEditDiscountPeople.editText?.text.toString().toInt()
                     val percentOff =
                         binding.menuEditDiscountPercentOff.editText?.text.toString().toInt()
                     val discount = Discount(people, percentOff)
@@ -165,15 +144,9 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                     discountAdapter.notifyDataSetChanged()
                     binding.menuEditDiscountPercentOff.editText?.text?.clear()
                     binding.menuEditDiscountPeople.editText?.text?.clear()
-
-                } else {
-                    Toast.makeText(this.context, "請填寫折扣", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this.context, "請選擇人數", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         binding.fixedBtn.setOnClickListener {
             addDish(container, AddDishType.FIXED.index, null)
@@ -188,12 +161,12 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
             findNavController().navigate(MobileNavigationDirections.actionGlobalAddTagFragment())
         }
 
-        setFragmentResultListener("tagList") { requestKey, bundle ->
+        setFragmentResultListener("tagList") { _, bundle ->
             val newList = bundle.getStringArrayList("tagList")
-            Log.d("menuEditfragment", "tagList = $tagList")
             if (newList != null) {
+                tagList.clear()
                 tagList.addAll(newList)
-                tagList.forEach { it ->
+                tagList.forEach {
                     val chip = Chip(this.context)
                     chip.text = it
                     chip.isCloseIconVisible = true
@@ -203,84 +176,108 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
                     binding.menuEditTagsGroup.addView(chip)
                 }
             }
-
         }
 
-        menuEditViewModel.openBoolean.observe(viewLifecycleOwner){
+        menuEditViewModel.openBoolean.observe(viewLifecycleOwner) {
             openBoolean = it
         }
 
-
-        //create Menu
+        // create Menu
         binding.build.setOnClickListener {
-            Log.d("menuEditfragment", "bindingItemCountList = ${bindingItemCountList}")
-            Log.d("menuEditfragment", "pendingList.size = ${pendingList.size}")
-            Log.d("menuEditfragment", "allDishBindingList.size = ${allDishBindingList.size}")
+            Log.d("menuEditFragment", "bindingItemCountList = $bindingItemCountList")
+            Log.d("menuEditFragment", "pendingList.size = ${pendingList.size}")
+            Log.d("menuEditFragment", "allDishBindingList.size = ${allDishBindingList.size}")
 
-            if (binding.menuEditName.editText?.text.toString() == "" || binding.menuEditIntro.editText?.text.toString() == "" || binding.menuEditPerprice.editText?.text.toString() == "") {
-                Toast.makeText(this.context, "欄位未完成", Toast.LENGTH_SHORT).show()
-            } else {
+            val dishList: List<Dish> = getFinalDishList()
 
-                menuName = binding.menuEditName.editText?.text.toString()
-                menuIntro = binding.menuEditIntro.editText?.text.toString()
-                perPrice = binding.menuEditPerprice.editText?.text.toString().toInt()
+            if (errorHandle(dishList)) {
+                val menuName = binding.menuEditName.editText?.text.toString()
+                val menuIntro = binding.menuEditIntro.editText?.text.toString()
+                val perPrice = binding.menuEditPerprice.editText?.text.toString().toInt()
 
-                var count = 0
-                var isNameFilled = true
-
-
-                for (i in allDishBindingList) {
-
-                    if (i.menuDishNameInput.editText?.text.toString() == "") {
-                        isNameFilled = false
-                    } else {
-                        val price = if (i.menuDishPriceInput.editText?.text.toString() == "") {
-                            0
-                        } else {
-                            i.menuDishPriceInput.editText?.text.toString().toInt()
-                        }
-
-                        val dishName = i.menuDishNameInput.editText?.text.toString()
-                        val type = pendingList[count].type
-                        val option = pendingList[count].option
-                        typeNumber = pendingList[count].typeNumber
-
-                        val dish = Dish(type, option, dishName, price, typeNumber)
-                        dishList.add(dish)
-                        Log.d("menueditfragment", "count=$count dishList = $dishList")
-                        count++
-                    }
-                }
-
-
-                if (!isNameFilled) {
-                    Toast.makeText(this.context, "菜品名稱未完成", Toast.LENGTH_SHORT).show()
-                } else if (imgList.isEmpty()) {
-                    Toast.makeText(this.context, "請上傳菜單照片", Toast.LENGTH_SHORT).show()
-                } else if (dishList.isNullOrEmpty()) {
-                    Toast.makeText(this.context, "請新增菜色", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.d("menuEditfragment", "ok,build!!，，dishList = ${dishList}")
-                    menuEditViewModel.createMenu(
-                        menuName,
-                        menuIntro,
-                        perPrice,
-                        imgList,
-                        discountList,
-                        dishList,
-                        tagList,
-                        openBoolean
-                    )
-                    dishList.clear()
-                    findNavController().navigateUp()
-//                typeNumber = -1
-                }
+                menuEditViewModel.createMenu(
+                    menuName,
+                    menuIntro,
+                    perPrice,
+                    imgList,
+                    discountList,
+                    dishList,
+                    tagList,
+                    openBoolean
+                )
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalDoneFragment("chefPage")
+                )
             }
         }
 
-
-
         return root
+    }
+
+    private fun getFinalDishList(): List<Dish> {
+        val dishList = mutableListOf<Dish>()
+        var typeNumber: Int
+
+        for (i in allDishBindingList) {
+            val price = if (i.menuDishPriceInput.editText?.text.toString() == "") {
+                0
+            } else {
+                i.menuDishPriceInput.editText?.text.toString().toInt()
+            }
+            val dishName = i.menuDishNameInput.editText?.text.toString()
+            val type = pendingList[allDishBindingList.indexOf(i)].type
+            val option = pendingList[allDishBindingList.indexOf(i)].option
+            typeNumber = pendingList[allDishBindingList.indexOf(i)].typeNumber
+            val dish = Dish(type, option, dishName, price, typeNumber)
+            dishList.add(dish)
+        }
+        return dishList
+    }
+
+    private fun errorHandle(dishList: List<Dish>): Boolean {
+        return if (
+            binding.menuEditName.editText?.text.toString() == "" ||
+            binding.menuEditIntro.editText?.text.toString() == "" ||
+            binding.menuEditPerprice.editText?.text.toString() == ""
+        ) {
+            Toast.makeText(
+                this.context,
+                getString(R.string.field_not_completet),
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        } else if (!checkIsNameFilled(allDishBindingList)) {
+            Toast.makeText(
+                this.context,
+                getString(R.string.please_complete_dish_name),
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        } else if (imgList.isEmpty()) {
+            Toast.makeText(
+                this.context,
+                getString(R.string.toast_please_upload_photo),
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        } else if (dishList.isNullOrEmpty()) {
+            Toast.makeText(this.context, getString(R.string.please_add_dish), Toast.LENGTH_SHORT)
+                .show()
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun checkIsNameFilled(allDishBindingList: MutableList<ItemDishOptionalBinding>): Boolean {
+        var isNameFilled = true
+
+        for (i in allDishBindingList) {
+            if (i.menuDishNameInput.editText?.text.toString() == "") {
+                isNameFilled = false
+            }
+        }
+        return isNameFilled
     }
 
     override fun onDestroyView() {
@@ -292,112 +289,111 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     override fun add(people: Int, percentOff: Int) {
         val discount = Discount(people, percentOff)
         discountList.add(discount)
-        Log.d("menueditfragment", "discountList = $discountList")
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun remove(position: Int, percentOff: Int) {
         discountList.removeAt(position)
         discountAdapter.submitList(discountList)
-        Log.d("menueditfragment", "peopleNumber = $discountList")
         discountAdapter.notifyDataSetChanged()
     }
 
-
-    private fun addDish(container: ViewGroup?, option: Int,displayTypeList:List<Dish>? ) {
-
+    private fun addDish(container: ViewGroup?, option: Int, displayTypeList: List<Dish>?) {
         _dishTypeView =
             ItemAddDishBinding.inflate(LayoutInflater.from(context), container, false)
         bindingList.add(dishTypeView)
 
-        if (option == AddDishType.FIXED.index) {
-            dishTypeView.introText.text = "顧客將享用以下所有菜品"
-        } else {
-            dishTypeView.introText.text = "顧客將在下方選擇一道菜"
-        }
+        setDishTypeIntroText(option)
 
-        for (t in bindingList) {
-
+        for (itemBindingList in bindingList) {
+            setDishTypeSelector()
             var typeIndex: Int
-            //typeSpinner
-            val typeList =
-                listOf("開胃菜", "湯", "飲料", "酒", "前菜", "主菜", "甜點", "其他")
 
-            val dishTypeAdapter =
-                ArrayAdapter(requireContext(), R.layout.list_people_item, typeList)
-            (dishTypeView.menuAddDishType.editText as? AutoCompleteTextView)?.setAdapter(
-                dishTypeAdapter
-            )
-
-//            if(displayTypeList!=null){
-//                for (dish in displayTypeList){
-//
-//
-//                }
-//            }
-
-            t.removeType.setOnClickListener {
-                typeIndex = bindingList.indexOf(t)
+            itemBindingList.removeType.setOnClickListener {
+                typeIndex = bindingList.indexOf(itemBindingList)
                 binding.dishTypeLinear.removeView(bindingList[typeIndex].root)
                 bindingList.removeAt(typeIndex)
-                //*****************************************
 
-                var num = 0
-                var count = typeIndex
-                for (i in bindingItemCountList) {
-                    if (count > 0) {
-                        num += i
-                        count--
-                    }
-                }
-                val countB = bindingItemCountList[typeIndex]
+                val beforeDishNum: Int = getBeforeDishNum(typeIndex, bindingItemCountList)
+                val numberInType = bindingItemCountList[typeIndex]
 
-                removeList(num, countB, pendingList, allDishBindingList)
+                removeList(beforeDishNum, numberInType, pendingList, allDishBindingList)
                 bindingItemCountList.removeAt(typeIndex)
             }
-            t.addDish.setOnClickListener {
-                typeIndex = bindingList.indexOf(t)
+
+            itemBindingList.addDish.setOnClickListener {
+                typeIndex = bindingList.indexOf(itemBindingList)
                 _dishView =
                     ItemDishOptionalBinding.inflate(LayoutInflater.from(context), container, false)
-
-                if (option == AddDishType.FIXED.index) {
-                    dishView.menuDishPriceInput.visibility = View.GONE
-                }
-
+                setPriceInputVisibility(option)
                 val dishBindingList = mutableListOf<ItemDishOptionalBinding>()
                 dishBindingList.add(dishView)
+                dishView.menuDishNameInput.dispatchSetSelected(true)
 
-                for (d in dishBindingList) {
-                    dishType = dishTypeView.menuAddDishType.editText?.text.toString()
+                for (itemDishBindingList in dishBindingList) {
+                    val dishType = dishTypeView.menuAddDishType.editText?.text.toString()
                     val pendingDish = Dish(dishType, option, typeNumber = typeIndex)
                     pendingList.add(pendingDish)
-                    allDishBindingList.add(d)
-                    d.dishRemove.setOnClickListener {
+                    allDishBindingList.add(itemDishBindingList)
 
-                        val dishIndex = dishBindingList.indexOf(d)
-                        typeIndex = bindingList.indexOf(t)
-
-                        bindingList[typeIndex].dishLinear.removeView(dishBindingList[dishIndex].root)
+                    itemDishBindingList.dishRemove.setOnClickListener {
+                        val dishIndex = dishBindingList.indexOf(itemDishBindingList)
+                        typeIndex = bindingList.indexOf(itemBindingList)
+                        bindingList[typeIndex].dishLinear.removeView(
+                            dishBindingList[dishIndex].root
+                        )
                         dishBindingList.removeAt(dishIndex)
-                        //*********************************
-                        bindingItemCountList[typeIndex]--
-                        Log.d("menueditfragment", "bindingItemCount=$bindingItemCount")
-
-                        //need to remove dish in pending list, done(maybe)
-                        allDishBindingList.remove(d)
+                        allDishBindingList.remove(itemDishBindingList)
                         pendingList.remove(pendingDish)
+                        bindingItemCountList[typeIndex]--
                     }
                 }
                 bindingList[typeIndex].dishLinear.addView(dishView.root)
-                //*********************************
                 bindingItemCountList[typeIndex]++
             }
         }
         binding.dishTypeLinear.addView(dishTypeView.root)
-        //**********************************
         bindingItemCountList.add(bindingItemCount)
     }
 
+    private fun getBeforeDishNum(typeIndex: Int, bindingItemCountList: MutableList<Int>): Int {
+        var beforeDishNum = 0
+        var counter = typeIndex
+        for (i in bindingItemCountList) {
+            if (counter > 0) {
+                beforeDishNum += i
+                counter--
+            }
+        }
+        return beforeDishNum
+    }
+
+    private fun setPriceInputVisibility(option: Int) {
+        if (option == AddDishType.FIXED.index) {
+            dishView.menuDishPriceInput.visibility = View.GONE
+        }
+    }
+
+    private fun setDishTypeSelector() {
+        val typeList =
+            listOf("開胃菜", "湯", "飲料", "酒", "前菜", "主菜", "甜點", "其他")
+
+        val dishTypeAdapter =
+            ArrayAdapter(requireContext(), R.layout.list_people_item, typeList)
+        (dishTypeView.menuAddDishType.editText as? AutoCompleteTextView)?.setAdapter(
+            dishTypeAdapter
+        )
+    }
+
+    private fun setDishTypeIntroText(option: Int) {
+        if (option == AddDishType.FIXED.index) {
+            dishTypeView.introText.text = getString(R.string.fixed_type_intro_txt)
+        } else {
+            dishTypeView.introText.text = getString(R.string.optional_type_intro_txt)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun remove(position: Int) {
         imgList.removeAt(position)
         imageAdapter.submitList(imgList)
@@ -405,34 +401,14 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     }
 
     private fun removeList(
-        num: Int,
-        countB: Int,
+        beforeDishNum: Int,
+        numberInType: Int,
         pendingList: MutableList<Dish>,
         allDishBindingList: MutableList<ItemDishOptionalBinding>
     ) {
-        if (countB < 1) return
-        pendingList.removeAt(num)
-        allDishBindingList.removeAt(num)
-        removeList(num, countB - 1, pendingList, allDishBindingList)
-    }
-
-    fun editMenuAddType(container: ViewGroup?, option: Int){
-        _dishTypeView =
-            ItemAddDishBinding.inflate(LayoutInflater.from(context), container, false)
-        bindingList.add(dishTypeView)
-
-        if (option == AddDishType.FIXED.index) {
-            dishTypeView.introText.text = "顧客將享用以下所有菜品"
-        } else {
-            dishTypeView.introText.text = "顧客將在下方選擇一道菜"
-        }
-
-    }
-
-    fun editMenuAddDish(){
-
+        if (numberInType < 1) return
+        pendingList.removeAt(beforeDishNum)
+        allDishBindingList.removeAt(beforeDishNum)
+        removeList(beforeDishNum, numberInType - 1, pendingList, allDishBindingList)
     }
 }
-
-
-

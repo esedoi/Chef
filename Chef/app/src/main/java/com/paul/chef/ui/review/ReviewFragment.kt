@@ -1,18 +1,19 @@
 package com.paul.chef.ui.review
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.ProfileOutlineProvider
+import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetReviewBinding
+import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
-
 
 class ReviewFragment : DialogFragment() {
 
@@ -21,7 +22,7 @@ class ReviewFragment : DialogFragment() {
 
     private val arg: ReviewFragmentArgs by navArgs()
 
-    private lateinit var reviewViewModel: ReviewViewModel
+    private val reviewViewModel by viewModels<ReviewViewModel> { getVmFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +30,12 @@ class ReviewFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = BottomSheetReviewBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        reviewViewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
 
         val order = arg.order
         val rating = arg.rating
@@ -43,7 +43,8 @@ class ReviewFragment : DialogFragment() {
         binding.apply {
             reviewMenuName.text = order.menuName
             reviewRatingbar.rating = rating.toFloat()
-            reviewMenuChef.text = "由 " + order.chefName + " 提供"
+            reviewMenuChef.text = getString(R.string.support_by, order.chefName)
+
             reviewDate.text = order.date.toString()
             val outlineProvider = ProfileOutlineProvider()
             reviewChefAvatar.outlineProvider = outlineProvider
@@ -54,13 +55,14 @@ class ReviewFragment : DialogFragment() {
 
                 reviewViewModel.rating(reviewTxt, newRating, order)
                 reviewDescription.editText?.setText("")
-                findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+                findNavController().navigate(
+                    MobileNavigationDirections.actionGlobalOrderManageFragment()
+                )
             }
             reviewClose.setOnClickListener {
                 dismiss()
             }
         }
-
         return root
     }
 
@@ -68,6 +70,4 @@ class ReviewFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
