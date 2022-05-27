@@ -9,6 +9,7 @@ import com.paul.chef.data.Chef
 import com.paul.chef.data.DateStatus
 import com.paul.chef.data.Order
 import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.util.ConstValue.CHEF_ID
 import java.time.LocalDate
 
 class CalendarViewModel(repository: ChefRepository) : ViewModel() {
@@ -25,16 +26,17 @@ class CalendarViewModel(repository: ChefRepository) : ViewModel() {
     val bookSetting: LiveData<BookSetting>
         get() = _bookSetting
 
-    val chefId = UserManger.chef?.id!!
+    val chefId = UserManger.chef?.id
 
     var liveOrderList = MutableLiveData<List<Order>>()
     var liveChef = MutableLiveData<Chef>()
 
     init {
-
-        liveOrderList = repository.getLiveOrder("chefId", chefId)
-        _dateSetting = repository.getLiveChefDateSetting(chefId)
-        liveChef = repository.getLiveChef(chefId)
+        if(chefId!=null){
+            liveOrderList = repository.getLiveOrder(CHEF_ID, chefId)
+            _dateSetting = repository.getLiveChefDateSetting(chefId)
+            liveChef = repository.getLiveChef(chefId)
+        }
     }
 
     fun getOrderDateList(orderList: List<Order>) {
@@ -50,7 +52,7 @@ class CalendarViewModel(repository: ChefRepository) : ViewModel() {
 
     fun getBookSetting(chef: Chef) {
         if (chef.bookSetting != null) {
-            _bookSetting.value = chef.bookSetting!!
+            _bookSetting.value = chef.bookSetting?:return
         }
     }
 }

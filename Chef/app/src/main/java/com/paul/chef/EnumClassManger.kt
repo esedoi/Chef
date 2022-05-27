@@ -1,5 +1,11 @@
 package com.paul.chef
 
+enum class LoadApiStatus {
+    LOADING,
+    ERROR,
+    DONE
+}
+
 enum class BookSettingType(val index: Int) {
     AcceptAll(0), OnlyUserSpace(1), OnlyChefSpace(2), RefuseAll(3)
 }

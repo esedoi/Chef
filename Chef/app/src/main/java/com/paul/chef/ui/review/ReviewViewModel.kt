@@ -1,7 +1,10 @@
 package com.paul.chef.ui.review
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paul.chef.LoadApiStatus
 import com.paul.chef.OrderStatus
 import com.paul.chef.data.Order
 import com.paul.chef.data.Review
@@ -11,6 +14,14 @@ import java.util.*
 import kotlinx.coroutines.launch
 
 class ReviewViewModel(private val repository: ChefRepository) : ViewModel() {
+
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
 
     fun rating(txt: String, rating: Float, order: Order) {
         val orderId = order.id
@@ -25,31 +36,47 @@ class ReviewViewModel(private val repository: ChefRepository) : ViewModel() {
         viewModelScope.launch {
             repository.updateOrderStatus(status, orderId)
 
-            when (val chef = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId)) {
                 is Result.Success -> {
-                    val chefRatingNumber = chef.data.reviewNumber ?: 0
-                    var chefRating = chef.data.reviewRating ?: 0
+                    val chefRatingNumber = result.data.reviewNumber ?: 0
+                    var chefRating = result.data.reviewRating ?: 0
                     chefRating = chefRating.toFloat()
                     newChefRatingNumber = chefRatingNumber + 1
                     newChefRating = ((chefRating * chefRatingNumber) + rating) / newChefRatingNumber
                     repository.updateChefReview(chefId, newChefRating, newChefRatingNumber)
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
 
-            when (val menu = repository.getMenu(menuId)) {
+            when (val result = repository.getMenu(menuId)) {
                 is Result.Success -> {
-                    val menuRatingNumber = menu.data.reviewNumber ?: 0
-                    val menuRating = (menu.data.reviewRating ?: 0).toInt().toFloat()
+                    val menuRatingNumber = result.data.reviewNumber ?: 0
+                    val menuRating = (result.data.reviewRating ?: 0).toInt().toFloat()
                     newMenuRatingNumber = menuRatingNumber + 1
                     newMenuRating = ((menuRating * menuRatingNumber) + rating) / newMenuRatingNumber
                     repository.updateMenuReview(menuId, newMenuRating, newMenuRatingNumber)
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
 
             val date = Calendar.getInstance().timeInMillis

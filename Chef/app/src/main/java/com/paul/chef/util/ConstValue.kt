@@ -29,4 +29,5 @@ object ConstValue{
     const val TRANSACTION = "Transaction"
     const val TIME = "time"
     const val USER = "User"
+    const val USER_ID = "userId"
 }

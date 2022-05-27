@@ -3,16 +3,17 @@ package com.paul.chef.ui.book
 import androidx.lifecycle.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paul.chef.ChefManger
+import com.paul.chef.LoadApiStatus
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
+import com.paul.chef.util.ConstValue.ORDER
 import java.util.*
 import kotlinx.coroutines.launch
 
 class BookViewModel(private val repository: ChefRepository) : ViewModel() {
 
-    private val db = FirebaseFirestore.getInstance()
 
     private var _chefSpaceAddress = MutableLiveData<Address>()
     val chefSpaceAddress: LiveData<Address>
@@ -29,15 +30,31 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
     val priceResult: LiveData<Map<String, Int>>
         get() = _priceResult
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
     fun getAddress(chefId: String) {
         viewModelScope.launch {
             when (val result = repository.getChef(chefId)) {
                 is Result.Success -> {
                     _chefSpaceAddress.value = result.data.bookSetting?.chefSpace?.address
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
@@ -78,13 +95,14 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
         time: String,
         note: String,
         people: Int,
-        selectedDish: List<Dish>
+        selectedDish: List<Dish>,
     ) {
-        val orderId = db.collection("Order").document().id
-        val userId = UserManger.user?.userId!!
-        val userName = UserManger.user!!.profileInfo?.name!!
+        val db = FirebaseFirestore.getInstance()
+        val orderId = db.collection(ORDER).document().id
+        val userId = UserManger.user?.userId ?: return
+        val userName = UserManger.user?.profileInfo?.name ?: return
         val chefName = menu.chefName
-        val userPic = UserManger.user!!.profileInfo?.avatar ?: "nullPic"
+        val userPic = UserManger.user?.profileInfo?.avatar ?: "nullPic"
         val chefPic = menu.chefAvatar
         val menuName = menu.menuName
         val chefId = menu.chefId
@@ -131,11 +149,19 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
         viewModelScope.launch {
             when (val result = repository.setOrder(order)) {
                 is Result.Success -> {
-                    _bookDone.value = result.data!!
+                    _bookDone.value = result.data ?: return@launch
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }

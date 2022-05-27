@@ -9,12 +9,13 @@ import kotlinx.coroutines.launch
 
 class CalendarSettingViewModel(private val repository: ChefRepository) : ViewModel() {
 
-    val date = mutableListOf<DateStatus>()
+
 
     fun settingDate(
         status: Int,
         selectDates: List<LocalDate>,
     ) {
+        val date = mutableListOf<DateStatus>()
         for (i in selectDates) {
             val long = i.toEpochDay()
             val dateStatus = DateStatus(status, long)

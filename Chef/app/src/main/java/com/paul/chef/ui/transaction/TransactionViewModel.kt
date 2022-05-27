@@ -10,12 +10,11 @@ import com.paul.chef.data.Order
 import com.paul.chef.data.Transaction
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
+import com.paul.chef.util.ConstValue.CHEF_ID
 import java.util.*
 import kotlinx.coroutines.launch
 
 class TransactionViewModel(private val repository: ChefRepository) : ViewModel() {
-
-    private val db = FirebaseFirestore.getInstance()
 
     private val unpaidList = mutableListOf<Order>()
     val processingList = mutableListOf<Transaction>()
@@ -29,12 +28,18 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
     val transactionList: LiveData<List<Transaction>>
         get() = _transactionList
 
-    val chefId = UserManger.chef?.id!!
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
 
     var liveOrderList = MutableLiveData<List<Order>>()
 
     init {
-        liveOrderList = repository.getLiveOrder("chefId", UserManger.user?.chefId!!)
+        liveOrderList = repository.getLiveOrder(CHEF_ID, UserManger.user?.chefId!!)
     }
 
     fun getList(position: Int) {
@@ -51,9 +56,17 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
                         }
                     }
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
@@ -102,6 +115,8 @@ class TransactionViewModel(private val repository: ChefRepository) : ViewModel()
     }
 
     fun applyMoney(chefReceive: Int) {
+        val db = FirebaseFirestore.getInstance()
+        val chefId = UserManger.chef?.id?:return
         val id = db.collection("Transaction").document().id
         val time = Calendar.getInstance().timeInMillis
         val idList = mutableListOf<String>()

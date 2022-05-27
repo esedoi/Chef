@@ -40,7 +40,7 @@ class DisplayChefFragment : Fragment(), Block {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentChefPageBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -91,7 +91,7 @@ class DisplayChefFragment : Fragment(), Block {
         binding.chefPageReviewRecycler.adapter = reviewAdapter
         chefViewModel.reviewList.observe(viewLifecycleOwner) {
             reviewList = if (UserManger.user?.blockReviewList != null) {
-                it.filter {review->
+                it.filter { review ->
                     !UserManger.user?.blockReviewList!!.contains(review.userId)
                 }
             } else {
@@ -99,7 +99,7 @@ class DisplayChefFragment : Fragment(), Block {
             }
 
             val filterList = reviewList.filterIndexed { index, _ ->
-                index <2
+                index < 2
             }
             reviewAdapter.submitList(filterList)
             reviewAdapter.notifyDataSetChanged()
@@ -130,7 +130,6 @@ class DisplayChefFragment : Fragment(), Block {
         blockReviewList.add(userId)
         (activity as MainActivity).block(UserManger.user?.userId!!, null, blockReviewList)
         UserManger.user?.blockReviewList = blockReviewList
-//        chefViewModel.getReview(menu.id)
     }
 
     override fun blockMenu(menuId: String) {

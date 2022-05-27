@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paul.chef.LoadApiStatus
 import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
@@ -19,28 +20,52 @@ class UserProfileViewModel(private val repository: ChefRepository) : ViewModel()
     val getChefDone: LiveData<Boolean>
         get() = _getChefDone
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
     fun createChef(user: User) {
         viewModelScope.launch {
             when (val result = repository.createChef(user)) {
                 is Result.Success -> {
-                    _chefId.value = result.data!!
+                    _chefId.value = result.data ?: return@launch
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
 
     fun getChef(chefId: String) {
         viewModelScope.launch {
-            when (repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId)) {
                 is Result.Success -> {
                     _getChefDone.value = true
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }

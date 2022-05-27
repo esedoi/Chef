@@ -92,7 +92,6 @@ class AddAddressFragment : DialogFragment(), OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 mMap.clear()
-
                 mark = place.latLng!!
                 mMap.addMarker(
                     MarkerOptions()

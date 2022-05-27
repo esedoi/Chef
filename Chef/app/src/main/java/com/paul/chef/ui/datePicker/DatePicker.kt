@@ -110,8 +110,7 @@ class DatePicker : BottomSheetDialogFragment() {
                     // 不能按
                     view.setOnClickListener {
 
-                        if (
-                            !validDate.contains(day.date)
+                        if (!validDate.contains(day.date)
                             && day.owner != DayOwner.THIS_MONTH
                             || !(day.date == today || day.date.isAfter(today))
                         ) {
@@ -133,8 +132,8 @@ class DatePicker : BottomSheetDialogFragment() {
                 } else {
                     // 可以按
                     view.setOnClickListener {
-                        if (
-                            inValidDate.contains(day.date)
+
+                        if (inValidDate.contains(day.date)
                             && day.owner != DayOwner.THIS_MONTH
                             || !(day.date == today || day.date.isAfter(today))
                         ) {

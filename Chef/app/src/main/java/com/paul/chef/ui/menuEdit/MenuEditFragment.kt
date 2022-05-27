@@ -2,7 +2,6 @@ package com.paul.chef.ui.menuEdit
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.paul.chef.databinding.ItemAddDishBinding
 import com.paul.chef.databinding.ItemDishOptionalBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.DetailImagesAdapter
+import timber.log.Timber
 
 class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
@@ -184,9 +184,10 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
 
         // create Menu
         binding.build.setOnClickListener {
-            Log.d("menuEditFragment", "bindingItemCountList = $bindingItemCountList")
-            Log.d("menuEditFragment", "pendingList.size = ${pendingList.size}")
-            Log.d("menuEditFragment", "allDishBindingList.size = ${allDishBindingList.size}")
+            Timber.d("bindingItemCountList = $bindingItemCountList")
+            Timber.d("pendingList.size = ${pendingList.size}")
+            Timber.d("allDishBindingList.size = ${allDishBindingList.size}")
+
 
             val dishList: List<Dish> = getFinalDishList()
 

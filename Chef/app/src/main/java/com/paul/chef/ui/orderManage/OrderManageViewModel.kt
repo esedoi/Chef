@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.data.source.ChefRepository
+import com.paul.chef.util.ConstValue.CHEF_ID
+import com.paul.chef.util.ConstValue.USER_ID
 import java.time.LocalDate
 import kotlinx.coroutines.launch
 
@@ -25,6 +27,14 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     val hasData: LiveData<Boolean>
         get() = _hasData
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
     var field = ""
     var value = ""
 
@@ -34,13 +44,13 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
 
         when (UserManger.readData("mode")) {
             Mode.USER.index -> {
-                val userId = UserManger.user?.userId!!
-                field = "userId"
+                val userId = UserManger.user?.userId?:""
+                field = USER_ID
                 value = userId
             }
             Mode.CHEF.index -> {
-                val chefId = UserManger.user?.chefId!!
-                field = "chefId"
+                val chefId = UserManger.user?.chefId?:""
+                field = CHEF_ID
                 value = chefId
             }
         }

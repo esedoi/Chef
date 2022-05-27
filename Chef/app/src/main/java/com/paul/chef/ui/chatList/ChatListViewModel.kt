@@ -20,10 +20,10 @@ class ChatListViewModel(repository: ChefRepository) : ViewModel() {
 
         val nowId = when (mode) {
             Mode.USER.index -> {
-                UserManger.user?.userId!!
+                UserManger.user?.userId ?: ""
             }
             Mode.CHEF.index -> {
-                UserManger.chef?.id!!
+                UserManger.chef?.id ?: ""
             }
             else -> {
                 ""

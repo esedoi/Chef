@@ -2,6 +2,7 @@ package com.paul.chef.ui.menuEdit
 
 import androidx.lifecycle.*
 import com.paul.chef.BookSettingType
+import com.paul.chef.LoadApiStatus
 import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import com.paul.chef.data.source.ChefRepository
@@ -16,6 +17,14 @@ class MenuEditViewModel(private val repository: ChefRepository) : ViewModel() {
     val openBoolean: LiveData<Boolean>
         get() = _openBoolean
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
     init {
 
         viewModelScope.launch {
@@ -24,9 +33,17 @@ class MenuEditViewModel(private val repository: ChefRepository) : ViewModel() {
                     _openBoolean.value =
                         result.data.bookSetting != null && result.data.bookSetting.type != BookSettingType.RefuseAll.index
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
