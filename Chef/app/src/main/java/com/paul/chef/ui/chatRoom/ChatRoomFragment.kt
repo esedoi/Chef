@@ -27,7 +27,7 @@ class ChatRoomFragment : Fragment() {
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private val arg: ChatRoomFragmentArgs by navArgs()
-    
+
     private val chatList = mutableListOf<Chat>()
 
     private val chatRoomViewModel by viewModels<ChatRoomViewModel> { getVmFactory() }
@@ -65,8 +65,6 @@ class ChatRoomFragment : Fragment() {
             chatRoomAdapter.notifyDataSetChanged()
             binding.chatRoomRecycler.scrollToPosition(chatList.size - 1)
         }
-
-
 
         binding.chatRoomSendBtn.setOnClickListener {
             val msg = binding.editText.editText?.text.toString()

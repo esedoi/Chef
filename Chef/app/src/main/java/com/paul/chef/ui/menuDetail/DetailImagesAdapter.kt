@@ -21,7 +21,7 @@ class DetailImagesAdapter(
 ) : ListAdapter<String, RecyclerView.ViewHolder>(ImageListCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        return ImageHolder.from(parent)
+
         return when (type) {
             ImgRecyclerType.IMAGE.index -> {
                 ImageHolder.from(parent)
@@ -35,9 +35,6 @@ class DetailImagesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-//        if (holder is ImageHolder) {
-//            holder.bind(item)
-//        }
         when (holder) {
             is ImageHolder -> {
                 holder.bind(item, itemMenu, menu)

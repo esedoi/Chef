@@ -1,6 +1,6 @@
 package com.paul.chef
 
-import android.util.Log
+
 import androidx.lifecycle.*
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
@@ -20,22 +20,36 @@ class MainViewModel(private val repository: ChefRepository) : ViewModel() {
     val isChef: LiveData<Boolean>
         get() = _isChef
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
 
     fun getUser(email: String) {
         viewModelScope.launch {
-            val result = repository.getUserByEmail(email)
-            Log.d("result", "result=$result")
-            when (result) {
+
+            when (val result = repository.getUserByEmail(email)) {
                 is Result.Success -> {
                     _newUser.value = result.data == null
                     if (result.data?.chefId != null) {
                         getChef(result.data.chefId)
                     }
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
 
+                }
             }
         }
     }

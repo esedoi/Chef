@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +53,7 @@ class DatePicker : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = BottomSheetDatepickerBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -110,51 +109,46 @@ class DatePicker : BottomSheetDialogFragment() {
                 if (calendarDefault == CalendarType.AllDayClose.index || type == BookSettingType.RefuseAll.index) {
                     // 不能按
                     view.setOnClickListener {
-                        if (validDate.contains(day.date)) {
-                            if (day.owner == DayOwner.THIS_MONTH &&
-                                (day.date == today || day.date.isAfter(today))
 
-                            ) {
-                                val currentSelection = selectedDate
-                                if (currentSelection == day.date) {
-                                    selectedDate = null
-                                    binding.datePickerCalendarView.notifyDateChanged(
-                                        currentSelection
-                                    )
-                                } else {
-                                    selectedDate = day.date
-                                    binding.datePickerCalendarView.notifyDateChanged(day.date)
-                                    if (currentSelection != null) {
-                                        binding.datePickerCalendarView.notifyDateChanged(
-                                            currentSelection
-                                        )
-                                    }
-                                }
+                        if (!validDate.contains(day.date)
+                            && day.owner != DayOwner.THIS_MONTH
+                            || !(day.date == today || day.date.isAfter(today))
+                        ) {
+                            return@setOnClickListener
+                        }
+
+                        val currentSelection = selectedDate
+                        if (currentSelection == day.date) {
+                            selectedDate = null
+                            binding.datePickerCalendarView.notifyDateChanged(currentSelection)
+                        } else {
+                            selectedDate = day.date
+                            binding.datePickerCalendarView.notifyDateChanged(day.date)
+                            if (currentSelection != null) {
+                                binding.datePickerCalendarView.notifyDateChanged(currentSelection)
                             }
                         }
                     }
                 } else {
                     // 可以按
                     view.setOnClickListener {
-                        if (!inValidDate.contains(day.date)) {
-                            if (day.owner == DayOwner.THIS_MONTH &&
-                                (day.date == today || day.date.isAfter(today))
-                            ) {
-                                val currentSelection = selectedDate
-                                if (currentSelection == day.date) {
-                                    selectedDate = null
-                                    binding.datePickerCalendarView.notifyDateChanged(
-                                        currentSelection
-                                    )
-                                } else {
-                                    selectedDate = day.date
-                                    binding.datePickerCalendarView.notifyDateChanged(day.date)
-                                    if (currentSelection != null) {
-                                        binding.datePickerCalendarView.notifyDateChanged(
-                                            currentSelection
-                                        )
-                                    }
-                                }
+
+                        if (inValidDate.contains(day.date)
+                            && day.owner != DayOwner.THIS_MONTH
+                            || !(day.date == today || day.date.isAfter(today))
+                        ) {
+                            return@setOnClickListener
+                        }
+
+                        val currentSelection = selectedDate
+                        if (currentSelection == day.date) {
+                            selectedDate = null
+                            binding.datePickerCalendarView.notifyDateChanged(currentSelection)
+                        } else {
+                            selectedDate = day.date
+                            binding.datePickerCalendarView.notifyDateChanged(day.date)
+                            if (currentSelection != null) {
+                                binding.datePickerCalendarView.notifyDateChanged(currentSelection)
                             }
                         }
                     }
@@ -235,8 +229,8 @@ class DatePicker : BottomSheetDialogFragment() {
             @SuppressLint("SetTextI18n")
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 container.textView.text = "${
-                month.yearMonth.month.name.lowercase(Locale.getDefault())
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                    month.yearMonth.month.name.lowercase(Locale.getDefault())
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 } ${month.year}"
             }
         }
@@ -250,7 +244,6 @@ class DatePicker : BottomSheetDialogFragment() {
 
         binding.dateSelected.setOnClickListener {
             val result = selectedDate?.toEpochDay()
-            Log.d("datePicker", "result=$result")
 
             if (arg.chefId != null) {
                 setFragmentResult("requestKey", bundleOf("bundleKey" to result))

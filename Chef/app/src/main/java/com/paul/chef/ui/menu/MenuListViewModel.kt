@@ -3,6 +3,7 @@ package com.paul.chef.ui.menu
 import androidx.lifecycle.*
 import com.paul.chef.BookSettingType
 import com.paul.chef.BookType
+import com.paul.chef.LoadApiStatus
 import com.paul.chef.data.Menu
 import com.paul.chef.data.User
 import com.paul.chef.data.source.ChefRepository
@@ -23,6 +24,14 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
     val likeList: LiveData<List<Menu>>
         get() = _likeList
 
+    private val _status = MutableLiveData<LoadApiStatus>()
+    val status: LiveData<LoadApiStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String>
+        get() = _error
+
     var liveUser = MutableLiveData<User>()
 
     val chefList = mutableListOf<String>()
@@ -34,7 +43,7 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
 
     fun filterLikeIdList(user: User) {
         if (user.likeList != null) {
-            _likeIdList.value = user.likeList!!
+            _likeIdList.value = user.likeList ?: return
         } else {
             _likeIdList.value = emptyList()
         }
@@ -47,7 +56,6 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
             val likeMenuList = menuList.filter {
                 newList.contains(it.id)
             }
-
             _likeList.value = likeMenuList
         }
     }
@@ -65,9 +73,17 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
                 is Result.Success -> {
                     getFilterMenuList(result.data)
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
@@ -82,9 +98,17 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
                     _menuList.value = filterList
                     chefList.clear()
                 }
-                is Result.Error -> TODO()
-                is Result.Fail -> TODO()
-                Result.Loading -> TODO()
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
             }
         }
     }
