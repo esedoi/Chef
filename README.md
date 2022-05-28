@@ -6,18 +6,18 @@
 A private chef platform where you can book a private chef, or as a chef you can post custom menus and receive orders.
 
 ## test Account 
-**account:** chftstccnt@gmail.com 
+**account:** chftstccnt@gmail.com   
 **password:** hu66i2vg
 
 ## Feature
 Provide two modes to switch between customers and chefs to suit different user scenarios
 
 ### Customer mode
-* **Select the menu** - You can filter the menu list by tags, click the heart button to add to the collection and click the menu to enter the detailed page
-<img src="https://i.imgur.com/rHIk1Aq.gif" height=300>
+* **Select the menu** - You can filter the menu list by tags, click the heart button to add to the collection and click the menu to enter the detailed page  
+<img src="https://i.imgur.com/rHIk1Aq.gif" >
 
-* **Address** - Choose to eat at a private chef's home, or book a private chef to come and cook for you at your home
-<img src="https://i.imgur.com/Pcgiilt.gif" height=400>
+* **Address** - Choose to eat at a private chef's home, or book a private chef to come and cook for you at your home  
+<img src="https://i.imgur.com/Pcgiilt.gif" height=200>
 
 * **Review** - write a review for a completed order
 <img src="https://i.imgur.com/VuN2S8L.jpg" height=400>
