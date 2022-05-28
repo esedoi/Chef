@@ -5,8 +5,8 @@
 #### A private chef platform where you can book a private chef, or as a chef you can post custom menus and receive orders.
 
 ## Test Account 
-**account:** chftstccnt@gmail.com   
-**password:** hu66i2vg
+**Account:** chftstccnt@gmail.com   
+**Password:** hu66i2vg
 
 ## Feature
 Provide two modes to switch between customers and chefs to suit different user scenarios
