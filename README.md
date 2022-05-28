@@ -1,10 +1,8 @@
 # Chef
 
-
-<img src="https://i.imgur.com/FTNAbk6.png" width="60" >
 <a href="https://play.google.com/store/apps/details?id=com.paul.chef"><img src="https://camo.githubusercontent.com/9b43e9e7bdf73be90eaee8bf94cf61440638567e/68747470733a2f2f692e696d6775722e636f6d2f49353862574c642e706e67" width="230" height="90"></a>
 
-A private chef platform where you can book a private chef, or as a chef you can post custom menus and receive orders.
+#### A private chef platform where you can book a private chef, or as a chef you can post custom menus and receive orders.
 
 ## Test Account 
 **account:** chftstccnt@gmail.com   
