@@ -12,12 +12,12 @@ A private chef platform where you can book a private chef, or as a chef you can 
 ## Feature
 Provide two modes to switch between customers and chefs to suit different user scenarios
 
-### Customer mode
-* **Select the menu** - You can filter the menu list by tags, click the heart button to add to the collection and click the menu to enter the detailed page  
-<img src="https://i.imgur.com/sY1n2J3.gif" height=400>
+### Customer mode  
+* **Select the menu** - You can filter the menu list by tags, click the heart button to add to the collection and click the menu to enter the detailed page
+<img src="https://i.imgur.com/sY1n2J3.gif" height=320>
 
-* **Address** - Choose to eat at a private chef's home, or book a private chef to come and cook for you at your home  
-<img src="https://i.imgur.com/6M516im.gif" height=400>
+* **Address** - Choose to eat at a private chef's home, or book a private chef to come and cook for you at your home
+<img src="https://i.imgur.com/KtcOySg.gif" height=320>
 
 * **Review** - write a review for a completed order
 <img src="https://i.imgur.com/VuN2S8L.jpg" height=400>
