@@ -14,7 +14,7 @@ Provide two modes to switch between customers and chefs to suit different user s
 
 ### Customer mode  
 * **Select the menu** - You can filter the menu list by tags, click the heart button to add to the collection and click the menu to enter the detailed page
-<img src="https://i.imgur.com/xd7i4Ee.gif" height=400>
+<img src="https://i.imgur.com/xAMN215.gif" height=400>
 
 * **Address** - Choose to eat at a private chef's home, or book a private chef to come and cook for you at your home
 <img src="https://i.imgur.com/KtcOySg.gif" height=400>
