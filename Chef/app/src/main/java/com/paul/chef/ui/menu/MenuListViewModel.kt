@@ -34,7 +34,7 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
 
     var liveUser = MutableLiveData<User>()
 
-    val chefList = mutableListOf<String>()
+    private val chefList = mutableListOf<String>()
 
     init {
         liveUser = repository.getLiveUser()

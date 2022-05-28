@@ -150,22 +150,24 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override fun getLiveUser(): MutableLiveData<User> {
-        val userId = UserManger.user?.userId!!
-
+        val userId = UserManger.user?.userId
         val liveData = MutableLiveData<User>()
-        FirebaseFirestore.getInstance().collection(USER)
-            .document(userId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Timber.w(e, "Listen failed.")
-                    return@addSnapshotListener
+        if(userId!=null){
+            FirebaseFirestore.getInstance().collection(USER)
+                .document(userId)
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Timber.w(e, "Listen failed.")
+                        return@addSnapshotListener
+                    }
+                    val item = value?.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, User::class.java)
+                    UserManger.user = data
+                    liveData.value = data
                 }
-                val item = value?.data
-                val json = Gson().toJson(item)
-                val data = Gson().fromJson(json, User::class.java)
-                UserManger.user = data
-                liveData.value = data
-            }
+        }
+
         return liveData
     }
 
