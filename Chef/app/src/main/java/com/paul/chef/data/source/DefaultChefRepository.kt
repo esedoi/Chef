@@ -29,16 +29,16 @@ class DefaultChefRepository(private val firebaseDataSource: ChefDataSource) : Ch
         return firebaseDataSource.getLiveUser()
     }
 
-    override suspend fun getChef(id: String): Result<Chef> {
-        return firebaseDataSource.getChef(id)
+    override suspend fun getChef(id: String, isDisPlay: Boolean): Result<Chef> {
+        return firebaseDataSource.getChef(id, isDisPlay)
     }
 
     override suspend fun getChefIdList(settingType: List<Int>): Result<List<String>> {
         return firebaseDataSource.getChefIdList(settingType)
     }
 
-    override fun getLiveChef(id: String): MutableLiveData<Chef> {
-        return firebaseDataSource.getLiveChef(id)
+    override fun getLiveChef(id: String, isDisPlay:Boolean): MutableLiveData<Chef> {
+        return firebaseDataSource.getLiveChef(id, isDisPlay)
     }
 
     override suspend fun blockMenu(blockMenuList: List<String>, userId: String) {
@@ -53,7 +53,7 @@ class DefaultChefRepository(private val firebaseDataSource: ChefDataSource) : Ch
         return firebaseDataSource.createChef(user)
     }
 
-    override suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String) {
+    override suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String?) {
         return firebaseDataSource.updateProfile(profileInfo, userId, chefId)
     }
 

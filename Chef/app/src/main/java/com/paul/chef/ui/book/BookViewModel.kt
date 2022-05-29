@@ -40,7 +40,7 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
 
     fun getAddress(chefId: String) {
         viewModelScope.launch {
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, true)) {
                 is Result.Success -> {
                     _chefSpaceAddress.value = result.data.bookSetting?.chefSpace?.address
                 }

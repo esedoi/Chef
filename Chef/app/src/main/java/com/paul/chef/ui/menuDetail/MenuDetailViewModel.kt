@@ -39,7 +39,7 @@ class MenuDetailViewModel(private val repository: ChefRepository) : ViewModel() 
 
     fun checkOpen(chefId: String) {
         viewModelScope.launch {
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, true)) {
                 is Result.Success -> {
                     _bookSettingType.value = if (result.data.bookSetting == null) {
                         null

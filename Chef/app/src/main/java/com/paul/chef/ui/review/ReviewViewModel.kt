@@ -36,7 +36,7 @@ class ReviewViewModel(private val repository: ChefRepository) : ViewModel() {
         viewModelScope.launch {
             repository.updateOrderStatus(status, orderId)
 
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, true)) {
                 is Result.Success -> {
                     val chefRatingNumber = result.data.reviewNumber ?: 0
                     var chefRating = result.data.reviewRating ?: 0

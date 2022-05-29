@@ -17,11 +17,11 @@ interface ChefRepository {
 
     fun getLiveUser(): MutableLiveData<User>
 
-    suspend fun getChef(id: String): Result<Chef>
+    suspend fun getChef(id: String,isDisplay: Boolean ): Result<Chef>
 
     suspend fun getChefIdList(settingType: List<Int>): Result<List<String>>
 
-    fun getLiveChef(id: String): MutableLiveData<Chef>
+    fun getLiveChef(id: String, isDisplay:Boolean): MutableLiveData<Chef>
 
     suspend fun blockMenu(blockMenuList: List<String>, userId: String)
 
@@ -29,7 +29,7 @@ interface ChefRepository {
 
     suspend fun createChef(user: User): Result<String>
 
-    suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String)
+    suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String?)
 
     suspend fun updateAddress(addressList: List<Address>)
 

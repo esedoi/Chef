@@ -37,26 +37,26 @@ class MenuEditFragment : Fragment(), AddDiscount, MenuEditImg {
     private var _dishView: ItemDishOptionalBinding? = null
     private val dishView get() = _dishView!!
 
-    var bindingList = mutableListOf<ItemAddDishBinding>()
+    private var bindingList = mutableListOf<ItemAddDishBinding>()
     private var allDishBindingList = mutableListOf<ItemDishOptionalBinding>()
-    var pendingList = mutableListOf<Dish>()
+    private var pendingList = mutableListOf<Dish>()
 
     private lateinit var discountAdapter: DiscountAdapter
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private lateinit var imageAdapter: DetailImagesAdapter
 
-    var discountList = mutableListOf<Discount>()
+    private var discountList = mutableListOf<Discount>()
 
     private val arg: MenuEditFragmentArgs by navArgs()
 
     private var imgList = mutableListOf<String>()
-    var tagList = mutableListOf<String>()
+    private var tagList = mutableListOf<String>()
 
     private var bindingItemCountList = mutableListOf<Int>()
     private var bindingItemCount = 0
 
-    var openBoolean: Boolean = false
+    private var openBoolean: Boolean = false
 
     private val menuEditViewModel by viewModels<MenuEditViewModel> { getVmFactory() }
 

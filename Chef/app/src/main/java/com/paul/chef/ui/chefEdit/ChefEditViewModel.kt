@@ -46,7 +46,7 @@ class ChefEditViewModel(private val repository: ChefRepository) : ViewModel() {
         }
     }
 
-    fun saveChef(profileInfo: ProfileInfo, userId: String, chefId: String) {
+    fun saveChef(profileInfo: ProfileInfo, userId: String, chefId: String?) {
         viewModelScope.launch {
             repository.updateProfile(profileInfo, userId, chefId)
         }

@@ -17,9 +17,9 @@ interface ChefDataSource {
 
     fun getLiveUser(): MutableLiveData<User>
 
-    suspend fun getChef(id: String): Result<Chef>
+    suspend fun getChef(id: String, isDisplay: Boolean): Result<Chef>
 
-    fun getLiveChef(id: String): MutableLiveData<Chef>
+    fun getLiveChef(id: String, isDisplay:Boolean): MutableLiveData<Chef>
 
     suspend fun getChefIdList(settingType: List<Int>): Result<List<String>>
 
@@ -29,7 +29,7 @@ interface ChefDataSource {
 
     suspend fun createChef(user: User): Result<String>
 
-    suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String)
+    suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String?)
 
     suspend fun updateAddress(addressList: List<Address>)
 

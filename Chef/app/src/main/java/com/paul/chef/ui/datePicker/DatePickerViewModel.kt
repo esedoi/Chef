@@ -21,7 +21,7 @@ class DatePickerViewModel(private val repository: ChefRepository) : ViewModel() 
     fun getChefData(chefId: String) {
         _dateSetting = repository.getLiveChefDateSetting(chefId)
 
-        liveChef = repository.getLiveChef(chefId)
+        liveChef = repository.getLiveChef(chefId, true)
     }
 
     fun getBookSetting(chef: Chef) {

@@ -88,7 +88,7 @@ class ChefEditFragment : Fragment() {
                     }
                     EditPageType.EDIT_PROFILE.index -> {
                         val userId = UserManger.user?.userId!!
-                        val chefId = UserManger.user?.chefId!!
+                        val chefId = UserManger.user?.chefId
                         chefEditViewModel.saveChef(newProfile, userId, chefId)
                     }
                 }

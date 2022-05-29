@@ -27,7 +27,7 @@ class BookSettingViewModel(private val repository: ChefRepository) : ViewModel()
     init {
 
         viewModelScope.launch {
-            when (val result = UserManger.chef?.let { repository.getChef(it.id) }) {
+            when (val result = UserManger.chef?.let { repository.getChef(it.id, false) }) {
                 is Result.Success -> {
                     if (result.data.bookSetting != null) {
                         _bookSetting.value = result.data.bookSetting?:return@launch

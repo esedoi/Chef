@@ -56,7 +56,7 @@ class DisplayChefFragment : Fragment(), Block {
         binding.divider16.visibility = View.GONE
         binding.divider11.visibility = View.GONE
         binding.chefPageSetTxt.visibility = View.GONE
-        chefViewModel.getChef(displayChefId)
+        chefViewModel.getChef(displayChefId, true)
 
         chefViewModel.chefInfo.observe(viewLifecycleOwner) {
             binding.chefName.text = it.profileInfo.name
