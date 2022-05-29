@@ -65,7 +65,7 @@ class DefaultChefRepository(private val firebaseDataSource: ChefDataSource) : Ch
         return firebaseDataSource.setOrder(order)
     }
 
-    override suspend fun updateOrderStatus(status: Int, orderId: String) {
+    override suspend fun updateOrderStatus(status: Int, orderId: String):Result<Boolean> {
         return firebaseDataSource.updateOrderStatus(status, orderId)
     }
 
