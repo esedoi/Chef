@@ -93,7 +93,7 @@ class ImageUploadFragment : DialogFragment() {
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 binding.imageView.setImageURI(null)
-                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this.context, "successfully upload", Toast.LENGTH_SHORT).show()
                 if (progressDialog.isShowing) progressDialog.dismiss()
                 val downloadUri = task.result
 

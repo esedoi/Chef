@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
+import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.OrderStatus
 import com.paul.chef.TransactionStatus
 import com.paul.chef.databinding.FragmentTransactionBinding
@@ -22,7 +24,7 @@ class TransactionFragment : Fragment() {
 
     private var pendingMoney = 0
     private var processingMoney = 0
-    var receivedMoney = 0
+    private var receivedMoney = 0
     private var idList = mutableListOf<String>()
 
     private val transactionViewModel by viewModels<TransactionViewModel> { getVmFactory() }
@@ -81,8 +83,10 @@ class TransactionFragment : Fragment() {
             transactionViewModel.applyMoney(pendingMoney)
             for (i in idList) {
                 transactionViewModel.changeStatus(i, OrderStatus.APPLIED.index)
+                if(idList.indexOf(i)==idList.lastIndex){
+                    findNavController().navigate(MobileNavigationDirections.actionGlobalTransactionFragment())
+                }
             }
-            super.onCreateView(inflater, container, savedInstanceState)
         }
 
         return root

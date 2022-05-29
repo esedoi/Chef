@@ -172,6 +172,12 @@
         android:name="com.paul.chef.ui.transaction.TransactionFragment"
         android:label="fragment_transaction_"
         tools:layout="@layout/fragment_transaction_" />
+    <action
+        android:id="@+id/action_global_transactionFragment"
+        app:destination="@id/transactionFragment"
+        app:popUpTo="@+id/mobile_navigation"
+        app:popUpToInclusive="true" />
+
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.paul.chef.ui.userProfile.UserProfileFragment"
