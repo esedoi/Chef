@@ -364,7 +364,8 @@ object ChefFirebaseDataSource : ChefDataSource {
                 }
         }
 
-    override suspend fun updateOrderStatus(status: Int, orderId: String) {
+    override suspend fun updateOrderStatus(status: Int, orderId: String):Result<Boolean> =
+        suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection(ORDER).document(orderId)
             .update(
                 mapOf(
@@ -372,6 +373,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
+                continuation.resume(Result.Success(true))
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->

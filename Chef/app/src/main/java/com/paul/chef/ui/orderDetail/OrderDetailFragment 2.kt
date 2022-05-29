@@ -112,6 +112,9 @@ class OrderDetailFragment : Fragment() {
                 )
             }
         }
+        viewModel.acceptDone.observe(viewLifecycleOwner){
+            if(it) findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+        }
 
         return root
     }
@@ -124,7 +127,7 @@ class OrderDetailFragment : Fragment() {
         }
         binding.orderDetailAcceptBtn.setOnClickListener {
             viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
-            findNavController().navigateUp()
+
         }
     }
 

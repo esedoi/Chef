@@ -20,6 +20,10 @@ class OrderDetailViewModel(private val repository: ChefRepository) : ViewModel()
     val error: LiveData<String>
         get() = _error
 
+    private val _acceptDone = MutableLiveData<Boolean>()
+    val acceptDone: LiveData<Boolean>
+        get() = _acceptDone
+
     fun getRoomId(userId: String, chefId: String) {
         viewModelScope.launch {
             when (val result = repository.getRoom(userId, chefId)) {
@@ -52,7 +56,7 @@ class OrderDetailViewModel(private val repository: ChefRepository) : ViewModel()
                 repository.setRoom(userId, chefId, useName, chefName, userAvatar, chefAvatar)
             when (result) {
                 is Result.Success -> {
-                    _roomId.value = result.data!!
+                    _roomId.value = result.data?:return@launch
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()
@@ -71,7 +75,23 @@ class OrderDetailViewModel(private val repository: ChefRepository) : ViewModel()
 
     fun changeStatus(orderId: String, status: Int) {
         viewModelScope.launch {
-            repository.updateOrderStatus(status, orderId)
+            when(val result = repository.updateOrderStatus(status, orderId)){
+                is Result.Success->{
+                    _acceptDone.value = result.data?:return@launch
+
+                }
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadApiStatus.ERROR
+                }
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadApiStatus.ERROR
+                }
+                Result.Loading -> {
+
+                }
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ interface ChefDataSource {
 
     suspend fun setOrder(order: Order): Result<Boolean>
 
-    suspend fun updateOrderStatus(status: Int, orderId: String)
+    suspend fun updateOrderStatus(status: Int, orderId: String):Result<Boolean>
 
     suspend fun updateChefReview(chefId: String, newChefRating: Float, newChefRatingNumber: Int)
 
