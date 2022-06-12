@@ -171,7 +171,7 @@ class OrderDetailFragment : Fragment() {
             OrderStatus.UPCOMING.index -> OrderStatus.UPCOMING.value
             OrderStatus.COMPLETED.index -> OrderStatus.COMPLETED.value
             OrderStatus.CANCELLED.index -> OrderStatus.CANCELLED.value
-            OrderStatus.SCORED.index -> OrderStatus.SCORED.value
+            OrderStatus.SCORED.index, OrderStatus.APPLIED.index -> OrderStatus.SCORED.value
             else -> "something went wrong"
         }
     }

@@ -117,6 +117,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
         viewModelScope.launch {
             repository.updateOrderStatus(status, order.id)
         }
+
     }
 
     fun getList(status: Int) {
