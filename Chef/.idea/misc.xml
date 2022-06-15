@@ -50,7 +50,7 @@
         <entry key="app/src/main/res/layout/fragment_add_adress.xml" value="0.30268096923828125" />
         <entry key="app/src/main/res/layout/fragment_add_tag.xml" value="0.2478920741989882" />
         <entry key="app/src/main/res/layout/fragment_address_list.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_book.xml" value="0.2520107238605898" />
+        <entry key="app/src/main/res/layout/fragment_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_setting.xml" value="0.15512465373961218" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.34546152750651044" />
         <entry key="app/src/main/res/layout/fragment_calendar_setting.xml" value="0.1" />

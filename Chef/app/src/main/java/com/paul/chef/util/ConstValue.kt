@@ -1,5 +1,7 @@
 package com.paul.chef.util
 
+import com.paul.chef.data.Address
+
 object ConstValue{
     const val ADDRESS = "address"
     const val ATTENDANCE = "attendance"
@@ -30,4 +32,23 @@ object ConstValue{
     const val TIME = "time"
     const val USER = "User"
     const val USER_ID = "userId"
+
+    const val DISCOUNT_PER_PRICE = "discountPerPrice"
+    const val ORIGINAL_PRICE = "originalPrice"
+    const val TOTAL = "total"
+    const val USER_PAY = "userPay"
+    const val USER_FEE = "userFee"
+    const val IS_DISCOUNT = "isDiscount"
+
+    const val DEFAULT_INT_VALUE = -1
+    const val DEFAULT_STRING_VALUE = ""
+
+
+    const val REQUEST_KEY_DATE_PICKER = "datePicker"
+    const val BUNDLE_KEY_SELECTED_DATE = "selectedDate"
+    const val REQUEST_KEY_ADDRESS = "selectAddress"
+    const val BUNDLE_KEY_ADDRESS = "address"
+
+
+
 }

@@ -36,6 +36,8 @@ import com.paul.chef.util.ConstValue.STATUS
 import com.paul.chef.util.ConstValue.TIME
 import com.paul.chef.util.ConstValue.TRANSACTION
 import com.paul.chef.util.ConstValue.USER
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -150,26 +152,28 @@ object ChefFirebaseDataSource : ChefDataSource {
     }
 
     override fun getLiveUser(): MutableLiveData<User> {
-        val userId = UserManger.user?.userId!!
-
+        val userId = UserManger.user?.userId
         val liveData = MutableLiveData<User>()
-        FirebaseFirestore.getInstance().collection(USER)
-            .document(userId)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Timber.w(e, "Listen failed.")
-                    return@addSnapshotListener
+        if(userId!=null){
+            FirebaseFirestore.getInstance().collection(USER)
+                .document(userId)
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Timber.w(e, "Listen failed.")
+                        return@addSnapshotListener
+                    }
+                    val item = value?.data
+                    val json = Gson().toJson(item)
+                    val data = Gson().fromJson(json, User::class.java)
+                    UserManger.user = data
+                    liveData.value = data
                 }
-                val item = value?.data
-                val json = Gson().toJson(item)
-                val data = Gson().fromJson(json, User::class.java)
-                UserManger.user = data
-                liveData.value = data
-            }
+        }
+
         return liveData
     }
 
-    override suspend fun getChef(id: String): Result<Chef> = suspendCoroutine { continuation ->
+    override suspend fun getChef(id: String, isDisplay:Boolean): Result<Chef> = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection(CHEF)
             .document(id)
             .get()
@@ -178,7 +182,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                     val item = document.data
                     val json = Gson().toJson(item)
                     val data = Gson().fromJson(json, Chef::class.java)
-                    UserManger.chef = data
+                    if(!isDisplay){
+                        UserManger.chef = data
+                    }
+
                     continuation.resume(Result.Success(data))
                 } else {
                     Timber.d("No such document")
@@ -189,7 +196,7 @@ object ChefFirebaseDataSource : ChefDataSource {
             }
     }
 
-    override fun getLiveChef(id: String): MutableLiveData<Chef> {
+    override fun getLiveChef(id: String, isDisPlay:Boolean): MutableLiveData<Chef> {
         val liveData = MutableLiveData<Chef>()
         FirebaseFirestore.getInstance().collection(CHEF)
             .document(id)
@@ -201,7 +208,10 @@ object ChefFirebaseDataSource : ChefDataSource {
                 val item = value?.data
                 val json = Gson().toJson(item)
                 val data = Gson().fromJson(json, Chef::class.java)
-                UserManger.chef = data
+                if(!isDisPlay){
+                    Timber.d("update userManger chef  data")
+                    UserManger.chef = data
+                }
                 liveData.value = data
             }
         return liveData
@@ -291,7 +301,7 @@ object ChefFirebaseDataSource : ChefDataSource {
         continuation.resume(Result.Success(id))
     }
 
-    override suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String) {
+    override suspend fun updateProfile(profileInfo: ProfileInfo, userId: String, chefId: String?) {
         val info = ProfileInfo(
             profileInfo.name,
             profileInfo.email,
@@ -299,16 +309,20 @@ object ChefFirebaseDataSource : ChefDataSource {
             profileInfo.introduce
         )
 
-        FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
-            .update(
-                mapOf(
-                    PROFILE_INFO to info,
+        if(chefId!=null){
+            FirebaseFirestore.getInstance().collection(CHEF).document(chefId)
+                .update(
+                    mapOf(
+                        PROFILE_INFO to info,
+                    )
                 )
-            )
-            .addOnSuccessListener {
-                Timber.d("DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
+                .addOnSuccessListener {
+                    Timber.d("DocumentSnapshot successfully updated!")
+                }
+                .addOnFailureListener { e -> Timber.w(e, "Error updating document") }
+        }
+
+
 
         FirebaseFirestore.getInstance().collection(USER).document(userId)
             .update(
@@ -352,7 +366,8 @@ object ChefFirebaseDataSource : ChefDataSource {
                 }
         }
 
-    override suspend fun updateOrderStatus(status: Int, orderId: String) {
+    override suspend fun updateOrderStatus(status: Int, orderId: String):Result<Boolean> =
+        suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection(ORDER).document(orderId)
             .update(
                 mapOf(
@@ -360,6 +375,7 @@ object ChefFirebaseDataSource : ChefDataSource {
                 )
             )
             .addOnSuccessListener { documentReference ->
+                continuation.resume(Result.Success(true))
                 Timber.d("DocumentSnapshot added with ID: $documentReference")
             }
             .addOnFailureListener { e ->

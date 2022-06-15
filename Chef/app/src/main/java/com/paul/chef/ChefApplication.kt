@@ -22,4 +22,5 @@ class ChefApplication : Application() {
         }
         instance = this
     }
+    fun isLiveDataDesign() = true
 }

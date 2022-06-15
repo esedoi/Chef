@@ -35,8 +35,8 @@ class ChefViewModel(private val repository: ChefRepository) : ViewModel() {
     val error: LiveData<String>
         get() = _error
 
-    fun getChef(chefId: String) {
-        _chefInfo = repository.getLiveChef(chefId)
+    fun getChef(chefId: String, isDisPlay:Boolean) {
+        _chefInfo = repository.getLiveChef(chefId, isDisPlay)
 
         menuIdList.clear()
 

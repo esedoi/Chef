@@ -14,6 +14,7 @@ import com.paul.chef.R
 import com.paul.chef.databinding.BottomSheetReviewBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menuDetail.bindImage
+import java.time.LocalDate
 
 class ReviewFragment : DialogFragment() {
 
@@ -45,7 +46,7 @@ class ReviewFragment : DialogFragment() {
             reviewRatingbar.rating = rating.toFloat()
             reviewMenuChef.text = getString(R.string.support_by, order.chefName)
 
-            reviewDate.text = order.date.toString()
+            reviewDate.text = LocalDate.ofEpochDay(order.date).toString()
             val outlineProvider = ProfileOutlineProvider()
             reviewChefAvatar.outlineProvider = outlineProvider
             bindImage(reviewChefAvatar, order.chefAvatar)

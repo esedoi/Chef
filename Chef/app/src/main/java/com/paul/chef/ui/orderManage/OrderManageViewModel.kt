@@ -11,6 +11,7 @@ import com.paul.chef.util.ConstValue.CHEF_ID
 import com.paul.chef.util.ConstValue.USER_ID
 import java.time.LocalDate
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class OrderManageViewModel(private val repository: ChefRepository) : ViewModel() {
 
@@ -27,6 +28,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     val hasData: LiveData<Boolean>
         get() = _hasData
 
+
     private val _status = MutableLiveData<LoadApiStatus>()
     val status: LiveData<LoadApiStatus>
         get() = _status
@@ -35,7 +37,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     val error: LiveData<String>
         get() = _error
 
-    var field = ""
+    private var field = ""
     var value = ""
 
     var liveOrderList = MutableLiveData<List<Order>>()
@@ -58,11 +60,13 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
     }
 
     fun sortOrder(orderList: List<Order>) {
+        Timber.d("sortOrderList")
+
+        pendingList.clear()
+        upComingList.clear()
+        completedList.clear()
+        cancelledList.clear()
         if (checkCompleteOrder(orderList)) {
-            pendingList.clear()
-            upComingList.clear()
-            completedList.clear()
-            cancelledList.clear()
 
             for (order in orderList) {
                 when (order.status) {
@@ -113,6 +117,7 @@ class OrderManageViewModel(private val repository: ChefRepository) : ViewModel()
         viewModelScope.launch {
             repository.updateOrderStatus(status, order.id)
         }
+
     }
 
     fun getList(status: Int) {

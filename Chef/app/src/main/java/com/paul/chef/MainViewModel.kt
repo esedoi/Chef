@@ -55,7 +55,7 @@ class MainViewModel(private val repository: ChefRepository) : ViewModel() {
     }
 
     private fun getChef(chefId: String) {
-        repository.getLiveChef(chefId)
+        repository.getLiveChef(chefId, false)
 
     }
 

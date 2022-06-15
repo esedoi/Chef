@@ -19,6 +19,8 @@ import com.paul.chef.MobileNavigationDirections
 import com.paul.chef.data.Address
 import com.paul.chef.databinding.FragmentAddressListBinding
 import com.paul.chef.ext.getVmFactory
+import com.paul.chef.util.ConstValue.BUNDLE_KEY_ADDRESS
+import com.paul.chef.util.ConstValue.REQUEST_KEY_ADDRESS
 import timber.log.Timber
 
 class AddressListFragment : BottomSheetDialogFragment(), AddressList {
@@ -110,7 +112,7 @@ class AddressListFragment : BottomSheetDialogFragment(), AddressList {
     @SuppressLint("NotifyDataSetChanged")
     override fun select(item: Address) {
         addressListAdapter.notifyDataSetChanged()
-        setFragmentResult("selectAddress", bundleOf("address" to item))
+        setFragmentResult(REQUEST_KEY_ADDRESS , bundleOf(BUNDLE_KEY_ADDRESS to item))
         dismiss()
     }
 }

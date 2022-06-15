@@ -51,7 +51,7 @@ class UserProfileViewModel(private val repository: ChefRepository) : ViewModel()
 
     fun getChef(chefId: String) {
         viewModelScope.launch {
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, false)) {
                 is Result.Success -> {
                     _getChefDone.value = true
                 }

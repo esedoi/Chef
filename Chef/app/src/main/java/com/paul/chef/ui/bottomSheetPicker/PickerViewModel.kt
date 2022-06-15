@@ -23,7 +23,7 @@ class PickerViewModel(private val repository: ChefRepository) : ViewModel() {
 
     fun getBookSetting(chefId: String) {
         viewModelScope.launch {
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, true)) {
                 is Result.Success -> {
                     if (result.data.bookSetting != null) {
                         _bookSetting.value = result.data.bookSetting?:return@launch

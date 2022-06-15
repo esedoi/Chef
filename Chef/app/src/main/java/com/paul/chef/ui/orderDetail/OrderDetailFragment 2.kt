@@ -112,6 +112,9 @@ class OrderDetailFragment : Fragment() {
                 )
             }
         }
+        viewModel.acceptDone.observe(viewLifecycleOwner){
+            if(it) findNavController().navigate(MobileNavigationDirections.actionGlobalOrderManageFragment())
+        }
 
         return root
     }
@@ -124,7 +127,7 @@ class OrderDetailFragment : Fragment() {
         }
         binding.orderDetailAcceptBtn.setOnClickListener {
             viewModel.changeStatus(order.id, OrderStatus.UPCOMING.index)
-            findNavController().navigateUp()
+
         }
     }
 
@@ -168,7 +171,7 @@ class OrderDetailFragment : Fragment() {
             OrderStatus.UPCOMING.index -> OrderStatus.UPCOMING.value
             OrderStatus.COMPLETED.index -> OrderStatus.COMPLETED.value
             OrderStatus.CANCELLED.index -> OrderStatus.CANCELLED.value
-            OrderStatus.SCORED.index -> OrderStatus.SCORED.value
+            OrderStatus.SCORED.index, OrderStatus.APPLIED.index -> OrderStatus.SCORED.value
             else -> "something went wrong"
         }
     }

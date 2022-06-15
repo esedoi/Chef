@@ -2,7 +2,6 @@ package com.paul.chef
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -24,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.paul.chef.data.ProfileInfo
 import com.paul.chef.databinding.ActivityMainBinding
 import com.paul.chef.ext.getVmFactory
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -214,15 +214,15 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            Log.d("login info", data?.extras.toString())
+
             try {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account.idToken!!)
 
-                Toast.makeText(this, "R.string.login_success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "login_success", Toast.LENGTH_SHORT).show()
             } catch (e: ApiException) {
 
-                Toast.makeText(this, "R.string.login_fail", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "login_fail", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -233,12 +233,12 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("TAG", "signInWithCredential:success")
+                    Timber.d("signInWithCredential:success")
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("TAG", "signInWithCredential:failure", task.exception)
+                    Timber.w(task.exception, "signInWithCredential:failure")
                     updateUI(null)
                 }
             }

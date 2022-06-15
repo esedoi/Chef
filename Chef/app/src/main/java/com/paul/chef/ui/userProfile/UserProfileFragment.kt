@@ -32,12 +32,22 @@ class UserProfileFragment : Fragment() {
         binding.userProfileIntro.text = user?.profileInfo?.introduce!!
         binding.userProfileNameText.text = user.profileInfo.name
 
+
         bindImage(binding.userProfileImg, user.profileInfo.avatar)
         val outlineProvider = ProfileOutlineProvider()
         binding.userProfileImg.outlineProvider = outlineProvider
         binding.userProfileLogout.setOnClickListener {
             (activity as MainActivity).signOut()
             findNavController().navigate(MobileNavigationDirections.actionGlobalLoginFragment())
+        }
+
+        binding.userProfileEditBtn.setOnClickListener {
+            findNavController().navigate(
+                MobileNavigationDirections.actionGlobalChefEditFragment(
+                    EditPageType.EDIT_PROFILE.index,
+                    UserManger.user?.profileInfo!!
+                )
+            )
         }
 
         userProfileViewModel.chefId.observe(viewLifecycleOwner) {

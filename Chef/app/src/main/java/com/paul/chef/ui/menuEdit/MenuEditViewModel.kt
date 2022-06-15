@@ -28,7 +28,7 @@ class MenuEditViewModel(private val repository: ChefRepository) : ViewModel() {
     init {
 
         viewModelScope.launch {
-            when (val result = repository.getChef(chefId)) {
+            when (val result = repository.getChef(chefId, false)) {
                 is Result.Success -> {
                     _openBoolean.value =
                         result.data.bookSetting != null && result.data.bookSetting.type != BookSettingType.RefuseAll.index

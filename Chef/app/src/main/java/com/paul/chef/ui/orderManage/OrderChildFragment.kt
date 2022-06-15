@@ -14,6 +14,7 @@ import com.paul.chef.*
 import com.paul.chef.data.Order
 import com.paul.chef.databinding.FragmentOrderChildBinding
 import com.paul.chef.ext.getVmFactory
+import timber.log.Timber
 
 class OrderChildFragment : Fragment(), GoOrderDetail {
 
@@ -60,6 +61,7 @@ class OrderChildFragment : Fragment(), GoOrderDetail {
         }
 
         orderViewModel.orderList.observe(viewLifecycleOwner) {
+            Timber.d("it.size = ${it.size}")
             setWhetherEmpty(it)
             orderChildAdapter.submitList(it)
             orderChildAdapter.notifyDataSetChanged()

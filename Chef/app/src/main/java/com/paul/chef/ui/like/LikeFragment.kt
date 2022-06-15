@@ -18,6 +18,7 @@ import com.paul.chef.databinding.FragmentLikeBinding
 import com.paul.chef.ext.getVmFactory
 import com.paul.chef.ui.menu.MenuListAdapter
 import com.paul.chef.ui.menu.MenuListViewModel
+import timber.log.Timber
 
 class LikeFragment : Fragment(), ItemMenu {
 
@@ -46,13 +47,29 @@ class LikeFragment : Fragment(), ItemMenu {
         binding.likeRecycler.layoutManager = layoutManager
         binding.likeRecycler.adapter = menuListAdapter
 
-        menuListViewModel.menuList.observe(viewLifecycleOwner) { menuList ->
-            menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
-                likeList.clear()
-                likeList.addAll(it)
-                menuListViewModel.getLikeList(it, menuList)
-            }
+
+
+//        menuListViewModel.menuList.observe(viewLifecycleOwner) { menuList ->
+//            menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
+//                likeList.clear()
+//                likeList.addAll(it)
+//                menuListViewModel.getLikeList(it, menuList)
+//            }
+//        }
+
+        val menuList = mutableListOf<Menu>()
+        menuListViewModel.menuList.observe(viewLifecycleOwner) {
+            menuList.clear()
+            menuList.addAll(it)
         }
+
+        menuListViewModel.likeIdList.observe(viewLifecycleOwner) {
+            likeList.clear()
+            likeList.addAll(it)
+            menuListViewModel.getLikeList(it, menuList)
+        }
+
+
 
         menuListViewModel.liveUser.observe(viewLifecycleOwner) {
             menuListViewModel.filterLikeIdList(it)

@@ -35,7 +35,7 @@ class CalendarViewModel(repository: ChefRepository) : ViewModel() {
         if(chefId!=null){
             liveOrderList = repository.getLiveOrder(CHEF_ID, chefId)
             _dateSetting = repository.getLiveChefDateSetting(chefId)
-            liveChef = repository.getLiveChef(chefId)
+            liveChef = repository.getLiveChef(chefId, false)
         }
     }
 

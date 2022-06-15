@@ -44,7 +44,7 @@ class ChefFragment : Fragment(), Block, ItemMenu {
         val root: View = binding.root
 
         val chefId = UserManger.chef?.id!!
-        chefViewModel.getChef(chefId)
+        chefViewModel.getChef(chefId, false)
 
         chefViewModel.chefInfo.observe(viewLifecycleOwner) {
             binding.chefName.text = it.profileInfo.name
