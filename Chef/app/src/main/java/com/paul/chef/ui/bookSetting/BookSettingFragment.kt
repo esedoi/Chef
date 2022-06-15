@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -18,8 +17,12 @@ import com.paul.chef.data.ChefSpace
 import com.paul.chef.data.UserSpace
 import com.paul.chef.databinding.FragmentBookSettingBinding
 import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ext.showToast
+import com.paul.chef.util.ConstValue.BUNDLE_KEY_ADDRESS
+import com.paul.chef.util.ConstValue.DEFAULT_STRING_VALUE
+import com.paul.chef.util.ConstValue.REQUEST_KEY_ADDRESS
 
-class BookSetting : Fragment() {
+class BookSettingFragment : Fragment() {
 
     private var _binding: FragmentBookSettingBinding? = null
     private val binding get() = _binding!!
@@ -105,8 +108,8 @@ class BookSetting : Fragment() {
         var capacity = 0
         var sessionCapacity = 0
         val sessionTime = mutableListOf<String>()
-        var startTime = "null"
-        var endTime = "null"
+        var startTime = DEFAULT_STRING_VALUE
+        var endTime = DEFAULT_STRING_VALUE
         var address: Address? = null
 
         setFragmentResultListener(PickerType.SET_CAPACITY.value) { _, bundle ->
@@ -142,8 +145,8 @@ class BookSetting : Fragment() {
             endTime = bundle.getString(PickerType.SET_END_TIME.value).toString()
             binding.bookSetUserSpaceEndTime.setText(endTime)
         }
-        setFragmentResultListener("selectAddress") { _, bundle ->
-            address = bundle.getParcelable("address")!!
+        setFragmentResultListener(REQUEST_KEY_ADDRESS) { _, bundle ->
+            address = bundle.getParcelable(BUNDLE_KEY_ADDRESS)
             val addressTxt = address?.addressTxt ?: ""
             binding.bookSetChefSpaceAddress.setText(addressTxt)
         }
@@ -192,23 +195,13 @@ class BookSetting : Fragment() {
             val calendarTxt = binding.bookSetCalenderDefault.editText?.text.toString()
 
             if (chefSpaceCheck && (sessionCapacity == 0 || sessionTime.size == 0 || address == null)) {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_set_capacity_session),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (userSpaceCheck && (capacity == 0 || startTime == "null" || endTime == "null")) {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_set_capacity_time),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (calendarTxt == "") {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_set_calendar_default),
-                    Toast.LENGTH_SHORT
-                ).show()
+                activity?.showToast(getString(R.string.please_set_capacity_session))
+            } else if (userSpaceCheck && (capacity == 0 || startTime == DEFAULT_STRING_VALUE || endTime == DEFAULT_STRING_VALUE)) {
+                activity?.showToast(getString(R.string.please_set_capacity_time))
+
+            } else if (calendarTxt == DEFAULT_STRING_VALUE) {
+                activity?.showToast(getString(R.string.please_set_calendar_default))
+
             } else {
                 calendarTypeResult = if (calendarTxt == getString(R.string.open_all_day)) {
                     CalendarType.AllDayOpen.index

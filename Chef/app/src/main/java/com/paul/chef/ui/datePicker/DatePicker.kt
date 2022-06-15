@@ -24,6 +24,8 @@ import com.paul.chef.R
 import com.paul.chef.data.DateStatus
 import com.paul.chef.databinding.*
 import com.paul.chef.ext.getVmFactory
+import com.paul.chef.util.ConstValue.BUNDLE_KEY_SELECTED_DATE
+import com.paul.chef.util.ConstValue.REQUEST_KEY_DATE_PICKER
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -251,7 +253,9 @@ class DatePicker : BottomSheetDialogFragment() {
             val result = selectedDate?.toEpochDay()
 
             if (arg.chefId != null) {
-                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+//                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+                setFragmentResult(REQUEST_KEY_DATE_PICKER, bundleOf(BUNDLE_KEY_SELECTED_DATE to result))
+
             } else {
                 setFragmentResult("filterDate", bundleOf("date" to result))
             }

@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -26,6 +24,20 @@ import com.paul.chef.data.Address
 import com.paul.chef.data.Menu
 import com.paul.chef.databinding.FragmentBookBinding
 import com.paul.chef.ext.getVmFactory
+import com.paul.chef.ext.showToast
+import com.paul.chef.util.ConstValue.BUNDLE_KEY_ADDRESS
+import com.paul.chef.util.ConstValue.BUNDLE_KEY_SELECTED_DATE
+import com.paul.chef.util.ConstValue.DEFAULT_INT_VALUE
+import com.paul.chef.util.ConstValue.DEFAULT_STRING_VALUE
+import com.paul.chef.util.ConstValue.DISCOUNT_PER_PRICE
+import com.paul.chef.util.ConstValue.IS_DISCOUNT
+import com.paul.chef.util.ConstValue.ORIGINAL_PRICE
+import com.paul.chef.util.ConstValue.REQUEST_KEY_ADDRESS
+import com.paul.chef.util.ConstValue.REQUEST_KEY_DATE_PICKER
+import com.paul.chef.util.ConstValue.TOTAL
+import com.paul.chef.util.ConstValue.USER_FEE
+import com.paul.chef.util.ConstValue.USER_PAY
+import com.paul.chef.util.Util.getPrice
 import java.time.LocalDate
 
 class BookFragment : Fragment(), OnMapReadyCallback {
@@ -35,8 +47,8 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     private var selectDate: Long? = null
     private lateinit var mMap: GoogleMap
     private lateinit var placesClient: PlacesClient
-    private var chefAddress: Address? = null
-    private var userAddress: Address? = null
+    private lateinit var chefAddress: Address
+    private lateinit var userAddress: Address
     private val arg: BookFragmentArgs by navArgs()
     lateinit var menu: Menu
 
@@ -80,17 +92,14 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                     binding.bookUserSpaceChip.isEnabled = false
                     binding.bookEditAddress.visibility = View.GONE
                     mMap.clear()
-                    if (chefAddress != null) {
-                        val latLng = LatLng(chefAddress?.latitude!!, chefAddress?.longitude!!)
+                    val latLng = LatLng(chefAddress.latitude, chefAddress.longitude)
 
-                        mMap.addMarker(
-                            MarkerOptions()
-                                .position(latLng)
-                                .title("Marker in chefSpace")
-                        )
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
-                        binding.bookAddress.text = chefAddress?.addressTxt
-                    }
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                    )
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                    binding.bookAddress.text = chefAddress.addressTxt
                 }
                 BookSettingType.OnlyUserSpace.index -> {
                     binding.bookChefSpaceChip.isChecked = false
@@ -103,42 +112,29 @@ class BookFragment : Fragment(), OnMapReadyCallback {
 
         // price result
         bookViewModel.priceResult.observe(viewLifecycleOwner) {
-            if (it["isDiscount"] == 1) {
+            if (it[IS_DISCOUNT] == 1 && it != null) {
                 binding.apply {
                     orginalPerPrice.visibility = View.VISIBLE
                     orginalTotal.visibility = View.VISIBLE
-
-                    orginalPerPrice.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
-                    orginalTotal.text = getString(
-                        R.string.new_taiwan_dollar,
-                        String.format("%,d", it["originalPrice"])
-                    )
+                    orginalPerPrice.text = getPrice(menu.perPrice)
+                    orginalTotal.text = it[ORIGINAL_PRICE]?.let { it1 -> getPrice(it1) }
                     orginalPerPrice.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
                     orginalTotal.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
-                    finalPerPrice.text = getString(
-                        R.string.new_taiwan_dollar,
-                        String.format("%,d", it["discountPerPrice"])
-                    )
-                    finalTotal.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
-                    userFee.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
-                    userPay.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
+                    finalPerPrice.text = it[DISCOUNT_PER_PRICE]?.let { it1 -> getPrice(it1) }
+                    finalTotal.text = it[TOTAL]?.let { it1 -> getPrice(it1) }
+                    userFee.text = it[USER_FEE]?.let { it1 -> getPrice(it1) }
+                    userPay.text = it[USER_PAY]?.let { it1 -> getPrice(it1) }
+
                 }
             } else {
                 binding.apply {
                     orginalPerPrice.visibility = View.GONE
                     orginalTotal.visibility = View.GONE
-                    finalPerPrice.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", menu.perPrice))
-                    finalTotal.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["total"]))
-                    userFee.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userFee"]))
-                    userPay.text =
-                        getString(R.string.new_taiwan_dollar, String.format("%,d", it["userPay"]))
+                    finalPerPrice.text = getPrice(menu.perPrice)
+
+                    finalTotal.text = it[TOTAL]?.let { it1 -> getPrice(it1) }
+                    userFee.text = it[USER_FEE]?.let { it1 -> getPrice(it1) }
+                    userPay.text = it[USER_PAY]?.let { it1 -> getPrice(it1) }
                 }
             }
         }
@@ -149,10 +145,10 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
-        setFragmentResultListener("requestKey") { _, bundle ->
-            val result = bundle.getLong("bundleKey")
+        setFragmentResultListener(REQUEST_KEY_DATE_PICKER) { _, bundle ->
+            val result = bundle.getLong(BUNDLE_KEY_SELECTED_DATE)
             selectDate = result
-            val localDate: LocalDate = LocalDate.ofEpochDay(selectDate!!)
+            val localDate: LocalDate? = selectDate?.let { LocalDate.ofEpochDay(it) }
             binding.bookDateSelect.setText(localDate.toString())
         }
 
@@ -182,13 +178,13 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        var pickPeople = -1
-        var pickTime = ""
+        var pickPeople = DEFAULT_INT_VALUE
+        var pickTime = DEFAULT_STRING_VALUE
 
         binding.bookChipGroup.setOnCheckedChangeListener { group, checkedId ->
             typeId = group.checkedChipId
-            pickPeople = -1
-            pickTime = ""
+            pickPeople = DEFAULT_INT_VALUE
+            pickTime = DEFAULT_STRING_VALUE
             binding.bookTimeSelect.text?.clear()
             binding.bookPeopleSelect.text?.clear()
             binding.bookDateSelect.text?.clear()
@@ -206,17 +202,14 @@ class BookFragment : Fragment(), OnMapReadyCallback {
                 R.id.book_chef_space_chip -> {
                     binding.bookEditAddress.visibility = View.GONE
                     mMap.clear()
-                    if (chefAddress != null) {
-                        val latLng = LatLng(chefAddress?.latitude!!, chefAddress?.longitude!!)
+                    val latLng = LatLng(chefAddress.latitude, chefAddress.longitude)
 
-                        mMap.addMarker(
-                            MarkerOptions()
-                                .position(latLng)
-                                .title("Marker in chefSpace")
-                        )
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
-                        binding.bookAddress.text = chefAddress?.addressTxt
-                    }
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                    )
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                    binding.bookAddress.text = chefAddress.addressTxt
                 }
             }
         }
@@ -252,41 +245,45 @@ class BookFragment : Fragment(), OnMapReadyCallback {
             bookViewModel.orderPrice(menu, pickPeople)
             binding.bookPeopleSelect.setText(pickPeople.toString())
         }
-        setFragmentResultListener("selectAddress") { _, bundle ->
-            val newAddress = bundle.getParcelable<Address>("address")!!
-            val addressTxt = newAddress.addressTxt
-            val latLng = LatLng(newAddress.latitude, newAddress.longitude)
-            userAddress = newAddress
+        setFragmentResultListener(REQUEST_KEY_ADDRESS) { _, bundle ->
+            val newAddress = bundle.getParcelable<Address>(BUNDLE_KEY_ADDRESS)
+            newAddress?.let {
+                val addressTxt = newAddress.addressTxt
+                val latLng = LatLng(newAddress.latitude, newAddress.longitude)
+                userAddress = newAddress
 
-            mMap.clear()
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(latLng)
-                    .title("Marker in userSpace")
-            )
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
-            binding.bookAddress.text = addressTxt
+                mMap.clear()
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(latLng)
+                )
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                binding.bookAddress.text = addressTxt
+            }
         }
 
         binding.pay.setOnClickListener {
             typeId = binding.bookChipGroup.checkedChipId
             val typeInt = getTypeInt(typeId)
             val address: Address? = getAddress(typeInt)
-            val errorHandleResult: Boolean =
-                checkErrorHandleResult(selectDate, typeId, pickPeople, pickTime, address)
 
-            if (errorHandleResult) {
+            val errorHandleResult: Boolean =
+                checkErrorHandleResult(selectDate, pickPeople, pickTime, address)
+
+            if (errorHandleResult && address != null) {
                 val note = binding.bookNoteLayout.editText?.text.toString()
-                bookViewModel.book(
-                    menu,
-                    typeInt,
-                    address!!,
-                    selectDate!!,
-                    pickTime,
-                    note,
-                    pickPeople,
-                    selectedDish
-                )
+                selectDate?.let {
+                    bookViewModel.book(
+                        menu,
+                        typeInt,
+                        address,
+                        it,
+                        pickTime,
+                        note,
+                        pickPeople,
+                        selectedDish
+                    )
+                }
             }
         }
 
@@ -318,12 +315,8 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun whetherTypeSelected(typeId: Int): Boolean {
-        return if (typeId == -1) {
-            Toast.makeText(
-                this.context,
-                getString(R.string.please_select_space),
-                Toast.LENGTH_SHORT
-            ).show()
+        return if (typeId == DEFAULT_INT_VALUE) {
+            activity?.showToast(getString(R.string.please_select_space))
             false
         } else {
             true
@@ -331,52 +324,27 @@ class BookFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-   private fun checkErrorHandleResult(
+    private fun checkErrorHandleResult(
         selectDate: Long?,
-        typeId: Int,
         pickPeople: Int,
         pickTime: String,
         address: Address?,
     ): Boolean {
         return when {
             selectDate == null -> {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_select_date),
-                    Toast.LENGTH_SHORT
-                ).show()
+                activity?.showToast(getString(R.string.please_select_date))
                 false
             }
-            typeId == -1 -> {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_select_space),
-                    Toast.LENGTH_SHORT
-                ).show()
+            pickPeople == DEFAULT_INT_VALUE -> {
+                activity?.showToast(getString(R.string.please_select_people))
                 false
             }
-            pickPeople == -1 -> {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_select_people),
-                    Toast.LENGTH_SHORT
-                ).show()
-                false
-            }
-            pickTime == "" -> {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_select_time),
-                    Toast.LENGTH_SHORT
-                ).show()
+            pickTime == DEFAULT_STRING_VALUE -> {
+                activity?.showToast(getString(R.string.please_select_time))
                 false
             }
             address == null -> {
-                Toast.makeText(
-                    this.context,
-                    getString(R.string.please_select_address),
-                    Toast.LENGTH_SHORT
-                ).show()
+                activity?.showToast(getString(R.string.please_select_address))
                 false
             }
             else -> {
@@ -385,12 +353,18 @@ class BookFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
     private fun getAddress(typeInt: Int): Address? {
-        return if (typeInt == BookType.ChefSpace.index) {
-            chefAddress
-        } else {
-            userAddress
+        return try {
+            if (typeInt == BookType.ChefSpace.index) {
+                chefAddress
+            } else {
+                userAddress
+            }
+        } catch (e: Exception) {
+            null
         }
+
     }
 
     private fun getTypeInt(typeId: Int): Int {

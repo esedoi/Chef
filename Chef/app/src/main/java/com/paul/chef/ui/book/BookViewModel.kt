@@ -8,7 +8,13 @@ import com.paul.chef.UserManger
 import com.paul.chef.data.*
 import com.paul.chef.data.source.ChefRepository
 import com.paul.chef.data.source.Result
+import com.paul.chef.util.ConstValue.DISCOUNT_PER_PRICE
+import com.paul.chef.util.ConstValue.IS_DISCOUNT
 import com.paul.chef.util.ConstValue.ORDER
+import com.paul.chef.util.ConstValue.ORIGINAL_PRICE
+import com.paul.chef.util.ConstValue.TOTAL
+import com.paul.chef.util.ConstValue.USER_FEE
+import com.paul.chef.util.ConstValue.USER_PAY
 import java.util.*
 import kotlinx.coroutines.launch
 
@@ -23,8 +29,8 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
     val bookDone: LiveData<Boolean>
         get() = _bookDone
 
-    var userPay = -1
-    var chefReceive = -1
+    private var userPay = -1
+    private var chefReceive = -1
 
     private var _priceResult = MutableLiveData<Map<String, Int>>()
     val priceResult: LiveData<Map<String, Int>>
@@ -77,12 +83,12 @@ class BookViewModel(private val repository: ChefRepository) : ViewModel() {
         userPay = total + userFee
         chefReceive = total - chefFee
         _priceResult.value = mapOf(
-            "discountPerPrice" to discountPerPrice,
-            "originalPrice" to originalPrice,
-            "total" to total,
-            "userPay" to userPay,
-            "userFee" to userFee,
-            "isDiscount" to isDiscount
+            DISCOUNT_PER_PRICE to discountPerPrice,
+            ORIGINAL_PRICE to originalPrice,
+            TOTAL to total,
+            USER_PAY to userPay,
+            USER_FEE to userFee,
+            IS_DISCOUNT to isDiscount
 
         )
     }

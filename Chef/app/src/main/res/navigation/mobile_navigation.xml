@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/calendar_set_open_radio"
-        android:name="com.paul.chef.ui.calendar.Calendar"
+        android:name="com.paul.chef.ui.calendar.CalendarFragment"
         android:label="Calendar" />
 
     <action
@@ -126,7 +126,7 @@
         app:destination="@id/calendarSetting" />
     <fragment
         android:id="@+id/bookSetting"
-        android:name="com.paul.chef.ui.bookSetting.BookSetting"
+        android:name="com.paul.chef.ui.bookSetting.BookSettingFragment"
         android:label="BookSetting" />
 
     <action

@@ -24,6 +24,7 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
     val likeList: LiveData<List<Menu>>
         get() = _likeList
 
+
     private val _status = MutableLiveData<LoadApiStatus>()
     val status: LiveData<LoadApiStatus>
         get() = _status
@@ -37,8 +38,8 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
     private val chefList = mutableListOf<String>()
 
     init {
-        liveUser = repository.getLiveUser()
-        _menuList = repository.getLiveMenuList()
+            _menuList = repository.getLiveMenuList()
+            liveUser = repository.getLiveUser()
     }
 
     fun filterLikeIdList(user: User) {
@@ -52,6 +53,7 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
     fun getLikeList(newList: List<String>, menuList: List<Menu>) {
         if (newList.isEmpty()) {
             _likeList.value = emptyList()
+
         } else {
             val likeMenuList = menuList.filter {
                 newList.contains(it.id)
@@ -88,7 +90,7 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
         }
     }
 
-    fun getFilterMenuList(chefIdList: List<String>) {
+    private fun getFilterMenuList(chefIdList: List<String>) {
         viewModelScope.launch {
             when (val result = repository.getMenuList()) {
                 is Result.Success -> {
@@ -118,4 +120,5 @@ class MenuListViewModel(private val repository: ChefRepository) : ViewModel() {
             repository.updateLikeList(newList)
         }
     }
+
 }

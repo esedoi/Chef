@@ -32,7 +32,7 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
-class Calendar : Fragment() {
+class CalendarFragment : Fragment() {
 
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
