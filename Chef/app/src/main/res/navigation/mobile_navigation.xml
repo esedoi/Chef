@@ -113,7 +113,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/calendarSetting"
-        android:name="com.paul.chef.ui.calendarSetting.CalendarSetting"
+        android:name="com.paul.chef.ui.calendarSetting.CalendarSettingFragment"
         android:label="CalendarSetting">
         <argument
             android:name="selectedDates"
@@ -243,7 +243,7 @@
 
     <fragment
         android:id="@+id/reviewPage"
-        android:name="com.paul.chef.ui.reviewPage.ReviewPage"
+        android:name="com.paul.chef.ui.reviewPage.ReviewPageFragment"
         android:label="ReviewPage">
         <argument
             android:name="review"

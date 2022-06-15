@@ -15,12 +15,12 @@ import com.paul.chef.ext.getVmFactory
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class CalendarSetting : Fragment() {
+class CalendarSettingFragment : Fragment() {
 
     private var _binding: FragmentCalendarSettingBinding? = null
     private val binding get() = _binding!!
 
-    private val arg: CalendarSettingArgs by navArgs()
+    private val arg: CalendarSettingFragmentArgs by navArgs()
 
     private val calendarSettingViewModel by viewModels<CalendarSettingViewModel> { getVmFactory() }
 

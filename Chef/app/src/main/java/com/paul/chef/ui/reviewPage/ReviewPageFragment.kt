@@ -12,7 +12,7 @@ import com.paul.chef.*
 import com.paul.chef.databinding.FragmentReviewPageBinding
 import com.paul.chef.ui.menuDetail.ReviewAdapter
 
-class ReviewPage : Fragment(), Block {
+class ReviewPageFragment : Fragment(), Block {
 
     private var _binding: FragmentReviewPageBinding? = null
     private val binding get() = _binding!!
@@ -20,7 +20,7 @@ class ReviewPage : Fragment(), Block {
     private lateinit var reviewAdapter: ReviewAdapter
     private var reviewLayoutManager: RecyclerView.LayoutManager? = null
 
-    private val arg: ReviewPageArgs by navArgs()
+    private val arg: ReviewPageFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
