@@ -67,10 +67,10 @@ class ChatListAdapter(private val goChatRoom: GoChatRoom, private val nowMode: I
 
 class ChatListCallback : DiffUtil.ItemCallback<Room>() {
     override fun areItemsTheSame(oldItem: Room, newItem: Room): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Room, newItem: Room): Boolean {
-        return areItemsTheSame(oldItem, newItem)
+        return oldItem == newItem
     }
 }

@@ -133,10 +133,10 @@ class MenuListAdapter(
 
 class MenuCallback : DiffUtil.ItemCallback<Menu>() {
     override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Menu, newItem: Menu): Boolean {
-        return areItemsTheSame(oldItem, newItem)
+        return oldItem == newItem
     }
 }

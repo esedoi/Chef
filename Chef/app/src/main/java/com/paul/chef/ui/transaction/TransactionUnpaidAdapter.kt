@@ -51,10 +51,10 @@ class TransactionUnpaidAdapter : ListAdapter<Order, RecyclerView.ViewHolder>(Ord
 
 class OrderCallback : DiffUtil.ItemCallback<Order>() {
     override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
-        return areItemsTheSame(oldItem, newItem)
+        return oldItem == newItem
     }
 }

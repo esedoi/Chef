@@ -53,10 +53,10 @@ class DiscountAdapter(val addDiscount: AddDiscount) :
 
 class DiscountCallback : DiffUtil.ItemCallback<Discount>() {
     override fun areItemsTheSame(oldItem: Discount, newItem: Discount): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Discount, newItem: Discount): Boolean {
-        return areItemsTheSame(oldItem, newItem)
+        return oldItem == newItem
     }
 }
